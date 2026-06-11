@@ -65,10 +65,11 @@ const observerOptions = {
     rootMargin: '0px 0px 0px 0px'
 };
 
-const observer = new IntersectionObserver((entries) => {
+const scrollObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add('active');
+            entry.target.classList.add('revealed');
             
             // Trigger counter animation for stats
             if (entry.target.classList.contains('hero-stats')) {
@@ -79,36 +80,37 @@ const observer = new IntersectionObserver((entries) => {
                 });
             }
             
-            observer.unobserve(entry.target);
+            scrollObserver.unobserve(entry.target);
         }
     });
 }, observerOptions);
 
-// Observe all scroll-reveal elements
-document.querySelectorAll('.scroll-reveal').forEach(el => {
-    observer.observe(el);
+// Observe all scroll-reveal elements AND card elements
+document.querySelectorAll('.scroll-reveal, .feature-card, .step-card, .testimonial-card, .pricing-card, .therapist-showcase, .stat-block').forEach(el => {
+    scrollObserver.observe(el);
 });
 
 // Observe hero stats
 const heroStats = document.querySelector('.hero-stats');
 if (heroStats) {
-    observer.observe(heroStats);
+    scrollObserver.observe(heroStats);
 }
 
-// Fallback: force-show all scroll-reveal elements after 1.5s
-// in case the observer doesn't fire (e.g. elements already in viewport on load)
+// Fallback: force-show all hidden elements after 1.5s
 setTimeout(() => {
-    document.querySelectorAll('.scroll-reveal:not(.active)').forEach(el => {
+    document.querySelectorAll('.scroll-reveal:not(.active), .feature-card:not(.revealed), .step-card:not(.revealed), .testimonial-card:not(.revealed), .pricing-card:not(.revealed), .therapist-showcase:not(.revealed), .stat-block:not(.revealed)').forEach(el => {
         el.classList.add('active');
+        el.classList.add('revealed');
     });
 }, 1500);
 
-// Also trigger observer check on page load for elements already visible
+// Also trigger on page load for elements already in viewport
 window.addEventListener('load', () => {
-    document.querySelectorAll('.scroll-reveal').forEach(el => {
+    document.querySelectorAll('.scroll-reveal, .feature-card, .step-card, .testimonial-card, .pricing-card, .therapist-showcase, .stat-block').forEach(el => {
         const rect = el.getBoundingClientRect();
         if (rect.top < window.innerHeight) {
             el.classList.add('active');
+            el.classList.add('revealed');
         }
     });
 });
