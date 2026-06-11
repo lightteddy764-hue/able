@@ -1,0 +1,43 @@
+<!-- AI Chatbot Widget - Include on all pages -->
+<div class="chatbot-button" id="chatbotButton">
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="9" cy="10" r="1" fill="white"/>
+        <circle cx="15" cy="10" r="1" fill="white"/>
+        <path d="M9 13C9 13 10 14 12 14C14 14 15 13 15 13" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <span class="chatbot-badge">AI</span>
+</div>
+
+<!-- AI Chatbot Widget (Hidden by default) -->
+<div class="chatbot-widget" id="chatbotWidget">
+    <div class="chatbot-header">
+        <div class="chatbot-header-content">
+            <div class="chatbot-avatar">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 5C13.66 5 15 6.34 15 8C15 9.66 13.66 11 12 11C10.34 11 9 9.66 9 8C9 6.34 10.34 5 12 5ZM12 19.2C9.5 19.2 7.29 17.92 6 15.98C6.03 13.99 10 12.9 12 12.9C13.99 12.9 17.97 13.99 18 15.98C16.71 17.92 14.5 19.2 12 19.2Z" fill="white"/>
+                </svg>
+            </div>
+            <div class="chatbot-info">
+                <h4>ABLE Wellness Assistant</h4>
+                <span class="chatbot-status">Online • Here to Help</span>
+            </div>
+        </div>
+        <button class="chatbot-close" id="chatbotClose">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </div>
+    <div class="chatbot-messages" id="chatbotMessages">
+        <!-- Messages will be added dynamically -->
+    </div>
+    <div class="chatbot-input">
+        <input type="text" id="chatbotInput" placeholder="Type your message..." autocomplete="off">
+        <button class="chatbot-send" id="chatbotSend">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 8L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </div>
+</div>

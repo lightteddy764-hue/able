@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Voice - ABLE</title>
+    <link rel="stylesheet" href="dashboard-styles.css">
+    <link rel="stylesheet" href="my-voice.css">
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header"><img src="images/logo.svg" alt="ABLE" class="sidebar-logo"></div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2"/><path d="M9 22V12h6v10" stroke="currentColor" stroke-width="2"/></svg><span>Dashboard</span></a>
+            <a href="healing-zone.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2"/></svg><span>Healing Zone</span></a>
+            <a href="body-mind.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Body-Mind</span></a>
+            <a href="community.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg><span>Community</span></a>
+            <a href="youth-support.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke="currentColor" stroke-width="2"/></svg><span>Youth Support</span></a>
+            <a href="my-voice.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2"/></svg><span>My Voice</span></a>
+            <a href="settings.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09" stroke="currentColor" stroke-width="2"/></svg><span>Settings</span></a>
+        </nav>
+        <div class="sidebar-footer"><a href="login.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2"/><path d="M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Logout</span></a></div>
+    </aside>
+
+    <div class="main-content">
+        <header class="topbar">
+            <button class="menu-toggle" id="menuToggle"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="search-bar"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input type="text" placeholder="Search stories, topics, authors..."></div>
+            <div class="topbar-actions"><button class="icon-button"><svg viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2"/><path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2"/></svg><span class="notification-badge">4</span></button><div class="user-profile"><img src="https://ui-avatars.com/api/?name=John+Doe&background=E67E22&color=fff" alt="User"><div class="user-info"><span class="user-name">John Doe</span><span class="user-role">Wellness Seeker</span></div></div></div>
+        </header>
+
+        <main class="dashboard-content mv-page">
+            <!-- Hero -->
+            <div class="mv-hero">
+                <div class="mv-hero-left">
+                    <h1>Every Story Matters ❤️</h1>
+                    <p>Share your journey, inspire others, and discover that you're not alone. Your voice has the power to heal — both you and someone who needs to hear it.</p>
+                    <div class="mv-hero-stats"><span>2,000+ Stories</span><span>10,000+ Readers</span><span>96% Positive Impact</span></div>
+                    <div class="mv-hero-ctas">
+                        <button class="mv-btn-write" id="openCompose"><svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Share My Story</button>
+                        <a href="#stories" class="mv-btn-explore">Explore Stories →</a>
+                    </div>
+                </div>
+                <div class="mv-hero-right">
+                    <div class="mv-live"><span class="mv-live-dot"></span> 128 reading now</div>
+                </div>
+            </div>
+
+            <!-- Featured Story -->
+            <div class="mv-featured">
+                <span class="mv-featured-badge">⭐ Featured Story</span>
+                <div class="mv-featured-body">
+                    <div class="mv-featured-content">
+                        <h2>Finding Light After Darkness</h2>
+                        <p>Six months ago, I could barely get out of bed. Depression had stolen everything from me. I want to share my journey because if even one person reads this and feels less alone, it's worth it...</p>
+                        <div class="mv-featured-meta">
+                            <span>📖 2,400 reads</span>
+                            <span>❤️ 348 reactions</span>
+                            <span>💬 92 conversations</span>
+                            <span>⏱ 4 min read</span>
+                        </div>
+                    </div>
+                    <a href="#" class="mv-featured-btn">Read Full Story →</a>
+                </div>
+            </div>
+
+            <!-- Weekly Challenge -->
+            <div class="mv-challenge">
+                <div class="mv-challenge-left">
+                    <span class="mv-challenge-badge">Weekly Reflection</span>
+                    <h3>What helped you through a difficult time?</h3>
+                    <p>83 stories submitted this week</p>
+                </div>
+                <a href="#" class="mv-challenge-btn">Participate →</a>
+            </div>
+
+            <!-- Categories -->
+            <div class="mv-cats">
+                <button class="mv-cat active">All</button>
+                <button class="mv-cat">🌱 Recovery</button>
+                <button class="mv-cat">🧠 Anxiety</button>
+                <button class="mv-cat">✨ Growth</button>
+                <button class="mv-cat">🙏 Gratitude</button>
+                <button class="mv-cat">💡 Advice</button>
+                <button class="mv-cat">❤️ Relationships</button>
+            </div>
+
+            <!-- Main Layout: Stories + Sidebar -->
+            <div class="mv-layout" id="stories">
+                <div class="mv-stories" id="mvStoriesFeed">
+                    <div class="empty-state">Loading stories...</div>
+                </div>
+
+                <!-- Sidebar -->
+                <aside class="mv-sidebar">
+                    <div class="mv-sb-card">
+                        <h4>🔥 Trending Stories</h4>
+                        <a href="#" class="mv-sb-item"><span>Anxiety Recovery Journey</span><small>124 reactions</small></a>
+                        <a href="#" class="mv-sb-item"><span>Finding Confidence Again</span><small>89 reactions</small></a>
+                        <a href="#" class="mv-sb-item"><span>Healing After Burnout</span><small>76 reactions</small></a>
+                        <a href="#" class="mv-sb-item"><span>Mindfulness Changed Me</span><small>68 reactions</small></a>
+                    </div>
+                    <div class="mv-sb-card">
+                        <h4>📚 Collections</h4>
+                        <a href="#" class="mv-sb-collection">Anxiety Recovery Stories <small>42 stories</small></a>
+                        <a href="#" class="mv-sb-collection">Career Growth Journeys <small>28 stories</small></a>
+                        <a href="#" class="mv-sb-collection">Student Wellness <small>35 stories</small></a>
+                        <a href="#" class="mv-sb-collection">Relationship Healing <small>19 stories</small></a>
+                    </div>
+                    <div class="mv-sb-card">
+                        <h4>Community Impact</h4>
+                        <div class="mv-sb-stats">
+                            <div><span class="mv-sb-num">2,000+</span><small>Stories</small></div>
+                            <div><span class="mv-sb-num">10k+</span><small>Readers</small></div>
+                            <div><span class="mv-sb-num">96%</span><small>Positive</small></div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+
+            <!-- Compose -->
+            <div class="mv-compose" id="composeSection" style="display:none">
+                <h2>Share Your Story</h2>
+                <p class="mv-compose-sub">Your story will be reviewed before publishing. It will appear with your name.</p>
+                <form id="storyForm" class="mv-compose-form">
+                    <input type="text" id="compTitle" placeholder="Give your story a title..." class="mv-input" required>
+                    <select id="compCat" class="mv-select"><option value="recovery">Recovery</option><option value="anxiety">Anxiety</option><option value="growth">Personal Growth</option><option value="gratitude">Gratitude</option><option value="advice">Advice</option><option value="relationships">Relationships</option></select>
+                    <textarea id="compContent" placeholder="Write your story... Take your time." class="mv-textarea" rows="6" required></textarea>
+                    <div class="form-group"><label style="font-size:0.8rem;color:#374151">Image URL (optional)</label><input type="text" id="compImage" placeholder="https://... paste image link" class="mv-input"></div>
+                    <div class="mv-compose-footer">
+                        <span style="font-size:0.75rem;color:#9ca3af">Your story will be reviewed by our team before publishing.</span>
+                        <div class="mv-compose-btns"><button type="button" class="mv-cancel" id="cancelCompose">Cancel</button><button type="submit" class="mv-publish">Submit for Review</button></div>
+                    </div>
+                </form>
+                <div id="compStatus" style="display:none;padding:1rem;text-align:center;color:#10b981;font-weight:600"></div>
+            </div>
+
+            <!-- My Stories -->
+            <div class="mv-my-stories" id="myStoriesSection" style="display:none">
+                <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem">Your Submitted Stories</h3>
+                <div id="myStoriesList"></div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Chatbot -->
+    <div class="chatbot-button" id="chatbotButton"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="white" stroke-width="2"/><circle cx="9" cy="10" r="1" fill="white"/><circle cx="15" cy="10" r="1" fill="white"/><path d="M9 13s1 1 3 1 3-1 3-1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg><span class="chatbot-badge">AI</span></div>
+    <div class="chatbot-widget" id="chatbotWidget"><div class="chatbot-header"><div class="chatbot-header-content"><div class="chatbot-avatar"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="white"/></svg></div><div class="chatbot-info"><h4>ABLE Wellness Assistant</h4><span class="chatbot-status">Online • Here to Help</span></div></div><button class="chatbot-close" id="chatbotClose"><svg viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><div class="chatbot-messages" id="chatbotMessages"></div><div class="chatbot-input"><input type="text" id="chatbotInput" placeholder="Type your message..." autocomplete="off"><button class="chatbot-send" id="chatbotSend"><svg viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9M22 2L2 8l9 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+
+    <script src="chatbot.js"></script>
+    <script src="dashboard.js"></script>
+    <script>
+    document.getElementById('openCompose').addEventListener('click',()=>{document.getElementById('composeSection').style.display='block';document.getElementById('composeSection').scrollIntoView({behavior:'smooth'})});
+    document.getElementById('cancelCompose').addEventListener('click',()=>{document.getElementById('composeSection').style.display='none'});
+    document.querySelectorAll('.mv-cat').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.mv-cat').forEach(x=>x.classList.remove('active'));b.classList.add('active');loadStories(b.textContent.trim())}));
+
+    // Submit story
+    document.getElementById('storyForm').addEventListener('submit', async(e) => {
+        e.preventDefault();
+        const token = localStorage.getItem('token');
+        if (!token) { alert('Please login to submit a story'); window.location.href='login.html'; return; }
+        
+        const body = {
+            title: document.getElementById('compTitle').value,
+            category: document.getElementById('compCat').value,
+            content: document.getElementById('compContent').value,
+            image: document.getElementById('compImage').value
+        };
+
+        try {
+            const res = await fetch('/api/stories', { method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token}, body:JSON.stringify(body) });
+            const data = await res.json();
+            if (data.error) { alert(data.error); return; }
+            document.getElementById('storyForm').reset();
+            document.getElementById('compStatus').style.display = 'block';
+            document.getElementById('compStatus').textContent = '✓ Story submitted for review! Our team will review it shortly.';
+            setTimeout(()=>{ document.getElementById('composeSection').style.display='none'; document.getElementById('compStatus').style.display='none'; loadMyStories(); }, 3000);
+        } catch(e) { alert('Error submitting story'); }
+    });
+
+    // Load public stories from DB
+    async function loadStories(category) {
+        const feed = document.getElementById('mvStoriesFeed');
+        try {
+            const res = await fetch('/api/stories');
+            const data = await res.json();
+            let stories = data.stories || [];
+            
+            if (category && category !== 'All') {
+                const catMap = {'🌱 Recovery':'recovery','🧠 Anxiety':'anxiety','✨ Growth':'growth','🙏 Gratitude':'gratitude','💡 Advice':'advice','❤️ Relationships':'relationships'};
+                const cat = catMap[category];
+                if (cat) stories = stories.filter(s => s.category === cat);
+            }
+
+            if (!stories.length) {
+                feed.innerHTML = '<div style="text-align:center;padding:3rem;color:#9ca3af">No stories yet. Be the first to share!</div>';
+                return;
+            }
+
+            const tagColors = {recovery:'blue',anxiety:'green',growth:'purple',gratitude:'orange',advice:'blue',relationships:'orange'};
+            feed.innerHTML = stories.map(s => `
+                <article class="mv-story" onclick="window.location.href='story.html?id=${s._id}'" style="cursor:pointer">
+                    <div class="mv-story-top">
+                        ${s.isAnonymous ? '<div class="mv-anon-av">🌿</div>' : `<img src="https://ui-avatars.com/api/?name=${encodeURIComponent(s.authorName||'U')}&background=E67E22&color=fff&size=40" class="mv-story-av">`}
+                        <div><strong>${s.isAnonymous ? 'Anonymous' : (s.authorName||'Unknown')}</strong><span>${timeAgo(s.createdAt)} • ${s.readTime||3} min read</span></div>
+                        <span class="mv-tag ${tagColors[s.category]||'blue'}">${s.category}</span>
+                    </div>
+                    ${s.image ? `<img src="${s.image}" style="width:100%;border-radius:10px;margin-bottom:0.75rem;max-height:200px;object-fit:cover">` : ''}
+                    <h3>${s.title}</h3>
+                    <p>${s.content.substring(0, 250)}${s.content.length > 250 ? '...' : ''}</p>
+                    <div class="mv-story-actions">
+                        <button class="mv-react" onclick="event.stopPropagation()">❤️ ${s.reactions?.inspired?.length||0} Inspired</button>
+                        <button class="mv-react" onclick="event.stopPropagation()">🤗 ${s.reactions?.relatable?.length||0} Relatable</button>
+                        <button class="mv-react" onclick="event.stopPropagation()">💬 ${s.comments?.length||0}</button>
+                        <button class="mv-react" onclick="event.stopPropagation()">🔖</button>
+                    </div>
+                    <div class="mv-read-more">Read full story →</div>
+                </article>
+            `).join('');
+        } catch(e) {
+            feed.innerHTML = '<div style="text-align:center;padding:3rem;color:#9ca3af">Unable to load stories</div>';
+        }
+    }
+
+    // Load user's own stories
+    async function loadMyStories() {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+        
+        try {
+            const res = await fetch('/api/my-stories', { headers:{'Authorization':'Bearer '+token} });
+            const data = await res.json();
+            const stories = data.stories || [];
+            if (!stories.length) return;
+            
+            document.getElementById('myStoriesSection').style.display = 'block';
+            const statusBadge = (s) => {
+                if(s.status==='published') return '<span style="background:#ecfdf5;color:#10b981;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.7rem;font-weight:600">Published</span>';
+                if(s.status==='pending') return '<span style="background:#fef3c7;color:#f59e0b;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.7rem;font-weight:600">Under Review</span>';
+                if(s.status==='rejected') return '<span style="background:#fef2f2;color:#ef4444;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.7rem;font-weight:600">Rejected</span>';
+                return '';
+            };
+            document.getElementById('myStoriesList').innerHTML = stories.map(s => `
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:0.75rem;background:white;border-radius:10px;border:1px solid #e5e7eb;margin-bottom:0.5rem">
+                    <div><strong style="font-size:0.85rem">${s.title}</strong><br><span style="font-size:0.7rem;color:#9ca3af">${timeAgo(s.createdAt)}</span></div>
+                    ${statusBadge(s)}
+                </div>
+            `).join('');
+        } catch(e) {}
+    }
+
+    function timeAgo(date) {
+        const diff = (Date.now() - new Date(date)) / 1000;
+        if (diff < 3600) return Math.floor(diff/60) + ' min ago';
+        if (diff < 86400) return Math.floor(diff/3600) + ' hours ago';
+        if (diff < 604800) return Math.floor(diff/86400) + ' days ago';
+        return new Date(date).toLocaleDateString();
+    }
+
+    loadStories();
+    loadMyStories();
+    </script>
+</body>
+</html>

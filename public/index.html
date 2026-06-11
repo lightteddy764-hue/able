@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABLE - A Better Life Enabled | Your Mental Wellness Companion</title>
+    <link rel="stylesheet" href="landing.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="/" class="logo"><img src="images/logo.svg" alt="ABLE" class="logo-icon"></a>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#therapists">Therapists</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                    <li><a href="#pricing">Pricing</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                </ul>
+                <div class="nav-actions">
+                    <a href="login.html" class="nav-login">Log In</a>
+                    <a href="signup.html" class="nav-cta">Get Started Free</a>
+                </div>
+                <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay" id="mobileOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <img src="images/logo.svg" alt="ABLE" style="height:30px;filter:none">
+            <button class="mobile-menu-close" id="mobileClose">✕</button>
+        </div>
+        <ul class="mobile-menu-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#therapists">Therapists</a></li>
+            <li><a href="#testimonials">Testimonials</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#faq">FAQ</a></li>
+        </ul>
+        <div class="mobile-menu-actions">
+            <a href="login.html" class="mobile-btn-login">Log In</a>
+            <a href="signup.html" class="mobile-btn-signup">Get Started Free</a>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-left">
+                    <div class="hero-badge">✨ Trusted by 50,000+ users worldwide</div>
+                    <h1>Transform Your Mental Wellness Journey With <span class="gradient-text">Expert Support</span> & AI Guidance</h1>
+                    <p class="hero-subtitle">Connect with licensed therapists, wellness coaches, and a supportive community designed to help you build a healthier and happier life.</p>
+                    <div class="hero-ctas">
+                        <a href="signup.html" class="btn-primary-lg">Start Free Assessment</a>
+                        <a href="#how-it-works" class="btn-ghost">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><polygon points="5,3 19,12 5,21" fill="currentColor"/></svg>
+                            Watch Demo
+                        </a>
+                    </div>
+                    <div class="hero-trust-row">
+                        <div class="trust-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"/><path d="M22 4L12 14.01l-3-3" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> 1,200+ Licensed Therapists</div>
+                        <div class="trust-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"/><path d="M22 4L12 14.01l-3-3" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> 50,000+ Wellness Sessions</div>
+                        <div class="trust-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"/><path d="M22 4L12 14.01l-3-3" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> 4.9/5 Average Rating</div>
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <img src="images/hero-art.png" alt="ABLE Wellness" class="hero-img">
+                    <div class="glass-card gc-1">
+                        <div class="gc-icon gc-orange"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="white" stroke-width="2"/></svg></div>
+                        <div><strong>Therapist Match</strong><span>Found your perfect fit</span></div>
+                    </div>
+                    <div class="glass-card gc-2">
+                        <div class="gc-icon gc-green"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M22 4L12 14.01l-3-3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                        <div><strong>AI Assessment</strong><span>Personalized plan ready</span></div>
+                    </div>
+                    <div class="glass-card gc-3">
+                        <div class="gc-icon gc-purple"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="white" stroke-width="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div>
+                        <div><strong>Community</strong><span>3,500+ active members</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="social-proof">
+        <div class="container">
+            <div class="sp-inner">
+                <div class="sp-rating">
+                    <div class="sp-stars">★★★★★</div>
+                    <span>4.9/5 based on 12,000+ reviews</span>
+                </div>
+                <div class="sp-avatars">
+                    <img src="https://ui-avatars.com/api/?name=A&background=E67E22&color=fff&size=32" alt="">
+                    <img src="https://ui-avatars.com/api/?name=B&background=10B981&color=fff&size=32" alt="">
+                    <img src="https://ui-avatars.com/api/?name=C&background=8B5CF6&color=fff&size=32" alt="">
+                    <img src="https://ui-avatars.com/api/?name=D&background=3B82F6&color=fff&size=32" alt="">
+                    <img src="https://ui-avatars.com/api/?name=E&background=EF4444&color=fff&size=32" alt="">
+                    <span>+50,000 users</span>
+                </div>
+                <div class="sp-logos">
+                    <span>Mental Health Weekly</span>
+                    <span>WellnessTech</span>
+                    <span>PsychToday</span>
+                    <span>HealthLine</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-label">Features</div>
+            <h2 class="section-title">Everything You Need for <span class="gradient-text">Mental Wellness</span></h2>
+            <p class="section-subtitle">Comprehensive tools and support designed to guide every step of your wellness journey</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke="currentColor" stroke-width="2"/><path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9 9h.01M15 9h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
+                    <h3>AI Wellness Assessment</h3>
+                    <p>Personalized mental health insights powered by WHODAS 2.0 and AI analysis to create your unique wellness plan.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <h3>Licensed Therapists</h3>
+                    <p>Connect with 1,200+ verified mental health professionals for personalized therapy sessions on your schedule.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <h3>Body-Mind Connection</h3>
+                    <p>Holistic health through guided yoga, breathing exercises, nutrition plans, and daily routine management.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+                    <h3>Wellness Community</h3>
+                    <p>Mental Spa, Wellness Dating, and Meetups. Build meaningful connections with people who understand.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <h3>Youth Support</h3>
+                    <p>Dedicated services for ages 13-24: aptitude testing, career advising, anti-bullying, and anxiety management.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                    <h3>Voice Platform</h3>
+                    <p>Share your story anonymously or publicly. Inspire others and find healing through community storytelling.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <div class="section-label">How It Works</div>
+            <h2 class="section-title">Your Wellness Journey in <span class="gradient-text">4 Simple Steps</span></h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-num">1</div>
+                    <h3>Take Assessment</h3>
+                    <p>Complete our AI-powered WHODAS 2.0 wellness assessment to identify your unique needs and priorities.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">2</div>
+                    <h3>Get Personalized Plan</h3>
+                    <p>Receive a tailored wellness plan based on your assessment results with recommended services and activities.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">3</div>
+                    <h3>Connect With Professionals</h3>
+                    <p>Match with licensed therapists, join community groups, or explore holistic wellness resources.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">4</div>
+                    <h3>Track Progress</h3>
+                    <p>Monitor your wellness journey with progress insights, habit tracking, and ongoing professional support.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-block">
+                    <span class="stat-num">85%</span>
+                    <span class="stat-desc">Users report improved wellbeing within 60 days</span>
+                </div>
+                <div class="stat-block">
+                    <span class="stat-num">50K+</span>
+                    <span class="stat-desc">Wellness sessions completed this year</span>
+                </div>
+                <div class="stat-block">
+                    <span class="stat-num">4.9/5</span>
+                    <span class="stat-desc">Average rating from verified users</span>
+                </div>
+                <div class="stat-block">
+                    <span class="stat-num">24/7</span>
+                    <span class="stat-desc">Crisis support and AI assistance available</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Therapists -->
+    <section id="therapists" class="therapists-section">
+        <div class="container">
+            <div class="section-label">Our Experts</div>
+            <h2 class="section-title">Meet Our <span class="gradient-text">Licensed Professionals</span></h2>
+            <p class="section-subtitle">World-class therapists passionate about guiding you on your path to wellness</p>
+            <div class="therapists-grid">
+                <div class="therapist-showcase">
+                    <img src="https://ui-avatars.com/api/?name=Dr+Sarah+Wilson&background=E67E22&color=fff&size=120" alt="Dr. Sarah Wilson">
+                    <h4>Dr. Sarah Wilson</h4>
+                    <span class="ts-role">Clinical Psychologist</span>
+                    <span class="ts-exp">12 Years Experience</span>
+                </div>
+                <div class="therapist-showcase">
+                    <img src="https://ui-avatars.com/api/?name=Dr+James+Chen&background=10B981&color=fff&size=120" alt="Dr. James Chen">
+                    <h4>Dr. James Chen</h4>
+                    <span class="ts-role">Psychiatrist, MD</span>
+                    <span class="ts-exp">18 Years Experience</span>
+                </div>
+                <div class="therapist-showcase">
+                    <img src="https://ui-avatars.com/api/?name=Dr+Priya+Sharma&background=8B5CF6&color=fff&size=120" alt="Dr. Priya Sharma">
+                    <h4>Dr. Priya Sharma</h4>
+                    <span class="ts-role">Licensed Clinical Social Worker</span>
+                    <span class="ts-exp">15 Years Experience</span>
+                </div>
+                <div class="therapist-showcase">
+                    <img src="https://ui-avatars.com/api/?name=Dr+Amara+Johnson&background=3B82F6&color=fff&size=120" alt="Dr. Amara Johnson">
+                    <h4>Dr. Amara Johnson</h4>
+                    <span class="ts-role">Family Therapist, PhD</span>
+                    <span class="ts-exp">8 Years Experience</span>
+                </div>
+            </div>
+            <div class="section-cta"><a href="healing-zone.html" class="btn-primary-lg">View All Therapists</a></div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="testimonials-section">
+        <div class="container">
+            <div class="section-label">Testimonials</div>
+            <h2 class="section-title">Stories That <span class="gradient-text">Inspire Hope</span></h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="tc-stars">★★★★★</div>
+                    <p>"ABLE connected me with a therapist who truly understood my struggles. For the first time in years, I feel hopeful about the future."</p>
+                    <div class="tc-author"><img src="https://ui-avatars.com/api/?name=Sarah+M&background=E67E22&color=fff&size=40" alt=""><div><strong>Sarah M.</strong><span>Healing Zone Member</span></div></div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="tc-stars">★★★★★</div>
+                    <p>"The Body-Mind breathing exercises helped me overcome daily panic attacks. I went from 3 attacks a week to zero in just 2 months."</p>
+                    <div class="tc-author"><img src="https://ui-avatars.com/api/?name=James+K&background=10B981&color=fff&size=40" alt=""><div><strong>James K.</strong><span>Body-Mind User</span></div></div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="tc-stars">★★★★★</div>
+                    <p>"As a 19-year-old dealing with anxiety, the Youth Support program gave me tools my friends don't have access to. Life-changing."</p>
+                    <div class="tc-author"><img src="https://ui-avatars.com/api/?name=Priya+R&background=8B5CF6&color=fff&size=40" alt=""><div><strong>Priya R.</strong><span>Youth Support Member</span></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="pricing-section">
+        <div class="container">
+            <div class="section-label">Pricing</div>
+            <h2 class="section-title">Simple, Transparent <span class="gradient-text">Pricing</span></h2>
+            <p class="section-subtitle">Start free, upgrade when you're ready</p>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Free</h3>
+                    <div class="price"><span>$0</span>/month</div>
+                    <ul>
+                        <li>AI Wellness Assessment</li>
+                        <li>Community Access</li>
+                        <li>Basic Breathing Exercises</li>
+                        <li>Voice Platform (Read)</li>
+                        <li>AI Chatbot Support</li>
+                    </ul>
+                    <a href="signup.html" class="btn-outline-lg">Get Started Free</a>
+                </div>
+                <div class="pricing-card popular">
+                    <div class="popular-badge">Most Popular</div>
+                    <h3>Premium</h3>
+                    <div class="price"><span>$29</span>/month</div>
+                    <ul>
+                        <li>Everything in Free</li>
+                        <li>Unlimited Therapist Sessions</li>
+                        <li>Personalized Wellness Plans</li>
+                        <li>Progress Tracking Dashboard</li>
+                        <li>All Yoga & Nutrition Content</li>
+                        <li>Priority Community Events</li>
+                        <li>Youth Support Programs</li>
+                    </ul>
+                    <a href="signup.html" class="btn-primary-lg">Start 7-Day Free Trial</a>
+                </div>
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <div class="price"><span>Custom</span></div>
+                    <ul>
+                        <li>Everything in Premium</li>
+                        <li>Team Wellness Programs</li>
+                        <li>Dedicated Account Manager</li>
+                        <li>Custom Integrations</li>
+                        <li>Analytics & Reporting</li>
+                    </ul>
+                    <a href="#" class="btn-outline-lg">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="faq-section">
+        <div class="container">
+            <div class="section-label">FAQ</div>
+            <h2 class="section-title">Frequently Asked <span class="gradient-text">Questions</span></h2>
+            <div class="faq-list">
+                <details class="faq-item">
+                    <summary>Are therapists licensed and verified?</summary>
+                    <p>Yes, all therapists on ABLE are licensed mental health professionals with verified credentials. Each therapist undergoes a thorough background check and credential verification process before joining our platform.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>How does the AI assessment work?</summary>
+                    <p>Our AI assessment is based on the WHO Disability Assessment Schedule (WHODAS 2.0). It asks questions about your daily functioning across 6 domains and uses AI to analyze your responses, creating a personalized wellness plan tailored to your needs.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Is my data secure and confidential?</summary>
+                    <p>Absolutely. We use end-to-end encryption for all communications. Your data is stored securely and never shared with third parties. We are HIPAA compliant and follow the highest standards of data protection.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>Can I cancel my subscription anytime?</summary>
+                    <p>Yes, you can cancel your subscription at any time with no penalty. If you cancel during a trial period, you won't be charged. Your data remains accessible for 30 days after cancellation.</p>
+                </details>
+                <details class="faq-item">
+                    <summary>What if I'm in a mental health crisis?</summary>
+                    <p>If you're experiencing a crisis, our AI chatbot provides immediate crisis resources including the 988 Suicide Prevention Lifeline, Crisis Text Line, and emergency services. We also have priority access to therapists for urgent situations.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <div class="container">
+            <h2>Ready to Start Your Wellness Journey?</h2>
+            <p>Join 50,000+ people already transforming their mental health with ABLE</p>
+            <a href="signup.html" class="btn-primary-lg">Start Free Assessment</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img src="images/logo.svg" alt="ABLE" class="footer-logo">
+                    <p>A Better Life Enabled — your companion for mental wellness, personal growth, and a healthier life.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <a href="healing-zone.html">Healing Zone</a>
+                    <a href="body-mind.html">Body-Mind</a>
+                    <a href="community.html">Community</a>
+                    <a href="youth-support.html">Youth Support</a>
+                    <a href="#pricing">Pricing</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <a href="#">About Us</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Contact</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">HIPAA Compliance</a>
+                    <a href="#">Crisis Support</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 ABLE - A Better Life Enabled. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AI Chatbot -->
+    <div class="chatbot-button" id="chatbotButton"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="10" r="1" fill="white"/><circle cx="15" cy="10" r="1" fill="white"/><path d="M9 13s1 1 3 1 3-1 3-1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg><span class="chatbot-badge">AI</span></div>
+    <div class="chatbot-widget" id="chatbotWidget">
+        <div class="chatbot-header"><div class="chatbot-header-content"><div class="chatbot-avatar"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="white"/></svg></div><div class="chatbot-info"><h4>ABLE Wellness Assistant</h4><span class="chatbot-status">Online • Here to Help</span></div></div><button class="chatbot-close" id="chatbotClose"><svg viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+        <div class="chatbot-messages" id="chatbotMessages"></div>
+        <div class="chatbot-input"><input type="text" id="chatbotInput" placeholder="Type your message..." autocomplete="off"><button class="chatbot-send" id="chatbotSend"><svg viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9M22 2L2 8l9 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    </div>
+
+    <script src="chatbot.js"></script>
+    <script src="script.js"></script>
+    <script>
+    // Sticky Navbar
+    window.addEventListener('scroll', () => {
+        document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+    });
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.feature-card, .step-card, .testimonial-card, .pricing-card, .therapist-showcase, .stat-block').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

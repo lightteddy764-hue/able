@@ -1,0 +1,103 @@
+/* ===== Premium Youth Support ===== */
+.ys-page { padding:1.5rem 2rem; }
+
+/* Hero */
+.ys-hero { display:flex; justify-content:space-between; align-items:center; padding:2.5rem; background:linear-gradient(135deg,#111827,#1e293b,#E67E22); border-radius:20px; color:white; margin-bottom:2rem; position:relative; overflow:hidden; }
+.ys-hero::after { content:''; position:absolute; top:-40%; right:-15%; width:300px; height:300px; background:rgba(230,126,34,0.1); border-radius:50%; }
+.ys-badge { display:inline-block; background:rgba(255,255,255,0.12); padding:0.35rem 0.8rem; border-radius:8px; font-size:0.75rem; font-weight:700; margin-bottom:1rem; }
+.ys-hero-left h1 { font-size:1.85rem; font-weight:800; margin-bottom:0.75rem; }
+.ys-hero-left p { font-size:0.95rem; opacity:0.85; margin-bottom:1rem; max-width:480px; line-height:1.6; }
+.ys-hero-checks { display:flex; flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem; }
+.ys-hero-checks span { font-size:0.8rem; opacity:0.75; }
+.ys-hero-btn { display:inline-block; background:white; color:#E67E22; padding:0.85rem 2rem; border-radius:12px; font-weight:700; text-decoration:none; transition:all 0.3s; }
+.ys-hero-btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(255,255,255,0.2); }
+.ys-hero-right { text-align:center; flex-shrink:0; }
+.ys-growth-score { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); padding:1.5rem 2rem; border-radius:16px; }
+.ys-gs-num { display:block; font-size:2.5rem; font-weight:800; }
+.ys-gs-label { font-size:0.8rem; opacity:0.7; display:block; }
+.ys-gs-trend { font-size:0.75rem; color:#10B981; font-weight:600; display:block; margin-top:0.5rem; }
+
+/* Progress Row */
+.ys-progress-row { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:2rem; }
+.ys-prog-item { background:white; padding:1rem 1.25rem; border-radius:14px; border:1px solid #E5E7EB; }
+.ys-prog-label { font-size:0.75rem; font-weight:600; color:#6B7280; display:block; margin-bottom:0.4rem; }
+.ys-prog-bar { width:100%; height:6px; background:#E5E7EB; border-radius:6px; overflow:hidden; margin-bottom:0.3rem; }
+.ys-prog-fill { height:100%; border-radius:6px; transition:width 0.5s; }
+.ys-prog-val { font-size:0.7rem; font-weight:700; color:#111827; }
+
+/* Section */
+.ys-section { margin-bottom:2.5rem; }
+.ys-sec-title { font-size:1.3rem; font-weight:800; color:#111827; margin-bottom:1.25rem; }
+
+/* Recommended */
+.ys-rec-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+.ys-rec-card { display:flex; align-items:center; gap:1rem; padding:1.25rem; background:white; border-radius:14px; border:1px solid #E5E7EB; transition:all 0.3s; }
+.ys-rec-card:hover { transform:translateY(-3px); box-shadow:0 8px 20px rgba(0,0,0,0.06); }
+.ys-rec-icon { width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.ys-rec-icon svg { width:22px; height:22px; }
+.ys-rec-card h4 { font-size:0.9rem; font-weight:700; color:#111827; margin-bottom:0.2rem; }
+.ys-rec-card p { font-size:0.75rem; color:#6B7280; margin:0; }
+.ys-rec-btn { margin-left:auto; color:#E67E22; font-weight:700; font-size:0.8rem; text-decoration:none; white-space:nowrap; }
+
+/* Modules */
+.ys-modules-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1.25rem; }
+.ys-module { background:white; border-radius:16px; overflow:hidden; border:1px solid #E5E7EB; transition:all 0.3s; }
+.ys-module:hover { transform:translateY(-4px); box-shadow:0 12px 30px rgba(0,0,0,0.08); }
+.ys-mod-header { height:80px; display:flex; align-items:center; justify-content:center; }
+.ys-mod-header svg { width:32px; height:32px; }
+.ys-mod-body { padding:1.25rem; }
+.ys-mod-body h4 { font-size:0.95rem; font-weight:700; color:#111827; margin-bottom:0.2rem; }
+.ys-mod-body p { font-size:0.75rem; color:#6B7280; margin-bottom:0.5rem; }
+.ys-mod-stat { font-size:0.7rem; color:#E67E22; font-weight:600; display:block; margin-bottom:0.75rem; }
+.ys-mod-btn { width:100%; padding:0.6rem; background:transparent; color:#E67E22; border:2px solid #E67E22; border-radius:8px; font-weight:700; font-size:0.8rem; cursor:pointer; transition:all 0.3s; }
+.ys-mod-btn:hover { background:#E67E22; color:white; }
+
+/* Career Matches */
+.ys-careers-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
+.ys-career { background:white; padding:1.25rem; border-radius:14px; border:1px solid #E5E7EB; text-align:center; transition:all 0.3s; }
+.ys-career:hover { transform:translateY(-3px); box-shadow:0 8px 20px rgba(0,0,0,0.06); }
+.ys-career-match { display:inline-block; background:#ECFDF5; color:#10B981; padding:0.25rem 0.6rem; border-radius:8px; font-size:0.7rem; font-weight:700; margin-bottom:0.5rem; }
+.ys-career h4 { font-size:0.9rem; font-weight:700; color:#111827; margin-bottom:0.2rem; }
+.ys-career p { font-size:0.7rem; color:#6B7280; margin:0; }
+
+/* Two Col */
+.ys-two-col { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:2rem; }
+.ys-card { background:white; padding:1.5rem; border-radius:16px; border:1px solid #E5E7EB; }
+.ys-card-title { font-size:1rem; font-weight:700; color:#111827; margin-bottom:1rem; }
+
+/* Counselor */
+.ys-counselor { display:flex; align-items:center; gap:1rem; margin-bottom:1rem; }
+.ys-coun-img { width:56px; height:56px; border-radius:50%; border:2px solid #F3E8FF; }
+.ys-counselor h4 { font-size:0.95rem; font-weight:700; color:#111827; margin-bottom:0.15rem; }
+.ys-counselor span { font-size:0.8rem; color:#8B5CF6; font-weight:600; display:block; }
+.ys-coun-meta { font-size:0.75rem; color:#6B7280; margin-top:0.3rem; }
+.ys-coun-btn { display:block; text-align:center; background:#E67E22; color:white; padding:0.7rem; border-radius:10px; text-decoration:none; font-weight:700; font-size:0.85rem; transition:all 0.3s; }
+.ys-coun-btn:hover { background:#D35400; }
+
+/* Challenges */
+.ys-challenges-list { display:flex; flex-direction:column; gap:0.5rem; }
+.ys-challenge { display:flex; align-items:center; gap:0.75rem; padding:0.6rem; border-radius:8px; font-size:0.85rem; color:#6B7280; }
+.ys-challenge span { width:20px; text-align:center; }
+.ys-challenge.done { color:#111827; font-weight:500; background:#ECFDF5; }
+
+/* Achievements */
+.ys-achievements { background:white; padding:1.5rem; border-radius:16px; border:1px solid #E5E7EB; margin-bottom:2rem; }
+.ys-achievements h3 { font-size:1rem; font-weight:700; color:#111827; margin-bottom:1rem; }
+.ys-ach-grid { display:flex; flex-wrap:wrap; gap:0.75rem; }
+.ys-ach { display:flex; align-items:center; gap:0.5rem; padding:0.5rem 1rem; border-radius:10px; font-size:0.8rem; color:#9CA3AF; background:#F9FAFB; border:1px solid #E5E7EB; }
+.ys-ach.earned { background:#FDF2E9; color:#E67E22; border-color:#E67E22; font-weight:600; }
+
+/* Resources */
+.ys-resources-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+.ys-resource { display:flex; align-items:center; gap:1rem; padding:1.25rem; background:white; border-radius:14px; border:1px solid #E5E7EB; text-decoration:none; transition:all 0.3s; }
+.ys-resource:hover { transform:translateY(-3px); box-shadow:0 8px 20px rgba(0,0,0,0.06); }
+.ys-res-icon { width:40px; height:40px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.ys-res-icon svg { width:24px; height:24px; }
+.ys-resource h4 { font-size:0.9rem; font-weight:700; color:#111827; margin-bottom:0.15rem; }
+.ys-resource span { font-size:0.7rem; color:#9CA3AF; }
+
+/* Responsive */
+@media(max-width:1200px) { .ys-modules-grid{grid-template-columns:repeat(2,1fr)} .ys-careers-grid{grid-template-columns:repeat(2,1fr)} .ys-resources-grid{grid-template-columns:repeat(2,1fr)} }
+@media(max-width:968px) { .ys-hero{flex-direction:column;text-align:center;gap:1.5rem;padding:2rem} .ys-hero-left p{max-width:100%} .ys-hero-checks{justify-content:center} .ys-progress-row{grid-template-columns:repeat(2,1fr)} .ys-rec-grid{grid-template-columns:1fr} .ys-two-col{grid-template-columns:1fr} }
+@media(max-width:768px) { .ys-page{padding:1rem} .ys-hero-left h1{font-size:1.4rem} .ys-modules-grid{grid-template-columns:1fr} .ys-careers-grid{grid-template-columns:1fr} .ys-resources-grid{grid-template-columns:1fr} .ys-progress-row{grid-template-columns:1fr} }
+@media(max-width:480px) { .ys-hero{padding:1.5rem} .ys-hero-left h1{font-size:1.2rem} .ys-ach-grid{flex-direction:column} }

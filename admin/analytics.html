@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Admin ABLE</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+    <style>
+        .analytics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
+        .stat-card { background: white; border-radius: 14px; padding: 1.5rem; border: 1px solid #E5E7EB; text-align: center; }
+        .stat-card .stat-num { font-size: 2rem; font-weight: 800; color: #E67E22; }
+        .stat-card .stat-label { font-size: 0.8rem; color: #6B7280; margin-top: 0.25rem; }
+        
+        .chart-card { background: white; border-radius: 14px; padding: 1.5rem; border: 1px solid #E5E7EB; margin-bottom: 2rem; }
+        .chart-card h3 { font-size: 1rem; font-weight: 700; color: #111827; margin-bottom: 1rem; }
+        .chart-canvas { width: 100%; height: 250px; position: relative; }
+        
+        .mood-bars { display: flex; align-items: flex-end; gap: 4px; height: 200px; padding: 0 0.5rem; }
+        .mood-bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
+        .mood-bar { width: 100%; max-width: 40px; border-radius: 6px 6px 0 0; transition: height 0.5s; min-height: 2px; }
+        .mood-bar-label { font-size: 0.6rem; color: #9CA3AF; text-align: center; white-space: nowrap; overflow: hidden; }
+        .mood-bar-val { font-size: 0.65rem; color: #6B7280; font-weight: 600; }
+        
+        .mood-dist { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-top: 1rem; }
+        .mood-dist-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; background: #F9FAFB; border-radius: 10px; border: 1px solid #E5E7EB; }
+        .mood-dist-emoji { font-size: 1.5rem; }
+        .mood-dist-info { text-align: left; }
+        .mood-dist-count { font-size: 1.1rem; font-weight: 800; color: #111827; display: block; }
+        .mood-dist-name { font-size: 0.7rem; color: #6B7280; }
+        
+        .task-stats-list { display: flex; flex-direction: column; gap: 0.75rem; }
+        .task-stat-item { display: flex; align-items: center; gap: 1rem; padding: 0.75rem; background: #F9FAFB; border-radius: 10px; }
+        .task-stat-name { flex: 1; font-size: 0.85rem; color: #374151; }
+        .task-stat-bar { width: 120px; height: 8px; background: #E5E7EB; border-radius: 4px; overflow: hidden; }
+        .task-stat-fill { height: 100%; background: #E67E22; border-radius: 4px; transition: width 0.5s; }
+        .task-stat-pct { font-size: 0.8rem; font-weight: 700; color: #E67E22; min-width: 40px; text-align: right; }
+        
+        .filter-bar { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .filter-btn { padding: 0.5rem 1.25rem; border: 1.5px solid #E5E7EB; background: white; border-radius: 8px; font-size: 0.8rem; font-weight: 600; color: #6B7280; cursor: pointer; transition: all 0.2s; }
+        .filter-btn.active { background: #E67E22; color: white; border-color: #E67E22; }
+        .filter-btn:hover { border-color: #E67E22; color: #E67E22; }
+        .filter-btn.active:hover { color: white; }
+
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        @media(max-width:768px) { .two-col { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div id="sidebar"></div>
+    <script src="/admin/admin-nav.js"></script>
+
+    <div class="main">
+        <div class="header">
+            <div style="display:flex;align-items:center;gap:0.75rem">
+                <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+                <h1>User Analytics</h1>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Period Filter -->
+            <div class="filter-bar">
+                <button class="filter-btn" data-days="7">Last 7 Days</button>
+                <button class="filter-btn active" data-days="30">Last 30 Days</button>
+                <button class="filter-btn" data-days="90">Last 90 Days</button>
+            </div>
+
+            <!-- Summary Stats -->
+            <div class="analytics-grid" id="summaryStats">
+                <div class="stat-card"><div class="stat-num" id="statTotalEntries">—</div><div class="stat-label">Total Mood Entries</div></div>
+                <div class="stat-card"><div class="stat-num" id="statActiveUsers">—</div><div class="stat-label">Active Users</div></div>
+                <div class="stat-card"><div class="stat-num" id="statAvgScore">—</div><div class="stat-label">Avg Wellness Score</div></div>
+                <div class="stat-card"><div class="stat-num" id="statTaskRate">—</div><div class="stat-label">Task Completion Rate</div></div>
+            </div>
+
+            <!-- Mood Distribution -->
+            <div class="chart-card">
+                <h3>Mood Distribution (All Users)</h3>
+                <div class="mood-dist" id="moodDistribution"></div>
+            </div>
+
+            <div class="two-col">
+                <!-- Daily Wellness Score Chart -->
+                <div class="chart-card">
+                    <h3>Daily Average Wellness Score</h3>
+                    <div class="mood-bars" id="dailyScoreChart"></div>
+                </div>
+
+                <!-- Task Completion Chart -->
+                <div class="chart-card">
+                    <h3>Daily Task Completion Rate</h3>
+                    <div class="mood-bars" id="dailyTaskChart"></div>
+                </div>
+            </div>
+
+            <!-- Task Stats -->
+            <div class="chart-card">
+                <h3>Task Completion Breakdown</h3>
+                <div class="task-stats-list" id="taskStatsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const token = localStorage.getItem('adminToken');
+    if (!token) window.location.href = '/admin/';
+
+    let currentDays = 30;
+
+    async function api(path) {
+        const res = await fetch(path, { headers: { 'Authorization': 'Bearer ' + token } });
+        if (res.status === 401) { localStorage.removeItem('adminToken'); window.location.href = '/admin/'; }
+        return res.json();
+    }
+
+    // Filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentDays = parseInt(btn.dataset.days);
+            loadAnalytics();
+        });
+    });
+
+    async function loadAnalytics() {
+        const [moodData, taskData] = await Promise.all([
+            api('/admin/api/mood-analytics?days=' + currentDays),
+            api('/admin/api/task-analytics?days=' + currentDays)
+        ]);
+
+        // Summary stats
+        document.getElementById('statTotalEntries').textContent = moodData.totalEntries || 0;
+        document.getElementById('statActiveUsers').textContent = moodData.totalUsers || 0;
+        
+        const avgScore = moodData.dailyScores.length > 0 
+            ? Math.round(moodData.dailyScores.reduce((s, d) => s + d.score, 0) / moodData.dailyScores.length)
+            : 0;
+        document.getElementById('statAvgScore').textContent = avgScore + '%';
+
+        const avgTaskRate = taskData.dailyRates.length > 0
+            ? Math.round(taskData.dailyRates.reduce((s, d) => s + d.rate, 0) / taskData.dailyRates.length)
+            : 0;
+        document.getElementById('statTaskRate').textContent = avgTaskRate + '%';
+
+        // Mood Distribution
+        renderMoodDistribution(moodData.moodDistribution);
+
+        // Daily score chart
+        renderBarChart('dailyScoreChart', moodData.dailyScores.map(d => ({
+            label: d.date.slice(5),
+            value: d.score,
+            max: 100
+        })), '#E67E22');
+
+        // Daily task chart
+        renderBarChart('dailyTaskChart', taskData.dailyRates.map(d => ({
+            label: d.date.slice(5),
+            value: d.rate,
+            max: 100
+        })), '#10B981');
+
+        // Task breakdown
+        renderTaskStats(taskData.taskStats);
+    }
+
+    function renderMoodDistribution(dist) {
+        const moods = [
+            { key: 'great', emoji: '😄', name: 'Great', color: '#10B981' },
+            { key: 'good', emoji: '🙂', name: 'Good', color: '#34D399' },
+            { key: 'okay', emoji: '😐', name: 'Okay', color: '#F59E0B' },
+            { key: 'low', emoji: '😔', name: 'Low', color: '#F97316' },
+            { key: 'struggling', emoji: '😢', name: 'Struggling', color: '#EF4444' }
+        ];
+
+        document.getElementById('moodDistribution').innerHTML = moods.map(m => `
+            <div class="mood-dist-item">
+                <span class="mood-dist-emoji">${m.emoji}</span>
+                <div class="mood-dist-info">
+                    <span class="mood-dist-count" style="color:${m.color}">${dist[m.key] || 0}</span>
+                    <span class="mood-dist-name">${m.name}</span>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function renderBarChart(containerId, data, color) {
+        const container = document.getElementById(containerId);
+        if (!data.length) {
+            container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#9CA3AF;font-size:0.85rem">No data for this period</div>';
+            return;
+        }
+
+        // Show last 14 bars max
+        const displayData = data.slice(-14);
+        const maxVal = Math.max(...displayData.map(d => d.value), 1);
+
+        container.innerHTML = displayData.map(d => {
+            const height = Math.max((d.value / 100) * 180, 4);
+            return `<div class="mood-bar-group">
+                <span class="mood-bar-val">${d.value}</span>
+                <div class="mood-bar" style="height:${height}px;background:${color}"></div>
+                <span class="mood-bar-label">${d.label}</span>
+            </div>`;
+        }).join('');
+    }
+
+    function renderTaskStats(stats) {
+        const container = document.getElementById('taskStatsList');
+        const entries = Object.entries(stats);
+        
+        if (!entries.length) {
+            container.innerHTML = '<div style="text-align:center;padding:2rem;color:#9CA3AF">No task data yet</div>';
+            return;
+        }
+
+        container.innerHTML = entries.map(([title, data]) => {
+            const pct = Math.round((data.completed / data.total) * 100);
+            return `<div class="task-stat-item">
+                <span class="task-stat-name">${title}</span>
+                <div class="task-stat-bar"><div class="task-stat-fill" style="width:${pct}%"></div></div>
+                <span class="task-stat-pct">${pct}%</span>
+            </div>`;
+        }).join('');
+    }
+
+    loadAnalytics();
+    </script>
+</body>
+</html>

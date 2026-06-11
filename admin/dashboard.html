@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - ABLE</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+    <div id="sidebar"></div>
+    <script src="/admin/admin-nav.js"></script>
+
+    <!-- Main -->
+    <div class="main">
+        <div class="header">
+            <div style="display:flex;align-items:center;gap:0.75rem">
+                <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+                <h1>Dashboard Overview</h1>
+            </div>
+            <div class="header-right"><span>Welcome, Admin</span></div>
+        </div>
+
+        <div class="container">
+            <!-- Stats -->
+            <div class="stats">
+                <div class="stat-card"><h3>Total Users</h3><div class="num" id="totalUsers">-</div><span class="stat-trend up">↑ Active</span></div>
+                <div class="stat-card"><h3>Stories Published</h3><div class="num" id="totalStories">-</div><span class="stat-trend">This month</span></div>
+                <div class="stat-card"><h3>Therapists</h3><div class="num" id="totalTherapists">-</div><span class="stat-trend up">↑ Verified</span></div>
+                <div class="stat-card"><h3>Communities</h3><div class="num" id="totalCommunities">-</div><span class="stat-trend">Groups</span></div>
+                <div class="stat-card"><h3>Sessions</h3><div class="num" id="totalSessions">-</div><span class="stat-trend">Booked</span></div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="charts-row">
+                <div class="chart-card">
+                    <h3>User Growth (Last 7 Days)</h3>
+                    <div class="chart-area">
+                        <svg viewBox="0 0 300 120" class="line-chart">
+                            <line x1="0" y1="100" x2="300" y2="100" stroke="#e5e7eb" stroke-width="0.5"/>
+                            <line x1="0" y1="66" x2="300" y2="66" stroke="#f3f4f6" stroke-width="0.5" stroke-dasharray="4"/>
+                            <line x1="0" y1="33" x2="300" y2="33" stroke="#f3f4f6" stroke-width="0.5" stroke-dasharray="4"/>
+                            <polyline id="userChart" points="0,90 50,85 100,75 150,70 200,60 250,50 300,40" fill="none" stroke="#E67E22" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <polyline id="userChartFill" points="0,90 50,85 100,75 150,70 200,60 250,50 300,40 300,100 0,100" fill="url(#chartGrad)" stroke="none"/>
+                            <defs><linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(230,126,34,0.2)"/><stop offset="100%" stop-color="rgba(230,126,34,0)"/></linearGradient></defs>
+                        </svg>
+                        <div class="chart-labels"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3>Platform Distribution</h3>
+                    <div class="donut-chart">
+                        <div class="donut-item"><span class="donut-dot" style="background:#E67E22"></span>Healing Zone<strong id="distHeal">40%</strong></div>
+                        <div class="donut-item"><span class="donut-dot" style="background:#10B981"></span>Body-Mind<strong id="distBody">25%</strong></div>
+                        <div class="donut-item"><span class="donut-dot" style="background:#3B82F6"></span>Community<strong id="distComm">20%</strong></div>
+                        <div class="donut-item"><span class="donut-dot" style="background:#8B5CF6"></span>Youth Support<strong id="distYouth">10%</strong></div>
+                        <div class="donut-item"><span class="donut-dot" style="background:#F59E0B"></span>My Voice<strong id="distVoice">5%</strong></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity + Quick Info -->
+            <div class="two-col">
+                <div class="card">
+                    <h3>Recent Users</h3>
+                    <div class="recent-list" id="recentUsers"><div class="empty">Loading...</div></div>
+                </div>
+                <div class="card">
+                    <h3>Quick Actions</h3>
+                    <div class="quick-actions">
+                        <a href="/admin/dashboard.html#users" class="qa-btn">View All Users</a>
+                        <a href="/admin/dashboard.html#therapists" class="qa-btn">Manage Therapists</a>
+                        <a href="/admin/dashboard.html#stories" class="qa-btn">Moderate Stories</a>
+                        <a href="/" target="_blank" class="qa-btn">Visit Website</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Stories for Review -->
+            <div class="card" id="pendingSection">
+                <h3>📋 Stories Pending Review</h3>
+                <div id="pendingStories"><div class="empty">Loading...</div></div>
+            </div>
+
+            <!-- Recent Stories -->
+            <div class="card">
+                <h3>Latest Stories</h3>
+                <table>
+                    <thead><tr><th>Title</th><th>Author</th><th>Category</th><th>Date</th><th>Actions</th></tr></thead>
+                    <tbody id="storiesTable"><tr><td colspan="5" class="empty">No stories yet</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const token = localStorage.getItem('adminToken');
+    if (!token) window.location.href = '/admin/';
+
+    async function api(path) {
+        const res = await fetch(path, { headers: { 'Authorization': 'Bearer ' + token } });
+        if (res.status === 401) { localStorage.removeItem('adminToken'); window.location.href='/admin/'; }
+        return res.json();
+    }
+
+    async function loadDashboard() {
+        try {
+            const data = await api('/admin/api/dashboard');
+            document.getElementById('totalUsers').textContent = data.counts.users;
+            document.getElementById('totalStories').textContent = data.counts.stories;
+            document.getElementById('totalTherapists').textContent = data.counts.therapists;
+            document.getElementById('totalCommunities').textContent = data.counts.communities;
+            document.getElementById('totalSessions').textContent = data.counts.sessions;
+
+            // Recent users
+            if (data.users.length) {
+                document.getElementById('recentUsers').innerHTML = data.users.slice(0, 5).map(u => `
+                    <div class="recent-item">
+                        <div class="ri-info"><strong>${u.name}</strong><span>${u.email}</span></div>
+                        <span class="badge ${u.assessment?.completed?'badge-green':'badge-red'}">${u.assessment?.severityLevel||'pending'}</span>
+                    </div>
+                `).join('');
+            } else {
+                document.getElementById('recentUsers').innerHTML = '<div class="empty">No users yet</div>';
+            }
+
+            // Stories table
+            if (data.stories.length) {
+                document.getElementById('storiesTable').innerHTML = data.stories.slice(0, 5).map(s => `<tr>
+                    <td>${s.title}</td>
+                    <td>${s.isAnonymous?'Anonymous':(s.author?.name||'Unknown')}</td>
+                    <td><span class="badge badge-blue">${s.category}</span></td>
+                    <td>${new Date(s.createdAt).toLocaleDateString()}</td>
+                    <td><button class="btn-sm btn-del" onclick="deleteStory('${s._id}')">Delete</button></td>
+                </tr>`).join('');
+            }
+        } catch(e) { console.error(e); }
+    }
+
+    async function deleteStory(id) {
+        if(confirm('Delete this story?')) {
+            await fetch('/admin/api/stories/'+id, {method:'DELETE', headers:{'Authorization':'Bearer '+token}});
+            loadDashboard();
+            loadPendingStories();
+        }
+    }
+
+    async function loadPendingStories() {
+        try {
+            const res = await fetch('/admin/api/stories/pending', { headers: { 'Authorization': 'Bearer ' + token } });
+            const data = await res.json();
+            const stories = data.stories || [];
+            
+            if (!stories.length) {
+                document.getElementById('pendingStories').innerHTML = '<div class="empty">✅ No stories pending review</div>';
+                return;
+            }
+
+            document.getElementById('pendingStories').innerHTML = stories.map(s => `
+                <div class="pending-story-card" style="background:#fffbf5;border:1px solid #fde68a;border-radius:10px;padding:1.25rem;margin-bottom:0.75rem">
+                    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.5rem">
+                        <div>
+                            <strong style="font-size:0.9rem;color:#111">${s.title}</strong>
+                            <div style="font-size:0.75rem;color:#6b7280;margin-top:0.2rem">
+                                By: ${s.author?.name || s.authorName || 'Unknown'} ${s.author?.email ? '(' + s.author.email + ')' : ''} • 
+                                <span class="badge badge-blue">${s.category}</span> • 
+                                ${new Date(s.createdAt).toLocaleDateString()}
+                            </div>
+                        </div>
+                        <span class="badge badge-orange">Pending</span>
+                    </div>
+                    <p style="font-size:0.82rem;color:#4b5563;line-height:1.6;margin-bottom:0.75rem;padding:0.75rem;background:white;border-radius:8px;border:1px solid #e5e7eb">${s.content.substring(0, 300)}${s.content.length > 300 ? '...' : ''}</p>
+                    <div style="display:flex;gap:0.5rem">
+                        <button class="btn-sm" style="background:#ecfdf5;color:#10b981;border-color:#a7f3d0;font-weight:600" onclick="approveStory('${s._id}')">✓ Approve</button>
+                        <button class="btn-sm" style="background:#fef2f2;color:#ef4444;border-color:#fecaca;font-weight:600" onclick="rejectStory('${s._id}')">✗ Reject</button>
+                        <button class="btn-sm btn-del" onclick="deleteStory('${s._id}')">🗑 Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        } catch(e) {
+            document.getElementById('pendingStories').innerHTML = '<div class="empty">Error loading pending stories</div>';
+        }
+    }
+
+    async function approveStory(id) {
+        if(confirm('Approve and publish this story?')) {
+            await fetch('/admin/api/stories/'+id+'/approve', {method:'PUT', headers:{'Authorization':'Bearer '+token}});
+            loadPendingStories();
+            loadDashboard();
+        }
+    }
+
+    async function rejectStory(id) {
+        if(confirm('Reject this story?')) {
+            await fetch('/admin/api/stories/'+id+'/reject', {method:'PUT', headers:{'Authorization':'Bearer '+token}});
+            loadPendingStories();
+            loadDashboard();
+        }
+    }
+
+    loadDashboard();
+    loadPendingStories();
+    </script>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Therapists - Admin ABLE</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+    <div id="sidebar"></div>
+    <script src="/admin/admin-nav.js"></script>
+
+    <div class="main">
+        <div class="header">
+            <div style="display:flex;align-items:center;gap:0.75rem">
+                <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+                <h1>Therapist Management</h1>
+            </div>
+            <button class="btn-primary" onclick="openAddModal()">+ Add Therapist</button>
+        </div>
+
+        <div class="container">
+            <!-- Stats -->
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-bottom:1.5rem" id="therapistStats"></div>
+
+            <!-- Filters -->
+            <div class="toolbar">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search therapists...">
+                <select class="filter-select" id="filterSpec">
+                    <option value="all">All Specializations</option>
+                    <option value="anxiety">Anxiety</option>
+                    <option value="depression">Depression</option>
+                    <option value="trauma">Trauma</option>
+                    <option value="relationships">Relationships</option>
+                    <option value="stress">Stress</option>
+                    <option value="grief">Grief</option>
+                    <option value="addiction">Addiction</option>
+                    <option value="family">Family</option>
+                    <option value="self-esteem">Self-Esteem</option>
+                    <option value="ocd">OCD</option>
+                    <option value="ptsd">PTSD</option>
+                </select>
+                <select class="filter-select" id="filterStatus">
+                    <option value="all">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                </select>
+            </div>
+
+            <!-- Table -->
+            <div class="card">
+                <table>
+                    <thead><tr><th>Therapist</th><th>Title</th><th>Specializations</th><th>Experience</th><th>Rating</th><th>Sessions</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody id="therapistTable"><tr><td colspan="8" class="empty">Loading...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay" style="display:none">
+        <div class="modal" style="max-width:650px">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Therapist</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="therapistForm">
+                    <input type="hidden" id="therapistId">
+                    <div class="form-row">
+                        <div class="form-group"><label>Full Name *</label><input type="text" id="tName" required placeholder="Dr. Sarah Mitchell"></div>
+                        <div class="form-group"><label>Title *</label><input type="text" id="tTitle" required placeholder="Clinical Psychologist"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Experience (years) *</label><input type="number" id="tExperience" required min="1" max="50" value="5"></div>
+                        <div class="form-group"><label>Session Rate ($)</label><input type="number" id="tRate" min="0" value="100"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Specializations * (comma-separated)</label>
+                        <input type="text" id="tSpecializations" required placeholder="Anxiety, Depression, Trauma, PTSD">
+                        <small style="color:#9ca3af;font-size:0.7rem">Categories: Anxiety, Depression, Trauma, Stress, Relationships, Self-Esteem, Grief, Family, Addiction, OCD, PTSD, Mindfulness</small>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Education</label><input type="text" id="tEducation" placeholder="PhD Clinical Psychology, Harvard"></div>
+                        <div class="form-group"><label>License Number</label><input type="text" id="tLicense" placeholder="PSY12345"></div>
+                    </div>
+                    <div class="form-group">
+                        <label>Bio</label>
+                        <textarea id="tBio" rows="3" placeholder="Brief description of the therapist's approach and background..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Therapeutic Approach</label>
+                        <input type="text" id="tApproach" placeholder="CBT, EMDR, Mindfulness-Based">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Session Types</label>
+                            <div class="check-row">
+                                <label class="check-label"><input type="checkbox" id="tVideo" checked> Video</label>
+                                <label class="check-label"><input type="checkbox" id="tAudio"> Audio</label>
+                                <label class="check-label"><input type="checkbox" id="tChat"> Chat</label>
+                                <label class="check-label"><input type="checkbox" id="tInPerson"> In-Person</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Languages (comma-separated)</label><input type="text" id="tLanguages" placeholder="English, Hindi, Spanish" value="English"></div>
+                        <div class="form-group"><label>Response Time</label><input type="text" id="tResponseTime" placeholder="1 hour" value="1 hour"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Avatar URL (optional)</label><input type="text" id="tAvatar" placeholder="https://..."></div>
+                        <div class="form-group"><label>Rating</label><input type="number" id="tRating" min="1" max="5" step="0.1" value="4.8"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Options</label>
+                            <div class="check-row">
+                                <label class="check-label"><input type="checkbox" id="tVerified" checked> Verified</label>
+                                <label class="check-label"><input type="checkbox" id="tAvailableToday" checked> Available Today</label>
+                                <label class="check-label"><input type="checkbox" id="tActive" checked> Active</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-action" onclick="closeModal()">Cancel</button>
+                        <button type="submit" class="btn-primary">Save Therapist</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const token = localStorage.getItem('adminToken');
+    if (!token) window.location.href = '/admin/';
+
+    let allTherapists = [];
+
+    async function api(path, opts={}) {
+        const res = await fetch(path, { ...opts, headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+token, ...opts.headers } });
+        if (res.status === 401) { localStorage.removeItem('adminToken'); window.location.href='/admin/'; }
+        return res.json();
+    }
+
+    async function loadTherapists() {
+        const data = await api('/admin/api/therapists');
+        allTherapists = data.therapists || [];
+        renderStats();
+        renderTable(allTherapists);
+    }
+
+    function renderStats() {
+        const total = allTherapists.length;
+        const active = allTherapists.filter(t => t.isActive).length;
+        const verified = allTherapists.filter(t => t.isVerified).length;
+        const availToday = allTherapists.filter(t => t.isAvailableToday).length;
+        document.getElementById('therapistStats').innerHTML = `
+            <div style="background:white;border-radius:12px;padding:1rem;border:1px solid #e5e7eb;text-align:center"><strong style="font-size:1.5rem;color:#E67E22">${total}</strong><br><small style="color:#6b7280">Total</small></div>
+            <div style="background:white;border-radius:12px;padding:1rem;border:1px solid #e5e7eb;text-align:center"><strong style="font-size:1.5rem;color:#10B981">${active}</strong><br><small style="color:#6b7280">Active</small></div>
+            <div style="background:white;border-radius:12px;padding:1rem;border:1px solid #e5e7eb;text-align:center"><strong style="font-size:1.5rem;color:#3B82F6">${verified}</strong><br><small style="color:#6b7280">Verified</small></div>
+            <div style="background:white;border-radius:12px;padding:1rem;border:1px solid #e5e7eb;text-align:center"><strong style="font-size:1.5rem;color:#8B5CF6">${availToday}</strong><br><small style="color:#6b7280">Available Today</small></div>
+        `;
+    }
+
+    function renderTable(therapists) {
+        if (!therapists.length) { document.getElementById('therapistTable').innerHTML = '<tr><td colspan="8" class="empty">No therapists found</td></tr>'; return; }
+        document.getElementById('therapistTable').innerHTML = therapists.map(t => `<tr>
+            <td><div style="display:flex;align-items:center;gap:0.5rem"><img src="${t.avatar || 'https://ui-avatars.com/api/?name='+encodeURIComponent(t.name)+'&background=E67E22&color=fff&size=32'}" style="width:32px;height:32px;border-radius:50%"><strong>${t.name}</strong></div></td>
+            <td>${t.title}</td>
+            <td>${(t.specializations||[]).map(s=>'<span class="badge badge-blue" style="margin:1px">'+s+'</span>').join('')}</td>
+            <td>${t.experience} yrs</td>
+            <td>⭐ ${t.rating}</td>
+            <td>${t.totalSessions || 0}</td>
+            <td>${t.isActive ? '<span class="badge badge-green">Active</span>' : '<span class="badge badge-red">Inactive</span>'}</td>
+            <td class="actions-cell">
+                <button class="btn-sm" onclick="editTherapist('${t._id}')">Edit</button>
+                <button class="btn-sm btn-del" onclick="deleteTherapist('${t._id}')">Delete</button>
+            </td>
+        </tr>`).join('');
+    }
+
+    // Filters
+    document.getElementById('searchInput').addEventListener('input', applyFilters);
+    document.getElementById('filterSpec').addEventListener('change', applyFilters);
+    document.getElementById('filterStatus').addEventListener('change', applyFilters);
+
+    function applyFilters() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const spec = document.getElementById('filterSpec').value;
+        const status = document.getElementById('filterStatus').value;
+        let filtered = allTherapists.filter(t => {
+            const matchSearch = t.name.toLowerCase().includes(search) || t.title.toLowerCase().includes(search);
+            const matchSpec = spec === 'all' || (t.specializations||[]).some(s => s.toLowerCase().includes(spec));
+            const matchStatus = status === 'all' || (status === 'active' && t.isActive) || (status === 'inactive' && !t.isActive);
+            return matchSearch && matchSpec && matchStatus;
+        });
+        renderTable(filtered);
+    }
+
+    // Add modal
+    function openAddModal() {
+        document.getElementById('modalTitle').textContent = 'Add Therapist';
+        document.getElementById('therapistId').value = '';
+        document.getElementById('therapistForm').reset();
+        document.getElementById('tVideo').checked = true;
+        document.getElementById('tVerified').checked = true;
+        document.getElementById('tAvailableToday').checked = true;
+        document.getElementById('tActive').checked = true;
+        document.getElementById('tRating').value = '4.8';
+        document.getElementById('tRate').value = '100';
+        document.getElementById('tExperience').value = '5';
+        document.getElementById('tLanguages').value = 'English';
+        document.getElementById('tResponseTime').value = '1 hour';
+        document.getElementById('modalOverlay').style.display = 'flex';
+    }
+
+    // Edit
+    function editTherapist(id) {
+        const t = allTherapists.find(x => x._id === id);
+        if (!t) return;
+        document.getElementById('modalTitle').textContent = 'Edit Therapist';
+        document.getElementById('therapistId').value = t._id;
+        document.getElementById('tName').value = t.name;
+        document.getElementById('tTitle').value = t.title;
+        document.getElementById('tExperience').value = t.experience;
+        document.getElementById('tRate').value = t.sessionRate || 0;
+        document.getElementById('tSpecializations').value = (t.specializations||[]).join(', ');
+        document.getElementById('tEducation').value = t.education || '';
+        document.getElementById('tLicense').value = t.licenseNumber || '';
+        document.getElementById('tBio').value = t.bio || '';
+        document.getElementById('tApproach').value = t.approach || '';
+        document.getElementById('tLanguages').value = (t.languages||[]).join(', ');
+        document.getElementById('tResponseTime').value = t.responseTime || '1 hour';
+        document.getElementById('tAvatar').value = t.avatar || '';
+        document.getElementById('tRating').value = t.rating || 4.8;
+        document.getElementById('tVideo').checked = (t.sessionTypes||[]).includes('video');
+        document.getElementById('tAudio').checked = (t.sessionTypes||[]).includes('audio');
+        document.getElementById('tChat').checked = (t.sessionTypes||[]).includes('chat');
+        document.getElementById('tInPerson').checked = (t.sessionTypes||[]).includes('in-person');
+        document.getElementById('tVerified').checked = t.isVerified;
+        document.getElementById('tAvailableToday').checked = t.isAvailableToday;
+        document.getElementById('tActive').checked = t.isActive;
+        document.getElementById('modalOverlay').style.display = 'flex';
+    }
+
+    function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
+
+    // Submit
+    document.getElementById('therapistForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('therapistId').value;
+        
+        const sessionTypes = [];
+        if (document.getElementById('tVideo').checked) sessionTypes.push('video');
+        if (document.getElementById('tAudio').checked) sessionTypes.push('audio');
+        if (document.getElementById('tChat').checked) sessionTypes.push('chat');
+        if (document.getElementById('tInPerson').checked) sessionTypes.push('in-person');
+
+        const body = {
+            name: document.getElementById('tName').value,
+            title: document.getElementById('tTitle').value,
+            experience: parseInt(document.getElementById('tExperience').value),
+            sessionRate: parseInt(document.getElementById('tRate').value) || 0,
+            specializations: document.getElementById('tSpecializations').value.split(',').map(s => s.trim()).filter(Boolean),
+            education: document.getElementById('tEducation').value,
+            licenseNumber: document.getElementById('tLicense').value,
+            bio: document.getElementById('tBio').value,
+            approach: document.getElementById('tApproach').value,
+            languages: document.getElementById('tLanguages').value.split(',').map(s => s.trim()).filter(Boolean),
+            responseTime: document.getElementById('tResponseTime').value,
+            avatar: document.getElementById('tAvatar').value,
+            rating: parseFloat(document.getElementById('tRating').value) || 4.8,
+            sessionTypes,
+            isVerified: document.getElementById('tVerified').checked,
+            isAvailableToday: document.getElementById('tAvailableToday').checked,
+            isActive: document.getElementById('tActive').checked
+        };
+
+        if (id) {
+            await api('/admin/api/therapists/' + id, { method:'PUT', body:JSON.stringify(body) });
+        } else {
+            await api('/admin/api/therapists', { method:'POST', body:JSON.stringify(body) });
+        }
+        closeModal();
+        loadTherapists();
+    });
+
+    // Delete
+    async function deleteTherapist(id) {
+        if (!confirm('Delete this therapist permanently?')) return;
+        await api('/admin/api/therapists/' + id, { method:'DELETE' });
+        loadTherapists();
+    }
+
+    loadTherapists();
+    </script>
+</body>
+</html>

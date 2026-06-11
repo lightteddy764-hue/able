@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story - ABLE</title>
+    <link rel="stylesheet" href="dashboard-styles.css">
+    <link rel="stylesheet" href="story-detail.css">
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header"><img src="images/logo.svg" alt="ABLE" class="sidebar-logo"></div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2"/><path d="M9 22V12h6v10" stroke="currentColor" stroke-width="2"/></svg><span>Dashboard</span></a>
+            <a href="healing-zone.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2"/></svg><span>Healing Zone</span></a>
+            <a href="body-mind.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Body-Mind</span></a>
+            <a href="community.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg><span>Community</span></a>
+            <a href="youth-support.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke="currentColor" stroke-width="2"/></svg><span>Youth Support</span></a>
+            <a href="my-voice.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2"/></svg><span>My Voice</span></a>
+            <a href="settings.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09" stroke="currentColor" stroke-width="2"/></svg><span>Settings</span></a>
+        </nav>
+        <div class="sidebar-footer"><a href="login.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2"/><path d="M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Logout</span></a></div>
+    </aside>
+
+    <div class="main-content">
+        <header class="topbar">
+            <button class="menu-toggle" id="menuToggle"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <a href="my-voice.html" class="back-link">← Back to Stories</a>
+            <div class="topbar-actions">
+                <div class="user-profile"><img src="https://ui-avatars.com/api/?name=User&background=E67E22&color=fff" alt="User" id="topbarAvatar"><div class="user-info"><span class="user-name" id="topbarName">User</span><span class="user-role">Wellness Seeker</span></div></div>
+            </div>
+        </header>
+
+        <main class="dashboard-content story-detail-page">
+            <!-- Loading State -->
+            <div class="story-loading" id="storyLoading">
+                <div class="loading-spinner"></div>
+                <p>Loading story...</p>
+            </div>
+
+            <!-- Story Content -->
+            <article class="story-article" id="storyArticle" style="display:none">
+                <!-- Story Header -->
+                <div class="story-header">
+                    <div class="story-category-badge" id="storyCatBadge">Recovery</div>
+                    <h1 class="story-title" id="storyTitle"></h1>
+                    <div class="story-meta">
+                        <div class="story-author-info">
+                            <img src="" alt="" class="story-author-avatar" id="storyAuthorAvatar">
+                            <div>
+                                <strong id="storyAuthorName"></strong>
+                                <span id="storyDate"></span>
+                            </div>
+                        </div>
+                        <div class="story-stats">
+                            <span>📖 <span id="storyReads">0</span> reads</span>
+                            <span>⏱ <span id="storyReadTime">3</span> min read</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Story Image -->
+                <div class="story-image-wrap" id="storyImageWrap" style="display:none">
+                    <img src="" alt="" id="storyImage">
+                </div>
+
+                <!-- Story Body -->
+                <div class="story-body" id="storyBody"></div>
+
+                <!-- Reactions -->
+                <div class="story-reactions">
+                    <h3>How did this story make you feel?</h3>
+                    <div class="reaction-buttons">
+                        <button class="reaction-btn" data-reaction="inspired" id="reactInspired">
+                            <span class="reaction-emoji">❤️</span>
+                            <span class="reaction-label">Inspired</span>
+                            <span class="reaction-count" id="countInspired">0</span>
+                        </button>
+                        <button class="reaction-btn" data-reaction="relatable" id="reactRelatable">
+                            <span class="reaction-emoji">🤗</span>
+                            <span class="reaction-label">Relatable</span>
+                            <span class="reaction-count" id="countRelatable">0</span>
+                        </button>
+                        <button class="reaction-btn" data-reaction="hopeful" id="reactHopeful">
+                            <span class="reaction-emoji">🌟</span>
+                            <span class="reaction-label">Hopeful</span>
+                            <span class="reaction-count" id="countHopeful">0</span>
+                        </button>
+                        <button class="reaction-btn" data-reaction="thankYou" id="reactThankYou">
+                            <span class="reaction-emoji">🙏</span>
+                            <span class="reaction-label">Thank You</span>
+                            <span class="reaction-count" id="countThankYou">0</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Share -->
+                <div class="story-share">
+                    <h3>Share this story</h3>
+                    <div class="share-buttons">
+                        <button class="share-btn share-copy" id="shareCopy">
+                            <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                            Copy Link
+                        </button>
+                        <button class="share-btn share-whatsapp" id="shareWhatsapp">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a8 8 0 01-4.1-1.127l-.29-.174-3.01.79.8-2.93-.19-.3A8 8 0 1112 20z"/></svg>
+                            WhatsApp
+                        </button>
+                        <button class="share-btn share-twitter" id="shareTwitter">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                            Twitter/X
+                        </button>
+                        <button class="share-btn share-facebook" id="shareFacebook">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                            Facebook
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Comments Section -->
+                <div class="story-comments">
+                    <h3>💬 Comments <span class="comment-count" id="commentCount">(0)</span></h3>
+                    
+                    <!-- Add Comment -->
+                    <div class="add-comment" id="addCommentSection">
+                        <div class="comment-input-wrap">
+                            <textarea id="commentInput" placeholder="Share your thoughts on this story..." rows="3"></textarea>
+                            <div class="comment-actions">
+                                <label class="anon-comment"><input type="checkbox" id="commentAnon"> Post anonymously</label>
+                                <button class="comment-submit" id="submitComment">Post Comment</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comments List -->
+                    <div class="comments-list" id="commentsList"></div>
+                </div>
+            </article>
+
+            <!-- Error State -->
+            <div class="story-error" id="storyError" style="display:none">
+                <h2>Story Not Found</h2>
+                <p>This story may have been removed or doesn't exist.</p>
+                <a href="my-voice.html" class="back-btn">← Back to My Voice</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="dashboard.js"></script>
+    <script>
+    const storyId = new URLSearchParams(window.location.search).get('id');
+    const token = localStorage.getItem('token');
+    let currentStory = null;
+
+    if (!storyId) {
+        document.getElementById('storyLoading').style.display = 'none';
+        document.getElementById('storyError').style.display = 'block';
+    } else {
+        loadStory();
+    }
+
+    async function loadStory() {
+        try {
+            const headers = {};
+            if (token) headers['Authorization'] = 'Bearer ' + token;
+            const res = await fetch('/api/stories/' + storyId, { headers });
+            const data = await res.json();
+            if (data.error || !data.story) {
+                document.getElementById('storyLoading').style.display = 'none';
+                document.getElementById('storyError').style.display = 'block';
+                return;
+            }
+            currentStory = data.story;
+            renderStory(currentStory, data.userReactions || []);
+        } catch(e) {
+            document.getElementById('storyLoading').style.display = 'none';
+            document.getElementById('storyError').style.display = 'block';
+        }
+    }
+
+    function renderStory(s, userReactions) {
+        document.title = s.title + ' - ABLE';
+        
+        // Category badge
+        const catColors = {recovery:'#10B981',anxiety:'#3B82F6',growth:'#8B5CF6',gratitude:'#F59E0B',advice:'#3B82F6',relationships:'#E67E22'};
+        const badge = document.getElementById('storyCatBadge');
+        badge.textContent = s.category;
+        badge.style.background = catColors[s.category] || '#E67E22';
+
+        // Title
+        document.getElementById('storyTitle').textContent = s.title;
+
+        // Author
+        const authorName = s.isAnonymous ? 'Anonymous' : (s.authorName || s.author?.name || 'Unknown');
+        document.getElementById('storyAuthorName').textContent = authorName;
+        document.getElementById('storyAuthorAvatar').src = s.isAnonymous 
+            ? 'https://ui-avatars.com/api/?name=A&background=9CA3AF&color=fff' 
+            : `https://ui-avatars.com/api/?name=${encodeURIComponent(authorName)}&background=E67E22&color=fff`;
+        
+        // Date
+        const date = new Date(s.createdAt);
+        document.getElementById('storyDate').textContent = date.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+
+        // Stats
+        document.getElementById('storyReads').textContent = s.readCount || 0;
+        document.getElementById('storyReadTime').textContent = s.readTime || 3;
+
+        // Image
+        if (s.image) {
+            document.getElementById('storyImageWrap').style.display = 'block';
+            document.getElementById('storyImage').src = s.image;
+            document.getElementById('storyImage').alt = s.title;
+        }
+
+        // Body - convert newlines to paragraphs
+        const paragraphs = s.content.split(/\n\n|\n/).filter(p => p.trim());
+        document.getElementById('storyBody').innerHTML = paragraphs.map(p => `<p>${p}</p>`).join('');
+
+        // Reactions
+        document.getElementById('countInspired').textContent = s.reactions?.inspired?.length || 0;
+        document.getElementById('countRelatable').textContent = s.reactions?.relatable?.length || 0;
+        document.getElementById('countHopeful').textContent = s.reactions?.hopeful?.length || 0;
+        document.getElementById('countThankYou').textContent = s.reactions?.thankYou?.length || 0;
+
+        // Highlight user's own reactions
+        userReactions.forEach(r => {
+            const btnMap = {inspired:'reactInspired', relatable:'reactRelatable', hopeful:'reactHopeful', thankYou:'reactThankYou'};
+            const btn = document.getElementById(btnMap[r]);
+            if (btn) btn.classList.add('reacted');
+        });
+
+        // Comments
+        renderComments(s.comments || []);
+
+        // Show article
+        document.getElementById('storyLoading').style.display = 'none';
+        document.getElementById('storyArticle').style.display = 'block';
+
+        // Login check for comment section
+        if (!token) {
+            document.getElementById('addCommentSection').innerHTML = '<p class="login-prompt">Please <a href="login.html">login</a> to leave a comment or react.</p>';
+        }
+    }
+
+    function renderComments(comments) {
+        document.getElementById('commentCount').textContent = `(${comments.length})`;
+        if (!comments.length) {
+            document.getElementById('commentsList').innerHTML = '<p class="no-comments">No comments yet. Be the first to share your thoughts!</p>';
+            return;
+        }
+        document.getElementById('commentsList').innerHTML = comments.map(c => {
+            const name = c.isAnonymous ? 'Anonymous' : (c.user?.name || 'User');
+            const avatar = c.isAnonymous 
+                ? 'https://ui-avatars.com/api/?name=A&background=9CA3AF&color=fff&size=36'
+                : `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=E67E22&color=fff&size=36`;
+            const time = timeAgo(c.createdAt);
+            return `<div class="comment-item">
+                <img src="${avatar}" alt="${name}" class="comment-avatar">
+                <div class="comment-content">
+                    <div class="comment-header"><strong>${name}</strong><span>${time}</span></div>
+                    <p>${c.text}</p>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    // Reactions
+    document.querySelectorAll('.reaction-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            if (!token) { alert('Please login to react to this story'); window.location.href = 'login.html'; return; }
+            const reaction = btn.dataset.reaction;
+            btn.disabled = true;
+            try {
+                const res = await fetch('/api/stories/' + storyId + '/react', {
+                    method: 'POST',
+                    headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+token },
+                    body: JSON.stringify({ reaction })
+                });
+                const data = await res.json();
+                if (data.error) { alert(data.error); btn.disabled = false; return; }
+                if (data.reactions) {
+                    document.getElementById('countInspired').textContent = data.reactions.inspired;
+                    document.getElementById('countRelatable').textContent = data.reactions.relatable;
+                    document.getElementById('countHopeful').textContent = data.reactions.hopeful;
+                    document.getElementById('countThankYou').textContent = data.reactions.thankYou;
+                    if (data.toggled) {
+                        btn.classList.add('reacted');
+                    } else {
+                        btn.classList.remove('reacted');
+                    }
+                }
+            } catch(e) { console.error('React error:', e); }
+            btn.disabled = false;
+        });
+    });
+
+    // Submit comment
+    document.getElementById('submitComment')?.addEventListener('click', async () => {
+        const input = document.getElementById('commentInput');
+        const text = input.value.trim();
+        if (!text) { input.focus(); return; }
+        if (!token) { alert('Please login to comment'); window.location.href = 'login.html'; return; }
+
+        const btn = document.getElementById('submitComment');
+        btn.disabled = true;
+        btn.textContent = 'Posting...';
+
+        try {
+            const res = await fetch('/api/stories/' + storyId + '/comment', {
+                method: 'POST',
+                headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+token },
+                body: JSON.stringify({ text, isAnonymous: document.getElementById('commentAnon').checked })
+            });
+            const data = await res.json();
+            if (data.error) { alert(data.error); btn.disabled = false; btn.textContent = 'Post Comment'; return; }
+            if (data.comments) {
+                renderComments(data.comments);
+                input.value = '';
+                document.getElementById('commentAnon').checked = false;
+            }
+        } catch(e) { console.error('Comment error:', e); }
+        btn.disabled = false;
+        btn.textContent = 'Post Comment';
+    });
+
+    // Also allow Enter key (Ctrl+Enter) to submit comment
+    document.getElementById('commentInput')?.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 'Enter') {
+            document.getElementById('submitComment').click();
+        }
+    });
+
+    // Share buttons
+    document.getElementById('shareCopy').addEventListener('click', () => {
+        navigator.clipboard.writeText(window.location.href);
+        const btn = document.getElementById('shareCopy');
+        btn.innerHTML = '✓ Copied!';
+        setTimeout(() => { btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Copy Link'; }, 2000);
+    });
+
+    document.getElementById('shareWhatsapp').addEventListener('click', () => {
+        const text = 'Check out this story: "' + currentStory.title + '" on ABLE';
+        window.open('https://wa.me/?text=' + encodeURIComponent(text + ' ' + window.location.href), '_blank');
+    });
+
+    document.getElementById('shareTwitter').addEventListener('click', () => {
+        const text = '"' + currentStory.title + '" - A powerful story on ABLE';
+        window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(window.location.href), '_blank');
+    });
+
+    document.getElementById('shareFacebook').addEventListener('click', () => {
+        window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href), '_blank');
+    });
+
+    function timeAgo(date) {
+        const diff = (Date.now() - new Date(date)) / 1000;
+        if (diff < 60) return 'Just now';
+        if (diff < 3600) return Math.floor(diff/60) + ' min ago';
+        if (diff < 86400) return Math.floor(diff/3600) + ' hours ago';
+        if (diff < 604800) return Math.floor(diff/86400) + ' days ago';
+        return new Date(date).toLocaleDateString();
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stories - Admin ABLE</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+    <div id="sidebar"></div>
+    <script src="/admin/admin-nav.js"></script>
+
+    <div class="main">
+        <div class="header">
+            <div style="display:flex;align-items:center;gap:0.75rem">
+                <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+                <h1>Story Management</h1>
+            </div>
+            <button class="btn-primary" onclick="openAddModal()">+ Add Story</button>
+        </div>
+
+        <div class="container">
+            <!-- Pending Stories Banner -->
+            <div class="pending-banner" id="pendingBanner" style="display:none;background:linear-gradient(135deg,#FEF3C7,#FDE68A);border:1px solid #F59E0B;border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;display:none;">
+                <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+                    <div style="display:flex;align-items:center;gap:0.75rem">
+                        <span style="font-size:1.5rem">⏳</span>
+                        <div>
+                            <strong style="font-size:0.95rem;color:#92400E" id="pendingCount">0 Stories Awaiting Review</strong>
+                            <p style="font-size:0.8rem;color:#A16207;margin:0">Users have submitted stories that need your approval</p>
+                        </div>
+                    </div>
+                    <button class="btn-primary" onclick="document.getElementById('filterStatus').value='pending';applyFilters();" style="background:#F59E0B;font-size:0.8rem;padding:0.5rem 1rem">Show Pending →</button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="toolbar">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search stories...">
+                <select class="filter-select" id="filterStatus">
+                    <option value="all">All Status</option>
+                    <option value="pending">⏳ Pending Review</option>
+                    <option value="published">✅ Published</option>
+                    <option value="rejected">❌ Rejected</option>
+                    <option value="draft">📝 Draft</option>
+                </select>
+                <select class="filter-select" id="filterCat">
+                    <option value="all">All Categories</option>
+                    <option value="recovery">Recovery</option>
+                    <option value="anxiety">Anxiety</option>
+                    <option value="growth">Personal Growth</option>
+                    <option value="gratitude">Gratitude</option>
+                    <option value="advice">Advice</option>
+                    <option value="relationships">Relationships</option>
+                </select>
+                <select class="filter-select" id="filterFeatured">
+                    <option value="all">All</option>
+                    <option value="featured">Featured Only</option>
+                </select>
+            </div>
+
+            <!-- Stories Table -->
+            <div class="card">
+                <table>
+                    <thead><tr><th>Title</th><th>Author</th><th>Category</th><th>Status</th><th>Reads</th><th>Featured</th><th>Date</th><th>Actions</th></tr></thead>
+                    <tbody id="storiesTable"><tr><td colspan="8" class="empty">Loading...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Story Modal -->
+    <div class="modal-overlay" id="modalOverlay" style="display:none">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Story</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="storyForm">
+                    <input type="hidden" id="storyId">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" id="storyTitle" placeholder="Story title..." required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select id="storyCat" required>
+                                <option value="recovery">Recovery</option>
+                                <option value="anxiety">Anxiety</option>
+                                <option value="growth">Personal Growth</option>
+                                <option value="gratitude">Gratitude</option>
+                                <option value="advice">Advice</option>
+                                <option value="relationships">Relationships</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Author Name</label>
+                            <input type="text" id="storyAuthor" placeholder="Author name or leave blank for Anonymous">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Content</label>
+                        <textarea id="storyContent" rows="8" placeholder="Write the story content..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Image</label>
+                        <div class="image-upload-area" id="imageUploadArea">
+                            <input type="file" id="storyImageFile" accept="image/*" style="display:none">
+                            <div class="upload-placeholder" id="uploadPlaceholder" onclick="document.getElementById('storyImageFile').click()">
+                                <svg viewBox="0 0 24 24" fill="none" width="24" height="24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" stroke="currentColor" stroke-width="2"/><path d="M17 8l-5-5-5 5M12 3v12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                <span>Click to upload image</span>
+                            </div>
+                            <img id="imagePreview" style="display:none;max-height:150px;border-radius:8px;width:100%;object-fit:cover">
+                            <button type="button" id="removeImage" style="display:none" class="btn-sm btn-del" onclick="removeUploadedImage()">Remove Image</button>
+                        </div>
+                        <input type="hidden" id="storyImage">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Read Time (min)</label>
+                            <input type="number" id="storyReadTime" value="4" min="1" max="30">
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select id="storyStatus">
+                                <option value="published">Published</option>
+                                <option value="pending">Pending Review</option>
+                                <option value="rejected">Rejected</option>
+                                <option value="draft">Draft</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Options</label>
+                            <div class="check-row">
+                                <label class="check-label"><input type="checkbox" id="storyAnon"> Anonymous</label>
+                                <label class="check-label"><input type="checkbox" id="storyFeatured"> Featured</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-action" onclick="closeModal()">Cancel</button>
+                        <button type="submit" class="btn-primary">Save Story</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const token = localStorage.getItem('adminToken');
+    if (!token) window.location.href = '/admin/';
+
+    let allStories = [];
+
+    async function api(path, opts={}) {
+        const res = await fetch(path, { ...opts, headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+token, ...opts.headers } });
+        if (res.status === 401) { localStorage.removeItem('adminToken'); window.location.href='/admin/'; }
+        return res.json();
+    }
+
+    async function loadStories() {
+        const data = await api('/admin/api/stories');
+        allStories = data.stories || [];
+        renderStories(allStories);
+        showPendingBanner();
+    }
+
+    function renderStories(stories) {
+        if (!stories.length) { document.getElementById('storiesTable').innerHTML = '<tr><td colspan="8" class="empty">No stories found</td></tr>'; return; }
+        const statusBadge = (s) => {
+            if(s.status==='published') return '<span class="badge badge-green">Published</span>';
+            if(s.status==='pending') return '<span class="badge badge-orange">Pending</span>';
+            if(s.status==='rejected') return '<span class="badge badge-red">Rejected</span>';
+            return '<span class="badge">Draft</span>';
+        };
+        document.getElementById('storiesTable').innerHTML = stories.map(s => `<tr>
+            <td><strong>${s.title}</strong></td>
+            <td>${s.isAnonymous?'Anonymous':(s.authorName||s.author?.name||'Unknown')}</td>
+            <td><span class="badge badge-blue">${s.category}</span></td>
+            <td>${statusBadge(s)}</td>
+            <td>${s.readCount||0}</td>
+            <td>${s.isFeatured?'⭐':'—'}</td>
+            <td>${new Date(s.createdAt).toLocaleDateString()}</td>
+            <td class="actions-cell">
+                <button class="btn-sm" onclick="editStory('${s._id}')">Edit</button>
+                ${s.status==='pending'?`<button class="btn-sm" style="color:#10b981;font-weight:700" onclick="approveStory('${s._id}')">✓ Approve</button><button class="btn-sm" style="color:#ef4444;font-weight:700" onclick="rejectStory('${s._id}')">✗ Reject</button>`:''}
+                <button class="btn-sm btn-del" onclick="deleteStory('${s._id}')">Delete</button>
+            </td>
+        </tr>`).join('');
+    }
+
+    function showPendingBanner() {
+        const pendingCount = allStories.filter(s => s.status === 'pending').length;
+        const banner = document.getElementById('pendingBanner');
+        if (pendingCount > 0) {
+            banner.style.display = 'block';
+            document.getElementById('pendingCount').textContent = pendingCount + ' Stor' + (pendingCount === 1 ? 'y' : 'ies') + ' Awaiting Review';
+        } else {
+            banner.style.display = 'none';
+        }
+    }
+
+    // Filters
+    document.getElementById('searchInput').addEventListener('input', applyFilters);
+    document.getElementById('filterStatus').addEventListener('change', applyFilters);
+    document.getElementById('filterCat').addEventListener('change', applyFilters);
+    document.getElementById('filterFeatured').addEventListener('change', applyFilters);
+
+    function applyFilters() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const status = document.getElementById('filterStatus').value;
+        const cat = document.getElementById('filterCat').value;
+        const feat = document.getElementById('filterFeatured').value;
+        let filtered = allStories.filter(s => {
+            const matchSearch = s.title.toLowerCase().includes(search);
+            const matchStatus = status === 'all' || s.status === status;
+            const matchCat = cat === 'all' || s.category === cat;
+            const matchFeat = feat === 'all' || (feat === 'featured' && s.isFeatured);
+            return matchSearch && matchStatus && matchCat && matchFeat;
+        });
+        renderStories(filtered);
+    }
+
+    // Add modal
+    function openAddModal() {
+        document.getElementById('modalTitle').textContent = 'Add Story';
+        document.getElementById('storyId').value = '';
+        document.getElementById('storyForm').reset();
+        document.getElementById('storyStatus').value = 'published';
+        removeUploadedImage();
+        document.getElementById('modalOverlay').style.display = 'flex';
+    }
+
+    // Image upload to base64
+    document.getElementById('storyImageFile').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > 5 * 1024 * 1024) { alert('Image must be under 5MB'); return; }
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            document.getElementById('storyImage').value = ev.target.result;
+            document.getElementById('imagePreview').src = ev.target.result;
+            document.getElementById('imagePreview').style.display = 'block';
+            document.getElementById('uploadPlaceholder').style.display = 'none';
+            document.getElementById('removeImage').style.display = 'inline-block';
+        };
+        reader.readAsDataURL(file);
+    });
+
+    function removeUploadedImage() {
+        document.getElementById('storyImage').value = '';
+        document.getElementById('imagePreview').style.display = 'none';
+        document.getElementById('uploadPlaceholder').style.display = 'flex';
+        document.getElementById('removeImage').style.display = 'none';
+        document.getElementById('storyImageFile').value = '';
+    }
+
+    // Edit
+    function editStory(id) {
+        const s = allStories.find(x => x._id === id);
+        if (!s) return;
+        document.getElementById('modalTitle').textContent = 'Edit Story';
+        document.getElementById('storyId').value = s._id;
+        document.getElementById('storyTitle').value = s.title;
+        document.getElementById('storyCat').value = s.category;
+        document.getElementById('storyAuthor').value = s.authorName || '';
+        document.getElementById('storyContent').value = s.content;
+        document.getElementById('storyImage').value = s.image || '';
+        document.getElementById('storyReadTime').value = s.readTime || 4;
+        document.getElementById('storyStatus').value = s.status || 'published';
+        document.getElementById('storyAnon').checked = s.isAnonymous;
+        document.getElementById('storyFeatured').checked = s.isFeatured;
+        // Show image preview if exists
+        if (s.image) {
+            document.getElementById('imagePreview').src = s.image;
+            document.getElementById('imagePreview').style.display = 'block';
+            document.getElementById('uploadPlaceholder').style.display = 'none';
+            document.getElementById('removeImage').style.display = 'inline-block';
+        } else {
+            removeUploadedImage();
+        }
+        document.getElementById('modalOverlay').style.display = 'flex';
+    }
+
+    function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
+
+    // Submit
+    document.getElementById('storyForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('storyId').value;
+        const body = {
+            title: document.getElementById('storyTitle').value,
+            category: document.getElementById('storyCat').value,
+            authorName: document.getElementById('storyAuthor').value,
+            content: document.getElementById('storyContent').value,
+            image: document.getElementById('storyImage').value,
+            readTime: parseInt(document.getElementById('storyReadTime').value),
+            status: document.getElementById('storyStatus').value,
+            isAnonymous: document.getElementById('storyAnon').checked,
+            isFeatured: document.getElementById('storyFeatured').checked
+        };
+        if (id) {
+            await api('/admin/api/stories/' + id, { method:'PUT', body:JSON.stringify(body) });
+        } else {
+            await api('/admin/api/stories', { method:'POST', body:JSON.stringify(body) });
+        }
+        closeModal();
+        loadStories();
+    });
+
+    // Feature toggle
+    async function toggleFeatured(id, featured) {
+        await api('/admin/api/stories/' + id, { method:'PUT', body:JSON.stringify({isFeatured:featured}) });
+        loadStories();
+    }
+
+    // Approve pending story
+    async function approveStory(id) {
+        if (!confirm('Approve and publish this story?')) return;
+        await api('/admin/api/stories/' + id + '/approve', { method:'PUT' });
+        loadStories();
+    }
+
+    // Reject pending story
+    async function rejectStory(id) {
+        if (!confirm('Reject this story? The author will see it as rejected.')) return;
+        await api('/admin/api/stories/' + id + '/reject', { method:'PUT' });
+        loadStories();
+    }
+
+    // Delete
+    async function deleteStory(id) {
+        if (!confirm('Delete this story permanently?')) return;
+        await api('/admin/api/stories/' + id, { method:'DELETE' });
+        loadStories();
+    }
+
+    loadStories();
+    </script>
+</body>
+</html>

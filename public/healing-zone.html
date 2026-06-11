@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enable-Healing Zone - ABLE</title>
+    <link rel="stylesheet" href="dashboard-styles.css">
+    <link rel="stylesheet" href="healing-zone.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header"><img src="images/logo.svg" alt="ABLE" class="sidebar-logo"></div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 22V12h6v10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Dashboard</span></a>
+            <a href="healing-zone.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2"/></svg><span>Healing Zone</span></a>
+            <a href="body-mind.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Body-Mind</span></a>
+            <a href="community.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg><span>Community</span></a>
+            <a href="youth-support.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke="currentColor" stroke-width="2"/></svg><span>Youth Support</span></a>
+            <a href="my-voice.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2"/></svg><span>My Voice</span></a>
+            <a href="settings.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="2"/></svg><span>Settings</span></a>
+        </nav>
+        <div class="sidebar-footer"><a href="login.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2"/><path d="M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Logout</span></a></div>
+    </aside>
+
+    <!-- Main -->
+    <div class="main-content">
+        <header class="topbar">
+            <button class="menu-toggle" id="menuToggle"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="search-bar"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input type="text" placeholder="Search therapists, specializations..."></div>
+            <div class="topbar-actions">
+                <button class="icon-button"><svg viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2"/><path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2"/></svg><span class="notification-badge">2</span></button>
+                <div class="user-profile"><img src="https://ui-avatars.com/api/?name=John+Doe&background=E67E22&color=fff" alt="User"><div class="user-info"><span class="user-name">John Doe</span><span class="user-role">Wellness Seeker</span></div></div>
+            </div>
+        </header>
+
+        <main class="dashboard-content hz-content">
+            <!-- Hero -->
+            <div class="hz-hero">
+                <div class="hz-hero-left">
+                    <h1>Find Your Ideal Therapist</h1>
+                    <p>1,200+ licensed experts ready to help. AI-matched to your unique needs for the best possible care.</p>
+                    <div class="hz-hero-badges">
+                        <span>✓ Video • Audio • Chat</span>
+                        <span>✓ 98% Satisfaction</span>
+                        <span>✓ First Session Free</span>
+                    </div>
+                    <a href="#recommended" class="hz-hero-btn">Book Free Consultation</a>
+                </div>
+                <div class="hz-hero-right">
+                    <div class="hz-avatar-stack">
+                        <img src="https://ui-avatars.com/api/?name=SW&background=E67E22&color=fff&size=48" alt=""><img src="https://ui-avatars.com/api/?name=JC&background=10B981&color=fff&size=48" alt=""><img src="https://ui-avatars.com/api/?name=PS&background=8B5CF6&color=fff&size=48" alt=""><img src="https://ui-avatars.com/api/?name=AJ&background=3B82F6&color=fff&size=48" alt="">
+                        <span class="hz-online-dot"></span>
+                    </div>
+                    <span class="hz-hero-online" id="hzOnlineCount">Loading...</span>
+                </div>
+            </div>
+
+            <!-- Chip Filters -->
+            <div class="hz-chips" id="hzChips">
+                <button class="hz-chip active" data-cat="All">All</button>
+                <button class="hz-chip" data-cat="Anxiety">Anxiety</button>
+                <button class="hz-chip" data-cat="Depression">Depression</button>
+                <button class="hz-chip" data-cat="Relationships">Relationships</button>
+                <button class="hz-chip" data-cat="Stress">Stress</button>
+                <button class="hz-chip" data-cat="Trauma">Trauma</button>
+                <button class="hz-chip" data-cat="Self-Esteem">Self-Esteem</button>
+                <button class="hz-chip" data-cat="Grief">Grief</button>
+                <button class="hz-chip" data-cat="Family">Family</button>
+                <button class="hz-chip" data-cat="Addiction">Addiction</button>
+            </div>
+
+            <!-- Recommended -->
+            <section id="recommended" class="hz-section">
+                <h2 class="hz-sec-title">⭐ Recommended For You</h2>
+                <p class="hz-sec-sub">Based on your assessment and preferences</p>
+                <div class="hz-rec-grid" id="hzRecGrid">
+                    <div style="text-align:center;padding:2rem;color:#9ca3af;grid-column:1/-1">Loading therapists...</div>
+                </div>
+            </section>
+
+            <!-- All Therapists -->
+            <section class="hz-section">
+                <div class="hz-sec-header">
+                    <h2 class="hz-sec-title">All Therapists</h2>
+                    <select class="hz-sort" id="hzSort"><option value="match">Sort: Best Match</option><option value="rating">Highest Rated</option><option value="available">Available Today</option><option value="experience">Most Experience</option></select>
+                </div>
+                <div class="hz-all-grid" id="hzAllGrid">
+                    <div style="text-align:center;padding:2rem;color:#9ca3af;grid-column:1/-1">Loading...</div>
+                </div>
+            </section>
+
+            <!-- Success Stories -->
+            <section class="hz-section">
+                <h2 class="hz-sec-title">Success Stories</h2>
+                <div class="hz-stories-grid">
+                    <div class="hz-story"><div class="hz-story-stars">★★★★★</div><p>"My therapist helped me overcome anxiety in 3 months. I can finally sleep through the night."</p><span class="hz-story-author">— Sarah, 27</span></div>
+                    <div class="hz-story"><div class="hz-story-stars">★★★★★</div><p>"After my divorce, I felt lost. Dr. Wilson gave me tools to rebuild my confidence and find joy again."</p><span class="hz-story-author">— Marcus, 34</span></div>
+                    <div class="hz-story"><div class="hz-story-stars">★★★★★</div><p>"ABLE matched me with someone who truly understood my cultural background. That made all the difference."</p><span class="hz-story-author">— Priya, 22</span></div>
+                </div>
+            </section>
+
+            <!-- How It Works -->
+            <section class="hz-section hz-how">
+                <h2 class="hz-sec-title">How It Works</h2>
+                <div class="hz-how-steps">
+                    <div class="hz-how-step"><div class="hz-step-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/></svg></div><h4>Take Assessment</h4><p>Complete your wellness profile</p></div>
+                    <div class="hz-how-line"></div>
+                    <div class="hz-how-step"><div class="hz-step-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke="currentColor" stroke-width="2"/><path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9 9h.01M15 9h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div><h4>AI Matching</h4><p>Get matched with ideal therapist</p></div>
+                    <div class="hz-how-line"></div>
+                    <div class="hz-how-step"><div class="hz-step-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><h4>Book Session</h4><p>Choose your preferred time</p></div>
+                    <div class="hz-how-line"></div>
+                    <div class="hz-how-step"><div class="hz-step-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2"/></svg></div><h4>Begin Healing</h4><p>Start your wellness journey</p></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Chatbot -->
+    <div class="chatbot-button" id="chatbotButton"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="white" stroke-width="2"/><circle cx="9" cy="10" r="1" fill="white"/><circle cx="15" cy="10" r="1" fill="white"/><path d="M9 13s1 1 3 1 3-1 3-1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg><span class="chatbot-badge">AI</span></div>
+    <div class="chatbot-widget" id="chatbotWidget"><div class="chatbot-header"><div class="chatbot-header-content"><div class="chatbot-avatar"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="white"/></svg></div><div class="chatbot-info"><h4>ABLE Wellness Assistant</h4><span class="chatbot-status">Online • Here to Help</span></div></div><button class="chatbot-close" id="chatbotClose"><svg viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><div class="chatbot-messages" id="chatbotMessages"></div><div class="chatbot-input"><input type="text" id="chatbotInput" placeholder="Type your message..." autocomplete="off"><button class="chatbot-send" id="chatbotSend"><svg viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9M22 2L2 8l9 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+
+    <script src="chatbot.js"></script>
+    <script src="dashboard.js"></script>
+    <script>
+    let allTherapists = [];
+    let currentCategory = 'All';
+
+    // Load therapists
+    async function loadTherapists(category, sort) {
+        try {
+            let url = '/api/therapists?';
+            if (category && category !== 'All') url += 'category=' + encodeURIComponent(category) + '&';
+            if (sort) url += 'sort=' + sort;
+            const res = await fetch(url);
+            const data = await res.json();
+            allTherapists = data.therapists || [];
+            renderTherapists(allTherapists);
+        } catch(e) {
+            console.error('Load error:', e);
+            document.getElementById('hzRecGrid').innerHTML = '<div style="text-align:center;padding:2rem;color:#9ca3af;grid-column:1/-1">Unable to load therapists</div>';
+            document.getElementById('hzAllGrid').innerHTML = '';
+        }
+    }
+
+    function renderTherapists(therapists) {
+        const colors = ['E67E22','8B5CF6','10B981','3B82F6','F59E0B','06B6D4','EF4444','6366F1'];
+        
+        // Top 3 = recommended
+        const recommended = therapists.slice(0, 3);
+        const rest = therapists.slice(3);
+
+        if (!therapists.length) {
+            document.getElementById('hzRecGrid').innerHTML = '<div style="text-align:center;padding:2rem;color:#9ca3af;grid-column:1/-1">No therapists found for this category. Try "All".</div>';
+            document.getElementById('hzAllGrid').innerHTML = '';
+            document.getElementById('hzOnlineCount').textContent = '0 therapists available';
+            return;
+        }
+
+        // Online count
+        const onlineCount = therapists.filter(t => t.isAvailableToday).length;
+        document.getElementById('hzOnlineCount').textContent = onlineCount + ' therapists online now';
+
+        // Recommended cards
+        document.getElementById('hzRecGrid').innerHTML = recommended.map((t, i) => {
+            const color = colors[i % colors.length];
+            const match = Math.max(75, 98 - (i * 4) - Math.floor(Math.random() * 5));
+            const stars = '★'.repeat(Math.floor(t.rating)) + (t.rating % 1 >= 0.5 ? '★' : '☆');
+            const avatar = t.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=${color}&color=fff&size=72&bold=true`;
+            return `<div class="hz-rec-card">
+                <div class="hz-match">${match}% Match</div>
+                <img src="${avatar}" alt="${t.name}" class="hz-rec-img">
+                <h4>${t.name}</h4>
+                <span class="hz-rec-role">${t.title} • ${(t.specializations || []).slice(0,2).join(', ')}</span>
+                <div class="hz-rec-stars">${stars} <span>${t.rating} (${t.reviewCount || 0})</span></div>
+                <div class="hz-rec-trust">
+                    <span>${t.isVerified ? '✓ Verified License' : '○ Pending'}</span>
+                    <span>✓ ${t.totalSessions || 0} Sessions</span>
+                    <span>✓ Responds in ${t.responseTime || '1hr'}</span>
+                </div>
+                <div class="hz-rec-meta"><span>${t.experience} yrs exp.</span><span>${(t.sessionTypes || []).join(' • ')}</span><span class="hz-avail">${t.isAvailableToday ? 'Available Today' : (t.nextAvailable || 'Tomorrow')}</span></div>
+                <button class="hz-rec-btn">Book Session</button>
+            </div>`;
+        }).join('');
+
+        // All therapists grid
+        if (rest.length) {
+            document.getElementById('hzAllGrid').innerHTML = rest.map((t, i) => {
+                const color = colors[(i + 3) % colors.length];
+                const match = Math.max(65, 85 - (i * 3));
+                const avatar = t.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=${color}&color=fff&size=56&bold=true`;
+                const ratingStars = '★'.repeat(Math.floor(t.rating)) + (t.rating % 1 >= 0.5 ? '★' : '☆');
+                return `<div class="hz-card"><div class="hz-card-top"><img src="${avatar}" alt="${t.name}"><div><h4>${t.name}</h4><span>${t.title} • ${(t.specializations||[]).slice(0,2).join(', ')}</span><div class="hz-card-stars">${ratingStars} ${t.rating}</div></div><span class="hz-card-match">${match}%</span></div><div class="hz-card-badges"><span>${t.isVerified ? '✓ Verified' : '○ Pending'}</span><span>${t.experience} yrs</span><span>${(t.sessionTypes||[]).join(' • ')}</span></div><button class="hz-card-btn">Book</button></div>`;
+            }).join('');
+        } else {
+            document.getElementById('hzAllGrid').innerHTML = '';
+        }
+    }
+
+    // Category chips
+    document.querySelectorAll('.hz-chip').forEach(c => {
+        c.addEventListener('click', () => {
+            document.querySelectorAll('.hz-chip').forEach(x => x.classList.remove('active'));
+            c.classList.add('active');
+            currentCategory = c.dataset.cat;
+            loadTherapists(currentCategory, document.getElementById('hzSort').value);
+        });
+    });
+
+    // Sort
+    document.getElementById('hzSort').addEventListener('change', (e) => {
+        loadTherapists(currentCategory, e.target.value);
+    });
+
+    // Init
+    loadTherapists('All', 'match');
+    </script>
+</body>
+</html>

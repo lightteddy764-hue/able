@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Begin Your Wellness Journey - ABLE | A Better Life Enabled</title>
+    <link rel="stylesheet" href="auth-styles.css">
+</head>
+<body>
+    <div class="auth-container">
+        <!-- Left Side - Branding -->
+        <div class="auth-branding">
+            <div class="branding-content">
+                <a href="index.html" style="display: inline-block; margin-bottom: 1rem; color: white; text-decoration: none; opacity: 0.8; transition: opacity 0.3s ease;">
+                    <svg style="width: 20px; height: 20px; vertical-align: middle; margin-right: 0.5rem;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Back to Home
+                </a>
+                <img src="images/logo.svg" alt="ABLE Logo" class="auth-logo">
+                <h1>Begin Your Wellness Journey</h1>
+                <p>A Better Life Enabled - Your path to mental wellness starts here</p>
+                <div class="branding-stats">
+                    <div class="stat-item">
+                        <h3>5,000+</h3>
+                        <p>Lives Transformed</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>1,200+</h3>
+                        <p>Licensed Therapists</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>98%</h3>
+                        <p>Satisfaction Rate</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side - Signup Form -->
+        <div class="auth-form-container">
+            <div class="auth-form">
+                <!-- Progress Indicator -->
+                <div class="progress-steps">
+                    <div class="step active" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-label">Personal Info</div>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-label">Wellness Assessment</div>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step" data-step="3">
+                        <div class="step-number">3</div>
+                        <div class="step-label">Security</div>
+                    </div>
+                </div>
+
+                <div class="form-header">
+                    <h2 id="stepTitle">Personal Information</h2>
+                    <p id="stepDescription">Let's start with your basic details</p>
+                </div>
+
+                <form id="signupForm" class="form">
+                    <!-- Step 1: Personal Info -->
+                    <div class="form-step active" data-step="1">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="text" id="firstName" name="firstName" placeholder="John" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" id="lastName" name="lastName" placeholder="Doe" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="age">Age</label>
+                                <input type="number" id="age" name="age" min="13" max="120" placeholder="25" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number (Optional)</label>
+                                <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000">
+                            </div>
+                        </div>
+
+                        <button type="button" class="btn-primary btn-large btn-next">Continue</button>
+                    </div>
+
+                    <!-- Step 2: WHODAS 2.0 Wellness Assessment -->
+                    <div class="form-step" data-step="2">
+                        <div class="assessment-intro">
+                            <p><strong>WHODAS 2.0 Wellness Assessment</strong></p>
+                            <p class="assessment-desc">Please answer the following questions about how much difficulty you've had in the last 30 days. This helps us personalize your wellness journey.</p>
+                        </div>
+
+                        <div class="assessment-questions" id="assessmentQuestions">
+                            <!-- Domain 1: Understanding and Communicating -->
+                            <div class="assessment-domain">
+                                <h4>Understanding & Communicating</h4>
+                                
+                                <div class="form-group assessment-question">
+                                    <label>Concentrating on something for ten minutes:</label>
+                                    <select name="whodas_q1" required>
+                                        <option value="">Select...</option>
+                                        <option value="0">None</option>
+                                        <option value="1">Mild</option>
+                                        <option value="2">Moderate</option>
+                                        <option value="3">Severe</option>
+                                        <option value="4">Extreme or cannot do</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group assessment-question">
+                                    <label>Remembering to do important things:</label>
+                                    <select name="whodas_q2" required>
+                                        <option value="">Select...</option>
+                                        <option value="0">None</option>
+                                        <option value="1">Mild</option>
+                                        <option value="2">Moderate</option>
+                                        <option value="3">Severe</option>
+                                        <option value="4">Extreme or cannot do</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group assessment-question">
+                                    <label>Analyzing and finding solutions to problems:</label>
+                                    <select name="whodas_q3" required>
+                                        <option value="">Select...</option>
+                                        <option value="0">None</option>
+                                        <option value="1">Mild</option>
+                                        <option value="2">Moderate</option>
+                                        <option value="3">Severe</option>
+                                        <option value="4">Extreme or cannot do</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Domain 2: Getting Along with People -->
+                            <div class="assessment-domain">
+                                <h4>Getting Along with People</h4>
+                                
+                                <div class="form-group assessment-question">
+                                    <label>Dealing with people you do not know:</label>
+                                    <select name="whodas_q4" required>
+                                        <option value="">Select...</option>
+                                        <option value="0">None</option>
+                                        <option value="1">Mild</option>
+                                        <option value="2">Moderate</option>
+                                        <option value="3">Severe</option>
+                                        <option value="4">Extreme or cannot do</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group assessment-question">
+                                    <label>Maintaining a friendship:</label>
+                                    <select name="whodas_q5" required>
+                                        <option value="">Select...</option>
+                                        <option value="0">None</option>
+                                        <option value="1">Mild</option>
+                                        <option value="2">Moderate</option>
+                                        <option value="3">Severe</option>
+                                        <option value="4">Extreme or cannot do</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group assessment-question">
+                                    <label>Getting along with people close to you:</label>
+                                    <select name="whodas_q6" required>
+                                        <option value="">Select...</option>
+                                        <option value="0">None</option>
+                                        <option value="1">Mild</option>
+                                        <option value="2">Moderate</option>
+                                        <option value="3">Severe</option>
+                                        <option value="4">Extreme or cannot do</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Domain 3: Life Activities -->
+                            <div class="assessment-domain">
+                                <h4>Life Activities</h4>
+                                
+                                <div class="form-group assessment-question">
+                                    <label>Taking care of household responsibilities:</label>
+                                    <select name="whodas_q7" required>
+                                        <option value="">Select...</option>
+                                        <option value="0">None</option>
+                                        <option value="1">Mild</option>
+                                        <option value="2">Moderate</option>
+                                        <option value="3">Severe</option>
+                                        <option value="4">Extreme or cannot do</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group assessment-question">
+                                    <label>Doing most important tasks well:</label>
+                                    <select name="whodas_q8" required>
+                                        <option value="">Select...</option>
+                                        <option value="0">None</option>
+                                        <option value="1">Mild</option>
+                                        <option value="2">Moderate</option>
+                                        <option value="3">Severe</option>
+                                        <option value="4">Extreme or cannot do</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Domain 4: Participation in Society -->
+                            <div class="assessment-domain">
+                                <h4>Participation in Society</h4>
+                                
+                                <div class="form-group assessment-question">
+                                    <label>Joining in community activities:</label>
+                                    <select name="whodas_q9" required>
+                                        <option value="">Select...</option>
+                                        <option value="0">None</option>
+                                        <option value="1">Mild</option>
+                                        <option value="2">Moderate</option>
+                                        <option value="3">Severe</option>
+                                        <option value="4">Extreme or cannot do</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group assessment-question">
+                                    <label>Being emotionally affected by your health:</label>
+                                    <select name="whodas_q10" required>
+                                        <option value="">Select...</option>
+                                        <option value="0">None</option>
+                                        <option value="1">Mild</option>
+                                        <option value="2">Moderate</option>
+                                        <option value="3">Severe</option>
+                                        <option value="4">Extreme or cannot do</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-buttons">
+                            <button type="button" class="btn-secondary btn-large btn-prev">Back</button>
+                            <button type="button" class="btn-primary btn-large btn-next">Continue</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Security -->
+                    <div class="form-step" data-step="3">
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" placeholder="Create a strong password" required>
+                            <div class="password-strength" id="passwordStrength">
+                                <div class="strength-bar"></div>
+                            </div>
+                            <small class="input-hint">Must be at least 8 characters with uppercase, lowercase, and numbers</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="terms" required>
+                                <span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></span>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="updates">
+                                <span>Send me wellness tips and platform updates</span>
+                            </label>
+                        </div>
+
+                        <div class="form-buttons">
+                            <button type="button" class="btn-secondary btn-large btn-prev">Back</button>
+                            <button type="submit" class="btn-primary btn-large">Begin My Journey</button>
+                        </div>
+                    </div>
+
+                    <div class="form-divider">
+                        <span>or continue with</span>
+                    </div>
+
+                    <div class="social-login">
+                        <button type="button" class="btn-social">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M22.56 12.25C22.56 11.47 22.49 10.72 22.36 10H12V14.26H17.92C17.66 15.63 16.88 16.79 15.71 17.57V20.34H19.28C21.36 18.42 22.56 15.6 22.56 12.25Z" fill="#4285F4"/>
+                                <path d="M12 23C14.97 23 17.46 22.02 19.28 20.34L15.71 17.57C14.73 18.23 13.48 18.63 12 18.63C9.13 18.63 6.71 16.7 5.84 14.1H2.18V16.94C3.99 20.53 7.7 23 12 23Z" fill="#34A853"/>
+                                <path d="M5.84 14.1C5.62 13.44 5.49 12.73 5.49 12C5.49 11.27 5.62 10.56 5.84 9.9V7.06H2.18C1.43 8.55 1 10.22 1 12C1 13.78 1.43 15.45 2.18 16.94L5.84 14.1Z" fill="#FBBC05"/>
+                                <path d="M12 5.38C13.62 5.38 15.06 5.91 16.21 7L19.36 3.85C17.45 2.09 14.97 1 12 1C7.7 1 3.99 3.47 2.18 7.06L5.84 9.9C6.71 7.3 9.13 5.38 12 5.38Z" fill="#EA4335"/>
+                            </svg>
+                            Google
+                        </button>
+                        <button type="button" class="btn-social">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20.447 20.452H16.893V14.883C16.893 13.555 16.866 11.846 15.041 11.846C13.188 11.846 12.905 13.291 12.905 14.785V20.452H9.351V9H12.765V10.561H12.811C13.288 9.661 14.448 8.711 16.181 8.711C19.782 8.711 20.448 11.081 20.448 14.166V20.452H20.447ZM5.337 7.433C4.193 7.433 3.274 6.507 3.274 5.368C3.274 4.23 4.194 3.305 5.337 3.305C6.477 3.305 7.401 4.23 7.401 5.368C7.401 6.507 6.476 7.433 5.337 7.433ZM7.119 20.452H3.555V9H7.119V20.452ZM22.225 0H1.771C0.792 0 0 0.774 0 1.729V22.271C0 23.227 0.792 24 1.771 24H22.222C23.2 24 24 23.227 24 22.271V1.729C24 0.774 23.2 0 22.222 0H22.225Z" fill="#0077B5"/>
+                            </svg>
+                            LinkedIn
+                        </button>
+                    </div>
+                </form>
+
+                <div class="form-footer">
+                    <p>Already have an account? <a href="login.html">Sign in</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Chatbot Widget -->
+    <div class="chatbot-button" id="chatbotButton">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="9" cy="10" r="1" fill="white"/>
+            <circle cx="15" cy="10" r="1" fill="white"/>
+            <path d="M9 13C9 13 10 14 12 14C14 14 15 13 15 13" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span class="chatbot-badge">AI</span>
+    </div>
+
+    <div class="chatbot-widget" id="chatbotWidget">
+        <div class="chatbot-header">
+            <div class="chatbot-header-content">
+                <div class="chatbot-avatar">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 5C13.66 5 15 6.34 15 8C15 9.66 13.66 11 12 11C10.34 11 9 9.66 9 8C9 6.34 10.34 5 12 5ZM12 19.2C9.5 19.2 7.29 17.92 6 15.98C6.03 13.99 10 12.9 12 12.9C13.99 12.9 17.97 13.99 18 15.98C16.71 17.92 14.5 19.2 12 19.2Z" fill="white"/>
+                    </svg>
+                </div>
+                <div class="chatbot-info">
+                    <h4>ABLE Wellness Assistant</h4>
+                    <span class="chatbot-status">Online • Here to Help</span>
+                </div>
+            </div>
+            <button class="chatbot-close" id="chatbotClose">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18 6L6 18M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages"></div>
+        <div class="chatbot-input">
+            <input type="text" id="chatbotInput" placeholder="Type your message..." autocomplete="off">
+            <button class="chatbot-send" id="chatbotSend">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 8L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script src="chatbot.js"></script>
+    <script src="auth.js"></script>
+</body>
+</html>

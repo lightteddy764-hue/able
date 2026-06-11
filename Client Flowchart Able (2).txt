@@ -1,0 +1,350 @@
+
+
+Welcome to ABLE: A Better Life Enabled
+Able is your all-in-one wellness companion designed to empower every aspect of your being. With Able, you're not just finding an app; you're unlocking a world where your well-being is the priority, and your journey to a healthier, happier life is our mission. Here's a detailed explanation of the services we offer to support your mental health and overall wellness.
+1. Enable-Healing Zone
+Description: Connect with world-class licensed and verified therapists who are passionate about guiding you on your path to wellness. This zone is where your healing begins, enabling you to unlock the peace and balance you seek.
+Features:
+* Access to licensed and verified therapists
+* Personalized therapy sessions
+* Flexible scheduling to fit your needs
+* Confidential and secure communication
+Benefits:
+* Professional guidance on mental health issues
+* Tailored therapeutic approaches
+* Emotional support and mental clarity
+* Improvement in overall mental health
+2. Capable-Body-Mind Connection
+Description: Experience the power of holistic health with Able. Nourish your mind with food that fosters mental wellness, engage in yogic practices that elevate your spirit, master breathing techniques that bring calm, and organize your routine for a life of harmony.
+Features:
+* Nutritional advice for mental wellness
+* Guided yoga sessions
+* Breathing exercises
+* Routine management tips
+Benefits:
+* Enhanced physical and mental well-being
+* Stress reduction
+* Improved focus and relaxation
+* Balanced and healthy lifestyle
+3. Suitable-Community Circle
+Description: Dive into Able's community-centric experiences. From the Mental Spa designed to immerse you in tranquility, to Wellness Dating where you meet souls that resonate on the same frequency, and Wellness Meetups that bring together minds focused on mental well-being.
+Features:
+* Mental Spa for immersive relaxation
+* Wellness Dating to find like-minded friends
+* Wellness Meetups for group activities
+Benefits:
+* Sense of belonging and community support
+* Opportunities to build meaningful relationships
+* Engaging social activities
+* Shared experiences and mutual growth
+4. Viable-Youth Support
+Description: Able extends its caring embrace to the younger ones among us, offering services tailored for children and young adults. With aptitude testing, career advising, and wellness support for challenges such as anxiety, body-image issues, and bullying, we ensure a viable future for our youth.
+Features:
+* Aptitude testing and career advising
+* Wellness support for anxiety and body-image issues
+* Anti-bullying resources
+* Support for young adults
+Benefits:
+* Guidance in academic and career choices
+* Emotional and psychological support
+* Healthy development and self-esteem
+* Coping strategies for various challenges
+5. Valuable-Voice Platform
+Description: At Able, every voice matters. Share your journey, wisdom, concerns, and suggestions. Your story is valuable, not just to us, but to a community that grows stronger and more understanding with every shared experience.
+Features:
+* Platform to share personal stories
+* Community feedback and support
+* Anonymous sharing options
+* Forums for discussions and advice
+Benefits:
+* Feeling heard and understood
+* Inspiring and helping others with your story
+* Building a supportive community
+* Learning from shared experiences
+Join Able: A Better Life Enabled
+Join Able today and step into a world where to be able, is to be empowered, connected, supported, and heard. Welcome to a better life, welcome to Able.
+For more information and to get started, visit our website at
+FLOWCHART FOR WEBSITE
+
+Client Enters Website
+        |
+        V
+Greeted by AI Assistant
+        |
+        V
+Collect Basic Information
+        |
+        | (Questions: Name, Age, Current Mental State, Specific Concerns)
+        |
+        V
+Administer WHODAS 2.0 Checklist
+        |
+        V
+Assess Severity Based on WHODAS 2.0 Scores
+        |
+        +--------------------------------------------------+
+        |                                                  |
+        V                                                  V
+Serious Condition (High Risk)                      Mild/Moderate Condition
+        |                                                  |
+        V                                                  V
+Refer to Psychiatrist                                    Suggest Website Services
+        |                                                  |
+        V                                                  V
+Provide Links to Services                        Display Service Options
+        |                                                  |
+        +--------------------------------------+--------------------+--------------------+--------------------+
+        |                                      |                    |                    |
+        V                                      V                    V                    V
+Enable-Healing Zone                 Capable-Body-Mind          Suitable-Community     Viable-Youth Support
+                                           Connection                    Circle
+        |
+        V
+Valuable-Voice Platform
+
+Example of Triage Process:
+1. AI Assistant Introduction:
+* "Welcome to Able! I'm here to assist you on your journey to mental wellness. Let's start by getting to know you better."
+2. Collect Basic Information:
+* "What's your name?"
+* "How old are you?"
+* "How are you feeling today? Please describe your current mental state."
+* "Do you have any specific concerns or issues you'd like to address?"
+3. Administer WHODAS 2.0 Checklist:
+* "Please answer the following questions about how much difficulty you had in the last 30 days due to health/mental health conditions."
+4. WHODAS 2.0 Questions:
+* Understanding and Communicating:
+* "How much difficulty did you have concentrating on doing something for ten minutes?" (None, Mild, Moderate, Severe, Extreme or cannot do)
+* "How much difficulty did you have remembering to do important things?" (None, Mild, Moderate, Severe, Extreme or cannot do)
+* ... (Continue with all WHODAS 2.0 items)
+5. Assess Severity Based on WHODAS 2.0 Scores:
+* Calculate the total score and domain scores.
+* Determine the level of disability: Higher scores indicate greater disability.
+6. Referral for Serious Conditions:
+* If the client indicates severe symptoms (e.g., severe depression, suicidal thoughts, psychosis):
+* "It sounds like you might need immediate support from a mental health professional. Here are some links to trusted psychiatric services that can help you right away."
+* Provide links to emergency services and psychiatrists.
+7. Suggestions for Mild to Moderate Conditions:
+* If the client indicates mild to moderate symptoms:
+* "Thank you for sharing. Here are some services that might help you on your wellness journey:"
+1. Enable-Healing Zone: "Connect with world-class licensed and verified therapists to help you in your wellness journey."
+2. Capable-Body-Mind Connection: "Benefit from holistic health practices including food for mental wellness, yogic practices, breathing techniques, and routine management."
+3. Suitable-Community Circle: "Join our community experiences such as the Mental Spa, Wellness Dating, and Wellness Meetups."
+4. Viable-Youth Support: "Explore dedicated services for children and young adults, including aptitude testing, career advising, and wellness support for anxiety, body-image issues, bullying, and more."
+5. Valuable-Voice Platform: "Share your story, experience, suggestions, and concerns with our supportive community."
+
+[Client Enters Website] | V [AI Assistant Greeting] | V [Collect Basic Information] | V [Administer WHODAS 2.0 Checklist] | V [Assess Severity Based on WHODAS 2.0 Scores] | +--------------------------------------------------+ | | V V [Serious Condition] [Mild/Moderate Condition] | | V V [Refer to Psychiatrist] [Suggest Services] | | V V [Provide Links to Services] [Display Service Options] | | +--------------------------------------+--------------------+--------------------+--------------------+ | | | | V V V V [Enable-Healing Zone] [Capable-Body-Mind [Suitable-Community [Viable-Youth Support] Connection] Circle] | V [Valuable-Voice Platform] 
+
+WHODAS 2.0 Checklist
+Client Information:
+* Name:
+* Age:
+* Sex: ? Male ? Female
+* Date:
+Instructions: For each question, circle the response that best describes how much difficulty you have had in the last 30 days due to health/mental health conditions. Health conditions include diseases, injuries, mental or emotional problems, and issues with alcohol or drugs.
+Domain 1: Understanding and Communicating
+1. Concentrating on doing something for ten minutes:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+2. Remembering to do important things:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+3. Analyzing and finding solutions to problems in day-to-day life:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+4. Learning a new task, e.g., how to get to a new place:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+5. Generally understanding what people say:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+6. Starting and maintaining a conversation:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+Domain 2: Getting Around
+1. Standing for long periods, such as 30 minutes:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+2. Standing up from sitting down:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+3. Moving around inside your home:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+4. Getting out of your home:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+5. Walking a long distance, such as a kilometer:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+Domain 3: Self-care
+1. Washing your whole body:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+2. Getting dressed:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+3. Eating:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+4. Staying by yourself for a few days:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+Domain 4: Getting Along with People
+1. Dealing with people you do not know:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+2. Maintaining a friendship:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+3. Getting along with people who are close to you:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+4. Making new friends:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+5. Sexual activities:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+Domain 5: Life Activities (Household)
+1. Taking care of your household responsibilities:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+2. Doing most important household tasks well:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+3. Getting all of the household work done that you needed to do:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+4. Getting your household work done as quickly as needed:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+Domain 6: Participation in Society
+1. Joining in community activities (e.g., festivities, religious activities):
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+2. Facing barriers or hindrances around you:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+3. Living with dignity because of the attitudes and actions of others:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+4. Spending time on your health condition:
+* None ?
+* Some ?
+* Moderate ?
+* A lot ?
+* Extreme or cannot do ?
+5. Being emotionally affected by your health condition:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+6. Health being a drain on financial resources:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+7. Family having problems because of your health problems:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+8. Doing things by yourself for relaxation or pleasure:
+* None ?
+* Mild ?
+* Moderate ?
+* Severe ?
+* Extreme or cannot do ?
+Scoring Instructions:
+* Sum the scores for each domain to get domain-specific scores.
+* Sum all domain scores to get the total score.
+* Interpret the scores: Higher scores indicate greater disability.
+This checklist provides a comprehensive assessment of a client's functioning and can help in identifying the level of support needed.
+
+
+

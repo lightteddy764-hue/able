@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wellness Dashboard - ABLE</title>
+    <link rel="stylesheet" href="dashboard-styles.css">
+    <link rel="stylesheet" href="dash-premium.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header"><img src="images/logo.svg" alt="ABLE" class="sidebar-logo"></div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9L12 2L21 9V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Dashboard</span></a>
+            <a href="healing-zone.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Healing Zone</span></a>
+            <a href="body-mind.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Body-Mind</span></a>
+            <a href="community.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg><span>Community</span></a>
+            <a href="youth-support.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Youth Support</span></a>
+            <a href="my-voice.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>My Voice</span></a>
+            <a href="settings.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Settings</span></a>
+        </nav>
+        <div class="sidebar-footer"><a href="login.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Logout</span></a></div>
+    </aside>
+
+    <!-- Main -->
+    <div class="main-content">
+        <!-- Topbar -->
+        <header class="topbar">
+            <button class="menu-toggle" id="menuToggle"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="search-bar"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input type="text" placeholder="Search therapists, resources, articles... (⌘K)"></div>
+            <div class="topbar-actions">
+                <button class="icon-button"><svg viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="notification-badge">3</span></button>
+                <div class="user-profile"><img src="https://ui-avatars.com/api/?name=John+Doe&background=E67E22&color=fff" alt="User"><div class="user-info"><span class="user-name" id="dashUserName">John Doe</span><span class="user-role">Wellness Seeker</span></div></div>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <main class="dashboard-content dp-content">
+            <div class="bg-blob blob-1"></div>
+            <div class="bg-blob blob-2"></div>
+            <div class="bg-blob blob-3"></div>
+            <!-- Greeting + Hero -->
+            <div class="dp-hero">
+                <div class="dp-hero-left">
+                    <h1 id="dpGreeting">Good Morning, John 👋</h1>
+                    <p>Your mental wellness score improved <strong>12%</strong> this week. Keep building healthy habits.</p>
+                    <div class="dp-hero-metrics">
+                        <div class="dp-metric"><span class="dp-metric-val" id="metricWellness">—</span><span class="dp-metric-lbl">Wellness Score</span></div>
+                        <div class="dp-metric"><span class="dp-metric-val" id="metricStreak">0 🔥</span><span class="dp-metric-lbl">Day Streak</span></div>
+                        <div class="dp-metric"><span class="dp-metric-val" id="metricTasks">0/5</span><span class="dp-metric-lbl">Tasks Done</span></div>
+                        <div class="dp-metric"><span class="dp-metric-val" id="metricSessions">0</span><span class="dp-metric-lbl">Sessions Booked</span></div>
+                    </div>
+                </div>
+                <div class="dp-hero-right">
+                    <div class="dp-trend-mini">
+                        <span class="dp-trend-label">This Week</span>
+                        <svg viewBox="0 0 200 60" class="dp-trend-svg">
+                            <polyline points="0,50 30,45 60,42 90,35 120,30 150,22 180,15 200,10" fill="none" stroke="#E67E22" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <polyline points="0,50 30,45 60,42 90,35 120,30 150,22 180,15 200,10" fill="url(#trendGrad)" stroke="none"/>
+                            <defs><linearGradient id="trendGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(230,126,34,0.3)"/><stop offset="100%" stop-color="rgba(230,126,34,0)"/></linearGradient></defs>
+                        </svg>
+                        <div class="dp-trend-days"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+                    </div>
+                    <div class="dp-trend-badge" id="trendBadge">— tracking mood</div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="dp-section">
+                <h3 class="dp-section-title">Quick Actions</h3>
+                <div class="dp-quick-actions">
+                    <a href="healing-zone.html" class="dp-action"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2"/></svg><span>Book Therapist</span></a>
+                    <a href="signup.html" class="dp-action"><svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Take Assessment</span></a>
+                    <a href="community.html" class="dp-action"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg><span>Join Community</span></a>
+                    <a href="body-mind.html" class="dp-action"><svg viewBox="0 0 24 24" fill="none"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Start Meditation</span></a>
+                </div>
+            </div>
+
+            <!-- Two Column: Mood + Daily Plan -->
+            <div class="dp-two-col">
+                <div class="dp-card">
+                    <h3 class="dp-card-title">How are you feeling today?</h3>
+                    <div class="dp-mood-grid" id="moodGrid">
+                        <button class="dp-mood" data-mood="great">😄<span>Great</span></button>
+                        <button class="dp-mood" data-mood="good">🙂<span>Good</span></button>
+                        <button class="dp-mood" data-mood="okay">😐<span>Okay</span></button>
+                        <button class="dp-mood" data-mood="low">😔<span>Low</span></button>
+                        <button class="dp-mood" data-mood="struggling">😢<span>Struggling</span></button>
+                    </div>
+                </div>
+                <div class="dp-card">
+                    <h3 class="dp-card-title">Today's Wellness Plan</h3>
+                    <div class="dp-checklist" id="dpChecklist">
+                        <div style="text-align:center;padding:1rem;color:#9ca3af;font-size:0.85rem">Loading tasks...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Cards -->
+            <div class="dp-section">
+                <h3 class="dp-section-title">Your Wellness Services</h3>
+                <div class="dp-services">
+                    <a href="healing-zone.html" class="dp-service-card"><div class="dp-svc-icon dp-svc-orange"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2"/></svg></div><div class="dp-svc-info"><h4>Healing Zone</h4><p>1,200+ therapists available</p></div><span class="dp-svc-arrow">→</span></a>
+                    <a href="body-mind.html" class="dp-service-card"><div class="dp-svc-icon dp-svc-green"><svg viewBox="0 0 24 24" fill="none"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="dp-svc-info"><h4>Body-Mind</h4><p>Yoga, nutrition & breathing</p></div><span class="dp-svc-arrow">→</span></a>
+                    <a href="community.html" class="dp-service-card"><div class="dp-svc-icon dp-svc-blue"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg></div><div class="dp-svc-info"><h4>Community</h4><p>3,500+ active members</p></div><span class="dp-svc-arrow">→</span></a>
+                    <a href="youth-support.html" class="dp-service-card"><div class="dp-svc-icon dp-svc-purple"><svg viewBox="0 0 24 24" fill="none"><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke="currentColor" stroke-width="2"/></svg></div><div class="dp-svc-info"><h4>Youth Support</h4><p>Ages 13-24 programs</p></div><span class="dp-svc-arrow">→</span></a>
+                    <a href="my-voice.html" class="dp-service-card"><div class="dp-svc-icon dp-svc-amber"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2"/></svg></div><div class="dp-svc-info"><h4>My Voice</h4><p>2,000+ shared stories</p></div><span class="dp-svc-arrow">→</span></a>
+                </div>
+            </div>
+
+            <!-- Therapist Recommendation + Weekly Chart -->
+            <div class="dp-two-col">
+                <div class="dp-card dp-therapist-rec">
+                    <h3 class="dp-card-title">Recommended Therapist</h3>
+                    <div class="dp-rec-content">
+                        <img src="https://ui-avatars.com/api/?name=Dr+Sarah+Wilson&background=E67E22&color=fff&size=64" alt="Dr. Sarah Wilson" class="dp-rec-avatar">
+                        <div class="dp-rec-info">
+                            <h4>Dr. Sarah Wilson</h4>
+                            <span class="dp-rec-specialty">Anxiety & Stress Specialist</span>
+                            <div class="dp-rec-meta">
+                                <span>⭐ 4.9</span>
+                                <span>12 Years Exp.</span>
+                                <span>Available Today</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="healing-zone.html" class="dp-rec-btn">Book Session →</a>
+                </div>
+                <div class="dp-card">
+                    <h3 class="dp-card-title">Weekly Wellness Progress</h3>
+                    <div class="dp-chart">
+                        <svg viewBox="0 0 280 100" class="dp-chart-svg" id="weekChartSvg">
+                            <line x1="0" y1="80" x2="280" y2="80" stroke="#E5E7EB" stroke-width="1"/>
+                            <line x1="0" y1="50" x2="280" y2="50" stroke="#F3F4F6" stroke-width="0.5" stroke-dasharray="4"/>
+                            <line x1="0" y1="20" x2="280" y2="20" stroke="#F3F4F6" stroke-width="0.5" stroke-dasharray="4"/>
+                            <text x="140" y="50" text-anchor="middle" fill="#9CA3AF" font-size="8">Log your mood to see progress</text>
+                        </svg>
+                        <div class="dp-chart-labels" id="weekChartLabels"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+                        <div class="dp-chart-values" id="weekChartValues"><span>—</span><span>—</span><span>—</span><span>—</span><span>—</span><span>—</span><span>—</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two Column: Journey + Activity -->
+            <div class="dp-two-col">
+                <div class="dp-card">
+                    <h3 class="dp-card-title">Wellness Journey</h3>
+                    <div class="dp-timeline">
+                        <div class="dp-tl-item done"><div class="dp-tl-dot"></div><span>Assessment Complete</span></div>
+                        <div class="dp-tl-item done"><div class="dp-tl-dot"></div><span>Wellness Profile Created</span></div>
+                        <div class="dp-tl-item"><div class="dp-tl-dot"></div><span>First Therapy Session</span></div>
+                        <div class="dp-tl-item"><div class="dp-tl-dot"></div><span>Community Joined</span></div>
+                        <div class="dp-tl-item"><div class="dp-tl-dot"></div><span>30-Day Milestone</span></div>
+                    </div>
+                </div>
+                <div class="dp-card">
+                    <h3 class="dp-card-title">Recent Activity</h3>
+                    <div class="dp-activity">
+                        <div class="dp-act-item"><span class="dp-act-dot green"></span>Assessment Completed<small>Today</small></div>
+                        <div class="dp-act-item"><span class="dp-act-dot blue"></span>Joined Community Circle<small>Yesterday</small></div>
+                        <div class="dp-act-item"><span class="dp-act-dot purple"></span>Read Anxiety Resource<small>2 days ago</small></div>
+                        <div class="dp-act-item"><span class="dp-act-dot orange"></span>Completed Meditation<small>3 days ago</small></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Community Highlights -->
+            <div class="dp-card dp-community-card">
+                <h3 class="dp-card-title">Community Highlights</h3>
+                <div class="dp-community-layout">
+                    <div class="dp-community-stats">
+                        <div class="dp-cm-stat"><span class="dp-cm-num">125</span><span>Discussions</span></div>
+                        <div class="dp-cm-stat"><span class="dp-cm-num">23</span><span>Stories</span></div>
+                        <div class="dp-cm-stat"><span class="dp-cm-num">18</span><span>Events</span></div>
+                    </div>
+                    <div class="dp-trending">
+                        <h4 class="dp-trending-title">Trending Today</h4>
+                        <a href="my-voice.html" class="dp-trending-item">How I Reduced Anxiety Naturally</a>
+                        <a href="community.html" class="dp-trending-item">Daily Gratitude Challenge</a>
+                        <a href="body-mind.html" class="dp-trending-item">Weekend Group Meditation Session</a>
+                    </div>
+                    <a href="community.html" class="dp-cm-btn">Explore Community →</a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Bottom Mobile Nav -->
+    <nav class="dp-mobile-nav">
+        <a href="dashboard.html" class="dp-mn-item active"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2"/></svg><span>Home</span></a>
+        <a href="healing-zone.html" class="dp-mn-item"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2"/></svg><span>Healing</span></a>
+        <a href="body-mind.html" class="dp-mn-item"><svg viewBox="0 0 24 24" fill="none"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2"/></svg><span>Wellness</span></a>
+        <a href="community.html" class="dp-mn-item"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg><span>Community</span></a>
+        <a href="settings.html" class="dp-mn-item"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4" stroke="currentColor" stroke-width="2"/></svg><span>Settings</span></a>
+    </nav>
+
+    <!-- Chatbot -->
+    <div class="chatbot-button" id="chatbotButton"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="white" stroke-width="2"/><circle cx="9" cy="10" r="1" fill="white"/><circle cx="15" cy="10" r="1" fill="white"/><path d="M9 13s1 1 3 1 3-1 3-1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg><span class="chatbot-badge">AI</span></div>
+    <div class="chatbot-widget" id="chatbotWidget">
+        <div class="chatbot-header"><div class="chatbot-header-content"><div class="chatbot-avatar"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="white"/></svg></div><div class="chatbot-info"><h4>ABLE Wellness Assistant</h4><span class="chatbot-status">Online • Here to Help</span></div></div><button class="chatbot-close" id="chatbotClose"><svg viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+        <div class="chatbot-messages" id="chatbotMessages"></div>
+        <div class="chatbot-input"><input type="text" id="chatbotInput" placeholder="Type your message..." autocomplete="off"><button class="chatbot-send" id="chatbotSend"><svg viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9M22 2L2 8l9 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    </div>
+
+    <script src="chatbot.js"></script>
+    <script src="dashboard.js"></script>
+    <script>
+    const token = localStorage.getItem('token');
+    if (!token) { window.location.href = 'login.html'; }
+
+    // Personalized greeting
+    const hour = new Date().getHours();
+    const greet = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
+
+    // Load dashboard data
+    async function loadDashboard() {
+        try {
+            const res = await fetch('/api/dashboard', { headers: { 'Authorization': 'Bearer ' + token } });
+            if (res.status === 401) { window.location.href = 'login.html'; return; }
+            const data = await res.json();
+            
+            const firstName = data.user.name.split(' ')[0];
+            document.getElementById('dpGreeting').textContent = `${greet}, ${firstName} 👋`;
+            document.getElementById('dashUserName').textContent = data.user.name;
+            localStorage.setItem('userName', data.user.name);
+            
+            // Update metrics
+            document.getElementById('metricWellness').textContent = data.wellnessScore + '%';
+            document.getElementById('metricStreak').textContent = data.user.streak + ' 🔥';
+            document.getElementById('metricTasks').textContent = data.tasksCompleted + '/' + data.totalTasks;
+            document.getElementById('metricSessions').textContent = data.user.sessionsBooked || 0;
+            
+            // Today's mood
+            if (data.todayMood) {
+                document.querySelectorAll('.dp-mood').forEach(b => b.classList.remove('selected'));
+                const moodBtn = document.querySelector(`.dp-mood[data-mood="${data.todayMood}"]`);
+                if (moodBtn) moodBtn.classList.add('selected');
+            }
+            
+            // Weekly mood chart
+            renderWeekChart(data.weekMoods, data.wellnessScore);
+            
+        } catch (e) {
+            console.error('Dashboard load error:', e);
+            // Fallback to localStorage name
+            const name = localStorage.getItem('userName') || 'User';
+            document.getElementById('dpGreeting').textContent = `${greet}, ${name.split(' ')[0]} 👋`;
+        }
+    }
+
+    // Load tasks
+    async function loadTasks() {
+        try {
+            const res = await fetch('/api/tasks', { headers: { 'Authorization': 'Bearer ' + token } });
+            const data = await res.json();
+            renderTasks(data.tasks || []);
+        } catch (e) {
+            console.error('Tasks load error:', e);
+        }
+    }
+
+    function renderTasks(tasks) {
+        const container = document.getElementById('dpChecklist');
+        container.innerHTML = tasks.map((task, i) => `
+            <label class="dp-check ${task.completed ? 'done' : ''}">
+                <input type="checkbox" ${task.completed ? 'checked disabled' : ''} data-index="${i}">
+                <span>${task.title}</span>
+                ${task.completed ? '<small class="task-done-badge">✓ Done</small>' : ''}
+            </label>
+        `).join('');
+
+        // Add event listeners
+        container.querySelectorAll('input[type="checkbox"]:not(:disabled)').forEach(cb => {
+            cb.addEventListener('change', async (e) => {
+                if (!e.target.checked) { e.target.checked = false; return; }
+                const index = e.target.dataset.index;
+                try {
+                    const res = await fetch('/api/tasks/' + index, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }
+                    });
+                    const data = await res.json();
+                    if (data.error) {
+                        e.target.checked = false;
+                        alert(data.error);
+                        return;
+                    }
+                    // Update UI
+                    renderTasks(data.tasks);
+                    // Update tasks metric
+                    const completed = data.tasks.filter(t => t.completed).length;
+                    document.getElementById('metricTasks').textContent = completed + '/' + data.tasks.length;
+                } catch (err) {
+                    e.target.checked = false;
+                    console.error('Task error:', err);
+                }
+            });
+        });
+    }
+
+    // Mood tracker
+    document.querySelectorAll('.dp-mood').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const mood = btn.dataset.mood;
+            document.querySelectorAll('.dp-mood').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            
+            try {
+                await fetch('/api/mood', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                    body: JSON.stringify({ mood })
+                });
+            } catch (e) {
+                console.error('Mood save error:', e);
+            }
+        });
+    });
+
+    // Render weekly wellness chart
+    function renderWeekChart(weekMoods, currentScore) {
+        const moodScores = { great: 100, good: 80, okay: 60, low: 40, struggling: 20 };
+        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const today = new Date();
+        const scores = [];
+        
+        for (let i = 6; i >= 0; i--) {
+            const d = new Date(today);
+            d.setDate(d.getDate() - i);
+            d.setHours(0, 0, 0, 0);
+            
+            const dayMood = weekMoods.find(m => {
+                const mDate = new Date(m.date);
+                mDate.setHours(0, 0, 0, 0);
+                return mDate.getTime() === d.getTime();
+            });
+            
+            scores.push(dayMood ? (moodScores[dayMood.mood] || 60) : null);
+        }
+        
+        // Build SVG polyline
+        const validScores = scores.filter(s => s !== null);
+        if (validScores.length < 2) return;
+        
+        const chartSvg = document.getElementById('weekChartSvg');
+        const labelsDiv = document.getElementById('weekChartLabels');
+        const valuesDiv = document.getElementById('weekChartValues');
+        
+        const points = [];
+        const circles = [];
+        scores.forEach((score, i) => {
+            if (score !== null) {
+                const x = 20 + (i * 40);
+                const y = 80 - ((score / 100) * 60);
+                points.push(`${x},${y}`);
+                circles.push(`<circle cx="${x}" cy="${y}" r="${i === scores.length - 1 ? 4 : 3}" fill="#E67E22" ${i === scores.length - 1 ? 'stroke="white" stroke-width="2"' : ''}/>`);
+            }
+        });
+        
+        if (points.length > 1) {
+            chartSvg.innerHTML = `
+                <line x1="0" y1="80" x2="280" y2="80" stroke="#E5E7EB" stroke-width="1"/>
+                <line x1="0" y1="50" x2="280" y2="50" stroke="#F3F4F6" stroke-width="0.5" stroke-dasharray="4"/>
+                <line x1="0" y1="20" x2="280" y2="20" stroke="#F3F4F6" stroke-width="0.5" stroke-dasharray="4"/>
+                <polyline points="${points.join(' ')}" fill="none" stroke="#E67E22" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                ${circles.join('')}
+            `;
+        }
+        
+        // Day labels
+        const dayNames = [];
+        for (let i = 6; i >= 0; i--) {
+            const d = new Date(today);
+            d.setDate(d.getDate() - i);
+            dayNames.push(days[d.getDay() === 0 ? 6 : d.getDay() - 1]);
+        }
+        labelsDiv.innerHTML = dayNames.map(d => `<span>${d}</span>`).join('');
+        valuesDiv.innerHTML = scores.map(s => `<span>${s !== null ? s : '—'}</span>`).join('');
+        
+        // Update trend badge
+        if (validScores.length >= 2) {
+            const first = validScores[0];
+            const last = validScores[validScores.length - 1];
+            const change = Math.round(((last - first) / first) * 100);
+            const trendBadge = document.getElementById('trendBadge');
+            if (change > 0) trendBadge.textContent = `↑ ${change}% this week`;
+            else if (change < 0) trendBadge.textContent = `↓ ${Math.abs(change)}% this week`;
+            else trendBadge.textContent = '→ Stable this week';
+        }
+    }
+
+    // Init
+    loadDashboard();
+    loadTasks();
+    </script>
+</body>
+</html>

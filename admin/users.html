@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users - Admin ABLE</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+    <div id="sidebar"></div>
+    <script src="/admin/admin-nav.js"></script>
+
+    <div class="main">
+        <div class="header">
+            <div style="display:flex;align-items:center;gap:0.75rem">
+                <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+                <h1>User Management</h1>
+            </div>
+            <div class="header-right"><span id="userCount">- users</span></div>
+        </div>
+
+        <div class="container">
+            <!-- Search & Filters -->
+            <div class="toolbar">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search by name or email...">
+                <select class="filter-select" id="filterPlan">
+                    <option value="all">All Plans</option>
+                    <option value="free">Free</option>
+                    <option value="premium">Premium</option>
+                </select>
+                <select class="filter-select" id="filterStatus">
+                    <option value="all">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="blocked">Blocked</option>
+                </select>
+            </div>
+
+            <!-- Users Table -->
+            <div class="card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Plan</th>
+                            <th>Assessment</th>
+                            <th>Status</th>
+                            <th>Joined</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable"><tr><td colspan="7" class="empty">Loading...</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Detail Modal -->
+    <div class="modal-overlay" id="modalOverlay" style="display:none">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">User Details</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+    const token = localStorage.getItem('adminToken');
+    if (!token) window.location.href = '/admin/';
+
+    let allUsers = [];
+
+    async function api(path, opts={}) {
+        const res = await fetch(path, { ...opts, headers: { 'Content-Type':'application/json', 'Authorization': 'Bearer ' + token, ...opts.headers } });
+        if (res.status === 401) { localStorage.removeItem('adminToken'); window.location.href='/admin/'; }
+        return res.json();
+    }
+
+    async function loadUsers() {
+        const data = await api('/admin/api/dashboard');
+        allUsers = data.users;
+        document.getElementById('userCount').textContent = allUsers.length + ' users';
+        renderUsers(allUsers);
+    }
+
+    function renderUsers(users) {
+        if (!users.length) {
+            document.getElementById('usersTable').innerHTML = '<tr><td colspan="7" class="empty">No users found</td></tr>';
+            return;
+        }
+        document.getElementById('usersTable').innerHTML = users.map(u => `<tr>
+            <td><div class="user-cell"><strong>${u.name}</strong></div></td>
+            <td>${u.email}</td>
+            <td><span class="badge ${u.plan==='premium'?'badge-orange':'badge-blue'}">${u.plan||'free'}</span></td>
+            <td><span class="badge ${u.assessment?.completed?'badge-green':'badge-red'}">${u.assessment?.completed?u.assessment.severityLevel||'done':'pending'}</span></td>
+            <td><span class="badge ${u.isBlocked?'badge-red':'badge-green'}">${u.isBlocked?'Blocked':'Active'}</span></td>
+            <td>${new Date(u.createdAt).toLocaleDateString()}</td>
+            <td class="actions-cell">
+                <button class="btn-sm" onclick="viewUser('${u._id}')">View</button>
+                <button class="btn-sm" onclick="toggleBlock('${u._id}', ${!u.isBlocked})" style="color:${u.isBlocked?'#10b981':'#f59e0b'}">${u.isBlocked?'Unblock':'Block'}</button>
+                <button class="btn-sm btn-del" onclick="deleteUser('${u._id}')">Delete</button>
+            </td>
+        </tr>`).join('');
+    }
+
+    // Search
+    document.getElementById('searchInput').addEventListener('input', filterUsers);
+    document.getElementById('filterPlan').addEventListener('change', filterUsers);
+    document.getElementById('filterStatus').addEventListener('change', filterUsers);
+
+    function filterUsers() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const plan = document.getElementById('filterPlan').value;
+        const status = document.getElementById('filterStatus').value;
+        let filtered = allUsers.filter(u => {
+            const matchSearch = u.name.toLowerCase().includes(search) || u.email.toLowerCase().includes(search);
+            const matchPlan = plan === 'all' || (u.plan||'free') === plan;
+            const matchStatus = status === 'all' || (status === 'blocked' ? u.isBlocked : !u.isBlocked);
+            return matchSearch && matchPlan && matchStatus;
+        });
+        renderUsers(filtered);
+    }
+
+    // View user
+    function viewUser(id) {
+        const u = allUsers.find(x => x._id === id);
+        if (!u) return;
+        document.getElementById('modalTitle').textContent = u.name;
+        document.getElementById('modalBody').innerHTML = `
+            <div class="detail-grid">
+                <div class="detail-item"><label>Email</label><span>${u.email}</span></div>
+                <div class="detail-item"><label>Phone</label><span>${u.phone||'Not provided'}</span></div>
+                <div class="detail-item"><label>Plan</label><span>${u.plan||'free'}</span></div>
+                <div class="detail-item"><label>Status</label><span>${u.isBlocked?'Blocked':'Active'}</span></div>
+                <div class="detail-item"><label>Assessment</label><span>${u.assessment?.completed?'Completed ('+u.assessment.severityLevel+')':'Not taken'}</span></div>
+                <div class="detail-item"><label>WHODAS Score</label><span>${u.assessment?.whodasScore||0}/40</span></div>
+                <div class="detail-item"><label>Streak</label><span>${u.streak||0} days</span></div>
+                <div class="detail-item"><label>Joined</label><span>${new Date(u.createdAt).toLocaleString()}</span></div>
+                <div class="detail-item"><label>Wellness Goals</label><span>${(u.wellnessGoals||[]).join(', ')||'None set'}</span></div>
+                <div class="detail-item"><label>Bio</label><span>${u.bio||'No bio'}</span></div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-action" onclick="changePlan('${u._id}')">Change Plan</button>
+                <button class="btn-action warn" onclick="toggleBlock('${u._id}', ${!u.isBlocked});closeModal()">${u.isBlocked?'Unblock User':'Block User'}</button>
+                <button class="btn-action danger" onclick="deleteUser('${u._id}');closeModal()">Delete User</button>
+            </div>
+        `;
+        document.getElementById('modalOverlay').style.display = 'flex';
+    }
+
+    function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
+    document.getElementById('modalOverlay').addEventListener('click', (e) => { if(e.target===e.currentTarget) closeModal(); });
+
+    // Block/Unblock
+    async function toggleBlock(id, block) {
+        await api('/admin/api/users/'+id+'/block', { method:'PUT', body:JSON.stringify({isBlocked:block}) });
+        loadUsers();
+    }
+
+    // Change plan
+    async function changePlan(id) {
+        const plan = prompt('Enter new plan (free, premium, enterprise):');
+        if (!plan || !['free','premium','enterprise'].includes(plan)) return alert('Invalid plan');
+        await api('/admin/api/users/'+id+'/plan', { method:'PUT', body:JSON.stringify({plan}) });
+        loadUsers();
+        closeModal();
+    }
+
+    // Delete
+    async function deleteUser(id) {
+        if(!confirm('Permanently delete this user? This cannot be undone.')) return;
+        await api('/admin/api/users/'+id, { method:'DELETE' });
+        loadUsers();
+    }
+
+    loadUsers();
+    </script>
+</body>
+</html>

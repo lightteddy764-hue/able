@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - ABLE</title>
+    <link rel="stylesheet" href="dashboard-styles.css">
+    <link rel="stylesheet" href="settings.css">
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header"><img src="images/logo.svg" alt="ABLE" class="sidebar-logo"></div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2"/><path d="M9 22V12h6v10" stroke="currentColor" stroke-width="2"/></svg><span>Dashboard</span></a>
+            <a href="healing-zone.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2"/></svg><span>Healing Zone</span></a>
+            <a href="body-mind.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Body-Mind</span></a>
+            <a href="community.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg><span>Community</span></a>
+            <a href="youth-support.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke="currentColor" stroke-width="2"/></svg><span>Youth Support</span></a>
+            <a href="my-voice.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2"/></svg><span>My Voice</span></a>
+            <a href="settings.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09" stroke="currentColor" stroke-width="2"/></svg><span>Settings</span></a>
+        </nav>
+        <div class="sidebar-footer"><a href="login.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2"/><path d="M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Logout</span></a></div>
+    </aside>
+
+    <div class="main-content">
+        <header class="topbar">
+            <button class="menu-toggle" id="menuToggle"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="search-bar"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input type="text" placeholder="Search settings..."></div>
+            <div class="topbar-actions"><button class="icon-button"><svg viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2"/><path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2"/></svg><span class="notification-badge">2</span></button><div class="user-profile"><img src="https://ui-avatars.com/api/?name=John+Doe&background=E67E22&color=fff" alt="User"><div class="user-info"><span class="user-name">John Doe</span><span class="user-role">Wellness Seeker</span></div></div></div>
+        </header>
+
+        <main class="dashboard-content st-page">
+            <!-- Header -->
+            <div class="st-header">
+                <div><h1>Account Settings</h1><p>Control your profile, privacy, notifications, and wellness preferences.</p></div>
+                <div class="st-status-cards">
+                    <div class="st-sc"><span class="st-sc-val">80%</span><span class="st-sc-lbl">Profile</span></div>
+                    <div class="st-sc"><span class="st-sc-val st-off">Off</span><span class="st-sc-lbl">2FA</span></div>
+                    <div class="st-sc"><span class="st-sc-val">Free</span><span class="st-sc-lbl">Plan</span></div>
+                </div>
+            </div>
+
+            <div class="st-layout">
+                <!-- Nav -->
+                <nav class="st-nav">
+                    <button class="st-nav-item active" data-section="profile">Profile</button>
+                    <button class="st-nav-item" data-section="wellness">Wellness Preferences</button>
+                    <button class="st-nav-item" data-section="notifications">Notifications</button>
+                    <button class="st-nav-item" data-section="privacy">Privacy & Security</button>
+                    <button class="st-nav-item" data-section="appearance">Appearance</button>
+                    <button class="st-nav-item" data-section="billing">Plan & Billing</button>
+                    <button class="st-nav-item" data-section="account">Account</button>
+                </nav>
+
+                <!-- Content -->
+                <div class="st-content">
+                    <!-- Profile -->
+                    <section class="st-section active" id="section-profile">
+                        <div class="st-completion"><div class="st-comp-bar"><div class="st-comp-fill" style="width:80%"></div></div><span>Profile 80% complete — Add your photo and wellness goals to improve recommendations.</span></div>
+                        <h2>Personal Information</h2>
+                        <div class="st-profile-top"><img src="https://ui-avatars.com/api/?name=John+Doe&background=E67E22&color=fff&size=72" alt="" class="st-avatar"><div><button class="st-btn-outline">Change Photo</button><p class="st-hint">JPG, PNG or GIF. Max 2MB.</p></div></div>
+                        <form class="st-form">
+                            <div class="st-row"><div class="st-field"><label>First Name</label><input type="text" value="John"></div><div class="st-field"><label>Last Name</label><input type="text" value="Doe"></div></div>
+                            <div class="st-row"><div class="st-field"><label>Email</label><input type="email" value="john.doe@example.com"></div><div class="st-field"><label>Phone</label><input type="tel" value="+1 (555) 123-4567"></div></div>
+                            <div class="st-field"><label>Bio</label><textarea rows="3">Wellness seeker on a journey to better mental health.</textarea></div>
+                            <button type="button" class="st-btn-primary" onclick="alert('Profile saved!')">Save Changes</button>
+                        </form>
+                    </section>
+
+                    <!-- Wellness Preferences -->
+                    <section class="st-section" id="section-wellness">
+                        <h2>Wellness Preferences</h2>
+                        <p class="st-sec-desc">Help us personalize your experience by selecting your wellness goals.</p>
+                        <div class="st-goals"><label class="st-goal"><input type="checkbox" checked><span>Reduce Anxiety</span></label><label class="st-goal"><input type="checkbox" checked><span>Improve Sleep</span></label><label class="st-goal"><input type="checkbox"><span>Build Confidence</span></label><label class="st-goal"><input type="checkbox" checked><span>Find Therapist</span></label><label class="st-goal"><input type="checkbox"><span>Join Community</span></label><label class="st-goal"><input type="checkbox"><span>Career Guidance</span></label><label class="st-goal"><input type="checkbox"><span>Better Nutrition</span></label><label class="st-goal"><input type="checkbox"><span>Daily Mindfulness</span></label></div>
+                        <h3 class="st-sub">Preferred Session Type</h3>
+                        <div class="st-radios"><label><input type="radio" name="session" checked> Video Call</label><label><input type="radio" name="session"> Audio Call</label><label><input type="radio" name="session"> Text Chat</label><label><input type="radio" name="session"> In-Person</label></div>
+                        <h3 class="st-sub">Preferred Schedule</h3>
+                        <div class="st-radios"><label><input type="radio" name="sched" checked> Morning</label><label><input type="radio" name="sched"> Afternoon</label><label><input type="radio" name="sched"> Evening</label><label><input type="radio" name="sched"> Weekends</label></div>
+                        <button class="st-btn-primary" onclick="alert('Preferences saved!')">Save Preferences</button>
+                    </section>
+
+                    <!-- Notifications -->
+                    <section class="st-section" id="section-notifications">
+                        <h2>Notification Preferences</h2>
+                        <div class="st-toggles">
+                            <div class="st-toggle"><div><h4>Session Reminders</h4><p>Before scheduled therapy sessions</p></div><label class="st-sw"><input type="checkbox" checked><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Community Updates</h4><p>New events and discussions</p></div><label class="st-sw"><input type="checkbox" checked><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Wellness Tips</h4><p>Daily wellness recommendations</p></div><label class="st-sw"><input type="checkbox"><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Story Reactions</h4><p>When someone reacts to your stories</p></div><label class="st-sw"><input type="checkbox" checked><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Security Alerts</h4><p>Login attempts and password changes</p></div><label class="st-sw"><input type="checkbox" checked><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Marketing Emails</h4><p>New features and promotions</p></div><label class="st-sw"><input type="checkbox"><span></span></label></div>
+                        </div>
+                    </section>
+
+                    <!-- Privacy -->
+                    <section class="st-section" id="section-privacy">
+                        <h2>Privacy & Security</h2>
+                        <div class="st-privacy-score"><span>Privacy Health: </span><span class="st-priv-good">Good</span></div>
+                        <div class="st-toggles">
+                            <div class="st-toggle"><div><h4>Profile Visibility</h4><p>Others can see your profile</p></div><label class="st-sw"><input type="checkbox" checked><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Anonymous Mode</h4><p>Hide name in forums and stories</p></div><label class="st-sw"><input type="checkbox"><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Two-Factor Authentication</h4><p>Extra security layer</p></div><label class="st-sw"><input type="checkbox"><span></span></label></div>
+                        </div>
+                        <h3 class="st-sub">Active Sessions</h3>
+                        <div class="st-devices">
+                            <div class="st-device"><div><h4>Chrome on Windows</h4><p>Last active: Now (current)</p></div><span class="st-dev-badge active">Active</span></div>
+                            <div class="st-device"><div><h4>Safari on iPhone</h4><p>Last active: Yesterday</p></div><button class="st-dev-logout">Logout</button></div>
+                        </div>
+                        <h3 class="st-sub">Change Password</h3>
+                        <form class="st-form"><div class="st-field"><label>Current Password</label><input type="password" placeholder="••••••••"></div><div class="st-field"><label>New Password</label><input type="password" placeholder="••••••••"></div><button type="button" class="st-btn-primary">Update Password</button></form>
+                    </section>
+
+                    <!-- Appearance -->
+                    <section class="st-section" id="section-appearance">
+                        <h2>Appearance</h2>
+                        <div class="st-toggles">
+                            <div class="st-toggle"><div><h4>Dark Mode</h4><p>Darker color scheme</p></div><label class="st-sw"><input type="checkbox"><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Reduce Animations</h4><p>Minimize motion</p></div><label class="st-sw"><input type="checkbox"><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Compact View</h4><p>Less spacing, more content</p></div><label class="st-sw"><input type="checkbox"><span></span></label></div>
+                        </div>
+                        <h3 class="st-sub">Text Size</h3>
+                        <div class="st-sizes"><button class="st-size">A-</button><button class="st-size active">A</button><button class="st-size">A+</button></div>
+                    </section>
+
+                    <!-- Billing -->
+                    <section class="st-section" id="section-billing">
+                        <h2>Plan & Billing</h2>
+                        <div class="st-plan-card">
+                            <div class="st-plan-current"><span class="st-plan-badge">Current Plan</span><h3>Free Wellness Plan</h3><p>AI Assessment, Community Access, Basic Resources</p></div>
+                            <div class="st-plan-upgrade">
+                                <h4>Upgrade to Premium — $29/month</h4>
+                                <ul><li>Unlimited Therapist Sessions</li><li>Advanced AI Insights</li><li>Full Yoga & Nutrition Library</li><li>Priority Community Events</li><li>Progress Tracking</li></ul>
+                                <button class="st-btn-primary">Upgrade Plan</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Account -->
+                    <section class="st-section" id="section-account">
+                        <h2>Account Management</h2>
+                        <div class="st-info-grid"><div class="st-info-item"><span>Member Since</span><strong>June 2026</strong></div><div class="st-info-item"><span>Plan</span><strong>Free</strong></div><div class="st-info-item"><span>Assessment</span><strong class="st-green">Completed</strong></div><div class="st-info-item"><span>Stories</span><strong>3 Published</strong></div></div>
+                        <div class="st-danger">
+                            <h3>Danger Zone</h3>
+                            <div class="st-danger-row"><div><h4>Export Data</h4><p>Download all your data</p></div><button class="st-btn-outline">Export</button></div>
+                            <div class="st-danger-row"><div><h4>Deactivate Account</h4><p>Temporarily disable</p></div><button class="st-btn-warn">Deactivate</button></div>
+                            <div class="st-danger-row"><div><h4>Delete Account</h4><p>Permanently remove everything</p></div><button class="st-btn-danger">Delete</button></div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Chatbot -->
+    <div class="chatbot-button" id="chatbotButton"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="white" stroke-width="2"/><circle cx="9" cy="10" r="1" fill="white"/><circle cx="15" cy="10" r="1" fill="white"/><path d="M9 13s1 1 3 1 3-1 3-1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg><span class="chatbot-badge">AI</span></div>
+    <div class="chatbot-widget" id="chatbotWidget"><div class="chatbot-header"><div class="chatbot-header-content"><div class="chatbot-avatar"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="white"/></svg></div><div class="chatbot-info"><h4>ABLE Wellness Assistant</h4><span class="chatbot-status">Online • Here to Help</span></div></div><button class="chatbot-close" id="chatbotClose"><svg viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><div class="chatbot-messages" id="chatbotMessages"></div><div class="chatbot-input"><input type="text" id="chatbotInput" placeholder="Type your message..." autocomplete="off"><button class="chatbot-send" id="chatbotSend"><svg viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9M22 2L2 8l9 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+
+    <script src="chatbot.js"></script>
+    <script src="dashboard.js"></script>
+    <script>
+    document.querySelectorAll('.st-nav-item').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.st-nav-item').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.st-section').forEach(s=>s.classList.remove('active'));btn.classList.add('active');document.getElementById('section-'+btn.dataset.section).classList.add('active')})});
+    </script>
+</body>
+</html>
