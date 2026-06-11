@@ -61,8 +61,8 @@ function animateCounter(element, target, duration = 2000) {
 
 // Intersection Observer for scroll animations
 const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -100px 0px'
+    threshold: 0.05,
+    rootMargin: '0px 0px 0px 0px'
 };
 
 const observer = new IntersectionObserver((entries) => {
@@ -94,6 +94,24 @@ const heroStats = document.querySelector('.hero-stats');
 if (heroStats) {
     observer.observe(heroStats);
 }
+
+// Fallback: force-show all scroll-reveal elements after 1.5s
+// in case the observer doesn't fire (e.g. elements already in viewport on load)
+setTimeout(() => {
+    document.querySelectorAll('.scroll-reveal:not(.active)').forEach(el => {
+        el.classList.add('active');
+    });
+}, 1500);
+
+// Also trigger observer check on page load for elements already visible
+window.addEventListener('load', () => {
+    document.querySelectorAll('.scroll-reveal').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight) {
+            el.classList.add('active');
+        }
+    });
+});
 
 // Smooth scroll for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
