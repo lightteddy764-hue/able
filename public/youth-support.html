@@ -33,106 +33,65 @@
             <!-- Hero -->
             <div class="ys-hero">
                 <div class="ys-hero-left">
-                    <span class="ys-badge">Ages 13–24</span>
-                    <h1>Your Future Starts Here 🚀</h1>
-                    <p>Get personalized guidance for school, career choices, confidence building, and mental wellness — all in one place.</p>
-                    <div class="ys-hero-checks"><span>✓ Career Discovery</span><span>✓ Aptitude Testing</span><span>✓ Wellness Support</span><span>✓ Confidence Building</span></div>
-                    <a href="#modules" class="ys-hero-btn">Take Youth Assessment</a>
+                    <span class="ys-badge" id="ysBadge">Ages 13–24</span>
+                    <h1 id="ysHeadline">Your Future Starts Here 🚀</h1>
+                    <p id="ysDescription">Get personalized guidance for school, career choices, confidence building, and mental wellness — all in one place.</p>
+                    <div class="ys-hero-checks" id="ysFeatures"></div>
+                    <a href="#modules" class="ys-hero-btn" id="ysHeroBtn">Take Youth Assessment</a>
                 </div>
                 <div class="ys-hero-right">
                     <div class="ys-growth-score">
-                        <span class="ys-gs-num">78%</span>
-                        <span class="ys-gs-label">Growth Score</span>
-                        <span class="ys-gs-trend">↑ 8% This Month</span>
+                        <span class="ys-gs-num" id="ysGrowthScore">78%</span>
+                        <span class="ys-gs-label" id="ysGrowthLabel">Growth Score</span>
+                        <span class="ys-gs-trend" id="ysGrowthTrend">↑ 8% This Month</span>
                     </div>
                 </div>
             </div>
 
             <!-- Progress Dashboard -->
-            <div class="ys-progress-row">
-                <div class="ys-prog-item"><span class="ys-prog-label">Confidence</span><div class="ys-prog-bar"><div class="ys-prog-fill" style="width:70%;background:#8B5CF6"></div></div><span class="ys-prog-val">70%</span></div>
-                <div class="ys-prog-item"><span class="ys-prog-label">Wellness</span><div class="ys-prog-bar"><div class="ys-prog-fill" style="width:55%;background:#10B981"></div></div><span class="ys-prog-val">55%</span></div>
-                <div class="ys-prog-item"><span class="ys-prog-label">Career Clarity</span><div class="ys-prog-bar"><div class="ys-prog-fill" style="width:40%;background:#3B82F6"></div></div><span class="ys-prog-val">40%</span></div>
-                <div class="ys-prog-item"><span class="ys-prog-label">Social Skills</span><div class="ys-prog-bar"><div class="ys-prog-fill" style="width:60%;background:#F59E0B"></div></div><span class="ys-prog-val">60%</span></div>
-            </div>
+            <div class="ys-progress-row" id="ysProgressRow"></div>
 
             <!-- Recommended -->
             <section class="ys-section">
                 <h2 class="ys-sec-title">Recommended For You</h2>
-                <div class="ys-rec-grid">
-                    <div class="ys-rec-card"><div class="ys-rec-icon" style="background:#EFF6FF;color:#3B82F6"><svg viewBox="0 0 24 24" fill="none"><path d="M12 20V10M18 20V4M6 20V16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div><h4>Career Discovery Assessment</h4><p>Find careers that match your personality</p></div><a href="#" class="ys-rec-btn">Start →</a></div>
-                    <div class="ys-rec-card"><div class="ys-rec-icon" style="background:#F3E8FF;color:#8B5CF6"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="2"/></svg></div><div><h4>Confidence Building Course</h4><p>7-day program for self-esteem</p></div><a href="#" class="ys-rec-btn">Start →</a></div>
-                    <div class="ys-rec-card"><div class="ys-rec-icon" style="background:#ECFDF5;color:#10B981"><svg viewBox="0 0 24 24" fill="none"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h4>Exam Stress Toolkit</h4><p>Practical tools for test anxiety</p></div><a href="#" class="ys-rec-btn">Start →</a></div>
-                </div>
+                <div class="ys-rec-grid" id="ysRecGrid"></div>
             </section>
 
             <!-- Feature Modules -->
             <section id="modules" class="ys-section">
                 <h2 class="ys-sec-title">Your Growth Modules</h2>
-                <div class="ys-modules-grid">
-                    <div class="ys-module"><div class="ys-mod-header" style="background:linear-gradient(135deg,#3B82F6,#60A5FA)"><svg viewBox="0 0 24 24" fill="none"><path d="M12 20V10M18 20V4M6 20V16" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div><div class="ys-mod-body"><h4>Career Discovery</h4><p>95 career paths • Personality matching</p><span class="ys-mod-stat">40% Explored</span><button class="ys-mod-btn">Continue</button></div></div>
-                    <div class="ys-module"><div class="ys-mod-header" style="background:linear-gradient(135deg,#8B5CF6,#A78BFA)"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="white" stroke-width="2"/></svg></div><div class="ys-mod-body"><h4>Confidence Building</h4><p>Self-esteem exercises • Daily challenges</p><span class="ys-mod-stat">70% Complete</span><button class="ys-mod-btn">Continue</button></div></div>
-                    <div class="ys-module"><div class="ys-mod-header" style="background:linear-gradient(135deg,#10B981,#34D399)"><svg viewBox="0 0 24 24" fill="none"><path d="M12 22C17.52 22 22 17.52 22 12S17.52 2 12 2 2 6.48 2 12s4.48 10 10 10z" stroke="white" stroke-width="2"/><path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div><div class="ys-mod-body"><h4>Wellness Check-In</h4><p>Weekly mood tracking • Guided support</p><span class="ys-mod-stat">This Week Available</span><button class="ys-mod-btn">Check In</button></div></div>
-                    <div class="ys-module"><div class="ys-mod-header" style="background:linear-gradient(135deg,#E67E22,#F59E0B)"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="white" stroke-width="2"/></svg></div><div class="ys-mod-body"><h4>Personal Coach</h4><p>Book a counselor • Available tomorrow</p><span class="ys-mod-stat">50+ Counselors</span><button class="ys-mod-btn">Book Session</button></div></div>
-                </div>
+                <div class="ys-modules-grid" id="ysModulesGrid"></div>
             </section>
 
             <!-- Career Matches -->
             <section class="ys-section">
                 <h2 class="ys-sec-title">Your Career Matches</h2>
-                <div class="ys-careers-grid">
-                    <div class="ys-career"><span class="ys-career-match">92%</span><h4>Software Engineer</h4><p>Problem-solving • Logic • Creativity</p></div>
-                    <div class="ys-career"><span class="ys-career-match">87%</span><h4>Graphic Designer</h4><p>Visual thinking • Creativity • Detail</p></div>
-                    <div class="ys-career"><span class="ys-career-match">84%</span><h4>Psychologist</h4><p>Empathy • Communication • Analysis</p></div>
-                    <div class="ys-career"><span class="ys-career-match">79%</span><h4>Content Creator</h4><p>Storytelling • Social • Innovation</p></div>
-                </div>
+                <div class="ys-careers-grid" id="ysCareersGrid"></div>
             </section>
 
             <!-- Counselor + Weekly Challenges -->
             <div class="ys-two-col">
                 <div class="ys-card">
                     <h3 class="ys-card-title">Featured Counselor</h3>
-                    <div class="ys-counselor">
-                        <img src="https://ui-avatars.com/api/?name=Sarah+Johnson&background=8B5CF6&color=fff&size=56" alt="" class="ys-coun-img">
-                        <div><h4>Sarah Johnson</h4><span>Youth Development Specialist</span><div class="ys-coun-meta">⭐ 4.9 • 12 Years • Available Today</div></div>
-                    </div>
-                    <a href="healing-zone.html" class="ys-coun-btn">Book Session →</a>
+                    <div class="ys-counselor" id="ysCounselor"></div>
+                    <a href="healing-zone.html" class="ys-coun-btn" id="ysCounBtn">Book Session →</a>
                 </div>
                 <div class="ys-card">
                     <h3 class="ys-card-title">Weekly Challenges</h3>
-                    <div class="ys-challenges-list">
-                        <div class="ys-challenge done"><span>✓</span> 7-Day Confidence Challenge</div>
-                        <div class="ys-challenge done"><span>✓</span> Digital Detox (3 Days)</div>
-                        <div class="ys-challenge"><span>○</span> Morning Routine Challenge</div>
-                        <div class="ys-challenge"><span>○</span> Gratitude Journal (7 Days)</div>
-                    </div>
+                    <div class="ys-challenges-list" id="ysChallenges"></div>
                 </div>
             </div>
 
             <!-- Achievements -->
             <div class="ys-achievements">
                 <h3>Your Achievements</h3>
-                <div class="ys-ach-grid">
-                    <div class="ys-ach earned"><span>🏆</span>First Assessment</div>
-                    <div class="ys-ach earned"><span>⭐</span>7-Day Streak</div>
-                    <div class="ys-ach earned"><span>🎯</span>Career Explorer</div>
-                    <div class="ys-ach"><span>🧠</span>Wellness Learner</div>
-                    <div class="ys-ach"><span>💪</span>Confidence Master</div>
-                    <div class="ys-ach"><span>🌟</span>Community Mentor</div>
-                </div>
+                <div class="ys-ach-grid" id="ysAchievements"></div>
             </div>
 
             <!-- Support Areas -->
             <section class="ys-section">
                 <h2 class="ys-sec-title">Support Resources</h2>
-                <div class="ys-resources-grid">
-                    <a href="#" class="ys-resource"><div class="ys-res-icon" style="color:#EC4899"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M16 16s-1.5-2-4-2-4 2-4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><h4>Body Image</h4><span>4 Resources • 2 Videos</span></a>
-                    <a href="#" class="ys-resource"><div class="ys-res-icon" style="color:#EF4444"><svg viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2"/></svg></div><h4>Anti-Bullying</h4><span>6 Resources • 1 Workshop</span></a>
-                    <a href="#" class="ys-resource"><div class="ys-res-icon" style="color:#F59E0B"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg></div><h4>Peer Pressure</h4><span>3 Guides • 1 Quiz</span></a>
-                    <a href="#" class="ys-resource"><div class="ys-res-icon" style="color:#3B82F6"><svg viewBox="0 0 24 24" fill="none"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h4>Exam Stress</h4><span>5 Tools • 3 Audio</span></a>
-                    <a href="#" class="ys-resource"><div class="ys-res-icon" style="color:#8B5CF6"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2"/></svg></div><h4>Social Media</h4><span>4 Articles • 2 Videos</span></a>
-                    <a href="#" class="ys-resource"><div class="ys-res-icon" style="color:#10B981"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2"/></svg></div><h4>Self-Esteem</h4><span>7 Exercises • Daily Tips</span></a>
-                </div>
+                <div class="ys-resources-grid" id="ysResources"></div>
             </section>
         </main>
     </div>
@@ -143,5 +102,100 @@
 
     <script src="chatbot.js"></script>
     <script src="dashboard.js"></script>
+    <script>
+    // Fetch youth support data from API and render page
+    async function loadYouthSupport() {
+        try {
+            const res = await fetch('/api/youth-support');
+            const data = await res.json();
+            renderHero(data.settings);
+            renderProgress(data.progress);
+            renderAssessments(data.assessments);
+            renderPrograms(data.programs);
+            renderCareers(data.careers);
+            renderCounselor(data.counselor);
+            renderChallenges(data.challenges);
+            renderAchievements(data.achievements);
+            renderResources(data.resources);
+        } catch (e) {
+            console.error('Failed to load youth support data:', e);
+        }
+    }
+
+    function renderHero(s) {
+        if (!s) return;
+        document.getElementById('ysBadge').textContent = s.heroBadge;
+        document.getElementById('ysHeadline').textContent = s.heroHeadline;
+        document.getElementById('ysDescription').textContent = s.heroDescription;
+        document.getElementById('ysHeroBtn').textContent = s.heroButtonText;
+        document.getElementById('ysHeroBtn').href = s.heroButtonLink;
+        document.getElementById('ysGrowthScore').textContent = s.heroGrowthScore + '%';
+        document.getElementById('ysGrowthLabel').textContent = s.heroGrowthLabel;
+        document.getElementById('ysGrowthTrend').textContent = s.heroGrowthTrend;
+        const features = s.heroFeatures || [];
+        document.getElementById('ysFeatures').innerHTML = features.map(f => `<span>✓ ${f}</span>`).join('');
+    }
+
+    function renderProgress(items) {
+        if (!items || !items.length) return;
+        document.getElementById('ysProgressRow').innerHTML = items.map(p => `
+            <div class="ys-prog-item"><span class="ys-prog-label">${p.label}</span><div class="ys-prog-bar"><div class="ys-prog-fill" style="width:${p.percentage}%;background:${p.color}"></div></div><span class="ys-prog-val">${p.percentage}%</span></div>
+        `).join('');
+    }
+
+    function renderAssessments(items) {
+        if (!items || !items.length) return;
+        document.getElementById('ysRecGrid').innerHTML = items.map(a => `
+            <div class="ys-rec-card"><div class="ys-rec-icon" style="background:${a.iconBgColor};color:${a.iconColor}"><span style="font-size:1.5rem">${a.icon}</span></div><div><h4>${a.title}</h4><p>${a.description}</p></div><a href="${a.link}" class="ys-rec-btn">Start →</a></div>
+        `).join('');
+    }
+
+    function renderPrograms(items) {
+        if (!items || !items.length) return;
+        document.getElementById('ysModulesGrid').innerHTML = items.map(p => `
+            <div class="ys-module"><div class="ys-mod-header" style="background:linear-gradient(135deg,${p.gradientStart},${p.gradientEnd})"><img src="${p.image}" alt="" loading="lazy"></div><div class="ys-mod-body"><h4>${p.title}</h4><p>${p.description}</p><span class="ys-mod-stat">${p.progressText}</span><button class="ys-mod-btn" onclick="window.location.href='${p.buttonLink}'">${p.buttonText}</button></div></div>
+        `).join('');
+    }
+
+    function renderCareers(items) {
+        if (!items || !items.length) return;
+        document.getElementById('ysCareersGrid').innerHTML = items.map(c => `
+            <div class="ys-career"><span class="ys-career-match">${c.matchPercent}%</span><h4>${c.name}</h4><p>${c.skillTags.join(' • ')}</p></div>
+        `).join('');
+    }
+
+    function renderCounselor(c) {
+        if (!c) return;
+        const nameEncoded = encodeURIComponent(c.name.replace(/ /g, '+'));
+        document.getElementById('ysCounselor').innerHTML = `
+            <img src="${c.photo || 'https://ui-avatars.com/api/?name=' + nameEncoded + '&background=8B5CF6&color=fff&size=56'}" alt="" class="ys-coun-img">
+            <div><h4>${c.name}</h4><span>${c.role}</span><div class="ys-coun-meta">⭐ ${c.rating} • ${c.experience} Years • ${c.availability}</div></div>
+        `;
+        document.getElementById('ysCounBtn').href = c.bookingLink;
+    }
+
+    function renderChallenges(items) {
+        if (!items || !items.length) return;
+        document.getElementById('ysChallenges').innerHTML = items.map(ch => `
+            <div class="ys-challenge ${ch.status === 'completed' ? 'done' : ''}"><span>${ch.status === 'completed' ? '✓' : '○'}</span> ${ch.title}${ch.duration ? ' (' + ch.duration + ')' : ''}</div>
+        `).join('');
+    }
+
+    function renderAchievements(items) {
+        if (!items || !items.length) return;
+        document.getElementById('ysAchievements').innerHTML = items.map(a => `
+            <div class="ys-ach ${a.status === 'earned' ? 'earned' : ''}"><span>${a.icon}</span>${a.title}</div>
+        `).join('');
+    }
+
+    function renderResources(items) {
+        if (!items || !items.length) return;
+        document.getElementById('ysResources').innerHTML = items.map(r => `
+            <a href="${r.link}" class="ys-resource"><div class="ys-res-icon" style="color:${r.iconColor}"><span style="font-size:1.5rem">${r.icon}</span></div><h4>${r.categoryName}</h4><span>${r.resourceCount} • ${r.mediaCount}</span></a>
+        `).join('');
+    }
+
+    loadYouthSupport();
+    </script>
 </body>
 </html>

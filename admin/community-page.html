@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Page Admin - ABLE</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+    <style>
+        .tabs { display:flex; gap:0.25rem; margin-bottom:1.5rem; flex-wrap:wrap; border-bottom:1px solid #e5e7eb; }
+        .tab { padding:0.65rem 1rem; background:none; border:none; cursor:pointer; font-size:0.85rem; font-weight:600; color:#6b7280; border-bottom:2px solid transparent; transition:all 0.2s; }
+        .tab:hover { color:#111; }
+        .tab.active { color:#E67E22; border-bottom-color:#E67E22; }
+        .tab-content { display:none; }
+        .tab-content.active { display:block; }
+
+        .section-title-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; }
+        .section-title-row h2 { font-size:1rem; font-weight:700; }
+        .btn-add { padding:0.55rem 1rem; background:#E67E22; color:white; border:none; border-radius:8px; font-size:0.8rem; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:0.4rem; }
+        .btn-add:hover { background:#d35400; }
+
+        /* Toggle switch */
+        .switch { position:relative; display:inline-block; width:38px; height:20px; }
+        .switch input { opacity:0; width:0; height:0; }
+        .slider { position:absolute; cursor:pointer; inset:0; background:#d1d5db; border-radius:20px; transition:.3s; }
+        .slider:before { position:absolute; content:""; height:14px; width:14px; left:3px; top:3px; background:white; border-radius:50%; transition:.3s; }
+        input:checked + .slider { background:#E67E22; }
+        input:checked + .slider:before { transform:translateX(18px); }
+
+        .img-thumb { width:48px; height:32px; object-fit:cover; border-radius:4px; background:#f3f4f6; }
+        .img-preview { max-width:200px; max-height:120px; object-fit:cover; border-radius:8px; border:1px solid #e5e7eb; }
+        .stats-edit-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; }
+        .empty-row { text-align:center; padding:2rem; color:#9ca3af; font-size:0.85rem; }
+
+        .badge-pill { padding:0.2rem 0.5rem; border-radius:12px; font-size:0.7rem; font-weight:600; background:#f3f4f6; color:#374151; }
+        .badge-hot { background:#fef2f2; color:#ef4444; }
+        .badge-active { background:#eff6ff; color:#3b82f6; }
+        .badge-new { background:#ecfdf5; color:#10b981; }
+        .badge-popular { background:#fef3c7; color:#f59e0b; }
+
+        .accent-dot { width:14px; height:14px; border-radius:50%; display:inline-block; vertical-align:middle; border:1px solid rgba(0,0,0,0.1); }
+        .accent-green { background:#10B981; }
+        .accent-blue { background:#3B82F6; }
+        .accent-pink { background:#EC4899; }
+        .accent-purple { background:#8B5CF6; }
+        .accent-orange { background:#E67E22; }
+
+        .row-actions { display:flex; gap:0.3rem; align-items:center; flex-wrap:wrap; }
+
+        .toast { position:fixed; bottom:24px; right:24px; padding:0.75rem 1.25rem; background:#111827; color:white; border-radius:8px; font-size:0.85rem; z-index:2000; opacity:0; transform:translateY(10px); transition:all 0.25s; pointer-events:none; }
+        .toast.show { opacity:1; transform:translateY(0); }
+        .toast.error { background:#ef4444; }
+        .toast.success { background:#10b981; }
+    </style>
+</head>
+<body>
+    <div id="sidebar"></div>
+    <script src="/admin/admin-nav.js"></script>
+
+    <div class="main">
+        <div class="header">
+            <div style="display:flex;align-items:center;gap:0.75rem">
+                <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+                <h1>Community Page Manager</h1>
+            </div>
+            <div class="header-right"><a href="/community.html" target="_blank" style="font-size:0.8rem;color:#E67E22;text-decoration:none;font-weight:600">↗ View public page</a></div>
+        </div>
+
+        <div class="container">
+            <!-- Tabs -->
+            <div class="tabs" role="tablist">
+                <button class="tab active" data-tab="stats">Stats</button>
+                <button class="tab" data-tab="circles">Featured Circles</button>
+                <button class="tab" data-tab="spaces">Community Spaces</button>
+                <button class="tab" data-tab="discussions">Discussions</button>
+                <button class="tab" data-tab="events">Events</button>
+                <button class="tab" data-tab="achievements">Achievements</button>
+                <button class="tab" data-tab="moderation">Moderation</button>
+            </div>
+
+            <!-- ===== STATS TAB ===== -->
+            <div class="tab-content active" id="tab-stats">
+                <div class="card">
+                    <h3>Hero & Activity Stats</h3>
+                    <p style="font-size:0.8rem;color:#6b7280;margin-bottom:1rem">These numbers appear at the top of the community page (hero stats), the live indicators, and the bottom activity bar.</p>
+                    <form id="settingsForm">
+                        <div class="stats-edit-grid">
+                            <div class="form-group"><label>Communities Joined</label><input type="number" name="communitiesJoined"></div>
+                            <div class="form-group"><label>New Discussions</label><input type="number" name="newDiscussions"></div>
+                            <div class="form-group"><label>Events This Week</label><input type="number" name="eventsThisWeek"></div>
+                            <div class="form-group"><label>Members Online</label><input type="number" name="membersOnline"></div>
+                            <div class="form-group"><label>Live Discussions</label><input type="number" name="liveDiscussions"></div>
+                            <div class="form-group"><label>Events Happening Now</label><input type="number" name="eventsHappeningNow"></div>
+                            <div class="form-group"><label>Total Discussions</label><input type="number" name="discussionsCount"></div>
+                            <div class="form-group"><label>Events This Week (bar)</label><input type="number" name="eventsThisWeekTotal"></div>
+                            <div class="form-group"><label>New Members</label><input type="number" name="newMembers"></div>
+                            <div class="form-group"><label>Reactions Today</label><input type="number" name="reactionsToday"></div>
+                        </div>
+                        <button type="submit" class="btn-primary" style="margin-top:0.75rem">Save Stats</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ===== CIRCLES TAB ===== -->
+            <div class="tab-content" id="tab-circles">
+                <div class="section-title-row">
+                    <h2>Featured Circles / Recommended Groups</h2>
+                    <button class="btn-add" onclick="openModal('circle')">+ Add Circle</button>
+                </div>
+                <table>
+                    <thead><tr><th>Order</th><th>Title</th><th>Match %</th><th>Members</th><th>Badge</th><th>Color</th><th>Visible</th><th>Actions</th></tr></thead>
+                    <tbody id="circlesTable"><tr><td colspan="8" class="empty-row">Loading...</td></tr></tbody>
+                </table>
+            </div>
+
+            <!-- ===== SPACES TAB ===== -->
+            <div class="tab-content" id="tab-spaces">
+                <div class="section-title-row">
+                    <h2>Community Spaces (Mental Spa, Connections, Meetups)</h2>
+                    <button class="btn-add" onclick="openModal('space')">+ Add Space</button>
+                </div>
+                <table>
+                    <thead><tr><th>Order</th><th>Image</th><th>Title</th><th>Members</th><th>Active stat</th><th>Color</th><th>Visible</th><th>Actions</th></tr></thead>
+                    <tbody id="spacesTable"><tr><td colspan="8" class="empty-row">Loading...</td></tr></tbody>
+                </table>
+            </div>
+
+            <!-- ===== DISCUSSIONS TAB ===== -->
+            <div class="tab-content" id="tab-discussions">
+                <div class="section-title-row">
+                    <h2>Trending Discussions (Curated)</h2>
+                    <button class="btn-add" onclick="openModal('discussion')">+ Add Discussion</button>
+                </div>
+                <table>
+                    <thead><tr><th>Pinned</th><th>Title</th><th>Group / Author</th><th>Replies</th><th>Badge</th><th>Hidden</th><th>Actions</th></tr></thead>
+                    <tbody id="discussionsTable"><tr><td colspan="7" class="empty-row">Loading...</td></tr></tbody>
+                </table>
+            </div>
+
+            <!-- ===== EVENTS TAB ===== -->
+            <div class="tab-content" id="tab-events">
+                <div class="section-title-row">
+                    <h2>Upcoming Events</h2>
+                    <button class="btn-add" onclick="openModal('event')">+ Add Event</button>
+                </div>
+                <table>
+                    <thead><tr><th>Date</th><th>Title</th><th>Location</th><th>Time</th><th>Attendees</th><th>RSVP</th><th>Visible</th><th>Actions</th></tr></thead>
+                    <tbody id="eventsTable"><tr><td colspan="8" class="empty-row">Loading...</td></tr></tbody>
+                </table>
+            </div>
+
+            <!-- ===== ACHIEVEMENTS TAB ===== -->
+            <div class="tab-content" id="tab-achievements">
+                <div class="section-title-row">
+                    <h2>Community Progress / Achievements</h2>
+                    <button class="btn-add" onclick="openModal('achievement')">+ Add Badge</button>
+                </div>
+                <table>
+                    <thead><tr><th>Order</th><th>Icon</th><th>Title</th><th>Color</th><th>Completed (default)</th><th>Visible</th><th>Actions</th></tr></thead>
+                    <tbody id="achievementsTable"><tr><td colspan="7" class="empty-row">Loading...</td></tr></tbody>
+                </table>
+            </div>
+
+            <!-- ===== MODERATION TAB ===== -->
+            <div class="tab-content" id="tab-moderation">
+                <div class="card" style="margin-bottom:1rem">
+                    <h3>Community Approvals</h3>
+                    <p style="font-size:0.8rem;color:#6b7280;margin-bottom:1rem">User-created communities awaiting your decision.</p>
+                    <table><thead><tr><th>Name</th><th>Type</th><th>Members</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody id="modCommunitiesTable"><tr><td colspan="5" class="empty-row">Loading...</td></tr></tbody></table>
+                </div>
+                <div class="card">
+                    <h3>Discussion Moderation</h3>
+                    <p style="font-size:0.8rem;color:#6b7280;margin-bottom:1rem">Hide spam or reported content. Hidden items disappear from the public page.</p>
+                    <table><thead><tr><th>Title</th><th>Author</th><th>Replies</th><th>Flags</th><th>Actions</th></tr></thead>
+                    <tbody id="modDiscussionsTable"><tr><td colspan="5" class="empty-row">Loading...</td></tr></tbody></table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal" style="display:none">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="modalForm"></form>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+    /* ---------- Auth & API helpers ---------- */
+    const token = localStorage.getItem('adminToken');
+    if (!token) window.location.href = '/admin/';
+
+    async function api(path, options = {}) {
+        const res = await fetch(path, {
+            ...options,
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json',
+                ...(options.headers || {})
+            }
+        });
+        if (res.status === 401) { localStorage.removeItem('adminToken'); window.location.href = '/admin/'; }
+        return res.json();
+    }
+
+    function toast(msg, type = '') {
+        const el = document.getElementById('toast');
+        el.textContent = msg;
+        el.className = 'toast show ' + type;
+        setTimeout(() => el.classList.remove('show'), 2200);
+    }
+
+    /* ---------- Tabs ---------- */
+    document.querySelectorAll('.tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+            loadTab(btn.dataset.tab);
+        });
+    });
+
+    /* ---------- Stats ---------- */
+    async function loadSettings() {
+        const s = await api('/admin/api/community-page/settings');
+        const f = document.getElementById('settingsForm');
+        Object.keys(s).forEach(k => {
+            if (f[k]) f[k].value = s[k] ?? '';
+        });
+    }
+    document.getElementById('settingsForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = Object.fromEntries(new FormData(e.target).entries());
+        for (const k of Object.keys(data)) data[k] = Number(data[k]) || 0;
+        const r = await api('/admin/api/community-page/settings', { method: 'PUT', body: JSON.stringify(data) });
+        if (r._id) toast('Stats saved', 'success'); else toast('Save failed', 'error');
+    });
+
+    /* ---------- Generic CRUD render ---------- */
+    function escapeHtml(s) { return (s ?? '').toString().replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+
+    function badgeClass(b) { return ({Hot:'badge-hot',Active:'badge-active',New:'badge-new',Popular:'badge-popular'}[b]) || ''; }
+
+    /* Circles */
+    async function loadCircles() {
+        const list = await api('/admin/api/community-page/circles');
+        const tb = document.getElementById('circlesTable');
+        if (!list.length) return tb.innerHTML = '<tr><td colspan="8" class="empty-row">No circles yet</td></tr>';
+        tb.innerHTML = list.map(c => `
+            <tr>
+                <td>${c.displayOrder ?? 0}</td>
+                <td><strong>${escapeHtml(c.title)}</strong><br><span style="font-size:0.75rem;color:#9ca3af">${escapeHtml(c.description)}</span></td>
+                <td>${c.matchPercent}%</td>
+                <td>${c.memberCount}</td>
+                <td><span class="badge-pill">${escapeHtml(c.statusBadge || '—')}</span></td>
+                <td><span class="accent-dot accent-${c.accentColor}"></span></td>
+                <td>${toggleSwitch('circles', c._id, 'isVisible', c.isVisible)}</td>
+                <td class="row-actions">
+                    <button class="btn-sm" onclick='editItem("circle", ${JSON.stringify(c)})'>Edit</button>
+                    <button class="btn-sm btn-del" onclick="deleteItem('circles','${c._id}')">Delete</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    /* Spaces */
+    async function loadSpaces() {
+        const list = await api('/admin/api/community-page/spaces');
+        const tb = document.getElementById('spacesTable');
+        if (!list.length) return tb.innerHTML = '<tr><td colspan="8" class="empty-row">No spaces yet</td></tr>';
+        tb.innerHTML = list.map(s => `
+            <tr>
+                <td>${s.displayOrder ?? 0}</td>
+                <td>${s.image ? `<img class="img-thumb" src="${s.image}">` : '<span style="color:#9ca3af">—</span>'}</td>
+                <td><strong>${escapeHtml(s.title)}</strong><br><span style="font-size:0.75rem;color:#9ca3af">${escapeHtml(s.description)}</span></td>
+                <td>${s.memberCount}</td>
+                <td>${escapeHtml(s.activeStat || '—')}</td>
+                <td><span class="accent-dot accent-${s.accentColor}"></span></td>
+                <td>${toggleSwitch('spaces', s._id, 'isVisible', s.isVisible)}</td>
+                <td class="row-actions">
+                    <button class="btn-sm" onclick='editItem("space", ${JSON.stringify(s)})'>Edit</button>
+                    <button class="btn-sm btn-del" onclick="deleteItem('spaces','${s._id}')">Delete</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    /* Discussions */
+    async function loadDiscussions() {
+        const list = await api('/admin/api/community-page/discussions');
+        const tb = document.getElementById('discussionsTable');
+        if (!list.length) return tb.innerHTML = '<tr><td colspan="7" class="empty-row">No discussions yet</td></tr>';
+        tb.innerHTML = list.map(d => `
+            <tr>
+                <td>${toggleSwitch('discussions', d._id, 'isPinned', d.isPinned)}</td>
+                <td><strong>${escapeHtml(d.title)}</strong></td>
+                <td>${escapeHtml(d.groupName || '—')}</td>
+                <td>${d.replyCount}</td>
+                <td><span class="badge-pill ${badgeClass(d.badge)}">${escapeHtml(d.badge || '—')}</span></td>
+                <td>${toggleSwitch('discussions', d._id, 'isHidden', d.isHidden)}</td>
+                <td class="row-actions">
+                    <button class="btn-sm" onclick='editItem("discussion", ${JSON.stringify(d)})'>Edit</button>
+                    <button class="btn-sm btn-del" onclick="deleteItem('discussions','${d._id}')">Delete</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    /* Events */
+    async function loadEvents() {
+        const list = await api('/admin/api/community-page/events');
+        const tb = document.getElementById('eventsTable');
+        if (!list.length) return tb.innerHTML = '<tr><td colspan="8" class="empty-row">No events yet</td></tr>';
+        tb.innerHTML = list.map(ev => {
+            const d = ev.date ? new Date(ev.date) : null;
+            const dStr = d ? d.toLocaleDateString(undefined, { month: 'short', day: '2-digit', year: 'numeric' }) : '—';
+            return `
+            <tr>
+                <td><strong>${dStr}</strong></td>
+                <td>${escapeHtml(ev.title)}</td>
+                <td>${escapeHtml(ev.location || '—')}</td>
+                <td>${escapeHtml(ev.time || '—')}</td>
+                <td>${ev.attendeesCount}</td>
+                <td>${toggleSwitch('events', ev._id, 'rsvpEnabled', ev.rsvpEnabled)}</td>
+                <td>${toggleSwitch('events', ev._id, 'isVisible', ev.isVisible)}</td>
+                <td class="row-actions">
+                    <button class="btn-sm" onclick='editItem("event", ${JSON.stringify(ev)})'>Edit</button>
+                    <button class="btn-sm btn-del" onclick="deleteItem('events','${ev._id}')">Delete</button>
+                </td>
+            </tr>`;
+        }).join('');
+    }
+
+    /* Achievements */
+    async function loadAchievements() {
+        const list = await api('/admin/api/community-page/achievements');
+        const tb = document.getElementById('achievementsTable');
+        if (!list.length) return tb.innerHTML = '<tr><td colspan="7" class="empty-row">No achievements yet</td></tr>';
+        tb.innerHTML = list.map(a => `
+            <tr>
+                <td>${a.displayOrder ?? 0}</td>
+                <td style="font-size:1.25rem">${escapeHtml(a.icon)}</td>
+                <td><strong>${escapeHtml(a.title)}</strong></td>
+                <td><span class="accent-dot" style="background:${a.color}"></span> <span style="font-size:0.75rem;color:#6b7280">${a.color}</span></td>
+                <td>${toggleSwitch('achievements', a._id, 'isCompleted', a.isCompleted)}</td>
+                <td>${toggleSwitch('achievements', a._id, 'isVisible', a.isVisible)}</td>
+                <td class="row-actions">
+                    <button class="btn-sm" onclick='editItem("achievement", ${JSON.stringify(a)})'>Edit</button>
+                    <button class="btn-sm btn-del" onclick="deleteItem('achievements','${a._id}')">Delete</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    /* Moderation */
+    async function loadModeration() {
+        const c = await api('/admin/api/community-page/moderation/communities');
+        const tbC = document.getElementById('modCommunitiesTable');
+        tbC.innerHTML = c.length ? c.map(x => `
+            <tr>
+                <td><strong>${escapeHtml(x.name)}</strong></td>
+                <td>${escapeHtml(x.type)}</td>
+                <td>${x.memberCount || 0}</td>
+                <td><span class="badge-pill">${escapeHtml(x.status || 'approved')}</span></td>
+                <td class="row-actions">
+                    <button class="btn-sm" onclick="modCommunityStatus('${x._id}','approved')">Approve</button>
+                    <button class="btn-sm btn-del" onclick="modCommunityStatus('${x._id}','rejected')">Reject</button>
+                </td>
+            </tr>
+        `).join('') : '<tr><td colspan="5" class="empty-row">Nothing to moderate</td></tr>';
+
+        const d = await api('/admin/api/community-page/moderation/discussions');
+        const tbD = document.getElementById('modDiscussionsTable');
+        tbD.innerHTML = d.length ? d.map(x => `
+            <tr>
+                <td><strong>${escapeHtml(x.title)}</strong>${x.isHidden ? ' <span class="badge-pill">Hidden</span>' : ''}</td>
+                <td>${escapeHtml(x.author?.name || '—')}<br><span style="font-size:0.7rem;color:#9ca3af">${escapeHtml(x.author?.email || '')}</span></td>
+                <td>${x.replyCount || 0}</td>
+                <td>${x.isReported ? '<span class="badge-pill badge-hot">Reported</span>' : '—'}</td>
+                <td class="row-actions">
+                    <button class="btn-sm" onclick="modDiscussionToggle('${x._id}','isHidden',${!x.isHidden})">${x.isHidden ? 'Show' : 'Hide'}</button>
+                    <button class="btn-sm btn-del" onclick="modDiscussionDelete('${x._id}')">Delete</button>
+                </td>
+            </tr>
+        `).join('') : '<tr><td colspan="5" class="empty-row">No discussions to moderate</td></tr>';
+    }
+
+    async function modCommunityStatus(id, status) {
+        await api(`/admin/api/community-page/moderation/communities/${id}`, { method: 'PUT', body: JSON.stringify({ status }) });
+        toast('Updated', 'success');
+        loadModeration();
+    }
+    async function modDiscussionToggle(id, field, value) {
+        await api(`/admin/api/community-page/moderation/discussions/${id}`, { method: 'PUT', body: JSON.stringify({ [field]: value }) });
+        loadModeration();
+    }
+    async function modDiscussionDelete(id) {
+        if (!confirm('Permanently delete this discussion?')) return;
+        await api(`/admin/api/community-page/moderation/discussions/${id}`, { method: 'DELETE' });
+        toast('Deleted', 'success');
+        loadModeration();
+    }
+
+    /* ---------- Toggle switch helper ---------- */
+    function toggleSwitch(resource, id, field, value) {
+        return `<label class="switch"><input type="checkbox" ${value ? 'checked' : ''} onchange="toggleField('${resource}','${id}','${field}')"><span class="slider"></span></label>`;
+    }
+    async function toggleField(resource, id, field) {
+        await api(`/admin/api/community-page/${resource}/${id}/toggle`, { method: 'PUT', body: JSON.stringify({ field }) });
+        loadTab(resource);
+    }
+    async function deleteItem(resource, id) {
+        if (!confirm('Delete this item?')) return;
+        await api(`/admin/api/community-page/${resource}/${id}`, { method: 'DELETE' });
+        toast('Deleted', 'success');
+        loadTab(resource);
+    }
+
+    /* ---------- Modal forms ---------- */
+    const colorOptions = ['green', 'blue', 'pink', 'purple', 'orange'];
+    const badgeOptions = ['Hot', 'Active', 'New', 'Popular'];
+
+    const formTemplates = {
+        circle: (item = {}) => `
+            <div class="form-group"><label>Title</label><input name="title" required value="${escapeHtml(item.title)}"></div>
+            <div class="form-group"><label>Description</label><textarea name="description">${escapeHtml(item.description)}</textarea></div>
+            <div class="form-row">
+                <div class="form-group"><label>Match %</label><input name="matchPercent" type="number" min="0" max="100" value="${item.matchPercent ?? 90}"></div>
+                <div class="form-group"><label>Members</label><input name="memberCount" type="number" min="0" value="${item.memberCount ?? 0}"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Status badge</label><input name="statusBadge" placeholder="Starting in 2 Hours" value="${escapeHtml(item.statusBadge)}"></div>
+                <div class="form-group"><label>Button text</label><input name="buttonText" value="${escapeHtml(item.buttonText || 'Join Circle')}"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Accent color</label><select name="accentColor">${colorOptions.map(c => `<option ${c === (item.accentColor || 'green') ? 'selected' : ''}>${c}</option>`).join('')}</select></div>
+                <div class="form-group"><label>Display order</label><input name="displayOrder" type="number" value="${item.displayOrder ?? 0}"></div>
+            </div>
+            <div class="check-row"><label class="check-label"><input type="checkbox" name="isVisible" ${item.isVisible !== false ? 'checked' : ''}> Visible</label></div>`,
+
+        space: (item = {}) => `
+            <div class="form-group"><label>Title</label><input name="title" required value="${escapeHtml(item.title)}"></div>
+            <div class="form-group"><label>Description</label><textarea name="description">${escapeHtml(item.description)}</textarea></div>
+            <div class="form-group">
+                <label>Image</label>
+                <input type="file" accept="image/*" onchange="readImage(event,'image')">
+                <input type="hidden" name="image" value="${escapeHtml(item.image)}">
+                <div id="imagePreview">${item.image ? `<img class="img-preview" src="${item.image}">` : ''}</div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Members</label><input name="memberCount" type="number" min="0" value="${item.memberCount ?? 0}"></div>
+                <div class="form-group"><label>Active stat</label><input name="activeStat" placeholder="18 Live Sessions" value="${escapeHtml(item.activeStat)}"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Button text</label><input name="buttonText" value="${escapeHtml(item.buttonText || 'Enter Community')}"></div>
+                <div class="form-group"><label>Link / action</label><input name="link" value="${escapeHtml(item.link || '#')}"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Accent color</label><select name="accentColor">${colorOptions.map(c => `<option ${c === (item.accentColor || 'green') ? 'selected' : ''}>${c}</option>`).join('')}</select></div>
+                <div class="form-group"><label>Display order</label><input name="displayOrder" type="number" value="${item.displayOrder ?? 0}"></div>
+            </div>
+            <div class="check-row"><label class="check-label"><input type="checkbox" name="isVisible" ${item.isVisible !== false ? 'checked' : ''}> Visible</label></div>`,
+
+        discussion: (item = {}) => `
+            <div class="form-group"><label>Title</label><input name="title" required value="${escapeHtml(item.title)}"></div>
+            <div class="form-group"><label>Group / Author line</label><input name="groupName" placeholder="Started by Sarah M." value="${escapeHtml(item.groupName)}"></div>
+            <div class="form-row">
+                <div class="form-group"><label>Reply count</label><input name="replyCount" type="number" min="0" value="${item.replyCount ?? 0}"></div>
+                <div class="form-group"><label>Badge</label><select name="badge">${badgeOptions.map(b => `<option ${b === (item.badge || 'Active') ? 'selected' : ''}>${b}</option>`).join('')}</select></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Accent color</label><select name="accentColor">${colorOptions.map(c => `<option ${c === (item.accentColor || 'green') ? 'selected' : ''}>${c}</option>`).join('')}</select></div>
+                <div class="form-group"><label>Display order</label><input name="displayOrder" type="number" value="${item.displayOrder ?? 0}"></div>
+            </div>
+            <div class="form-group"><label>Link</label><input name="link" value="${escapeHtml(item.link || 'my-voice.html')}"></div>
+            <div class="check-row">
+                <label class="check-label"><input type="checkbox" name="isPinned" ${item.isPinned ? 'checked' : ''}> Pinned</label>
+                <label class="check-label"><input type="checkbox" name="isHidden" ${item.isHidden ? 'checked' : ''}> Hidden</label>
+            </div>`,
+
+        event: (item = {}) => {
+            const d = item.date ? new Date(item.date) : null;
+            const ds = d ? d.toISOString().slice(0, 10) : '';
+            return `
+            <div class="form-group"><label>Title</label><input name="title" required value="${escapeHtml(item.title)}"></div>
+            <div class="form-row">
+                <div class="form-group"><label>Date</label><input name="date" type="date" required value="${ds}"></div>
+                <div class="form-group"><label>Time</label><input name="time" placeholder="7 AM" value="${escapeHtml(item.time)}"></div>
+            </div>
+            <div class="form-group"><label>Location</label><input name="location" placeholder="Central Park / Online (Zoom)" value="${escapeHtml(item.location)}"></div>
+            <div class="form-row">
+                <div class="form-group"><label>Attendees</label><input name="attendeesCount" type="number" min="0" value="${item.attendeesCount ?? 0}"></div>
+                <div class="form-group"><label>Button text</label><input name="buttonText" value="${escapeHtml(item.buttonText || 'RSVP')}"></div>
+            </div>
+            <div class="form-group"><label>Display order</label><input name="displayOrder" type="number" value="${item.displayOrder ?? 0}"></div>
+            <div class="check-row">
+                <label class="check-label"><input type="checkbox" name="rsvpEnabled" ${item.rsvpEnabled !== false ? 'checked' : ''}> RSVP enabled</label>
+                <label class="check-label"><input type="checkbox" name="isVisible" ${item.isVisible !== false ? 'checked' : ''}> Visible</label>
+            </div>`;
+        },
+
+        achievement: (item = {}) => `
+            <div class="form-group"><label>Title</label><input name="title" required value="${escapeHtml(item.title)}"></div>
+            <div class="form-row">
+                <div class="form-group"><label>Icon (emoji or character)</label><input name="icon" maxlength="4" value="${escapeHtml(item.icon || '✓')}"></div>
+                <div class="form-group"><label>Color (hex)</label><input name="color" type="color" value="${item.color || '#10B981'}"></div>
+            </div>
+            <div class="form-group"><label>Display order</label><input name="displayOrder" type="number" value="${item.displayOrder ?? 0}"></div>
+            <div class="check-row">
+                <label class="check-label"><input type="checkbox" name="isCompleted" ${item.isCompleted ? 'checked' : ''}> Completed (default)</label>
+                <label class="check-label"><input type="checkbox" name="isVisible" ${item.isVisible !== false ? 'checked' : ''}> Visible</label>
+            </div>`
+    };
+
+    const resourceMap = {
+        circle: 'circles',
+        space: 'spaces',
+        discussion: 'discussions',
+        event: 'events',
+        achievement: 'achievements'
+    };
+    const titleMap = {
+        circle: 'Featured Circle',
+        space: 'Community Space',
+        discussion: 'Trending Discussion',
+        event: 'Upcoming Event',
+        achievement: 'Achievement'
+    };
+
+    let editingId = null;
+    let editingType = null;
+
+    function openModal(type, item = null) {
+        editingType = type;
+        editingId = item?._id || null;
+        document.getElementById('modalTitle').textContent = (editingId ? 'Edit ' : 'Add ') + titleMap[type];
+        document.getElementById('modalForm').innerHTML = formTemplates[type](item || {}) +
+            `<div class="modal-actions"><button type="submit" class="btn-primary">${editingId ? 'Save changes' : 'Create'}</button><button type="button" class="btn-action" onclick="closeModal()">Cancel</button></div>`;
+        document.getElementById('modal').style.display = 'flex';
+    }
+    function editItem(type, item) { openModal(type, item); }
+    function closeModal() { document.getElementById('modal').style.display = 'none'; editingId = null; editingType = null; }
+
+    document.getElementById('modal').addEventListener('click', (e) => { if (e.target.id === 'modal') closeModal(); });
+
+    document.getElementById('modalForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const data = {};
+        for (const el of form.elements) {
+            if (!el.name) continue;
+            if (el.type === 'checkbox') data[el.name] = el.checked;
+            else if (el.type === 'number') data[el.name] = el.value === '' ? 0 : Number(el.value);
+            else if (el.type === 'date') data[el.name] = el.value ? new Date(el.value).toISOString() : null;
+            else data[el.name] = el.value;
+        }
+        const resource = resourceMap[editingType];
+        const url = editingId
+            ? `/admin/api/community-page/${resource}/${editingId}`
+            : `/admin/api/community-page/${resource}`;
+        const r = await api(url, { method: editingId ? 'PUT' : 'POST', body: JSON.stringify(data) });
+        if (r._id) {
+            toast(editingId ? 'Updated' : 'Created', 'success');
+            closeModal();
+            loadTab(resource);
+        } else {
+            toast(r.error || 'Save failed', 'error');
+        }
+    });
+
+    function readImage(e, fieldName) {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > 2 * 1024 * 1024) { toast('Image too large (max 2MB)', 'error'); e.target.value = ''; return; }
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            document.querySelector(`#modalForm input[name="${fieldName}"]`).value = ev.target.result;
+            const preview = document.getElementById('imagePreview');
+            if (preview) preview.innerHTML = `<img class="img-preview" src="${ev.target.result}">`;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    /* ---------- Tab loader dispatch ---------- */
+    function loadTab(name) {
+        const map = {
+            stats: loadSettings,
+            circles: loadCircles,
+            spaces: loadSpaces,
+            discussions: loadDiscussions,
+            events: loadEvents,
+            achievements: loadAchievements,
+            moderation: loadModeration
+        };
+        (map[name] || (() => {}))();
+    }
+
+    // Initial load
+    loadSettings();
+    </script>
+</body>
+</html>

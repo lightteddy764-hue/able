@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youth Support Manager - ABLE Admin</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+    <style>
+        .tabs{display:flex;gap:0;border-bottom:2px solid #e5e7eb;margin-bottom:1.5rem;overflow-x:auto}
+        .tab{padding:0.75rem 1.25rem;font-size:0.8rem;font-weight:600;color:#6b7280;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all 0.2s}
+        .tab:hover{color:#E67E22}
+        .tab.active{color:#E67E22;border-bottom-color:#E67E22}
+        .tab-content{display:none}
+        .tab-content.active{display:block}
+        .edit-card{background:white;border:1px solid #e5e7eb;border-radius:10px;padding:1.25rem;margin-bottom:1rem}
+        .edit-card h4{font-size:0.85rem;font-weight:700;margin-bottom:0.75rem;color:#111}
+        .toggle-switch{position:relative;display:inline-block;width:40px;height:22px}
+        .toggle-switch input{opacity:0;width:0;height:0}
+        .toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#ccc;border-radius:22px;transition:0.3s}
+        .toggle-slider:before{content:"";position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:white;border-radius:50%;transition:0.3s}
+        .toggle-switch input:checked + .toggle-slider{background:#E67E22}
+        .toggle-switch input:checked + .toggle-slider:before{transform:translateX(18px)}
+        .item-row{display:flex;align-items:center;justify-content:space-between;padding:0.75rem;border:1px solid #f3f4f6;border-radius:8px;margin-bottom:0.5rem}
+        .item-row:hover{background:#f9fafb}
+        .item-info{display:flex;align-items:center;gap:0.75rem}
+        .item-actions{display:flex;align-items:center;gap:0.5rem}
+        .color-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+        .role-tabs{display:flex;gap:0.5rem;margin-bottom:1rem}
+        .role-tab{padding:0.4rem 0.8rem;border-radius:6px;font-size:0.75rem;font-weight:600;border:1px solid #e5e7eb;cursor:pointer;background:white}
+        .role-tab.active{background:#E67E22;color:white;border-color:#E67E22}
+        .moderation-card{background:#fffbf5;border:1px solid #fde68a;border-radius:10px;padding:1rem;margin-bottom:0.75rem}
+        .img-preview{width:60px;height:60px;border-radius:8px;object-fit:cover;border:1px solid #e5e7eb}
+        .order-btn{width:24px;height:24px;border-radius:4px;border:1px solid #e5e7eb;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.7rem}
+        .order-btn:hover{background:#f3f4f6}
+    </style>
+</head>
+<body>
+    <div id="sidebar"></div>
+    <script src="/admin/admin-nav.js"></script>
+
+    <div class="main">
+        <div class="header">
+            <div style="display:flex;align-items:center;gap:0.75rem">
+                <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+                <h1>Youth Support Manager</h1>
+            </div>
+            <div class="header-right">
+                <div class="role-tabs">
+                    <span class="role-tab active">Admin</span>
+                    <span class="role-tab">Youth Counselor</span>
+                    <span class="role-tab">Moderator</span>
+                </div>
+                <span style="font-size:0.75rem;color:#6b7280">Managing: youth-support.html</span>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Stats -->
+            <div class="stats">
+                <div class="stat-card"><h3>Active Modules</h3><div class="num">4</div><span class="stat-trend up">All Active</span></div>
+                <div class="stat-card"><h3>Career Matches</h3><div class="num">4</div><span class="stat-trend">Configured</span></div>
+                <div class="stat-card"><h3>Challenges</h3><div class="num">4</div><span class="stat-trend">2 Completed</span></div>
+                <div class="stat-card"><h3>Resources</h3><div class="num">6</div><span class="stat-trend up">Categories</span></div>
+                <div class="stat-card"><h3>Achievements</h3><div class="num">6</div><span class="stat-trend">3 Earned</span></div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" data-tab="hero">Hero Section</div>
+                <div class="tab" data-tab="progress">Skill Progress</div>
+                <div class="tab" data-tab="assessments">Assessments</div>
+                <div class="tab" data-tab="programs">Programs</div>
+                <div class="tab" data-tab="careers">Careers</div>
+                <div class="tab" data-tab="counselor">Counselor</div>
+                <div class="tab" data-tab="challenges">Challenges</div>
+                <div class="tab" data-tab="achievements">Achievements</div>
+                <div class="tab" data-tab="resources">Resources</div>
+                <div class="tab" data-tab="moderation">Moderation</div>
+            </div>
+
+            <!-- 1. Hero Section Manager -->
+            <div class="tab-content active" id="tab-hero">
+                <div class="section"><h2>Hero Section Manager</h2></div>
+                <div class="edit-card">
+                    <h4>Hero Content</h4>
+                    <div class="form-row">
+                        <div class="form-group"><label>Age Badge Text</label><input type="text" id="heroBadge" value="Ages 13–24"></div>
+                        <div class="form-group"><label>Button Text</label><input type="text" id="heroBtn" value="Take Youth Assessment"></div>
+                    </div>
+                    <div class="form-group"><label>Main Headline</label><input type="text" id="heroHeadline" value="Your Future Starts Here 🚀"></div>
+                    <div class="form-group"><label>Description</label><textarea id="heroDesc">Get personalized guidance for school, career choices, confidence building, and mental wellness — all in one place.</textarea></div>
+                    <div class="form-group"><label>Feature Points (comma-separated)</label><input type="text" id="heroFeatures" value="Career Discovery, Aptitude Testing, Wellness Support, Confidence Building"></div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Button Link/Action</label><input type="text" id="heroBtnLink" value="#modules"></div>
+                        <div class="form-group"><label>Growth Score %</label><input type="number" id="heroScore" value="78" min="0" max="100"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Monthly Growth Value</label><input type="text" id="heroGrowth" value="↑ 8% This Month"></div>
+                        <div class="form-group"><label>Growth Score Label</label><input type="text" id="heroScoreLabel" value="Growth Score"></div>
+                    </div>
+                    <button class="btn-primary" onclick="saveHero()">Save Hero Section</button>
+                </div>
+            </div>
+
+            <!-- 2. Skill Progress Manager -->
+            <div class="tab-content" id="tab-progress">
+                <div class="section"><h2>Skill Progress Manager</h2></div>
+                <div class="edit-card">
+                    <h4>Progress Bars</h4>
+                    <div id="progressItems">
+                        <div class="item-row">
+                            <div class="item-info"><span class="color-dot" style="background:#8B5CF6"></span><strong style="font-size:0.8rem">Confidence</strong><span style="font-size:0.75rem;color:#6b7280">70%</span></div>
+                            <div class="item-actions"><input type="number" value="70" min="0" max="100" style="width:60px;padding:0.3rem;border:1px solid #e5e7eb;border-radius:4px;font-size:0.8rem"><input type="color" value="#8B5CF6" style="width:30px;height:26px;border:none;cursor:pointer"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label><button class="btn-sm" onclick="editProgress(0)">Edit</button></div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-info"><span class="color-dot" style="background:#10B981"></span><strong style="font-size:0.8rem">Wellness</strong><span style="font-size:0.75rem;color:#6b7280">55%</span></div>
+                            <div class="item-actions"><input type="number" value="55" min="0" max="100" style="width:60px;padding:0.3rem;border:1px solid #e5e7eb;border-radius:4px;font-size:0.8rem"><input type="color" value="#10B981" style="width:30px;height:26px;border:none;cursor:pointer"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label><button class="btn-sm" onclick="editProgress(1)">Edit</button></div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-info"><span class="color-dot" style="background:#3B82F6"></span><strong style="font-size:0.8rem">Career Clarity</strong><span style="font-size:0.75rem;color:#6b7280">40%</span></div>
+                            <div class="item-actions"><input type="number" value="40" min="0" max="100" style="width:60px;padding:0.3rem;border:1px solid #e5e7eb;border-radius:4px;font-size:0.8rem"><input type="color" value="#3B82F6" style="width:30px;height:26px;border:none;cursor:pointer"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label><button class="btn-sm" onclick="editProgress(2)">Edit</button></div>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-info"><span class="color-dot" style="background:#F59E0B"></span><strong style="font-size:0.8rem">Social Skills</strong><span style="font-size:0.75rem;color:#6b7280">60%</span></div>
+                            <div class="item-actions"><input type="number" value="60" min="0" max="100" style="width:60px;padding:0.3rem;border:1px solid #e5e7eb;border-radius:4px;font-size:0.8rem"><input type="color" value="#F59E0B" style="width:30px;height:26px;border:none;cursor:pointer"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label><button class="btn-sm" onclick="editProgress(3)">Edit</button></div>
+                        </div>
+                    </div>
+                    <button class="btn-primary" style="margin-top:1rem" onclick="saveProgress()">Save Progress Bars</button>
+                </div>
+            </div>
+
+            <!-- 3. Assessment & Toolkit Manager -->
+            <div class="tab-content" id="tab-assessments">
+                <div class="section"><h2>Assessment & Toolkit Manager</h2></div>
+                <div class="toolbar">
+                    <input type="text" class="search-input" placeholder="Search assessments...">
+                    <button class="btn-primary" onclick="showAssessmentModal()">+ Add Assessment</button>
+                </div>
+                <table>
+                    <thead><tr><th>Order</th><th>Icon</th><th>Title</th><th>Description</th><th>Status</th><th>Link</th><th>Visible</th><th>Actions</th></tr></thead>
+                    <tbody id="assessmentsTable">
+                        <tr>
+                            <td><div style="display:flex;gap:0.25rem"><button class="order-btn">↑</button><button class="order-btn">↓</button></div></td>
+                            <td><span style="font-size:1.2rem">📊</span></td>
+                            <td><strong>Career Discovery Assessment</strong></td>
+                            <td style="font-size:0.8rem;color:#6b7280">Find careers that match your personality</td>
+                            <td><span class="badge badge-green">Active</span></td>
+                            <td style="font-size:0.75rem;color:#3b82f6">#</td>
+                            <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editAssessment(0)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                        <tr>
+                            <td><div style="display:flex;gap:0.25rem"><button class="order-btn">↑</button><button class="order-btn">↓</button></div></td>
+                            <td><span style="font-size:1.2rem">⭐</span></td>
+                            <td><strong>Confidence Building Course</strong></td>
+                            <td style="font-size:0.8rem;color:#6b7280">7-day program for self-esteem</td>
+                            <td><span class="badge badge-green">Active</span></td>
+                            <td style="font-size:0.75rem;color:#3b82f6">#</td>
+                            <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editAssessment(1)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                        <tr>
+                            <td><div style="display:flex;gap:0.25rem"><button class="order-btn">↑</button><button class="order-btn">↓</button></div></td>
+                            <td><span style="font-size:1.2rem">💚</span></td>
+                            <td><strong>Exam Stress Toolkit</strong></td>
+                            <td style="font-size:0.8rem;color:#6b7280">Practical tools for test anxiety</td>
+                            <td><span class="badge badge-green">Active</span></td>
+                            <td style="font-size:0.75rem;color:#3b82f6">#</td>
+                            <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editAssessment(2)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 4. Support Program Cards -->
+            <div class="tab-content" id="tab-programs">
+                <div class="section"><h2>Support Program Cards</h2></div>
+                <div class="toolbar">
+                    <input type="text" class="search-input" placeholder="Search programs...">
+                    <button class="btn-primary" onclick="showProgramModal()">+ Add Program</button>
+                </div>
+                <div id="programsList"><div class="empty">Loading programs...</div></div>
+            </div>
+
+            <!-- 5. Career Match Manager -->
+            <div class="tab-content" id="tab-careers">
+                <div class="section"><h2>Career Match Manager</h2></div>
+                <div class="toolbar">
+                    <input type="text" class="search-input" placeholder="Search careers...">
+                    <button class="btn-primary" onclick="showCareerModal()">+ Add Career</button>
+                </div>
+                <table>
+                    <thead><tr><th>Order</th><th>Career Name</th><th>Match %</th><th>Skill Tags</th><th>Visible</th><th>Actions</th></tr></thead>
+                    <tbody id="careersTable">
+                        <tr>
+                            <td><div style="display:flex;gap:0.25rem"><button class="order-btn">↑</button><button class="order-btn">↓</button></div></td>
+                            <td><strong>Software Engineer</strong></td>
+                            <td><span class="badge badge-green">92%</span></td>
+                            <td><span class="badge badge-blue">Problem-solving</span> <span class="badge badge-blue">Logic</span> <span class="badge badge-blue">Creativity</span></td>
+                            <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editCareer(0)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                        <tr>
+                            <td><div style="display:flex;gap:0.25rem"><button class="order-btn">↑</button><button class="order-btn">↓</button></div></td>
+                            <td><strong>Graphic Designer</strong></td>
+                            <td><span class="badge badge-green">87%</span></td>
+                            <td><span class="badge badge-blue">Visual thinking</span> <span class="badge badge-blue">Creativity</span> <span class="badge badge-blue">Detail</span></td>
+                            <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editCareer(1)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                        <tr>
+                            <td><div style="display:flex;gap:0.25rem"><button class="order-btn">↑</button><button class="order-btn">↓</button></div></td>
+                            <td><strong>Psychologist</strong></td>
+                            <td><span class="badge badge-green">84%</span></td>
+                            <td><span class="badge badge-blue">Empathy</span> <span class="badge badge-blue">Communication</span> <span class="badge badge-blue">Analysis</span></td>
+                            <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editCareer(2)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                        <tr>
+                            <td><div style="display:flex;gap:0.25rem"><button class="order-btn">↑</button><button class="order-btn">↓</button></div></td>
+                            <td><strong>Content Creator</strong></td>
+                            <td><span class="badge badge-orange">79%</span></td>
+                            <td><span class="badge badge-blue">Storytelling</span> <span class="badge badge-blue">Social</span> <span class="badge badge-blue">Innovation</span></td>
+                            <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editCareer(3)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 6. Counselor Manager -->
+            <div class="tab-content" id="tab-counselor">
+                <div class="section"><h2>Featured Counselor Manager</h2></div>
+                <div class="edit-card">
+                    <h4>Featured Counselor Profile</h4>
+                    <div style="display:flex;gap:1.5rem;align-items:flex-start;margin-bottom:1rem">
+                        <div style="text-align:center">
+                            <img src="https://ui-avatars.com/api/?name=Sarah+Johnson&background=8B5CF6&color=fff&size=80" alt="" style="width:80px;height:80px;border-radius:50%;margin-bottom:0.5rem">
+                            <button class="btn-sm" style="display:block;margin:0 auto">Change Photo</button>
+                        </div>
+                        <div style="flex:1">
+                            <div class="form-row">
+                                <div class="form-group"><label>Counselor Name</label><input type="text" value="Sarah Johnson"></div>
+                                <div class="form-group"><label>Role/Specialty</label><input type="text" value="Youth Development Specialist"></div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group"><label>Rating</label><input type="number" value="4.9" min="0" max="5" step="0.1"></div>
+                                <div class="form-group"><label>Years of Experience</label><input type="number" value="12"></div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group"><label>Availability</label>
+                                    <select><option selected>Available Today</option><option>Available Tomorrow</option><option>Available This Week</option><option>Unavailable</option></select>
+                                </div>
+                                <div class="form-group"><label>Profile Initials</label><input type="text" value="SJ" maxlength="3"></div>
+                            </div>
+                            <div class="form-group"><label>Booking Button Link</label><input type="text" value="healing-zone.html"></div>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:0.75rem">
+                        <button class="btn-primary" onclick="saveCounselor()">Save Counselor</button>
+                        <button class="btn-sm" style="color:#3b82f6">Verify Profile ✓</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. Weekly Challenges Manager -->
+            <div class="tab-content" id="tab-challenges">
+                <div class="section"><h2>Weekly Challenges Manager</h2></div>
+                <div class="toolbar">
+                    <input type="text" class="search-input" placeholder="Search challenges...">
+                    <select class="filter-select"><option>All Status</option><option>Completed</option><option>Pending</option></select>
+                    <button class="btn-primary" onclick="showChallengeModal()">+ Add Challenge</button>
+                </div>
+                <table>
+                    <thead><tr><th>Challenge Title</th><th>Duration</th><th>Status</th><th>Visible</th><th>Actions</th></tr></thead>
+                    <tbody id="challengesTable">
+                        <tr>
+                            <td><strong>7-Day Confidence Challenge</strong></td>
+                            <td>7 Days</td>
+                            <td><span class="badge badge-green">Completed ✓</span></td>
+                            <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editChallenge(0)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Digital Detox</strong></td>
+                            <td>3 Days</td>
+                            <td><span class="badge badge-green">Completed ✓</span></td>
+                            <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editChallenge(1)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Morning Routine Challenge</strong></td>
+                            <td>5 Days</td>
+                            <td><span class="badge badge-orange">Pending</span></td>
+                            <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editChallenge(2)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Gratitude Journal</strong></td>
+                            <td>7 Days</td>
+                            <td><span class="badge badge-orange">Pending</span></td>
+                            <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editChallenge(3)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 8. Achievement Manager -->
+            <div class="tab-content" id="tab-achievements">
+                <div class="section"><h2>Achievement Manager</h2></div>
+                <div class="toolbar">
+                    <input type="text" class="search-input" placeholder="Search achievements...">
+                    <select class="filter-select"><option>All</option><option>Earned</option><option>Locked</option></select>
+                    <button class="btn-primary" onclick="showAchievementModal()">+ Add Achievement</button>
+                </div>
+                <table>
+                    <thead><tr><th>Icon</th><th>Badge Title</th><th>Status</th><th>Color</th><th>Actions</th></tr></thead>
+                    <tbody id="achievementsTable">
+                        <tr>
+                            <td><span style="font-size:1.3rem">🏆</span></td>
+                            <td><strong>First Assessment</strong></td>
+                            <td><span class="badge badge-green">Earned</span></td>
+                            <td><input type="color" value="#F59E0B" style="width:30px;height:24px;border:none;cursor:pointer"></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editAchievement(0)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-size:1.3rem">⭐</span></td>
+                            <td><strong>7-Day Streak</strong></td>
+                            <td><span class="badge badge-green">Earned</span></td>
+                            <td><input type="color" value="#E67E22" style="width:30px;height:24px;border:none;cursor:pointer"></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editAchievement(1)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-size:1.3rem">🎯</span></td>
+                            <td><strong>Career Explorer</strong></td>
+                            <td><span class="badge badge-green">Earned</span></td>
+                            <td><input type="color" value="#3B82F6" style="width:30px;height:24px;border:none;cursor:pointer"></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editAchievement(2)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-size:1.3rem">🧠</span></td>
+                            <td><strong>Wellness Learner</strong></td>
+                            <td><span class="badge badge-orange">Locked</span></td>
+                            <td><input type="color" value="#10B981" style="width:30px;height:24px;border:none;cursor:pointer"></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editAchievement(3)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-size:1.3rem">💪</span></td>
+                            <td><strong>Confidence Master</strong></td>
+                            <td><span class="badge badge-orange">Locked</span></td>
+                            <td><input type="color" value="#8B5CF6" style="width:30px;height:24px;border:none;cursor:pointer"></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editAchievement(4)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-size:1.3rem">🌟</span></td>
+                            <td><strong>Community Mentor</strong></td>
+                            <td><span class="badge badge-orange">Locked</span></td>
+                            <td><input type="color" value="#EC4899" style="width:30px;height:24px;border:none;cursor:pointer"></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editAchievement(5)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 9. Resource Category Manager -->
+            <div class="tab-content" id="tab-resources">
+                <div class="section"><h2>Resource Category Manager</h2></div>
+                <div class="toolbar">
+                    <input type="text" class="search-input" placeholder="Search resources...">
+                    <button class="btn-primary" onclick="showResourceModal()">+ Add Resource Category</button>
+                </div>
+                <table>
+                    <thead><tr><th>Icon</th><th>Category</th><th>Resources</th><th>Media</th><th>Link</th><th>Visible</th><th>Actions</th></tr></thead>
+                    <tbody id="resourcesTable">
+                        <tr>
+                            <td><span style="font-size:1.1rem;color:#EC4899">😔</span></td>
+                            <td><strong>Body Image</strong></td>
+                            <td>4 Resources</td>
+                            <td>2 Videos</td>
+                            <td style="font-size:0.75rem;color:#3b82f6">#</td>
+                            <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editResource(0)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-size:1.1rem;color:#EF4444">🛡️</span></td>
+                            <td><strong>Anti-Bullying</strong></td>
+                            <td>6 Resources</td>
+                            <td>1 Workshop</td>
+                            <td style="font-size:0.75rem;color:#3b82f6">#</td>
+                            <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editResource(1)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-size:1.1rem;color:#F59E0B">👥</span></td>
+                            <td><strong>Peer Pressure</strong></td>
+                            <td>3 Guides</td>
+                            <td>1 Quiz</td>
+                            <td style="font-size:0.75rem;color:#3b82f6">#</td>
+                            <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editResource(2)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-size:1.1rem;color:#3B82F6">📝</span></td>
+                            <td><strong>Exam Stress</strong></td>
+                            <td>5 Tools</td>
+                            <td>3 Audio</td>
+                            <td style="font-size:0.75rem;color:#3b82f6">#</td>
+                            <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editResource(3)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-size:1.1rem;color:#8B5CF6">💬</span></td>
+                            <td><strong>Social Media</strong></td>
+                            <td>4 Articles</td>
+                            <td>2 Videos</td>
+                            <td style="font-size:0.75rem;color:#3b82f6">#</td>
+                            <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editResource(4)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                        <tr>
+                            <td><span style="font-size:1.1rem;color:#10B981">❤️</span></td>
+                            <td><strong>Self-Esteem</strong></td>
+                            <td>7 Exercises</td>
+                            <td>Daily Tips</td>
+                            <td style="font-size:0.75rem;color:#3b82f6">#</td>
+                            <td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td>
+                            <td class="actions-cell"><button class="btn-sm" onclick="editResource(5)">Edit</button><button class="btn-sm btn-del">Del</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 10. Safety & Moderation -->
+            <div class="tab-content" id="tab-moderation">
+                <div class="section"><h2>Safety & Content Moderation</h2></div>
+                
+                <div class="two-col">
+                    <div class="card">
+                        <h3>Content Approval Queue</h3>
+                        <div class="moderation-card">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
+                                <strong style="font-size:0.85rem">Youth Wellness Article #12</strong>
+                                <span class="badge badge-orange">Pending Review</span>
+                            </div>
+                            <p style="font-size:0.75rem;color:#6b7280;margin-bottom:0.5rem">Submitted by: Youth Counselor • 2 hours ago</p>
+                            <div style="display:flex;gap:0.5rem">
+                                <button class="btn-sm" style="background:#ecfdf5;color:#10b981;border-color:#a7f3d0">Approve</button>
+                                <button class="btn-sm btn-del">Reject</button>
+                                <button class="btn-sm">Review</button>
+                            </div>
+                        </div>
+                        <div class="moderation-card">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
+                                <strong style="font-size:0.85rem">Career Guide Update</strong>
+                                <span class="badge badge-orange">Pending Review</span>
+                            </div>
+                            <p style="font-size:0.75rem;color:#6b7280;margin-bottom:0.5rem">Submitted by: Admin • 5 hours ago</p>
+                            <div style="display:flex;gap:0.5rem">
+                                <button class="btn-sm" style="background:#ecfdf5;color:#10b981;border-color:#a7f3d0">Approve</button>
+                                <button class="btn-sm btn-del">Reject</button>
+                                <button class="btn-sm">Review</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3>Counselor Verification</h3>
+                        <div class="item-row">
+                            <div class="item-info"><img src="https://ui-avatars.com/api/?name=Sarah+Johnson&background=8B5CF6&color=fff&size=32" alt="" style="width:32px;height:32px;border-radius:50%"><div><strong style="font-size:0.8rem">Sarah Johnson</strong><span style="display:block;font-size:0.7rem;color:#6b7280">Youth Development Specialist</span></div></div>
+                            <span class="badge badge-green">Verified ✓</span>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-info"><img src="https://ui-avatars.com/api/?name=Mark+Davis&background=3B82F6&color=fff&size=32" alt="" style="width:32px;height:32px;border-radius:50%"><div><strong style="font-size:0.8rem">Mark Davis</strong><span style="display:block;font-size:0.7rem;color:#6b7280">Career Counselor</span></div></div>
+                            <span class="badge badge-orange">Pending</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="two-col">
+                    <div class="card">
+                        <h3>Reported Content</h3>
+                        <div class="empty">No reported content at this time ✅</div>
+                    </div>
+                    <div class="card">
+                        <h3>Emergency & Support Resources</h3>
+                        <div class="item-row">
+                            <div class="item-info"><span style="font-size:1.1rem">🆘</span><strong style="font-size:0.8rem">Crisis Helpline Banner</strong></div>
+                            <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-info"><span style="font-size:1.1rem">📞</span><strong style="font-size:0.8rem">Counselor Contact Widget</strong></div>
+                            <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+                        </div>
+                        <div class="item-row">
+                            <div class="item-info"><span style="font-size:1.1rem">🔒</span><strong style="font-size:0.8rem">Safe Space Disclaimer</strong></div>
+                            <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Age-Appropriate Content Controls</h3>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem">
+                        <div class="item-row" style="flex-direction:column;align-items:flex-start;gap:0.5rem">
+                            <strong style="font-size:0.8rem">Age Group: 13-15</strong>
+                            <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+                                <span class="badge badge-green">Career Quiz</span>
+                                <span class="badge badge-green">Confidence</span>
+                                <span class="badge badge-red">Deep Therapy ✗</span>
+                            </div>
+                        </div>
+                        <div class="item-row" style="flex-direction:column;align-items:flex-start;gap:0.5rem">
+                            <strong style="font-size:0.8rem">Age Group: 16-18</strong>
+                            <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+                                <span class="badge badge-green">All Modules</span>
+                                <span class="badge badge-green">Peer Support</span>
+                                <span class="badge badge-orange">Monitored</span>
+                            </div>
+                        </div>
+                        <div class="item-row" style="flex-direction:column;align-items:flex-start;gap:0.5rem">
+                            <strong style="font-size:0.8rem">Age Group: 19-24</strong>
+                            <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+                                <span class="badge badge-green">Full Access</span>
+                                <span class="badge badge-green">Self-Directed</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /container -->
+    </div><!-- /main -->
+
+    <!-- Assessment Modal -->
+    <div class="modal-overlay" id="assessmentModal" style="display:none">
+        <div class="modal">
+            <div class="modal-header"><h2>Add/Edit Assessment</h2><button class="modal-close" onclick="closeModal('assessmentModal')">×</button></div>
+            <div class="modal-body">
+                <div class="form-group"><label>Icon (emoji or SVG)</label><input type="text" id="asmIcon" placeholder="📊"></div>
+                <div class="form-group"><label>Title</label><input type="text" id="asmTitle" placeholder="Assessment title"></div>
+                <div class="form-group"><label>Description</label><textarea id="asmDesc" placeholder="Short description..."></textarea></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Status</label><select id="asmStatus"><option>Active</option><option>Draft</option><option>Archived</option></select></div>
+                    <div class="form-group"><label>Link</label><input type="text" id="asmLink" placeholder="#"></div>
+                </div>
+                <div class="form-group"><label>Display Order</label><input type="number" id="asmOrder" value="1" min="1"></div>
+                <div class="check-row"><label class="check-label"><input type="checkbox" checked> Visible on page</label></div>
+                <button class="btn-primary" style="margin-top:1rem" onclick="saveAssessment()">Save Assessment</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Program Modal -->
+    <div class="modal-overlay" id="programModal" style="display:none">
+        <div class="modal">
+            <div class="modal-header"><h2>Add/Edit Program</h2><button class="modal-close" onclick="closeModal('programModal')">×</button></div>
+            <div class="modal-body">
+                <div class="form-group"><label>Program Image</label>
+                    <div class="image-upload-area">
+                        <div class="upload-placeholder" onclick="document.getElementById('progImgInput').click()"><span>📷 Click to upload image</span><span style="font-size:0.7rem">PNG, JPG up to 2MB</span></div>
+                        <input type="file" id="progImgInput" accept="image/*" style="display:none">
+                    </div>
+                </div>
+                <div class="form-group"><label>Title</label><input type="text" id="progTitle" placeholder="Program title"></div>
+                <div class="form-group"><label>Description</label><textarea id="progDesc" placeholder="Program description..."></textarea></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Progress/Status Text</label><input type="text" id="progStatus" placeholder="40% Explored"></div>
+                    <div class="form-group"><label>Button Text</label><input type="text" id="progBtn" placeholder="Continue"></div>
+                </div>
+                <div class="form-group"><label>Button Link</label><input type="text" id="progLink" placeholder="#"></div>
+                <div class="form-group"><label>Gradient Colors</label>
+                    <div style="display:flex;gap:0.5rem;align-items:center"><input type="color" id="progColor1" value="#3B82F6"><span style="font-size:0.75rem">→</span><input type="color" id="progColor2" value="#60A5FA"></div>
+                </div>
+                <div class="check-row"><label class="check-label"><input type="checkbox" checked> Show on page</label></div>
+                <button class="btn-primary" style="margin-top:1rem" onclick="saveProgram()">Save Program</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Career Modal -->
+    <div class="modal-overlay" id="careerModal" style="display:none">
+        <div class="modal">
+            <div class="modal-header"><h2>Add/Edit Career Match</h2><button class="modal-close" onclick="closeModal('careerModal')">×</button></div>
+            <div class="modal-body">
+                <div class="form-group"><label>Career Name</label><input type="text" id="careerName" placeholder="Software Engineer"></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Match Percentage</label><input type="number" id="careerMatch" min="0" max="100" value="85"></div>
+                    <div class="form-group"><label>Display Order</label><input type="number" id="careerOrder" value="1" min="1"></div>
+                </div>
+                <div class="form-group"><label>Skill Tags (comma-separated)</label><input type="text" id="careerTags" placeholder="Problem-solving, Logic, Creativity"></div>
+                <div class="check-row"><label class="check-label"><input type="checkbox" checked> Visible on page</label></div>
+                <button class="btn-primary" style="margin-top:1rem" onclick="saveCareer()">Save Career</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Challenge Modal -->
+    <div class="modal-overlay" id="challengeModal" style="display:none">
+        <div class="modal">
+            <div class="modal-header"><h2>Add/Edit Challenge</h2><button class="modal-close" onclick="closeModal('challengeModal')">×</button></div>
+            <div class="modal-body">
+                <div class="form-group"><label>Challenge Title</label><input type="text" id="chalTitle" placeholder="7-Day Confidence Challenge"></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Duration</label><input type="text" id="chalDuration" placeholder="7 Days"></div>
+                    <div class="form-group"><label>Status</label><select id="chalStatus"><option>Pending</option><option>Completed</option></select></div>
+                </div>
+                <div class="check-row"><label class="check-label"><input type="checkbox" checked> Show on page</label></div>
+                <button class="btn-primary" style="margin-top:1rem" onclick="saveChallenge()">Save Challenge</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievement Modal -->
+    <div class="modal-overlay" id="achievementModal" style="display:none">
+        <div class="modal">
+            <div class="modal-header"><h2>Add/Edit Achievement</h2><button class="modal-close" onclick="closeModal('achievementModal')">×</button></div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group"><label>Badge Icon (emoji)</label><input type="text" id="achIcon" placeholder="🏆"></div>
+                    <div class="form-group"><label>Badge Title</label><input type="text" id="achTitle" placeholder="First Assessment"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Status</label><select id="achStatus"><option>Earned</option><option>Locked</option></select></div>
+                    <div class="form-group"><label>Color</label><input type="color" id="achColor" value="#F59E0B"></div>
+                </div>
+                <button class="btn-primary" style="margin-top:1rem" onclick="saveAchievement()">Save Achievement</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resource Modal -->
+    <div class="modal-overlay" id="resourceModal" style="display:none">
+        <div class="modal">
+            <div class="modal-header"><h2>Add/Edit Resource Category</h2><button class="modal-close" onclick="closeModal('resourceModal')">×</button></div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group"><label>Icon (emoji)</label><input type="text" id="resIcon" placeholder="😔"></div>
+                    <div class="form-group"><label>Icon Color</label><input type="color" id="resColor" value="#EC4899"></div>
+                </div>
+                <div class="form-group"><label>Category Name</label><input type="text" id="resName" placeholder="Body Image"></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Resource Count</label><input type="text" id="resCount" placeholder="4 Resources"></div>
+                    <div class="form-group"><label>Media Count</label><input type="text" id="resMedia" placeholder="2 Videos"></div>
+                </div>
+                <div class="form-group"><label>Link/Action</label><input type="text" id="resLink" placeholder="#"></div>
+                <div class="check-row"><label class="check-label"><input type="checkbox" checked> Visible on page</label></div>
+                <button class="btn-primary" style="margin-top:1rem" onclick="saveResource()">Save Resource</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Auth check
+    const token = localStorage.getItem('adminToken');
+    if (!token) window.location.href = '/admin/';
+
+    const API = '/admin/api/youth-support';
+    const headers = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+
+    // Tab Navigation
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+        });
+    });
+
+    // Modal helpers
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+    function showAssessmentModal(data) {
+        if (data) { document.getElementById('asmIcon').value = data.icon||''; document.getElementById('asmTitle').value = data.title||''; document.getElementById('asmDesc').value = data.description||''; document.getElementById('asmLink').value = data.link||'#'; document.getElementById('asmOrder').value = data.displayOrder||1; document.getElementById('assessmentModal').dataset.editId = data._id; }
+        else { document.getElementById('asmIcon').value=''; document.getElementById('asmTitle').value=''; document.getElementById('asmDesc').value=''; document.getElementById('asmLink').value='#'; document.getElementById('asmOrder').value=1; delete document.getElementById('assessmentModal').dataset.editId; }
+        document.getElementById('assessmentModal').style.display = 'flex';
+    }
+    function showProgramModal(data) {
+        if (data) { document.getElementById('progTitle').value=data.title||''; document.getElementById('progDesc').value=data.description||''; document.getElementById('progStatus').value=data.progressText||''; document.getElementById('progBtn').value=data.buttonText||'Continue'; document.getElementById('progLink').value=data.buttonLink||'#'; document.getElementById('progColor1').value=data.gradientStart||'#3B82F6'; document.getElementById('progColor2').value=data.gradientEnd||'#60A5FA'; document.getElementById('programModal').dataset.editId=data._id; }
+        else { document.getElementById('progTitle').value=''; document.getElementById('progDesc').value=''; document.getElementById('progStatus').value=''; document.getElementById('progBtn').value='Continue'; document.getElementById('progLink').value='#'; delete document.getElementById('programModal').dataset.editId; }
+        document.getElementById('programModal').style.display = 'flex';
+    }
+    function showCareerModal(data) {
+        if (data) { document.getElementById('careerName').value=data.name||''; document.getElementById('careerMatch').value=data.matchPercent||85; document.getElementById('careerTags').value=(data.skillTags||[]).join(', '); document.getElementById('careerOrder').value=data.displayOrder||1; document.getElementById('careerModal').dataset.editId=data._id; }
+        else { document.getElementById('careerName').value=''; document.getElementById('careerMatch').value=85; document.getElementById('careerTags').value=''; document.getElementById('careerOrder').value=1; delete document.getElementById('careerModal').dataset.editId; }
+        document.getElementById('careerModal').style.display = 'flex';
+    }
+    function showChallengeModal(data) {
+        if (data) { document.getElementById('chalTitle').value=data.title||''; document.getElementById('chalDuration').value=data.duration||''; document.getElementById('chalStatus').value=data.status||'pending'; document.getElementById('challengeModal').dataset.editId=data._id; }
+        else { document.getElementById('chalTitle').value=''; document.getElementById('chalDuration').value=''; document.getElementById('chalStatus').value='pending'; delete document.getElementById('challengeModal').dataset.editId; }
+        document.getElementById('challengeModal').style.display = 'flex';
+    }
+    function showAchievementModal(data) {
+        if (data) { document.getElementById('achIcon').value=data.icon||'🏆'; document.getElementById('achTitle').value=data.title||''; document.getElementById('achStatus').value=data.status||'locked'; document.getElementById('achColor').value=data.color||'#F59E0B'; document.getElementById('achievementModal').dataset.editId=data._id; }
+        else { document.getElementById('achIcon').value='🏆'; document.getElementById('achTitle').value=''; document.getElementById('achStatus').value='locked'; document.getElementById('achColor').value='#F59E0B'; delete document.getElementById('achievementModal').dataset.editId; }
+        document.getElementById('achievementModal').style.display = 'flex';
+    }
+    function showResourceModal(data) {
+        if (data) { document.getElementById('resIcon').value=data.icon||'📚'; document.getElementById('resColor').value=data.iconColor||'#EC4899'; document.getElementById('resName').value=data.categoryName||''; document.getElementById('resCount').value=data.resourceCount||''; document.getElementById('resMedia').value=data.mediaCount||''; document.getElementById('resLink').value=data.link||'#'; document.getElementById('resourceModal').dataset.editId=data._id; }
+        else { document.getElementById('resIcon').value='📚'; document.getElementById('resColor').value='#EC4899'; document.getElementById('resName').value=''; document.getElementById('resCount').value=''; document.getElementById('resMedia').value=''; document.getElementById('resLink').value='#'; delete document.getElementById('resourceModal').dataset.editId; }
+        document.getElementById('resourceModal').style.display = 'flex';
+    }
+
+    // Close modal on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.style.display = 'none'; });
+    });
+
+    // Toast
+    function showToast(msg) {
+        const toast = document.createElement('div');
+        toast.style.cssText = 'position:fixed;bottom:2rem;right:2rem;background:#111827;color:white;padding:0.75rem 1.25rem;border-radius:8px;font-size:0.85rem;z-index:9999;animation:fadeIn 0.3s';
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // ===== API SAVE FUNCTIONS =====
+    async function saveHero() {
+        const body = {
+            heroBadge: document.getElementById('heroBadge').value,
+            heroHeadline: document.getElementById('heroHeadline').value,
+            heroDescription: document.getElementById('heroDesc').value,
+            heroFeatures: document.getElementById('heroFeatures').value.split(',').map(s => s.trim()).filter(Boolean),
+            heroButtonText: document.getElementById('heroBtn').value,
+            heroButtonLink: document.getElementById('heroBtnLink').value,
+            heroGrowthScore: parseInt(document.getElementById('heroScore').value),
+            heroGrowthLabel: document.getElementById('heroScoreLabel').value,
+            heroGrowthTrend: document.getElementById('heroGrowth').value
+        };
+        await fetch(API + '/settings', { method: 'PUT', headers, body: JSON.stringify(body) });
+        showToast('✓ Hero section saved');
+    }
+
+    async function saveProgress() {
+        showToast('✓ Progress bars saved');
+        loadAllData();
+    }
+
+    async function saveAssessment() {
+        const id = document.getElementById('assessmentModal').dataset.editId;
+        const body = { icon: document.getElementById('asmIcon').value, title: document.getElementById('asmTitle').value, description: document.getElementById('asmDesc').value, link: document.getElementById('asmLink').value, displayOrder: parseInt(document.getElementById('asmOrder').value) };
+        if (id) await fetch(API + '/assessments/' + id, { method: 'PUT', headers, body: JSON.stringify(body) });
+        else await fetch(API + '/assessments', { method: 'POST', headers, body: JSON.stringify(body) });
+        closeModal('assessmentModal'); showToast('✓ Assessment saved'); loadAllData();
+    }
+
+    async function saveProgram() {
+        const id = document.getElementById('programModal').dataset.editId;
+        const body = { title: document.getElementById('progTitle').value, description: document.getElementById('progDesc').value, progressText: document.getElementById('progStatus').value, buttonText: document.getElementById('progBtn').value, buttonLink: document.getElementById('progLink').value, gradientStart: document.getElementById('progColor1').value, gradientEnd: document.getElementById('progColor2').value };
+        if (id) await fetch(API + '/programs/' + id, { method: 'PUT', headers, body: JSON.stringify(body) });
+        else await fetch(API + '/programs', { method: 'POST', headers, body: JSON.stringify(body) });
+        closeModal('programModal'); showToast('✓ Program saved'); loadAllData();
+    }
+
+    async function saveCareer() {
+        const id = document.getElementById('careerModal').dataset.editId;
+        const body = { name: document.getElementById('careerName').value, matchPercent: parseInt(document.getElementById('careerMatch').value), skillTags: document.getElementById('careerTags').value.split(',').map(s => s.trim()).filter(Boolean), displayOrder: parseInt(document.getElementById('careerOrder').value) };
+        if (id) await fetch(API + '/careers/' + id, { method: 'PUT', headers, body: JSON.stringify(body) });
+        else await fetch(API + '/careers', { method: 'POST', headers, body: JSON.stringify(body) });
+        closeModal('careerModal'); showToast('✓ Career saved'); loadAllData();
+    }
+
+    async function saveCounselor() {
+        const form = document.querySelector('#tab-counselor');
+        const inputs = form.querySelectorAll('input, select');
+        const body = {};
+        inputs.forEach(inp => {
+            if (inp.type === 'text') { if (inp.value.includes('Johnson') || inp.previousElementSibling?.textContent?.includes('Name')) body.name = inp.value; }
+        });
+        // Get values from labeled inputs
+        const labels = form.querySelectorAll('.form-group');
+        labels.forEach(fg => {
+            const label = fg.querySelector('label')?.textContent || '';
+            const input = fg.querySelector('input, select');
+            if (!input) return;
+            if (label.includes('Counselor Name')) body.name = input.value;
+            if (label.includes('Role')) body.role = input.value;
+            if (label.includes('Rating')) body.rating = parseFloat(input.value);
+            if (label.includes('Years')) body.experience = parseInt(input.value);
+            if (label.includes('Availability')) body.availability = input.value;
+            if (label.includes('Initials')) body.initials = input.value;
+            if (label.includes('Booking')) body.bookingLink = input.value;
+        });
+        await fetch(API + '/counselor', { method: 'PUT', headers, body: JSON.stringify(body) });
+        showToast('✓ Counselor updated');
+    }
+
+    async function saveChallenge() {
+        const id = document.getElementById('challengeModal').dataset.editId;
+        const body = { title: document.getElementById('chalTitle').value, duration: document.getElementById('chalDuration').value, status: document.getElementById('chalStatus').value };
+        if (id) await fetch(API + '/challenges/' + id, { method: 'PUT', headers, body: JSON.stringify(body) });
+        else await fetch(API + '/challenges', { method: 'POST', headers, body: JSON.stringify(body) });
+        closeModal('challengeModal'); showToast('✓ Challenge saved'); loadAllData();
+    }
+
+    async function saveAchievement() {
+        const id = document.getElementById('achievementModal').dataset.editId;
+        const body = { icon: document.getElementById('achIcon').value, title: document.getElementById('achTitle').value, status: document.getElementById('achStatus').value, color: document.getElementById('achColor').value };
+        if (id) await fetch(API + '/achievements/' + id, { method: 'PUT', headers, body: JSON.stringify(body) });
+        else await fetch(API + '/achievements', { method: 'POST', headers, body: JSON.stringify(body) });
+        closeModal('achievementModal'); showToast('✓ Achievement saved'); loadAllData();
+    }
+
+    async function saveResource() {
+        const id = document.getElementById('resourceModal').dataset.editId;
+        const body = { icon: document.getElementById('resIcon').value, iconColor: document.getElementById('resColor').value, categoryName: document.getElementById('resName').value, resourceCount: document.getElementById('resCount').value, mediaCount: document.getElementById('resMedia').value, link: document.getElementById('resLink').value };
+        if (id) await fetch(API + '/resources/' + id, { method: 'PUT', headers, body: JSON.stringify(body) });
+        else await fetch(API + '/resources', { method: 'POST', headers, body: JSON.stringify(body) });
+        closeModal('resourceModal'); showToast('✓ Resource saved'); loadAllData();
+    }
+
+    async function deleteItem(collection, id) {
+        if (!confirm('Delete this item?')) return;
+        await fetch(API + '/' + collection + '/' + id, { method: 'DELETE', headers });
+        showToast('✓ Deleted'); loadAllData();
+    }
+
+    // ===== LOAD DATA FROM API =====
+    let cachedData = {};
+
+    async function loadAllData() {
+        try {
+            const [settings, progressRes, assessmentsRes, programsRes, careersRes, counselorRes, challengesRes, achievementsRes, resourcesRes] = await Promise.all([
+                fetch(API + '/settings', { headers }).then(r => r.json()),
+                fetch(API + '/progress', { headers }).then(r => r.json()),
+                fetch(API + '/assessments', { headers }).then(r => r.json()),
+                fetch(API + '/programs', { headers }).then(r => r.json()),
+                fetch(API + '/careers', { headers }).then(r => r.json()),
+                fetch(API + '/counselor', { headers }).then(r => r.json()),
+                fetch(API + '/challenges', { headers }).then(r => r.json()),
+                fetch(API + '/achievements', { headers }).then(r => r.json()),
+                fetch(API + '/resources', { headers }).then(r => r.json())
+            ]);
+            cachedData = { settings, progress: progressRes, assessments: assessmentsRes, programs: programsRes, careers: careersRes, counselor: counselorRes, challenges: challengesRes, achievements: achievementsRes, resources: resourcesRes };
+            renderAdminData();
+        } catch (e) { console.error('Load error:', e); }
+    }
+
+    function renderAdminData() {
+        const { settings, progress, assessments, programs, careers, counselor, challenges, achievements, resources } = cachedData;
+        // Populate hero form
+        if (settings) {
+            document.getElementById('heroBadge').value = settings.heroBadge || '';
+            document.getElementById('heroHeadline').value = settings.heroHeadline || '';
+            document.getElementById('heroDesc').value = settings.heroDescription || '';
+            document.getElementById('heroFeatures').value = (settings.heroFeatures || []).join(', ');
+            document.getElementById('heroBtn').value = settings.heroButtonText || '';
+            document.getElementById('heroBtnLink').value = settings.heroButtonLink || '';
+            document.getElementById('heroScore').value = settings.heroGrowthScore || 78;
+            document.getElementById('heroGrowth').value = settings.heroGrowthTrend || '';
+            document.getElementById('heroScoreLabel').value = settings.heroGrowthLabel || '';
+        }
+        // Render tables
+        renderProgressAdmin(progress);
+        renderAssessmentsAdmin(assessments);
+        renderCareersAdmin(careers);
+        renderChallengesAdmin(challenges);
+        renderAchievementsAdmin(achievements);
+        renderResourcesAdmin(resources);
+        renderProgramsAdmin(programs);
+    }
+
+    function renderProgressAdmin(items) {
+        if (!items || !items.length) return;
+        document.getElementById('progressItems').innerHTML = items.map((p, i) => `
+            <div class="item-row">
+                <div class="item-info"><span class="color-dot" style="background:${p.color}"></span><strong style="font-size:0.8rem">${p.label}</strong><span style="font-size:0.75rem;color:#6b7280">${p.percentage}%</span></div>
+                <div class="item-actions"><input type="number" value="${p.percentage}" min="0" max="100" style="width:60px;padding:0.3rem;border:1px solid #e5e7eb;border-radius:4px;font-size:0.8rem" onchange="updateProgress('${p._id}',{percentage:parseInt(this.value)})"><input type="color" value="${p.color}" style="width:30px;height:26px;border:none;cursor:pointer" onchange="updateProgress('${p._id}',{color:this.value})"><label class="toggle-switch"><input type="checkbox" ${p.isVisible?'checked':''} onchange="toggleItem('progress','${p._id}')"><span class="toggle-slider"></span></label></div>
+            </div>
+        `).join('');
+    }
+
+    function renderAssessmentsAdmin(items) {
+        if (!items) return;
+        document.getElementById('assessmentsTable').innerHTML = items.map(a => `<tr>
+            <td><div style="display:flex;gap:0.25rem"><button class="order-btn" onclick="reorder('assessments','${a._id}',-1)">↑</button><button class="order-btn" onclick="reorder('assessments','${a._id}',1)">↓</button></div></td>
+            <td><span style="font-size:1.2rem">${a.icon}</span></td>
+            <td><strong>${a.title}</strong></td>
+            <td style="font-size:0.8rem;color:#6b7280">${a.description}</td>
+            <td><span class="badge badge-green">${a.status}</span></td>
+            <td style="font-size:0.75rem;color:#3b82f6">${a.link}</td>
+            <td><label class="toggle-switch"><input type="checkbox" ${a.isVisible?'checked':''} onchange="toggleItem('assessments','${a._id}')"><span class="toggle-slider"></span></label></td>
+            <td class="actions-cell"><button class="btn-sm" onclick="editAssessment('${a._id}')">Edit</button><button class="btn-sm btn-del" onclick="deleteItem('assessments','${a._id}')">Del</button></td>
+        </tr>`).join('');
+    }
+
+    function renderCareersAdmin(items) {
+        if (!items) return;
+        document.getElementById('careersTable').innerHTML = items.map(c => `<tr>
+            <td><div style="display:flex;gap:0.25rem"><button class="order-btn" onclick="reorder('careers','${c._id}',-1)">↑</button><button class="order-btn" onclick="reorder('careers','${c._id}',1)">↓</button></div></td>
+            <td><strong>${c.name}</strong></td>
+            <td><span class="badge ${c.matchPercent>=80?'badge-green':'badge-orange'}">${c.matchPercent}%</span></td>
+            <td>${(c.skillTags||[]).map(t=>'<span class="badge badge-blue">'+t+'</span>').join(' ')}</td>
+            <td><label class="toggle-switch"><input type="checkbox" ${c.isVisible?'checked':''} onchange="toggleItem('careers','${c._id}')"><span class="toggle-slider"></span></label></td>
+            <td class="actions-cell"><button class="btn-sm" onclick="editCareer('${c._id}')">Edit</button><button class="btn-sm btn-del" onclick="deleteItem('careers','${c._id}')">Del</button></td>
+        </tr>`).join('');
+    }
+
+    function renderChallengesAdmin(items) {
+        if (!items) return;
+        document.getElementById('challengesTable').innerHTML = items.map(ch => `<tr>
+            <td><strong>${ch.title}</strong></td>
+            <td>${ch.duration}</td>
+            <td><span class="badge ${ch.status==='completed'?'badge-green':'badge-orange'}">${ch.status==='completed'?'Completed ✓':'Pending'}</span></td>
+            <td><label class="toggle-switch"><input type="checkbox" ${ch.isVisible?'checked':''} onchange="toggleItem('challenges','${ch._id}')"><span class="toggle-slider"></span></label></td>
+            <td class="actions-cell"><button class="btn-sm" onclick="editChallenge('${ch._id}')">Edit</button><button class="btn-sm btn-del" onclick="deleteItem('challenges','${ch._id}')">Del</button></td>
+        </tr>`).join('');
+    }
+
+    function renderAchievementsAdmin(items) {
+        if (!items) return;
+        document.getElementById('achievementsTable').innerHTML = items.map(a => `<tr>
+            <td><span style="font-size:1.3rem">${a.icon}</span></td>
+            <td><strong>${a.title}</strong></td>
+            <td><span class="badge ${a.status==='earned'?'badge-green':'badge-orange'}">${a.status==='earned'?'Earned':'Locked'}</span></td>
+            <td><input type="color" value="${a.color}" style="width:30px;height:24px;border:none;cursor:pointer" onchange="updateItem('achievements','${a._id}',{color:this.value})"></td>
+            <td class="actions-cell"><button class="btn-sm" onclick="editAchievement('${a._id}')">Edit</button><button class="btn-sm btn-del" onclick="deleteItem('achievements','${a._id}')">Del</button></td>
+        </tr>`).join('');
+    }
+
+    function renderResourcesAdmin(items) {
+        if (!items) return;
+        document.getElementById('resourcesTable').innerHTML = items.map(r => `<tr>
+            <td><span style="font-size:1.1rem;color:${r.iconColor}">${r.icon}</span></td>
+            <td><strong>${r.categoryName}</strong></td>
+            <td>${r.resourceCount}</td>
+            <td>${r.mediaCount}</td>
+            <td style="font-size:0.75rem;color:#3b82f6">${r.link}</td>
+            <td><label class="toggle-switch"><input type="checkbox" ${r.isVisible?'checked':''} onchange="toggleItem('resources','${r._id}')"><span class="toggle-slider"></span></label></td>
+            <td class="actions-cell"><button class="btn-sm" onclick="editResource('${r._id}')">Edit</button><button class="btn-sm btn-del" onclick="deleteItem('resources','${r._id}')">Del</button></td>
+        </tr>`).join('');
+    }
+
+    function renderProgramsAdmin(items) {
+        if (!items || !items.length) { document.getElementById('programsList').innerHTML = '<div class="empty">No programs yet. Add one above.</div>'; return; }
+        document.getElementById('programsList').innerHTML = items.map(p => `
+            <div class="edit-card">
+                <div style="display:flex;gap:1rem;align-items:flex-start">
+                    <img src="${p.image || '/images/youth-career-discovery.png'}" alt="" class="img-preview">
+                    <div style="flex:1">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
+                            <h4 style="margin:0">${p.title}</h4>
+                            <div style="display:flex;align-items:center;gap:0.5rem"><span class="badge ${p.isVisible?'badge-green':'badge-red'}">${p.isVisible?'Active':'Hidden'}</span><label class="toggle-switch"><input type="checkbox" ${p.isVisible?'checked':''} onchange="toggleItem('programs','${p._id}')"><span class="toggle-slider"></span></label></div>
+                        </div>
+                        <p style="font-size:0.8rem;color:#6b7280;margin-bottom:0.5rem">${p.description}</p>
+                        <div style="display:flex;gap:0.5rem;align-items:center;font-size:0.75rem;color:#6b7280"><span>Progress: ${p.progressText}</span><span>|</span><span>Button: ${p.buttonText}</span><span>|</span><span>Link: ${p.buttonLink}</span></div>
+                    </div>
+                    <div class="actions-cell" style="flex-direction:column"><button class="btn-sm" onclick="editProgram('${p._id}')">Edit</button><button class="btn-sm btn-del" onclick="deleteItem('programs','${p._id}')">Del</button></div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Helper actions
+    async function updateProgress(id, updates) {
+        await fetch(API + '/progress/' + id, { method: 'PUT', headers, body: JSON.stringify(updates) });
+        showToast('✓ Updated'); loadAllData();
+    }
+    async function updateItem(collection, id, updates) {
+        await fetch(API + '/' + collection + '/' + id, { method: 'PUT', headers, body: JSON.stringify(updates) });
+        showToast('✓ Updated');
+    }
+    async function toggleItem(collection, id) {
+        await fetch(API + '/' + collection + '/' + id + '/toggle', { method: 'PUT', headers, body: JSON.stringify({ field: 'isVisible' }) });
+        showToast('✓ Toggled');
+    }
+    async function reorder(collection, id, direction) {
+        const items = cachedData[collection] || [];
+        const item = items.find(i => i._id === id);
+        if (item) {
+            await fetch(API + '/' + collection + '/' + id, { method: 'PUT', headers, body: JSON.stringify({ displayOrder: (item.displayOrder || 0) + direction }) });
+            loadAllData();
+        }
+    }
+
+    // Edit functions using cached data
+    function editAssessment(id) { const item = (cachedData.assessments||[]).find(i=>i._id===id); if(item) showAssessmentModal(item); }
+    function editProgram(id) { const item = (cachedData.programs||[]).find(i=>i._id===id); if(item) showProgramModal(item); }
+    function editCareer(id) { const item = (cachedData.careers||[]).find(i=>i._id===id); if(item) showCareerModal(item); }
+    function editChallenge(id) { const item = (cachedData.challenges||[]).find(i=>i._id===id); if(item) showChallengeModal(item); }
+    function editAchievement(id) { const item = (cachedData.achievements||[]).find(i=>i._id===id); if(item) showAchievementModal(item); }
+    function editResource(id) { const item = (cachedData.resources||[]).find(i=>i._id===id); if(item) showResourceModal(item); }
+
+    // Role access management
+    document.querySelectorAll('.role-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            showToast('Switched to ' + tab.textContent.trim() + ' view');
+        });
+    });
+
+    // Image upload preview
+    const progImgInput = document.getElementById('progImgInput');
+    if (progImgInput) {
+        progImgInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    const placeholder = progImgInput.previousElementSibling;
+                    placeholder.innerHTML = '<img src="' + ev.target.result + '" style="max-width:100%;max-height:120px;border-radius:8px">';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // Load data on page load
+    loadAllData();
+    </script>
+</body>
+</html>

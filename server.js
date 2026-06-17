@@ -121,6 +121,51 @@ app.put('/api/me', authMiddleware, async (req, res) => {
     }
 });
 
+// Update user settings (notifications, privacy, appearance, wellness preferences)
+app.put('/api/me/settings', authMiddleware, async (req, res) => {
+    try {
+        const { notifications, privacy, appearance, wellnessGoals, preferredSessionType, preferredSchedule } = req.body;
+        const updates = {};
+        if (notifications) updates.notifications = notifications;
+        if (privacy) updates.privacy = privacy;
+        if (appearance) updates.appearance = appearance;
+        if (wellnessGoals) updates.wellnessGoals = wellnessGoals;
+        if (preferredSessionType) updates.preferredSessionType = preferredSessionType;
+        if (preferredSchedule) updates.preferredSchedule = preferredSchedule;
+        const user = await User.findByIdAndUpdate(req.user.id, { $set: updates }, { new: true }).select('-password');
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Change password
+app.put('/api/me/password', authMiddleware, async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+        if (!currentPassword || !newPassword) return res.status(400).json({ error: 'Both passwords required' });
+        if (newPassword.length < 6) return res.status(400).json({ error: 'New password must be at least 6 characters' });
+        const user = await User.findById(req.user.id);
+        const isMatch = await user.comparePassword(currentPassword);
+        if (!isMatch) return res.status(401).json({ error: 'Current password is incorrect' });
+        user.password = newPassword;
+        await user.save();
+        res.json({ message: 'Password updated successfully' });
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Delete own account
+app.delete('/api/me', authMiddleware, async (req, res) => {
+    try {
+        await User.findByIdAndDelete(req.user.id);
+        res.json({ message: 'Account deleted' });
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 // Save mood
 app.post('/api/mood', authMiddleware, async (req, res) => {
     try {
@@ -793,6 +838,271 @@ app.get('/api/therapists', async (req, res) => {
 
 // Serve admin static files
 app.use('/admin', express.static('admin'));
+
+// ============================================================
+// COMMUNITY PAGE — Admin CRUD + Public read endpoints
+// All admin routes are protected by adminAuth.
+// Public routes are read-only and used by community.html.
+// ============================================================
+const {
+    CommunityPageSettings,
+    FeaturedCircle,
+    CommunitySpace,
+    TrendingDiscussion,
+    UpcomingEvent,
+    Achievement,
+    Discussion: RawDiscussion,
+    Community: RawCommunity
+} = require('./models/Community');
+
+// ----- Public: full community page data in one call -----
+app.get('/api/community-page', async (req, res) => {
+    try {
+        let settings = await CommunityPageSettings.findOne({ key: 'singleton' }).lean();
+        if (!settings) {
+            settings = await CommunityPageSettings.create({ key: 'singleton' });
+            settings = settings.toObject();
+        }
+        const [circles, spaces, discussions, events, achievements] = await Promise.all([
+            FeaturedCircle.find({ isVisible: true }).sort({ displayOrder: 1, createdAt: -1 }).lean(),
+            CommunitySpace.find({ isVisible: true }).sort({ displayOrder: 1, createdAt: -1 }).lean(),
+            TrendingDiscussion.find({ isHidden: false }).sort({ isPinned: -1, displayOrder: 1, createdAt: -1 }).lean(),
+            UpcomingEvent.find({ isVisible: true, date: { $gte: new Date(Date.now() - 24 * 3600 * 1000) } }).sort({ date: 1 }).lean(),
+            Achievement.find({ isVisible: true }).sort({ displayOrder: 1, createdAt: 1 }).lean()
+        ]);
+        res.json({ settings, circles, spaces, discussions, events, achievements });
+    } catch (e) {
+        console.error('community-page GET error:', e);
+        res.status(500).json({ error: 'Failed to load community page data' });
+    }
+});
+
+// ----- Admin: settings (singleton) -----
+app.get('/admin/api/community-page/settings', adminAuth, async (req, res) => {
+    let settings = await CommunityPageSettings.findOne({ key: 'singleton' });
+    if (!settings) settings = await CommunityPageSettings.create({ key: 'singleton' });
+    res.json(settings);
+});
+
+app.put('/admin/api/community-page/settings', adminAuth, async (req, res) => {
+    const updates = { ...req.body };
+    delete updates._id; delete updates.key;
+    const settings = await CommunityPageSettings.findOneAndUpdate(
+        { key: 'singleton' },
+        { $set: updates },
+        { new: true, upsert: true }
+    );
+    res.json(settings);
+});
+
+// ----- Generic CRUD factory for the curated collections -----
+function crud(path, Model) {
+    app.get(`/admin/api/community-page/${path}`, adminAuth, async (req, res) => {
+        const items = await Model.find().sort({ displayOrder: 1, createdAt: -1 }).lean();
+        res.json(items);
+    });
+    app.post(`/admin/api/community-page/${path}`, adminAuth, async (req, res) => {
+        try {
+            const item = await Model.create(req.body);
+            res.status(201).json(item);
+        } catch (e) {
+            res.status(400).json({ error: e.message });
+        }
+    });
+    app.put(`/admin/api/community-page/${path}/:id`, adminAuth, async (req, res) => {
+        try {
+            const item = await Model.findByIdAndUpdate(req.params.id, req.body, { new: true });
+            if (!item) return res.status(404).json({ error: 'Not found' });
+            res.json(item);
+        } catch (e) {
+            res.status(400).json({ error: e.message });
+        }
+    });
+    app.delete(`/admin/api/community-page/${path}/:id`, adminAuth, async (req, res) => {
+        await Model.findByIdAndDelete(req.params.id);
+        res.json({ message: 'Deleted' });
+    });
+    app.put(`/admin/api/community-page/${path}/:id/toggle`, adminAuth, async (req, res) => {
+        const field = req.body.field || 'isVisible';
+        const item = await Model.findById(req.params.id);
+        if (!item) return res.status(404).json({ error: 'Not found' });
+        item[field] = !item[field];
+        await item.save();
+        res.json(item);
+    });
+}
+
+crud('circles', FeaturedCircle);
+crud('spaces', CommunitySpace);
+crud('discussions', TrendingDiscussion);
+crud('events', UpcomingEvent);
+crud('achievements', Achievement);
+
+// ----- Moderation: raw user-generated communities & discussions -----
+app.get('/admin/api/community-page/moderation/communities', adminAuth, async (req, res) => {
+    const items = await RawCommunity.find({ status: { $in: ['pending', 'approved', 'rejected'] } })
+        .sort({ createdAt: -1 }).limit(100).lean();
+    res.json(items);
+});
+
+app.put('/admin/api/community-page/moderation/communities/:id', adminAuth, async (req, res) => {
+    const { status } = req.body; // approved | rejected | pending
+    const item = await RawCommunity.findByIdAndUpdate(req.params.id, { status }, { new: true });
+    res.json(item);
+});
+
+app.get('/admin/api/community-page/moderation/discussions', adminAuth, async (req, res) => {
+    const items = await RawDiscussion.find({}).sort({ createdAt: -1 }).limit(100)
+        .populate('author', 'name email').lean();
+    res.json(items);
+});
+
+app.put('/admin/api/community-page/moderation/discussions/:id', adminAuth, async (req, res) => {
+    const allowed = ['isHidden', 'isPinned', 'isReported'];
+    const updates = {};
+    for (const k of allowed) if (k in req.body) updates[k] = req.body[k];
+    const item = await RawDiscussion.findByIdAndUpdate(req.params.id, updates, { new: true });
+    res.json(item);
+});
+
+app.delete('/admin/api/community-page/moderation/discussions/:id', adminAuth, async (req, res) => {
+    await RawDiscussion.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Deleted' });
+});
+
+app.put('/admin/api/community-page/moderation/users/:id/block-community', adminAuth, async (req, res) => {
+    const { blocked } = req.body;
+    await User.findByIdAndUpdate(req.params.id, { isCommunityBlocked: !!blocked });
+    res.json({ message: 'Updated' });
+});
+
+// ============================================================
+// YOUTH SUPPORT PAGE — Admin CRUD + Public read endpoints
+// ============================================================
+const {
+    YouthPageSettings,
+    SkillProgress,
+    YouthAssessment,
+    YouthProgram,
+    YouthCareer,
+    YouthCounselor,
+    YouthChallenge,
+    YouthAchievement,
+    YouthResource
+} = require('./models/YouthSupport');
+
+// ----- Public: full youth support page data in one call -----
+app.get('/api/youth-support', async (req, res) => {
+    try {
+        let settings = await YouthPageSettings.findOne({ key: 'singleton' }).lean();
+        if (!settings) {
+            settings = await YouthPageSettings.create({
+                key: 'singleton',
+                heroFeatures: ['Career Discovery', 'Aptitude Testing', 'Wellness Support', 'Confidence Building']
+            });
+            settings = settings.toObject();
+        }
+        let counselor = await YouthCounselor.findOne({ key: 'featured' }).lean();
+        if (!counselor) {
+            counselor = await YouthCounselor.create({ key: 'featured' });
+            counselor = counselor.toObject();
+        }
+        const [progress, assessments, programs, careers, challenges, achievements, resources] = await Promise.all([
+            SkillProgress.find({ isVisible: true }).sort({ displayOrder: 1 }).lean(),
+            YouthAssessment.find({ isVisible: true, status: 'active' }).sort({ displayOrder: 1 }).lean(),
+            YouthProgram.find({ isVisible: true }).sort({ displayOrder: 1 }).lean(),
+            YouthCareer.find({ isVisible: true }).sort({ displayOrder: 1 }).lean(),
+            YouthChallenge.find({ isVisible: true }).sort({ displayOrder: 1 }).lean(),
+            YouthAchievement.find().sort({ displayOrder: 1 }).lean(),
+            YouthResource.find({ isVisible: true }).sort({ displayOrder: 1 }).lean()
+        ]);
+        res.json({ settings, counselor, progress, assessments, programs, careers, challenges, achievements, resources });
+    } catch (e) {
+        console.error('youth-support GET error:', e);
+        res.status(500).json({ error: 'Failed to load youth support data' });
+    }
+});
+
+// ----- Admin: Youth Page Settings (singleton) -----
+app.get('/admin/api/youth-support/settings', adminAuth, async (req, res) => {
+    let settings = await YouthPageSettings.findOne({ key: 'singleton' });
+    if (!settings) settings = await YouthPageSettings.create({ key: 'singleton', heroFeatures: ['Career Discovery', 'Aptitude Testing', 'Wellness Support', 'Confidence Building'] });
+    res.json(settings);
+});
+
+app.put('/admin/api/youth-support/settings', adminAuth, async (req, res) => {
+    const updates = { ...req.body };
+    delete updates._id; delete updates.key;
+    const settings = await YouthPageSettings.findOneAndUpdate(
+        { key: 'singleton' },
+        { $set: updates },
+        { new: true, upsert: true }
+    );
+    res.json(settings);
+});
+
+// ----- Admin: Counselor (singleton) -----
+app.get('/admin/api/youth-support/counselor', adminAuth, async (req, res) => {
+    let counselor = await YouthCounselor.findOne({ key: 'featured' });
+    if (!counselor) counselor = await YouthCounselor.create({ key: 'featured' });
+    res.json(counselor);
+});
+
+app.put('/admin/api/youth-support/counselor', adminAuth, async (req, res) => {
+    const updates = { ...req.body };
+    delete updates._id; delete updates.key;
+    const counselor = await YouthCounselor.findOneAndUpdate(
+        { key: 'featured' },
+        { $set: updates },
+        { new: true, upsert: true }
+    );
+    res.json(counselor);
+});
+
+// ----- Generic CRUD for youth support collections -----
+function youthCrud(path, Model) {
+    app.get(`/admin/api/youth-support/${path}`, adminAuth, async (req, res) => {
+        const items = await Model.find().sort({ displayOrder: 1, createdAt: -1 }).lean();
+        res.json(items);
+    });
+    app.post(`/admin/api/youth-support/${path}`, adminAuth, async (req, res) => {
+        try {
+            const item = await Model.create(req.body);
+            res.status(201).json(item);
+        } catch (e) {
+            res.status(400).json({ error: e.message });
+        }
+    });
+    app.put(`/admin/api/youth-support/${path}/:id`, adminAuth, async (req, res) => {
+        try {
+            const item = await Model.findByIdAndUpdate(req.params.id, req.body, { new: true });
+            if (!item) return res.status(404).json({ error: 'Not found' });
+            res.json(item);
+        } catch (e) {
+            res.status(400).json({ error: e.message });
+        }
+    });
+    app.delete(`/admin/api/youth-support/${path}/:id`, adminAuth, async (req, res) => {
+        await Model.findByIdAndDelete(req.params.id);
+        res.json({ message: 'Deleted' });
+    });
+    app.put(`/admin/api/youth-support/${path}/:id/toggle`, adminAuth, async (req, res) => {
+        const field = req.body.field || 'isVisible';
+        const item = await Model.findById(req.params.id);
+        if (!item) return res.status(404).json({ error: 'Not found' });
+        item[field] = !item[field];
+        await item.save();
+        res.json(item);
+    });
+}
+
+youthCrud('progress', SkillProgress);
+youthCrud('assessments', YouthAssessment);
+youthCrud('programs', YouthProgram);
+youthCrud('careers', YouthCareer);
+youthCrud('challenges', YouthChallenge);
+youthCrud('achievements', YouthAchievement);
+youthCrud('resources', YouthResource);
 
 // Root route
 app.get('/', (req, res) => {

@@ -41,8 +41,10 @@
 .cm-spaces-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
 .cm-space-card { background:white; border-radius:20px; overflow:hidden; border:1px solid #E5E7EB; transition:all 0.3s; }
 .cm-space-card:hover { transform:translateY(-6px); box-shadow:0 16px 40px rgba(0,0,0,0.08); }
-.cm-space-header { height:100px; display:flex; align-items:center; justify-content:center; }
-.cm-space-header svg { width:36px; height:36px; }
+.cm-space-header { height: 180px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+.cm-space-header svg { width: 36px; height: 36px; }
+.cm-space-header img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
+.cm-space-card:hover .cm-space-header img { transform: scale(1.05); }
 .cm-bg-green { background:linear-gradient(135deg,#10B981,#34D399); }
 .cm-bg-pink { background:linear-gradient(135deg,#EC4899,#F472B6); }
 .cm-bg-purple { background:linear-gradient(135deg,#8B5CF6,#A78BFA); }

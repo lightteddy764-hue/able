@@ -34,139 +34,290 @@
             <!-- Hero -->
             <div class="cm-hero">
                 <div class="cm-hero-left">
-                    <h1 id="cmGreeting">Welcome Back, John 👋</h1>
-                    <p>Connect, heal & grow together. Join meaningful conversations, wellness events, and support circles built around your goals.</p>
-                    <div class="cm-hero-stats">
-                        <span>3 Communities Joined</span>
-                        <span>12 New Discussions</span>
-                        <span>4 Events This Week</span>
+                    <h1 id="cmGreeting">Welcome Back, John &#128075;</h1>
+                    <p>Connect, heal &amp; grow together. Join meaningful conversations, wellness events, and support circles built around your goals.</p>
+                    <div class="cm-hero-stats" id="cmHeroStats">
+                        <span>&mdash; Communities Joined</span>
+                        <span>&mdash; New Discussions</span>
+                        <span>&mdash; Events This Week</span>
                     </div>
                     <div class="cm-hero-ctas">
                         <a href="#communities" class="cm-btn-primary">Explore Communities</a>
-                        <a href="#events" class="cm-btn-ghost">Upcoming Events →</a>
+                        <a href="#events" class="cm-btn-ghost">Upcoming Events &rarr;</a>
                     </div>
                 </div>
-                <div class="cm-hero-right">
-                    <div class="cm-live-indicator"><span class="cm-live-dot"></span> 214 Members Online</div>
-                    <div class="cm-live-indicator"><span class="cm-live-dot"></span> 12 Live Discussions</div>
-                    <div class="cm-live-indicator"><span class="cm-live-dot"></span> 3 Events Happening Now</div>
+                <div class="cm-hero-right" id="cmLiveIndicators">
+                    <div class="cm-live-indicator"><span class="cm-live-dot"></span> Loading&hellip;</div>
                 </div>
             </div>
 
             <!-- Recommended -->
-            <section class="cm-section">
+            <section class="cm-section" id="cmRecommendedSection">
                 <h2 class="cm-sec-title">Recommended For You</h2>
-                <div class="cm-rec-grid">
-                    <div class="cm-rec-card cm-rec-green">
-                        <div class="cm-rec-match">92% Match</div>
-                        <h4>Anxiety Support Circle</h4>
-                        <p>Safe space for sharing and coping strategies</p>
-                        <div class="cm-rec-meta"><span>Starting in 2 Hours</span><span>48 Members</span></div>
-                        <button class="cm-rec-btn">Join Circle</button>
-                    </div>
-                    <div class="cm-rec-card cm-rec-blue">
-                        <div class="cm-rec-match">88% Match</div>
-                        <h4>Morning Meditation Group</h4>
-                        <p>Daily guided meditation with community</p>
-                        <div class="cm-rec-meta"><span>35 Members Online</span><span>Daily 6 AM</span></div>
-                        <button class="cm-rec-btn">Join Group</button>
-                    </div>
-                    <div class="cm-rec-card cm-rec-purple">
-                        <div class="cm-rec-match">84% Match</div>
-                        <h4>Creative Wellness Club</h4>
-                        <p>Express through art, writing & music</p>
-                        <div class="cm-rec-meta"><span>Trending Today</span><span>62 Members</span></div>
-                        <button class="cm-rec-btn">Join Club</button>
-                    </div>
+                <div class="cm-rec-grid" id="cmRecGrid">
+                    <div class="cm-skeleton cm-skeleton-card"></div>
+                    <div class="cm-skeleton cm-skeleton-card"></div>
+                    <div class="cm-skeleton cm-skeleton-card"></div>
                 </div>
             </section>
 
-            <!-- Community Categories -->
-            <section id="communities" class="cm-section">
+            <!-- Community Spaces -->
+            <section id="communities" class="cm-section" data-section="spaces">
                 <h2 class="cm-sec-title">Community Spaces</h2>
-                <div class="cm-spaces-grid">
-                    <div class="cm-space-card">
-                        <div class="cm-space-header cm-bg-green"><svg viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="white" stroke-width="2"/></svg></div>
-                        <div class="cm-space-body">
-                            <h4>Mental Spa</h4>
-                            <p>Calming experiences for stress relief and mindfulness</p>
-                            <div class="cm-space-stats"><span>1,200 Members</span><span>18 Live Sessions</span></div>
-                            <button class="cm-space-btn">Enter Community</button>
-                        </div>
-                    </div>
-                    <div class="cm-space-card">
-                        <div class="cm-space-header cm-bg-pink"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="white" stroke-width="2"/></svg></div>
-                        <div class="cm-space-body">
-                            <h4>Meaningful Connections</h4>
-                            <p>Meet like-minded people who share your wellness values</p>
-                            <div class="cm-space-stats"><span>890 Members</span><span>42 Active Now</span></div>
-                            <button class="cm-space-btn">Find Connections</button>
-                        </div>
-                    </div>
-                    <div class="cm-space-card">
-                        <div class="cm-space-header cm-bg-purple"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="white" stroke-width="2"/><circle cx="9" cy="7" r="4" stroke="white" stroke-width="2"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" stroke="white" stroke-width="2"/></svg></div>
-                        <div class="cm-space-body">
-                            <h4>Wellness Meetups</h4>
-                            <p>Local and virtual events for connection and growth</p>
-                            <div class="cm-space-stats"><span>340 Members</span><span>4 Events This Week</span></div>
-                            <button class="cm-space-btn">View Events</button>
-                        </div>
-                    </div>
+                <div class="cm-spaces-grid" id="cmSpacesGrid">
+                    <div class="cm-skeleton cm-skeleton-card"></div>
+                    <div class="cm-skeleton cm-skeleton-card"></div>
+                    <div class="cm-skeleton cm-skeleton-card"></div>
                 </div>
             </section>
 
             <!-- Trending Discussions -->
-            <section class="cm-section">
+            <section class="cm-section" id="cmDiscussionsSection">
                 <h2 class="cm-sec-title">Trending Discussions</h2>
-                <div class="cm-discussions">
-                    <a href="my-voice.html" class="cm-disc-item"><div class="cm-disc-left"><span class="cm-disc-dot green"></span><div><h4>How meditation changed my anxiety</h4><span class="cm-disc-meta">128 replies • Started by Sarah M.</span></div></div><span class="cm-disc-badge hot">🔥 Hot</span></a>
-                    <a href="my-voice.html" class="cm-disc-item"><div class="cm-disc-left"><span class="cm-disc-dot blue"></span><div><h4>Best morning wellness routines?</h4><span class="cm-disc-meta">76 replies • Started by James K.</span></div></div><span class="cm-disc-badge">Active</span></a>
-                    <a href="my-voice.html" class="cm-disc-item"><div class="cm-disc-left"><span class="cm-disc-dot purple"></span><div><h4>Weekly gratitude challenge — join us!</h4><span class="cm-disc-meta">54 participants • Community Circle</span></div></div><span class="cm-disc-badge new">New</span></a>
-                    <a href="my-voice.html" class="cm-disc-item"><div class="cm-disc-left"><span class="cm-disc-dot orange"></span><div><h4>Breathing exercises that actually work</h4><span class="cm-disc-meta">92 replies • Body-Mind Group</span></div></div><span class="cm-disc-badge">Popular</span></a>
+                <div class="cm-discussions" id="cmDiscussionsList">
+                    <div class="cm-skeleton cm-skeleton-row"></div>
+                    <div class="cm-skeleton cm-skeleton-row"></div>
+                    <div class="cm-skeleton cm-skeleton-row"></div>
                 </div>
             </section>
 
             <!-- Upcoming Events -->
-            <section id="events" class="cm-section">
+            <section id="events" class="cm-section" data-section="events">
                 <h2 class="cm-sec-title">Upcoming Events</h2>
-                <div class="cm-events-grid">
-                    <div class="cm-event"><div class="cm-event-date"><span class="cm-ev-month">JUN</span><span class="cm-ev-day">08</span></div><div class="cm-event-info"><h4>Mindful Morning Walk</h4><p>Central Park • 7 AM • 12 attending</p></div><button class="cm-ev-btn">RSVP</button></div>
-                    <div class="cm-event"><div class="cm-event-date"><span class="cm-ev-month">JUN</span><span class="cm-ev-day">12</span></div><div class="cm-event-info"><h4>Anxiety Support Circle</h4><p>Online (Zoom) • 6 PM • 24 attending</p></div><button class="cm-ev-btn">RSVP</button></div>
-                    <div class="cm-event"><div class="cm-event-date"><span class="cm-ev-month">JUN</span><span class="cm-ev-day">15</span></div><div class="cm-event-info"><h4>Wellness Potluck Dinner</h4><p>Community Center • 6:30 PM • 18 attending</p></div><button class="cm-ev-btn">RSVP</button></div>
+                <div class="cm-events-grid" id="cmEventsGrid">
+                    <div class="cm-skeleton cm-skeleton-row"></div>
+                    <div class="cm-skeleton cm-skeleton-row"></div>
                 </div>
             </section>
 
             <!-- Community Progress -->
-            <div class="cm-progress-card">
+            <div class="cm-progress-card" id="cmProgressCard">
                 <h3>Your Community Progress</h3>
-                <div class="cm-progress-tl">
-                    <div class="cm-pr-item done"><span>✓ Joined First Circle</span></div>
-                    <div class="cm-pr-item done"><span>✓ Attended First Event</span></div>
-                    <div class="cm-pr-item done"><span>✓ Started Discussion</span></div>
-                    <div class="cm-pr-item"><span>○ Become Community Mentor</span></div>
-                    <div class="cm-pr-item"><span>○ Host Your First Event</span></div>
+                <div class="cm-progress-tl" id="cmProgressList">
+                    <div class="cm-skeleton cm-skeleton-row"></div>
                 </div>
             </div>
 
             <!-- Activity Stats -->
             <div class="cm-activity-bar">
-                <div class="cm-act-stat"><span class="cm-act-num">125</span><span>Discussions</span></div>
-                <div class="cm-act-stat"><span class="cm-act-num">18</span><span>Events This Week</span></div>
-                <div class="cm-act-stat"><span class="cm-act-num">42</span><span>New Members</span></div>
-                <div class="cm-act-stat"><span class="cm-act-num">320</span><span>Reactions Today</span></div>
+                <div class="cm-act-stat"><span class="cm-act-num" data-key="discussionsCount">&mdash;</span><span>Discussions</span></div>
+                <div class="cm-act-stat"><span class="cm-act-num" data-key="eventsThisWeekTotal">&mdash;</span><span>Events This Week</span></div>
+                <div class="cm-act-stat"><span class="cm-act-num" data-key="newMembers">&mdash;</span><span>New Members</span></div>
+                <div class="cm-act-stat"><span class="cm-act-num" data-key="reactionsToday">&mdash;</span><span>Reactions Today</span></div>
             </div>
         </main>
     </div>
 
+    <style>
+        /* Skeleton loaders shown until /api/community-page returns */
+        .cm-skeleton { background: linear-gradient(90deg, #f3f4f6 0%, #e5e7eb 50%, #f3f4f6 100%); background-size: 200% 100%; border-radius: 12px; animation: cmShimmer 1.4s ease-in-out infinite; }
+        .cm-skeleton-card { height: 200px; }
+        .cm-skeleton-row { height: 64px; margin-bottom: 0.5rem; }
+        @keyframes cmShimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+        .cm-section.is-hidden, .cm-progress-card.is-hidden { display: none; }
+        .cm-empty { padding: 1.5rem; text-align: center; color: #9ca3af; font-size: 0.85rem; background: #f9fafb; border: 1px dashed #e5e7eb; border-radius: 12px; }
+    </style>
+
     <!-- Chatbot -->
     <div class="chatbot-button" id="chatbotButton"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="white" stroke-width="2"/><circle cx="9" cy="10" r="1" fill="white"/><circle cx="15" cy="10" r="1" fill="white"/><path d="M9 13s1 1 3 1 3-1 3-1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg><span class="chatbot-badge">AI</span></div>
-    <div class="chatbot-widget" id="chatbotWidget"><div class="chatbot-header"><div class="chatbot-header-content"><div class="chatbot-avatar"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="white"/></svg></div><div class="chatbot-info"><h4>ABLE Wellness Assistant</h4><span class="chatbot-status">Online • Here to Help</span></div></div><button class="chatbot-close" id="chatbotClose"><svg viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><div class="chatbot-messages" id="chatbotMessages"></div><div class="chatbot-input"><input type="text" id="chatbotInput" placeholder="Type your message..." autocomplete="off"><button class="chatbot-send" id="chatbotSend"><svg viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9M22 2L2 8l9 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+    <div class="chatbot-widget" id="chatbotWidget"><div class="chatbot-header"><div class="chatbot-header-content"><div class="chatbot-avatar"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="white"/></svg></div><div class="chatbot-info"><h4>ABLE Wellness Assistant</h4><span class="chatbot-status">Online &bull; Here to Help</span></div></div><button class="chatbot-close" id="chatbotClose"><svg viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><div class="chatbot-messages" id="chatbotMessages"></div><div class="chatbot-input"><input type="text" id="chatbotInput" placeholder="Type your message..." autocomplete="off"><button class="chatbot-send" id="chatbotSend"><svg viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9M22 2L2 8l9 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
 
     <script src="chatbot.js"></script>
     <script src="dashboard.js"></script>
     <script>
-    const name = localStorage.getItem('userName') || 'John';
-    document.getElementById('cmGreeting').textContent = `Welcome Back, ${name.split(' ')[0]} 👋`;
+    /* ============================================================
+       Community Page Hydration
+       Source of truth: GET /api/community-page (managed in admin/community-page.html).
+       Static markup contains only skeleton placeholders; this script renders
+       the real content. Empty sections collapse automatically.
+       ============================================================ */
+
+    const userName = localStorage.getItem('userName') || 'John';
+    const greetingEl = document.getElementById('cmGreeting');
+    if (greetingEl) greetingEl.textContent = 'Welcome Back, ' + userName.split(' ')[0] + ' \uD83D\uDC4B';
+
+    function escapeHtml(s) {
+        return (s == null ? '' : String(s)).replace(/[&<>"']/g, function (c) {
+            return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+        });
+    }
+    var escapeAttr = escapeHtml;
+    var BULLET = ' \u2022 ';
+
+    function setSectionVisible(el, visible) {
+        if (!el) return;
+        if (visible) el.classList.remove('is-hidden');
+        else el.classList.add('is-hidden');
+    }
+
+    function renderHero(settings) {
+        var hero = document.getElementById('cmHeroStats');
+        if (hero && settings) {
+            hero.innerHTML =
+                '<span>' + (settings.communitiesJoined || 0) + ' Communities Joined</span>' +
+                '<span>' + (settings.newDiscussions || 0) + ' New Discussions</span>' +
+                '<span>' + (settings.eventsThisWeek || 0) + ' Events This Week</span>';
+        }
+        var live = document.getElementById('cmLiveIndicators');
+        if (live && settings) {
+            live.innerHTML =
+                '<div class="cm-live-indicator"><span class="cm-live-dot"></span> ' + (settings.membersOnline || 0) + ' Members Online</div>' +
+                '<div class="cm-live-indicator"><span class="cm-live-dot"></span> ' + (settings.liveDiscussions || 0) + ' Live Discussions</div>' +
+                '<div class="cm-live-indicator"><span class="cm-live-dot"></span> ' + (settings.eventsHappeningNow || 0) + ' Events Happening Now</div>';
+        }
+    }
+
+    function renderActivityBar(settings) {
+        if (!settings) return;
+        document.querySelectorAll('.cm-activity-bar [data-key]').forEach(function (el) {
+            el.textContent = settings[el.dataset.key] != null ? settings[el.dataset.key] : 0;
+        });
+    }
+
+    function renderCircles(circles) {
+        var grid = document.getElementById('cmRecGrid');
+        var section = document.getElementById('cmRecommendedSection');
+        if (!grid || !section) return;
+        if (!Array.isArray(circles) || !circles.length) { setSectionVisible(section, false); return; }
+        setSectionVisible(section, true);
+        grid.innerHTML = circles.map(function (c) {
+            return '' +
+                '<div class="cm-rec-card cm-rec-' + (c.accentColor || 'green') + '">' +
+                    '<div class="cm-rec-match">' + (c.matchPercent || 0) + '% Match</div>' +
+                    '<h4>' + escapeHtml(c.title) + '</h4>' +
+                    '<p>' + escapeHtml(c.description) + '</p>' +
+                    '<div class="cm-rec-meta">' +
+                        '<span>' + escapeHtml(c.statusBadge || '') + '</span>' +
+                        '<span>' + (c.memberCount || 0) + ' Members</span>' +
+                    '</div>' +
+                    '<button class="cm-rec-btn">' + escapeHtml(c.buttonText || 'Join Circle') + '</button>' +
+                '</div>';
+        }).join('');
+    }
+
+    function renderSpaces(spaces) {
+        var grid = document.getElementById('cmSpacesGrid');
+        var section = document.querySelector('[data-section="spaces"]');
+        if (!grid || !section) return;
+        if (!Array.isArray(spaces) || !spaces.length) { setSectionVisible(section, false); return; }
+        setSectionVisible(section, true);
+        grid.innerHTML = spaces.map(function (s) {
+            var img = s.image
+                ? '<img src="' + escapeAttr(s.image) + '" alt="' + escapeAttr(s.title) + '" loading="lazy">'
+                : '';
+            var members = (s.memberCount || 0).toLocaleString();
+            return '' +
+                '<div class="cm-space-card">' +
+                    '<div class="cm-space-header cm-bg-' + (s.accentColor || 'green') + '">' + img + '</div>' +
+                    '<div class="cm-space-body">' +
+                        '<h4>' + escapeHtml(s.title) + '</h4>' +
+                        '<p>' + escapeHtml(s.description) + '</p>' +
+                        '<div class="cm-space-stats">' +
+                            '<span>' + members + ' Members</span>' +
+                            '<span>' + escapeHtml(s.activeStat || '') + '</span>' +
+                        '</div>' +
+                        '<a href="' + escapeAttr(s.link || '#') + '" class="cm-space-btn" style="display:inline-block;text-align:center;text-decoration:none">' + escapeHtml(s.buttonText || 'Enter Community') + '</a>' +
+                    '</div>' +
+                '</div>';
+        }).join('');
+    }
+
+    function renderDiscussions(discussions) {
+        var list = document.getElementById('cmDiscussionsList');
+        var section = document.getElementById('cmDiscussionsSection');
+        if (!list || !section) return;
+        if (!Array.isArray(discussions) || !discussions.length) { setSectionVisible(section, false); return; }
+        setSectionVisible(section, true);
+        list.innerHTML = discussions.map(function (d) {
+            var badge = d.badge || '';
+            var badgeClass = badge.toLowerCase();
+            var badgeIcon = badge === 'Hot' ? '\uD83D\uDD25 ' : '';
+            var meta = (d.replyCount || 0) + ' replies';
+            if (d.groupName) meta += BULLET + d.groupName;
+            return '' +
+                '<a href="' + escapeAttr(d.link || '#') + '" class="cm-disc-item">' +
+                    '<div class="cm-disc-left">' +
+                        '<span class="cm-disc-dot ' + (d.accentColor || 'green') + '"></span>' +
+                        '<div>' +
+                            '<h4>' + escapeHtml(d.title) + '</h4>' +
+                            '<span class="cm-disc-meta">' + escapeHtml(meta) + '</span>' +
+                        '</div>' +
+                    '</div>' +
+                    '<span class="cm-disc-badge ' + badgeClass + '">' + badgeIcon + escapeHtml(badge) + '</span>' +
+                '</a>';
+        }).join('');
+    }
+
+    function renderEvents(events) {
+        var grid = document.getElementById('cmEventsGrid');
+        var section = document.querySelector('[data-section="events"]');
+        if (!grid || !section) return;
+        if (!Array.isArray(events) || !events.length) { setSectionVisible(section, false); return; }
+        setSectionVisible(section, true);
+        grid.innerHTML = events.map(function (ev) {
+            var d = ev.date ? new Date(ev.date) : null;
+            var month = d ? d.toLocaleString(undefined, { month: 'short' }).toUpperCase() : '';
+            var day = d ? String(d.getDate()).padStart(2, '0') : '';
+            var parts = [];
+            if (ev.location) parts.push(ev.location);
+            if (ev.time) parts.push(ev.time);
+            if (ev.attendeesCount) parts.push(ev.attendeesCount + ' attending');
+            var disabled = ev.rsvpEnabled === false ? ' disabled style="opacity:0.5;cursor:not-allowed"' : '';
+            return '' +
+                '<div class="cm-event">' +
+                    '<div class="cm-event-date">' +
+                        '<span class="cm-ev-month">' + escapeHtml(month) + '</span>' +
+                        '<span class="cm-ev-day">' + escapeHtml(day) + '</span>' +
+                    '</div>' +
+                    '<div class="cm-event-info">' +
+                        '<h4>' + escapeHtml(ev.title) + '</h4>' +
+                        '<p>' + escapeHtml(parts.join(BULLET)) + '</p>' +
+                    '</div>' +
+                    '<button class="cm-ev-btn"' + disabled + '>' + escapeHtml(ev.buttonText || 'RSVP') + '</button>' +
+                '</div>';
+        }).join('');
+    }
+
+    function renderAchievements(items) {
+        var list = document.getElementById('cmProgressList');
+        var card = document.getElementById('cmProgressCard');
+        if (!list || !card) return;
+        if (!Array.isArray(items) || !items.length) { setSectionVisible(card, false); return; }
+        setSectionVisible(card, true);
+        list.innerHTML = items.map(function (a) {
+            return '' +
+                '<div class="cm-pr-item' + (a.isCompleted ? ' done' : '') + '">' +
+                    '<span style="color:' + escapeAttr(a.color || '#9CA3AF') + '">' + escapeHtml(a.icon || '\u25CB') + '</span> ' +
+                    escapeHtml(a.title) +
+                '</div>';
+        }).join('');
+    }
+
+    function showFailure() {
+        ['cmRecGrid', 'cmSpacesGrid', 'cmDiscussionsList', 'cmEventsGrid', 'cmProgressList'].forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el) el.innerHTML = '<div class="cm-empty">Could not load content. Please refresh.</div>';
+        });
+    }
+
+    (async function () {
+        try {
+            var res = await fetch('/api/community-page', { headers: { 'Accept': 'application/json' } });
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            var data = await res.json();
+            renderHero(data.settings);
+            renderActivityBar(data.settings);
+            renderCircles(data.circles);
+            renderSpaces(data.spaces);
+            renderDiscussions(data.discussions);
+            renderEvents(data.events);
+            renderAchievements(data.achievements);
+        } catch (e) {
+            console.error('Community page hydration failed:', e);
+            showFailure();
+        }
+    })();
     </script>
 </body>
 </html>

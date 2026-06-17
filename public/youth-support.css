@@ -43,8 +43,10 @@
 .ys-modules-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1.25rem; }
 .ys-module { background:white; border-radius:16px; overflow:hidden; border:1px solid #E5E7EB; transition:all 0.3s; }
 .ys-module:hover { transform:translateY(-4px); box-shadow:0 12px 30px rgba(0,0,0,0.08); }
-.ys-mod-header { height:80px; display:flex; align-items:center; justify-content:center; }
-.ys-mod-header svg { width:32px; height:32px; }
+.ys-mod-header { height: 160px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; }
+.ys-mod-header svg { width: 32px; height: 32px; }
+.ys-mod-header img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
+.ys-module:hover .ys-mod-header img { transform: scale(1.05); }
 .ys-mod-body { padding:1.25rem; }
 .ys-mod-body h4 { font-size:0.95rem; font-weight:700; color:#111827; margin-bottom:0.2rem; }
 .ys-mod-body p { font-size:0.75rem; color:#6B7280; margin-bottom:0.5rem; }

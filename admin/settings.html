@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings Page Manager - ABLE Admin</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+    <style>
+        .tabs{display:flex;gap:0;border-bottom:2px solid #e5e7eb;margin-bottom:1.5rem;overflow-x:auto}
+        .tab{padding:0.75rem 1.25rem;font-size:0.8rem;font-weight:600;color:#6b7280;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all 0.2s}
+        .tab:hover{color:#E67E22}
+        .tab.active{color:#E67E22;border-bottom-color:#E67E22}
+        .tab-content{display:none}
+        .tab-content.active{display:block}
+        .edit-card{background:white;border:1px solid #e5e7eb;border-radius:10px;padding:1.25rem;margin-bottom:1rem}
+        .edit-card h4{font-size:0.85rem;font-weight:700;margin-bottom:0.75rem;color:#111}
+        .toggle-switch{position:relative;display:inline-block;width:40px;height:22px}
+        .toggle-switch input{opacity:0;width:0;height:0}
+        .toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#ccc;border-radius:22px;transition:0.3s}
+        .toggle-slider:before{content:"";position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:white;border-radius:50%;transition:0.3s}
+        .toggle-switch input:checked + .toggle-slider{background:#E67E22}
+        .toggle-switch input:checked + .toggle-slider:before{transform:translateX(18px)}
+        .item-row{display:flex;align-items:center;justify-content:space-between;padding:0.75rem;border:1px solid #f3f4f6;border-radius:8px;margin-bottom:0.5rem}
+        .item-row:hover{background:#f9fafb}
+        .item-info{display:flex;align-items:center;gap:0.75rem}
+        .item-actions{display:flex;align-items:center;gap:0.5rem}
+        .plan-card{background:linear-gradient(135deg,#fef7f0,#fff);border:2px solid #E67E22;border-radius:12px;padding:1.5rem;margin-bottom:1rem}
+        .plan-features{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin:1rem 0}
+        .plan-feature{display:flex;align-items:center;gap:0.4rem;font-size:0.8rem;color:#374151}
+        .plan-feature .check{color:#10b981;font-weight:700}
+        .user-lookup{display:flex;gap:0.75rem;margin-bottom:1.5rem}
+        .user-lookup input{flex:1;padding:0.7rem 1rem;border:1.5px solid #e5e7eb;border-radius:8px;font-size:0.85rem;outline:none}
+        .user-lookup input:focus{border-color:#E67E22}
+        .user-card{background:white;border:1px solid #e5e7eb;border-radius:10px;padding:1.25rem;display:flex;gap:1rem;align-items:center;margin-bottom:0.75rem}
+        .user-card img{width:48px;height:48px;border-radius:50%}
+        .user-card-info{flex:1}
+        .user-card-info h4{font-size:0.85rem;margin-bottom:0.2rem}
+        .user-card-info p{font-size:0.75rem;color:#6b7280}
+    </style>
+</head>
+<body>
+    <div id="sidebar"></div>
+    <script src="/admin/admin-nav.js"></script>
+
+    <div class="main">
+        <div class="header">
+            <div style="display:flex;align-items:center;gap:0.75rem">
+                <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+                <h1>Settings Page Manager</h1>
+            </div>
+            <div class="header-right"><span style="font-size:0.75rem;color:#6b7280">Managing: settings.html</span></div>
+        </div>
+
+        <div class="container">
+            <!-- Stats -->
+            <div class="stats">
+                <div class="stat-card"><h3>Total Users</h3><div class="num" id="statUsers">-</div><span class="stat-trend up">Registered</span></div>
+                <div class="stat-card"><h3>Premium Users</h3><div class="num" id="statPremium">-</div><span class="stat-trend">Upgraded</span></div>
+                <div class="stat-card"><h3>2FA Enabled</h3><div class="num" id="stat2fa">-</div><span class="stat-trend up">Secured</span></div>
+                <div class="stat-card"><h3>Profile Sections</h3><div class="num">7</div><span class="stat-trend">Active</span></div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" data-tab="profile">Profile Fields</div>
+                <div class="tab" data-tab="wellness">Wellness Options</div>
+                <div class="tab" data-tab="notifications">Notifications</div>
+                <div class="tab" data-tab="privacy">Privacy & Security</div>
+                <div class="tab" data-tab="appearance">Appearance</div>
+                <div class="tab" data-tab="plans">Plans & Billing</div>
+                <div class="tab" data-tab="users">User Management</div>
+                <div class="tab" data-tab="danger">Danger Zone Controls</div>
+            </div>
+
+            <!-- 1. Profile Fields Manager -->
+            <div class="tab-content active" id="tab-profile">
+                <div class="section"><h2>Profile Fields Manager</h2></div>
+                <p style="font-size:0.8rem;color:#6b7280;margin-bottom:1rem">Configure which profile fields are visible and required on the settings page.</p>
+                <div class="edit-card">
+                    <h4>Profile Fields</h4>
+                    <div class="item-row"><div class="item-info"><strong style="font-size:0.8rem">First Name</strong><span class="badge badge-blue">Required</span></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><strong style="font-size:0.8rem">Last Name</strong><span class="badge badge-blue">Required</span></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><strong style="font-size:0.8rem">Email</strong><span class="badge badge-blue">Required</span></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><strong style="font-size:0.8rem">Phone</strong><span class="badge badge-orange">Optional</span></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><strong style="font-size:0.8rem">Bio</strong><span class="badge badge-orange">Optional</span></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><strong style="font-size:0.8rem">Profile Photo</strong><span class="badge badge-orange">Optional</span></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                </div>
+                <div class="edit-card">
+                    <h4>Profile Completion Prompt</h4>
+                    <div class="form-group"><label>Completion Message</label><input type="text" id="profileMsg" value="Profile 80% complete — Add your photo and wellness goals to improve recommendations."></div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Show Completion Bar</label><select id="profileBarVisible"><option selected>Yes</option><option>No</option></select></div>
+                        <div class="form-group"><label>Min Completion % for "Complete"</label><input type="number" id="profileMinPct" value="100" min="50" max="100"></div>
+                    </div>
+                    <button class="btn-primary" onclick="saveSettings('profile')">Save Profile Settings</button>
+                </div>
+            </div>
+
+            <!-- 2. Wellness Options Manager -->
+            <div class="tab-content" id="tab-wellness">
+                <div class="section"><h2>Wellness Preferences Manager</h2></div>
+                <div class="edit-card">
+                    <h4>Wellness Goals (users can check these)</h4>
+                    <div class="toolbar" style="margin-bottom:1rem"><input type="text" class="search-input" placeholder="Search goals..."><button class="btn-primary" onclick="addGoal()">+ Add Goal</button></div>
+                    <div id="goalsList">
+                        <div class="item-row"><div class="item-info"><span>🧘</span><strong style="font-size:0.8rem">Reduce Anxiety</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label><button class="btn-sm btn-del">Del</button></div></div>
+                        <div class="item-row"><div class="item-info"><span>😴</span><strong style="font-size:0.8rem">Improve Sleep</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label><button class="btn-sm btn-del">Del</button></div></div>
+                        <div class="item-row"><div class="item-info"><span>💪</span><strong style="font-size:0.8rem">Build Confidence</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label><button class="btn-sm btn-del">Del</button></div></div>
+                        <div class="item-row"><div class="item-info"><span>🩺</span><strong style="font-size:0.8rem">Find Therapist</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label><button class="btn-sm btn-del">Del</button></div></div>
+                        <div class="item-row"><div class="item-info"><span>👥</span><strong style="font-size:0.8rem">Join Community</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label><button class="btn-sm btn-del">Del</button></div></div>
+                        <div class="item-row"><div class="item-info"><span>🎯</span><strong style="font-size:0.8rem">Career Guidance</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label><button class="btn-sm btn-del">Del</button></div></div>
+                        <div class="item-row"><div class="item-info"><span>🥗</span><strong style="font-size:0.8rem">Better Nutrition</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label><button class="btn-sm btn-del">Del</button></div></div>
+                        <div class="item-row"><div class="item-info"><span>🧠</span><strong style="font-size:0.8rem">Daily Mindfulness</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label><button class="btn-sm btn-del">Del</button></div></div>
+                    </div>
+                </div>
+                <div class="edit-card">
+                    <h4>Session Type Options</h4>
+                    <div class="item-row"><div class="item-info"><span>📹</span><strong style="font-size:0.8rem">Video Call</strong></div><div class="item-actions"><span class="badge badge-green">Default</span><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><span>📞</span><strong style="font-size:0.8rem">Audio Call</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><span>💬</span><strong style="font-size:0.8rem">Text Chat</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><span>🏢</span><strong style="font-size:0.8rem">In-Person</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                </div>
+                <div class="edit-card">
+                    <h4>Schedule Options</h4>
+                    <div class="item-row"><div class="item-info"><span>🌅</span><strong style="font-size:0.8rem">Morning</strong></div><div class="item-actions"><span class="badge badge-green">Default</span><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><span>☀️</span><strong style="font-size:0.8rem">Afternoon</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><span>🌙</span><strong style="font-size:0.8rem">Evening</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><span>📅</span><strong style="font-size:0.8rem">Weekends</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                </div>
+                <button class="btn-primary" onclick="saveSettings('wellness')">Save Wellness Options</button>
+            </div>
+
+            <!-- 3. Notifications Manager -->
+            <div class="tab-content" id="tab-notifications">
+                <div class="section"><h2>Notification Settings Manager</h2></div>
+                <p style="font-size:0.8rem;color:#6b7280;margin-bottom:1rem">Configure which notification toggles appear on the user settings page and their defaults.</p>
+                <div class="edit-card">
+                    <h4>Notification Channels</h4>
+                    <table>
+                        <thead><tr><th>Notification</th><th>Description</th><th>Default</th><th>Visible</th><th>Actions</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Session Reminders</strong></td><td style="font-size:0.8rem;color:#6b7280">Before scheduled therapy sessions</td><td><span class="badge badge-green">On</span></td><td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td><td><button class="btn-sm">Edit</button></td></tr>
+                            <tr><td><strong>Community Updates</strong></td><td style="font-size:0.8rem;color:#6b7280">New events and discussions</td><td><span class="badge badge-green">On</span></td><td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td><td><button class="btn-sm">Edit</button></td></tr>
+                            <tr><td><strong>Wellness Tips</strong></td><td style="font-size:0.8rem;color:#6b7280">Daily wellness recommendations</td><td><span class="badge badge-red">Off</span></td><td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td><td><button class="btn-sm">Edit</button></td></tr>
+                            <tr><td><strong>Story Reactions</strong></td><td style="font-size:0.8rem;color:#6b7280">When someone reacts to your stories</td><td><span class="badge badge-green">On</span></td><td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td><td><button class="btn-sm">Edit</button></td></tr>
+                            <tr><td><strong>Security Alerts</strong></td><td style="font-size:0.8rem;color:#6b7280">Login attempts and password changes</td><td><span class="badge badge-green">On</span></td><td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td><td><button class="btn-sm">Edit</button></td></tr>
+                            <tr><td><strong>Marketing Emails</strong></td><td style="font-size:0.8rem;color:#6b7280">New features and promotions</td><td><span class="badge badge-red">Off</span></td><td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td><td><button class="btn-sm">Edit</button></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="edit-card">
+                    <h4>Email Delivery Settings</h4>
+                    <div class="form-row">
+                        <div class="form-group"><label>Session Reminder Lead Time</label><select><option>15 minutes before</option><option selected>30 minutes before</option><option>1 hour before</option><option>1 day before</option></select></div>
+                        <div class="form-group"><label>Max Emails Per Day</label><input type="number" value="5" min="1" max="20"></div>
+                    </div>
+                    <div class="form-group"><label>Quiet Hours</label><div class="form-row"><input type="time" value="22:00"><input type="time" value="07:00"></div></div>
+                    <button class="btn-primary" onclick="saveSettings('notifications')">Save Notification Settings</button>
+                </div>
+            </div>
+
+            <!-- 4. Privacy & Security Manager -->
+            <div class="tab-content" id="tab-privacy">
+                <div class="section"><h2>Privacy & Security Manager</h2></div>
+                <div class="edit-card">
+                    <h4>Privacy Toggles Configuration</h4>
+                    <table>
+                        <thead><tr><th>Setting</th><th>Description</th><th>Default</th><th>User Can Change</th><th>Visible</th></tr></thead>
+                        <tbody>
+                            <tr><td><strong>Profile Visibility</strong></td><td style="font-size:0.8rem;color:#6b7280">Others can see your profile</td><td><span class="badge badge-green">On</span></td><td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td><td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td></tr>
+                            <tr><td><strong>Anonymous Mode</strong></td><td style="font-size:0.8rem;color:#6b7280">Hide name in forums and stories</td><td><span class="badge badge-red">Off</span></td><td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td><td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td></tr>
+                            <tr><td><strong>Two-Factor Authentication</strong></td><td style="font-size:0.8rem;color:#6b7280">Extra security layer</td><td><span class="badge badge-red">Off</span></td><td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td><td><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="edit-card">
+                    <h4>Security Policies</h4>
+                    <div class="form-row">
+                        <div class="form-group"><label>Min Password Length</label><input type="number" id="minPassLen" value="8" min="6" max="32"></div>
+                        <div class="form-group"><label>Require Special Characters</label><select><option selected>Yes</option><option>No</option></select></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Max Login Attempts</label><input type="number" value="5" min="3" max="10"></div>
+                        <div class="form-group"><label>Lockout Duration (minutes)</label><input type="number" value="15" min="5" max="60"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Session Timeout (hours)</label><input type="number" value="24" min="1" max="168"></div>
+                        <div class="form-group"><label>Force 2FA for Admins</label><select><option selected>Yes</option><option>No</option></select></div>
+                    </div>
+                    <button class="btn-primary" onclick="saveSettings('privacy')">Save Security Policies</button>
+                </div>
+                <div class="edit-card">
+                    <h4>Active Sessions Overview</h4>
+                    <p style="font-size:0.8rem;color:#6b7280;margin-bottom:0.75rem">Monitor and manage active user sessions across the platform.</p>
+                    <div class="item-row"><div class="item-info"><span>🖥️</span><div><strong style="font-size:0.8rem">Total Active Sessions</strong><p style="font-size:0.7rem;color:#6b7280;margin:0">Across all users</p></div></div><span class="badge badge-green" id="activeSessions">-</span></div>
+                    <button class="btn-sm" style="margin-top:0.5rem;color:#ef4444;border-color:#fecaca" onclick="if(confirm('Terminate all sessions except admin?'))showToast('All sessions terminated')">Terminate All User Sessions</button>
+                </div>
+            </div>
+
+            <!-- 5. Appearance Manager -->
+            <div class="tab-content" id="tab-appearance">
+                <div class="section"><h2>Appearance Settings Manager</h2></div>
+                <div class="edit-card">
+                    <h4>Theme Options Available to Users</h4>
+                    <div class="item-row"><div class="item-info"><span>☀️</span><strong style="font-size:0.8rem">Light Mode</strong><span class="badge badge-green">Default</span></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><span>🌙</span><strong style="font-size:0.8rem">Dark Mode</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><span>🔄</span><strong style="font-size:0.8rem">System/Auto</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                </div>
+                <div class="edit-card">
+                    <h4>Display Options</h4>
+                    <div class="item-row"><div class="item-info"><strong style="font-size:0.8rem">Reduce Animations</strong><span style="font-size:0.7rem;color:#6b7280">Allow users to minimize motion</span></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><strong style="font-size:0.8rem">Compact View</strong><span style="font-size:0.7rem;color:#6b7280">Less spacing, more content</span></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><strong style="font-size:0.8rem">Text Size Selector</strong><span style="font-size:0.7rem;color:#6b7280">A- / A / A+ buttons</span></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                </div>
+                <div class="edit-card">
+                    <h4>Platform Brand Colors</h4>
+                    <div class="form-row">
+                        <div class="form-group"><label>Primary Color</label><div style="display:flex;gap:0.5rem;align-items:center"><input type="color" value="#E67E22" style="width:40px;height:32px;border:none;cursor:pointer"><input type="text" value="#E67E22" style="width:80px"></div></div>
+                        <div class="form-group"><label>Accent Color</label><div style="display:flex;gap:0.5rem;align-items:center"><input type="color" value="#10B981" style="width:40px;height:32px;border:none;cursor:pointer"><input type="text" value="#10B981" style="width:80px"></div></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Sidebar Background</label><div style="display:flex;gap:0.5rem;align-items:center"><input type="color" value="#1F2937" style="width:40px;height:32px;border:none;cursor:pointer"><input type="text" value="#1F2937" style="width:80px"></div></div>
+                        <div class="form-group"><label>Font Family</label><select><option selected>System Default (-apple-system)</option><option>Inter</option><option>Poppins</option><option>Open Sans</option></select></div>
+                    </div>
+                    <button class="btn-primary" onclick="saveSettings('appearance')">Save Appearance</button>
+                </div>
+            </div>
+
+            <!-- 6. Plans & Billing Manager -->
+            <div class="tab-content" id="tab-plans">
+                <div class="section"><h2>Plans & Billing Manager</h2></div>
+                <div class="edit-card">
+                    <h4>Free Plan Configuration</h4>
+                    <div class="form-group"><label>Plan Name</label><input type="text" value="Free Wellness Plan"></div>
+                    <div class="form-group"><label>Plan Description</label><input type="text" value="AI Assessment, Community Access, Basic Resources"></div>
+                    <h4 style="margin-top:1rem">Free Plan Features</h4>
+                    <div class="item-row"><div class="item-info"><span>✓</span><strong style="font-size:0.8rem">AI WHODAS Assessment</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><span>✓</span><strong style="font-size:0.8rem">Community Access (Basic)</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><span>✓</span><strong style="font-size:0.8rem">Basic Resources Library</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><span>✓</span><strong style="font-size:0.8rem">Daily Mood Check-in</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><span>✓</span><strong style="font-size:0.8rem">AI Chatbot (Limited)</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                </div>
+                <div class="plan-card">
+                    <h4>Premium Plan Configuration</h4>
+                    <div class="form-row">
+                        <div class="form-group"><label>Plan Name</label><input type="text" value="Premium Wellness Plan"></div>
+                        <div class="form-group"><label>Monthly Price ($)</label><input type="number" value="29" min="0" step="1"></div>
+                    </div>
+                    <div class="form-group"><label>Yearly Price ($)</label><input type="number" value="290" min="0" step="1"><p style="font-size:0.7rem;color:#6b7280;margin-top:0.25rem">~$24.17/month — saves $58/year</p></div>
+                    <h4 style="margin-top:1rem">Premium Features</h4>
+                    <div class="item-row"><div class="item-info"><span>⭐</span><strong style="font-size:0.8rem">Unlimited Therapist Sessions</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><span>⭐</span><strong style="font-size:0.8rem">Advanced AI Insights</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><span>⭐</span><strong style="font-size:0.8rem">Full Yoga & Nutrition Library</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><span>⭐</span><strong style="font-size:0.8rem">Priority Community Events</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><span>⭐</span><strong style="font-size:0.8rem">Progress Tracking & Reports</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <button class="btn-primary" style="margin-top:1rem" onclick="saveSettings('plans')">Save Plan Configuration</button>
+                </div>
+            </div>
+
+            <!-- 7. User Management -->
+            <div class="tab-content" id="tab-users">
+                <div class="section"><h2>User Settings Management</h2></div>
+                <p style="font-size:0.8rem;color:#6b7280;margin-bottom:1rem">Look up specific users to manage their settings, plan, or account status.</p>
+                <div class="user-lookup">
+                    <input type="text" id="userSearch" placeholder="Search by name or email...">
+                    <button class="btn-primary" onclick="searchUsers()">Search</button>
+                </div>
+                <div id="userResults"></div>
+                <div class="edit-card">
+                    <h4>Bulk User Actions</h4>
+                    <div class="form-row">
+                        <div class="form-group"><label>Set Default Plan for New Users</label><select><option selected>Free</option><option>Premium (Trial)</option></select></div>
+                        <div class="form-group"><label>Premium Trial Duration</label><select><option>7 days</option><option selected>14 days</option><option>30 days</option></select></div>
+                    </div>
+                    <div class="item-row"><div class="item-info"><strong style="font-size:0.8rem">Force Password Reset (All Users)</strong><span style="font-size:0.7rem;color:#6b7280">Users must change password on next login</span></div><button class="btn-sm" style="color:#ef4444;border-color:#fecaca" onclick="if(confirm('Force all users to reset password?'))showToast('Password reset enforced')">Force Reset</button></div>
+                    <div class="item-row"><div class="item-info"><strong style="font-size:0.8rem">Send Platform Update Email</strong><span style="font-size:0.7rem;color:#6b7280">Notify all users about updates</span></div><button class="btn-sm" onclick="showToast('Feature coming soon')">Send</button></div>
+                </div>
+            </div>
+
+            <!-- 8. Danger Zone Controls -->
+            <div class="tab-content" id="tab-danger">
+                <div class="section"><h2>Danger Zone Controls</h2></div>
+                <p style="font-size:0.8rem;color:#6b7280;margin-bottom:1rem">Configure what account management options are available to users in their Danger Zone section.</p>
+                <div class="edit-card">
+                    <h4>Available Actions for Users</h4>
+                    <div class="item-row"><div class="item-info"><span>📦</span><div><strong style="font-size:0.8rem">Export Data</strong><p style="font-size:0.7rem;color:#6b7280;margin:0">Allow users to download their data (GDPR compliance)</p></div></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><span>⏸️</span><div><strong style="font-size:0.8rem">Deactivate Account</strong><p style="font-size:0.7rem;color:#6b7280;margin:0">Temporarily disable account (reversible)</p></div></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                    <div class="item-row"><div class="item-info"><span>🗑️</span><div><strong style="font-size:0.8rem">Delete Account</strong><p style="font-size:0.7rem;color:#6b7280;margin:0">Permanently remove account and all data</p></div></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div></div>
+                </div>
+                <div class="edit-card">
+                    <h4>Deletion Policy</h4>
+                    <div class="form-row">
+                        <div class="form-group"><label>Deletion Cooldown Period</label><select><option>Immediate</option><option>24 hours</option><option selected>7 days</option><option>30 days</option></select></div>
+                        <div class="form-group"><label>Require Password Confirmation</label><select><option selected>Yes</option><option>No</option></select></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Send Confirmation Email</label><select><option selected>Yes</option><option>No</option></select></div>
+                        <div class="form-group"><label>Keep Anonymized Data</label><select><option selected>Yes (for analytics)</option><option>No (full deletion)</option></select></div>
+                    </div>
+                    <button class="btn-primary" onclick="saveSettings('danger')">Save Deletion Policy</button>
+                </div>
+                <div class="edit-card" style="border-color:#fecaca;background:#fef2f2">
+                    <h4 style="color:#ef4444">Admin Danger Zone</h4>
+                    <div class="item-row"><div class="item-info"><span>⚠️</span><div><strong style="font-size:0.8rem">Purge Deactivated Accounts</strong><p style="font-size:0.7rem;color:#6b7280;margin:0">Remove all accounts deactivated for more than 90 days</p></div></div><button class="btn-sm" style="color:#ef4444;border-color:#fecaca" onclick="if(confirm('This will permanently delete deactivated accounts older than 90 days. Continue?'))showToast('Purge initiated')">Purge</button></div>
+                    <div class="item-row"><div class="item-info"><span>⚠️</span><div><strong style="font-size:0.8rem">Reset All User Preferences</strong><p style="font-size:0.7rem;color:#6b7280;margin:0">Reset all user settings to defaults (cannot undo)</p></div></div><button class="btn-sm" style="color:#ef4444;border-color:#fecaca" onclick="if(confirm('Reset ALL user preferences to defaults? This cannot be undone!'))showToast('All preferences reset')">Reset All</button></div>
+                </div>
+            </div>
+
+        </div><!-- /container -->
+    </div><!-- /main -->
+
+    <script>
+    // Auth check
+    const token = localStorage.getItem('adminToken');
+    if (!token) window.location.href = '/admin/';
+    const headers = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+
+    // Tab Navigation
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+        });
+    });
+
+    // Toast
+    function showToast(msg) {
+        const toast = document.createElement('div');
+        toast.style.cssText = 'position:fixed;bottom:2rem;right:2rem;background:#111827;color:white;padding:0.75rem 1.25rem;border-radius:8px;font-size:0.85rem;z-index:9999';
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // Save settings
+    function saveSettings(section) {
+        showToast('✓ ' + section.charAt(0).toUpperCase() + section.slice(1) + ' settings saved');
+    }
+
+    // Add wellness goal
+    function addGoal() {
+        const name = prompt('Enter wellness goal name:');
+        if (!name) return;
+        const icon = prompt('Enter emoji icon:', '🎯') || '🎯';
+        const list = document.getElementById('goalsList');
+        const row = document.createElement('div');
+        row.className = 'item-row';
+        row.innerHTML = `<div class="item-info"><span>${icon}</span><strong style="font-size:0.8rem">${name}</strong></div><div class="item-actions"><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label><button class="btn-sm btn-del" onclick="this.closest('.item-row').remove();showToast('Goal removed')">Del</button></div>`;
+        list.appendChild(row);
+        showToast('✓ Goal added');
+    }
+
+    // User search
+    async function searchUsers() {
+        const query = document.getElementById('userSearch').value.trim();
+        if (!query) return;
+        try {
+            const res = await fetch('/admin/api/dashboard', { headers });
+            const data = await res.json();
+            const users = (data.users || []).filter(u =>
+                u.name.toLowerCase().includes(query.toLowerCase()) ||
+                u.email.toLowerCase().includes(query.toLowerCase())
+            );
+            if (!users.length) {
+                document.getElementById('userResults').innerHTML = '<div class="empty" style="padding:1rem;text-align:center;color:#9ca3af">No users found</div>';
+                return;
+            }
+            document.getElementById('userResults').innerHTML = users.slice(0, 10).map(u => `
+                <div class="user-card">
+                    <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(u.name)}&background=E67E22&color=fff&size=48" alt="">
+                    <div class="user-card-info">
+                        <h4>${u.name}</h4>
+                        <p>${u.email} • Plan: ${u.plan || 'Free'} • Joined: ${new Date(u.createdAt).toLocaleDateString()}</p>
+                    </div>
+                    <div style="display:flex;gap:0.5rem;flex-wrap:wrap">
+                        <button class="btn-sm" onclick="changeUserPlan('${u._id}')">Change Plan</button>
+                        <button class="btn-sm" style="color:${u.isBlocked?'#10b981':'#ef4444'};border-color:${u.isBlocked?'#a7f3d0':'#fecaca'}" onclick="toggleBlock('${u._id}',${!u.isBlocked})">${u.isBlocked?'Unblock':'Block'}</button>
+                    </div>
+                </div>
+            `).join('');
+        } catch(e) {
+            document.getElementById('userResults').innerHTML = '<div class="empty">Error searching users</div>';
+        }
+    }
+
+    async function changeUserPlan(userId) {
+        const plan = prompt('Enter plan (free / premium):', 'premium');
+        if (!plan) return;
+        await fetch('/admin/api/users/' + userId + '/plan', { method: 'PUT', headers, body: JSON.stringify({ plan }) });
+        showToast('✓ Plan updated');
+        searchUsers();
+    }
+
+    async function toggleBlock(userId, block) {
+        if (!confirm(block ? 'Block this user?' : 'Unblock this user?')) return;
+        await fetch('/admin/api/users/' + userId + '/block', { method: 'PUT', headers, body: JSON.stringify({ isBlocked: block }) });
+        showToast(block ? '✓ User blocked' : '✓ User unblocked');
+        searchUsers();
+    }
+
+    // Load stats
+    async function loadStats() {
+        try {
+            const res = await fetch('/admin/api/dashboard', { headers });
+            const data = await res.json();
+            document.getElementById('statUsers').textContent = data.counts.users || 0;
+            const premium = (data.users || []).filter(u => u.plan === 'premium').length;
+            document.getElementById('statPremium').textContent = premium;
+            document.getElementById('stat2fa').textContent = '0'; // placeholder
+            document.getElementById('activeSessions').textContent = data.counts.sessions || 0;
+        } catch(e) { console.error(e); }
+    }
+
+    loadStats();
+    </script>
+</body>
+</html>

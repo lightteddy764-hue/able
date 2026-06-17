@@ -34,9 +34,9 @@
             <div class="st-header">
                 <div><h1>Account Settings</h1><p>Control your profile, privacy, notifications, and wellness preferences.</p></div>
                 <div class="st-status-cards">
-                    <div class="st-sc"><span class="st-sc-val">80%</span><span class="st-sc-lbl">Profile</span></div>
-                    <div class="st-sc"><span class="st-sc-val st-off">Off</span><span class="st-sc-lbl">2FA</span></div>
-                    <div class="st-sc"><span class="st-sc-val">Free</span><span class="st-sc-lbl">Plan</span></div>
+                    <div class="st-sc"><span class="st-sc-val" id="profilePct">80%</span><span class="st-sc-lbl">Profile</span></div>
+                    <div class="st-sc"><span class="st-sc-val st-off" id="tfaBadge">Off</span><span class="st-sc-lbl">2FA</span></div>
+                    <div class="st-sc"><span class="st-sc-val" id="planBadge">Free</span><span class="st-sc-lbl">Plan</span></div>
                 </div>
             </div>
 
@@ -56,14 +56,14 @@
                 <div class="st-content">
                     <!-- Profile -->
                     <section class="st-section active" id="section-profile">
-                        <div class="st-completion"><div class="st-comp-bar"><div class="st-comp-fill" style="width:80%"></div></div><span>Profile 80% complete — Add your photo and wellness goals to improve recommendations.</span></div>
+                        <div class="st-completion"><div class="st-comp-bar"><div class="st-comp-fill" id="profileFill" style="width:80%"></div></div><span>Profile completion — Add your photo and wellness goals to improve recommendations.</span></div>
                         <h2>Personal Information</h2>
-                        <div class="st-profile-top"><img src="https://ui-avatars.com/api/?name=John+Doe&background=E67E22&color=fff&size=72" alt="" class="st-avatar"><div><button class="st-btn-outline">Change Photo</button><p class="st-hint">JPG, PNG or GIF. Max 2MB.</p></div></div>
-                        <form class="st-form">
-                            <div class="st-row"><div class="st-field"><label>First Name</label><input type="text" value="John"></div><div class="st-field"><label>Last Name</label><input type="text" value="Doe"></div></div>
-                            <div class="st-row"><div class="st-field"><label>Email</label><input type="email" value="john.doe@example.com"></div><div class="st-field"><label>Phone</label><input type="tel" value="+1 (555) 123-4567"></div></div>
-                            <div class="st-field"><label>Bio</label><textarea rows="3">Wellness seeker on a journey to better mental health.</textarea></div>
-                            <button type="button" class="st-btn-primary" onclick="alert('Profile saved!')">Save Changes</button>
+                        <div class="st-profile-top"><img id="avatarImg" src="https://ui-avatars.com/api/?name=User&background=E67E22&color=fff&size=72" alt="" class="st-avatar"><div><button class="st-btn-outline" onclick="showToast('Photo upload coming soon')">Change Photo</button><p class="st-hint">JPG, PNG or GIF. Max 2MB.</p></div></div>
+                        <form class="st-form" onsubmit="event.preventDefault();saveProfile()">
+                            <div class="st-row"><div class="st-field"><label>First Name</label><input type="text" id="firstName" value=""></div><div class="st-field"><label>Last Name</label><input type="text" id="lastName" value=""></div></div>
+                            <div class="st-row"><div class="st-field"><label>Email</label><input type="email" id="emailField" value="" disabled></div><div class="st-field"><label>Phone</label><input type="tel" id="phoneField" value=""></div></div>
+                            <div class="st-field"><label>Bio</label><textarea id="bioField" rows="3"></textarea></div>
+                            <button type="submit" class="st-btn-primary">Save Changes</button>
                         </form>
                     </section>
 
@@ -71,25 +71,26 @@
                     <section class="st-section" id="section-wellness">
                         <h2>Wellness Preferences</h2>
                         <p class="st-sec-desc">Help us personalize your experience by selecting your wellness goals.</p>
-                        <div class="st-goals"><label class="st-goal"><input type="checkbox" checked><span>Reduce Anxiety</span></label><label class="st-goal"><input type="checkbox" checked><span>Improve Sleep</span></label><label class="st-goal"><input type="checkbox"><span>Build Confidence</span></label><label class="st-goal"><input type="checkbox" checked><span>Find Therapist</span></label><label class="st-goal"><input type="checkbox"><span>Join Community</span></label><label class="st-goal"><input type="checkbox"><span>Career Guidance</span></label><label class="st-goal"><input type="checkbox"><span>Better Nutrition</span></label><label class="st-goal"><input type="checkbox"><span>Daily Mindfulness</span></label></div>
+                        <div class="st-goals" id="wellnessGoals"><label class="st-goal"><input type="checkbox"><span>Reduce Anxiety</span></label><label class="st-goal"><input type="checkbox"><span>Improve Sleep</span></label><label class="st-goal"><input type="checkbox"><span>Build Confidence</span></label><label class="st-goal"><input type="checkbox"><span>Find Therapist</span></label><label class="st-goal"><input type="checkbox"><span>Join Community</span></label><label class="st-goal"><input type="checkbox"><span>Career Guidance</span></label><label class="st-goal"><input type="checkbox"><span>Better Nutrition</span></label><label class="st-goal"><input type="checkbox"><span>Daily Mindfulness</span></label></div>
                         <h3 class="st-sub">Preferred Session Type</h3>
-                        <div class="st-radios"><label><input type="radio" name="session" checked> Video Call</label><label><input type="radio" name="session"> Audio Call</label><label><input type="radio" name="session"> Text Chat</label><label><input type="radio" name="session"> In-Person</label></div>
+                        <div class="st-radios"><label><input type="radio" name="session" value="video"> Video Call</label><label><input type="radio" name="session" value="audio"> Audio Call</label><label><input type="radio" name="session" value="text"> Text Chat</label><label><input type="radio" name="session" value="in-person"> In-Person</label></div>
                         <h3 class="st-sub">Preferred Schedule</h3>
-                        <div class="st-radios"><label><input type="radio" name="sched" checked> Morning</label><label><input type="radio" name="sched"> Afternoon</label><label><input type="radio" name="sched"> Evening</label><label><input type="radio" name="sched"> Weekends</label></div>
-                        <button class="st-btn-primary" onclick="alert('Preferences saved!')">Save Preferences</button>
+                        <div class="st-radios"><label><input type="radio" name="sched" value="morning"> Morning</label><label><input type="radio" name="sched" value="afternoon"> Afternoon</label><label><input type="radio" name="sched" value="evening"> Evening</label><label><input type="radio" name="sched" value="weekends"> Weekends</label></div>
+                        <button class="st-btn-primary" onclick="saveWellness()">Save Preferences</button>
                     </section>
 
                     <!-- Notifications -->
                     <section class="st-section" id="section-notifications">
                         <h2>Notification Preferences</h2>
                         <div class="st-toggles">
-                            <div class="st-toggle"><div><h4>Session Reminders</h4><p>Before scheduled therapy sessions</p></div><label class="st-sw"><input type="checkbox" checked><span></span></label></div>
-                            <div class="st-toggle"><div><h4>Community Updates</h4><p>New events and discussions</p></div><label class="st-sw"><input type="checkbox" checked><span></span></label></div>
-                            <div class="st-toggle"><div><h4>Wellness Tips</h4><p>Daily wellness recommendations</p></div><label class="st-sw"><input type="checkbox"><span></span></label></div>
-                            <div class="st-toggle"><div><h4>Story Reactions</h4><p>When someone reacts to your stories</p></div><label class="st-sw"><input type="checkbox" checked><span></span></label></div>
-                            <div class="st-toggle"><div><h4>Security Alerts</h4><p>Login attempts and password changes</p></div><label class="st-sw"><input type="checkbox" checked><span></span></label></div>
-                            <div class="st-toggle"><div><h4>Marketing Emails</h4><p>New features and promotions</p></div><label class="st-sw"><input type="checkbox"><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Session Reminders</h4><p>Before scheduled therapy sessions</p></div><label class="st-sw"><input type="checkbox" id="notifSessions"><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Community Updates</h4><p>New events and discussions</p></div><label class="st-sw"><input type="checkbox" id="notifCommunity"><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Wellness Tips</h4><p>Daily wellness recommendations</p></div><label class="st-sw"><input type="checkbox" id="notifWellness"><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Story Reactions</h4><p>When someone reacts to your stories</p></div><label class="st-sw"><input type="checkbox" id="notifStories"><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Security Alerts</h4><p>Login attempts and password changes</p></div><label class="st-sw"><input type="checkbox" id="notifSecurity"><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Marketing Emails</h4><p>New features and promotions</p></div><label class="st-sw"><input type="checkbox" id="notifMarketing"><span></span></label></div>
                         </div>
+                        <button class="st-btn-primary" style="margin-top:1rem" onclick="saveNotifications()">Save Notifications</button>
                     </section>
 
                     <!-- Privacy -->
@@ -97,29 +98,30 @@
                         <h2>Privacy & Security</h2>
                         <div class="st-privacy-score"><span>Privacy Health: </span><span class="st-priv-good">Good</span></div>
                         <div class="st-toggles">
-                            <div class="st-toggle"><div><h4>Profile Visibility</h4><p>Others can see your profile</p></div><label class="st-sw"><input type="checkbox" checked><span></span></label></div>
-                            <div class="st-toggle"><div><h4>Anonymous Mode</h4><p>Hide name in forums and stories</p></div><label class="st-sw"><input type="checkbox"><span></span></label></div>
-                            <div class="st-toggle"><div><h4>Two-Factor Authentication</h4><p>Extra security layer</p></div><label class="st-sw"><input type="checkbox"><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Profile Visibility</h4><p>Others can see your profile</p></div><label class="st-sw"><input type="checkbox" id="privProfile"><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Anonymous Mode</h4><p>Hide name in forums and stories</p></div><label class="st-sw"><input type="checkbox" id="privAnonymous"><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Two-Factor Authentication</h4><p>Extra security layer</p></div><label class="st-sw"><input type="checkbox" id="privTwoFactor"><span></span></label></div>
                         </div>
+                        <button class="st-btn-primary" style="margin-top:1rem" onclick="savePrivacy()">Save Privacy Settings</button>
                         <h3 class="st-sub">Active Sessions</h3>
                         <div class="st-devices">
-                            <div class="st-device"><div><h4>Chrome on Windows</h4><p>Last active: Now (current)</p></div><span class="st-dev-badge active">Active</span></div>
-                            <div class="st-device"><div><h4>Safari on iPhone</h4><p>Last active: Yesterday</p></div><button class="st-dev-logout">Logout</button></div>
+                            <div class="st-device"><div><h4>Current Browser</h4><p>Last active: Now (current)</p></div><span class="st-dev-badge active">Active</span></div>
                         </div>
                         <h3 class="st-sub">Change Password</h3>
-                        <form class="st-form"><div class="st-field"><label>Current Password</label><input type="password" placeholder="••••••••"></div><div class="st-field"><label>New Password</label><input type="password" placeholder="••••••••"></div><button type="button" class="st-btn-primary">Update Password</button></form>
+                        <form class="st-form" onsubmit="event.preventDefault();changePassword()"><div class="st-field"><label>Current Password</label><input type="password" id="curPass" placeholder="••••••••"></div><div class="st-field"><label>New Password</label><input type="password" id="newPass" placeholder="••••••••"></div><button type="submit" class="st-btn-primary">Update Password</button></form>
                     </section>
 
                     <!-- Appearance -->
                     <section class="st-section" id="section-appearance">
                         <h2>Appearance</h2>
                         <div class="st-toggles">
-                            <div class="st-toggle"><div><h4>Dark Mode</h4><p>Darker color scheme</p></div><label class="st-sw"><input type="checkbox"><span></span></label></div>
-                            <div class="st-toggle"><div><h4>Reduce Animations</h4><p>Minimize motion</p></div><label class="st-sw"><input type="checkbox"><span></span></label></div>
-                            <div class="st-toggle"><div><h4>Compact View</h4><p>Less spacing, more content</p></div><label class="st-sw"><input type="checkbox"><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Dark Mode</h4><p>Darker color scheme</p></div><label class="st-sw"><input type="checkbox" id="appDark"><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Reduce Animations</h4><p>Minimize motion</p></div><label class="st-sw"><input type="checkbox" id="appAnimations"><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Compact View</h4><p>Less spacing, more content</p></div><label class="st-sw"><input type="checkbox" id="appCompact"><span></span></label></div>
                         </div>
                         <h3 class="st-sub">Text Size</h3>
-                        <div class="st-sizes"><button class="st-size">A-</button><button class="st-size active">A</button><button class="st-size">A+</button></div>
+                        <div class="st-sizes"><button class="st-size" data-size="small">A-</button><button class="st-size" data-size="normal">A</button><button class="st-size" data-size="large">A+</button></div>
+                        <button class="st-btn-primary" style="margin-top:1rem" onclick="saveAppearance()">Save Appearance</button>
                     </section>
 
                     <!-- Billing -->
@@ -138,12 +140,12 @@
                     <!-- Account -->
                     <section class="st-section" id="section-account">
                         <h2>Account Management</h2>
-                        <div class="st-info-grid"><div class="st-info-item"><span>Member Since</span><strong>June 2026</strong></div><div class="st-info-item"><span>Plan</span><strong>Free</strong></div><div class="st-info-item"><span>Assessment</span><strong class="st-green">Completed</strong></div><div class="st-info-item"><span>Stories</span><strong>3 Published</strong></div></div>
+                        <div class="st-info-grid"><div class="st-info-item"><span>Member Since</span><strong id="acctSince">-</strong></div><div class="st-info-item"><span>Plan</span><strong id="acctPlan">Free</strong></div><div class="st-info-item"><span>Assessment</span><strong id="acctAssessment" class="st-green">-</strong></div><div class="st-info-item"><span>Stories</span><strong>-</strong></div></div>
                         <div class="st-danger">
                             <h3>Danger Zone</h3>
-                            <div class="st-danger-row"><div><h4>Export Data</h4><p>Download all your data</p></div><button class="st-btn-outline">Export</button></div>
-                            <div class="st-danger-row"><div><h4>Deactivate Account</h4><p>Temporarily disable</p></div><button class="st-btn-warn">Deactivate</button></div>
-                            <div class="st-danger-row"><div><h4>Delete Account</h4><p>Permanently remove everything</p></div><button class="st-btn-danger">Delete</button></div>
+                            <div class="st-danger-row"><div><h4>Export Data</h4><p>Download all your data</p></div><button class="st-btn-outline" onclick="exportData()">Export</button></div>
+                            <div class="st-danger-row"><div><h4>Deactivate Account</h4><p>Temporarily disable</p></div><button class="st-btn-warn" onclick="if(confirm('Deactivate your account? You can reactivate later.'))showToast('Account deactivated (demo)')">Deactivate</button></div>
+                            <div class="st-danger-row"><div><h4>Delete Account</h4><p>Permanently remove everything</p></div><button class="st-btn-danger" onclick="if(confirm('Are you sure? This cannot be undone!'))if(confirm('FINAL WARNING: All data will be permanently deleted.'))deleteAccount()">Delete</button></div>
                         </div>
                     </section>
                 </div>
@@ -158,7 +160,223 @@
     <script src="chatbot.js"></script>
     <script src="dashboard.js"></script>
     <script>
+    // Settings page - Tab navigation
     document.querySelectorAll('.st-nav-item').forEach(btn=>{btn.addEventListener('click',()=>{document.querySelectorAll('.st-nav-item').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.st-section').forEach(s=>s.classList.remove('active'));btn.classList.add('active');document.getElementById('section-'+btn.dataset.section).classList.add('active')})});
+
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = 'login.html';
+
+    let currentUser = null;
+
+    // Toast notification
+    function showToast(msg, isError) {
+        const toast = document.createElement('div');
+        toast.style.cssText = 'position:fixed;bottom:2rem;right:2rem;padding:0.75rem 1.25rem;border-radius:8px;font-size:0.85rem;z-index:9999;color:white;background:' + (isError ? '#ef4444' : '#111827');
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // Load user data
+    async function loadSettings() {
+        try {
+            const res = await fetch('/api/me', { headers: { 'Authorization': 'Bearer ' + token } });
+            if (res.status === 401) { localStorage.removeItem('token'); window.location.href = 'login.html'; return; }
+            currentUser = await res.json();
+            populateProfile();
+            populateWellness();
+            populateNotifications();
+            populatePrivacy();
+            populateAppearance();
+            populateAccount();
+        } catch(e) { console.error('Failed to load settings:', e); }
+    }
+
+    function populateProfile() {
+        const u = currentUser;
+        const names = (u.name || '').split(' ');
+        document.getElementById('firstName').value = names[0] || '';
+        document.getElementById('lastName').value = names.slice(1).join(' ') || '';
+        document.getElementById('emailField').value = u.email || '';
+        document.getElementById('phoneField').value = u.phone || '';
+        document.getElementById('bioField').value = u.bio || '';
+        // Avatar
+        const avatarImg = document.getElementById('avatarImg');
+        avatarImg.src = u.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(u.name) + '&background=E67E22&color=fff&size=72';
+        // Topbar user info
+        document.querySelector('.user-name').textContent = u.name;
+        document.querySelector('.user-profile img').src = u.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(u.name) + '&background=E67E22&color=fff';
+        // Plan badge
+        document.getElementById('planBadge').textContent = u.plan === 'premium' ? 'Premium' : 'Free';
+        // Profile completion
+        let complete = 40; // base for name+email
+        if (u.phone) complete += 15;
+        if (u.bio) complete += 15;
+        if (u.avatar) complete += 15;
+        if (u.wellnessGoals && u.wellnessGoals.length > 0) complete += 15;
+        complete = Math.min(complete, 100);
+        document.getElementById('profilePct').textContent = complete + '%';
+        document.getElementById('profileFill').style.width = complete + '%';
+    }
+
+    function populateWellness() {
+        const goals = currentUser.wellnessGoals || [];
+        const allGoals = ['Reduce Anxiety','Improve Sleep','Build Confidence','Find Therapist','Join Community','Career Guidance','Better Nutrition','Daily Mindfulness'];
+        document.querySelectorAll('#wellnessGoals input[type=checkbox]').forEach((cb, i) => {
+            cb.checked = goals.includes(allGoals[i]);
+        });
+        // Session type
+        document.querySelectorAll('input[name=session]').forEach(r => {
+            r.checked = r.value === (currentUser.preferredSessionType || 'video');
+        });
+        // Schedule
+        document.querySelectorAll('input[name=sched]').forEach(r => {
+            r.checked = r.value === (currentUser.preferredSchedule || 'morning');
+        });
+    }
+
+    function populateNotifications() {
+        const n = currentUser.notifications || {};
+        document.getElementById('notifSessions').checked = n.sessions !== false;
+        document.getElementById('notifCommunity').checked = n.community !== false;
+        document.getElementById('notifWellness').checked = n.wellness === true;
+        document.getElementById('notifStories').checked = n.storyReactions !== false;
+        document.getElementById('notifSecurity').checked = n.security !== false;
+        document.getElementById('notifMarketing').checked = n.marketing === true;
+    }
+
+    function populatePrivacy() {
+        const p = currentUser.privacy || {};
+        document.getElementById('privProfile').checked = p.profileVisible !== false;
+        document.getElementById('privAnonymous').checked = p.anonymousMode === true;
+        document.getElementById('privTwoFactor').checked = p.twoFactor === true;
+        // 2FA status card
+        document.getElementById('tfaBadge').textContent = p.twoFactor ? 'On' : 'Off';
+        document.getElementById('tfaBadge').className = 'st-sc-val' + (p.twoFactor ? '' : ' st-off');
+    }
+
+    function populateAppearance() {
+        const a = currentUser.appearance || {};
+        document.getElementById('appDark').checked = a.darkMode === true;
+        document.getElementById('appAnimations').checked = a.reduceAnimations === true;
+        document.getElementById('appCompact').checked = a.compactView === true;
+        document.querySelectorAll('.st-size').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.size === (a.textSize || 'normal'));
+        });
+    }
+
+    function populateAccount() {
+        const u = currentUser;
+        document.getElementById('acctSince').textContent = new Date(u.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        document.getElementById('acctPlan').textContent = u.plan === 'premium' ? 'Premium' : 'Free';
+        document.getElementById('acctAssessment').textContent = u.assessment?.completed ? 'Completed' : 'Not done';
+    }
+
+    // Save profile
+    async function saveProfile() {
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const name = (firstName + ' ' + lastName).trim();
+        const phone = document.getElementById('phoneField').value.trim();
+        const bio = document.getElementById('bioField').value.trim();
+        if (!name) { showToast('Name is required', true); return; }
+        try {
+            const res = await fetch('/api/me', { method: 'PUT', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ name, phone, bio }) });
+            if (res.ok) { currentUser = await res.json(); populateProfile(); showToast('✓ Profile saved'); }
+            else { const d = await res.json(); showToast(d.error || 'Failed to save', true); }
+        } catch(e) { showToast('Network error', true); }
+    }
+
+    // Save wellness preferences
+    async function saveWellness() {
+        const allGoals = ['Reduce Anxiety','Improve Sleep','Build Confidence','Find Therapist','Join Community','Career Guidance','Better Nutrition','Daily Mindfulness'];
+        const goals = [];
+        document.querySelectorAll('#wellnessGoals input[type=checkbox]').forEach((cb, i) => { if (cb.checked) goals.push(allGoals[i]); });
+        const sessionType = document.querySelector('input[name=session]:checked')?.value || 'video';
+        const schedule = document.querySelector('input[name=sched]:checked')?.value || 'morning';
+        try {
+            const res = await fetch('/api/me/settings', { method: 'PUT', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ wellnessGoals: goals, preferredSessionType: sessionType, preferredSchedule: schedule }) });
+            if (res.ok) { currentUser = await res.json(); showToast('✓ Wellness preferences saved'); }
+            else showToast('Failed to save', true);
+        } catch(e) { showToast('Network error', true); }
+    }
+
+    // Save notifications
+    async function saveNotifications() {
+        const notifications = { sessions: document.getElementById('notifSessions').checked, community: document.getElementById('notifCommunity').checked, wellness: document.getElementById('notifWellness').checked, storyReactions: document.getElementById('notifStories').checked, security: document.getElementById('notifSecurity').checked, marketing: document.getElementById('notifMarketing').checked };
+        try {
+            const res = await fetch('/api/me/settings', { method: 'PUT', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ notifications }) });
+            if (res.ok) { currentUser = await res.json(); showToast('✓ Notifications saved'); }
+            else showToast('Failed to save', true);
+        } catch(e) { showToast('Network error', true); }
+    }
+
+    // Save privacy
+    async function savePrivacy() {
+        const privacy = { profileVisible: document.getElementById('privProfile').checked, anonymousMode: document.getElementById('privAnonymous').checked, twoFactor: document.getElementById('privTwoFactor').checked };
+        try {
+            const res = await fetch('/api/me/settings', { method: 'PUT', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ privacy }) });
+            if (res.ok) { currentUser = await res.json(); populatePrivacy(); showToast('✓ Privacy settings saved'); }
+            else showToast('Failed to save', true);
+        } catch(e) { showToast('Network error', true); }
+    }
+
+    // Save appearance
+    async function saveAppearance() {
+        const appearance = { darkMode: document.getElementById('appDark').checked, reduceAnimations: document.getElementById('appAnimations').checked, compactView: document.getElementById('appCompact').checked, textSize: document.querySelector('.st-size.active')?.dataset.size || 'normal' };
+        try {
+            const res = await fetch('/api/me/settings', { method: 'PUT', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ appearance }) });
+            if (res.ok) { currentUser = await res.json(); showToast('✓ Appearance saved'); }
+            else showToast('Failed to save', true);
+        } catch(e) { showToast('Network error', true); }
+    }
+
+    // Change password
+    async function changePassword() {
+        const cur = document.getElementById('curPass').value;
+        const newP = document.getElementById('newPass').value;
+        if (!cur || !newP) { showToast('Both passwords required', true); return; }
+        if (newP.length < 6) { showToast('Password must be at least 6 characters', true); return; }
+        try {
+            const res = await fetch('/api/me/password', { method: 'PUT', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ currentPassword: cur, newPassword: newP }) });
+            const data = await res.json();
+            if (res.ok) { showToast('✓ Password updated'); document.getElementById('curPass').value = ''; document.getElementById('newPass').value = ''; }
+            else showToast(data.error || 'Failed', true);
+        } catch(e) { showToast('Network error', true); }
+    }
+
+    // Text size buttons
+    document.querySelectorAll('.st-size').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.st-size').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        });
+    });
+
+    // Export data
+    async function exportData() {
+        try {
+            const res = await fetch('/api/me', { headers: { 'Authorization': 'Bearer ' + token } });
+            const data = await res.json();
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = 'able-my-data.json'; a.click();
+            URL.revokeObjectURL(url);
+            showToast('✓ Data exported');
+        } catch(e) { showToast('Export failed', true); }
+    }
+
+    // Delete account
+    async function deleteAccount() {
+        try {
+            const res = await fetch('/api/me', { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } });
+            if (res.ok) { localStorage.removeItem('token'); showToast('Account deleted'); setTimeout(() => window.location.href = 'login.html', 1500); }
+            else showToast('Failed to delete account', true);
+        } catch(e) { showToast('Network error', true); }
+    }
+
+    loadSettings();
     </script>
 </body>
 </html>
