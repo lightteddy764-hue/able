@@ -54,12 +54,42 @@ const userSchema = new mongoose.Schema({
     plan: { type: String, enum: ['free', 'premium', 'enterprise'], default: 'free' },
     planExpiresAt: { type: Date },
     isBlocked: { type: Boolean, default: false },
+    status: { type: String, enum: ['active', 'deactivated', 'deleted'], default: 'active' },
     
     // Activity
     streak: { type: Number, default: 0 },
     lastActive: { type: Date, default: Date.now },
     completedTasks: { type: Number, default: 0 },
-    sessionsBooked: { type: Number, default: 0 }
+    sessionsBooked: { type: Number, default: 0 },
+    
+    // Recent Activity Log
+    recentActivity: [{
+        type: { type: String }, // checkin, task, challenge, story, session, profile, mood
+        title: { type: String },
+        description: { type: String },
+        icon: { type: String, default: '📋' },
+        page: { type: String }, // self-care, parenting, child-support, etc.
+        createdAt: { type: Date, default: Date.now }
+    }],
+
+    // Community
+    joinedCircles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'FeaturedCircle' }],
+    rsvpEvents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'UpcomingEvent' }],
+    bookmarkedStories: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Story' }],
+
+    // Care Hub Progress
+    careProgress: {
+        selfCareCheckIns: { type: Number, default: 0 },
+        selfCareTasksCompleted: { type: Number, default: 0 },
+        parentingChallengesStarted: { type: Number, default: 0 },
+        parentingChallengesCompleted: { type: Number, default: 0 },
+        parentingDaysCompleted: { type: Number, default: 0 },
+        childProfilesCreated: { type: Number, default: 0 },
+        childSupportGuidesViewed: { type: Number, default: 0 },
+        lastSelfCareCheckin: { type: Date },
+        lastParentingActivity: { type: Date },
+        lastChildSupportView: { type: Date }
+    }
 }, { timestamps: true });
 
 // Hash password before save

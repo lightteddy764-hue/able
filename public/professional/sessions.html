@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Sessions – ABLE Professional Portal</title>
+    <link rel="stylesheet" href="/professional/portal.css">
+    <link rel="stylesheet" href="/loader.css">
+    <style>
+        /* ===== STATUS TABS ===== */
+        .sess-tabs { display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:1.5rem; }
+        .sess-tab {
+            padding:0.55rem 1.15rem;
+            border:1.5px solid var(--border);
+            border-radius:100px;
+            background:white;
+            font-size:0.8rem;
+            font-weight:600;
+            color:var(--text-3);
+            cursor:pointer;
+            transition:all 0.2s;
+        }
+        .sess-tab:hover { border-color:var(--brand); color:var(--brand); }
+        .sess-tab.active { background:var(--brand); color:white; border-color:var(--brand); }
+
+        /* ===== SESSION CARD ===== */
+        .sess-card {
+            background:white;
+            border:1px solid var(--border);
+            border-radius:var(--radius);
+            padding:1.25rem 1.5rem;
+            margin-bottom:0.875rem;
+            transition:all 0.2s;
+            position:relative;
+        }
+        .sess-card:hover { box-shadow:var(--shadow-md); }
+
+        .sess-card-top {
+            display:flex;
+            align-items:flex-start;
+            gap:1rem;
+            margin-bottom:0.875rem;
+        }
+        .sess-client-avatar {
+            width:44px;
+            height:44px;
+            border-radius:50%;
+            background:linear-gradient(135deg,#667EEA,#764BA2);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:white;
+            font-size:1rem;
+            font-weight:800;
+            flex-shrink:0;
+        }
+        .sess-client-info { flex:1; min-width:0; }
+        .sess-client-name { font-size:0.95rem; font-weight:700; color:var(--text-1); margin-bottom:0.15rem; }
+        .sess-client-meta { font-size:0.78rem; color:var(--text-3); }
+
+        /* Status badge */
+        .sess-status {
+            display:inline-block;
+            padding:0.25rem 0.65rem;
+            border-radius:100px;
+            font-size:0.7rem;
+            font-weight:700;
+            text-transform:uppercase;
+            letter-spacing:0.04em;
+            flex-shrink:0;
+        }
+        .sess-status.requested { background:var(--yellow-bg); color:var(--yellow-text); }
+        .sess-status.accepted, .sess-status.confirmed { background:var(--blue-bg); color:var(--blue-text); }
+        .sess-status.completed { background:var(--green-bg); color:var(--green-text); }
+        .sess-status.cancelled { background:#F3F4F6; color:var(--text-3); }
+        .sess-status.rejected { background:var(--red-bg); color:var(--red-text); }
+        .sess-status.reschedule_suggested { background:var(--purple-bg); color:var(--purple-text); }
+        .sess-status.no_show { background:#FFF7ED; color:#C2410C; }
+
+        /* Detail grid */
+        .sess-details {
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+            gap:0.5rem;
+            margin-bottom:0.875rem;
+        }
+        .sess-detail { display:flex; flex-direction:column; gap:0.1rem; }
+        .sess-detail .dl { font-size:0.68rem; font-weight:600; color:var(--text-4); text-transform:uppercase; letter-spacing:0.05em; }
+        .sess-detail .dv { font-size:0.83rem; color:var(--text-2); font-weight:500; }
+
+        /* Notes */
+        .sess-user-note {
+            background:var(--bg);
+            border:1px solid var(--border);
+            border-radius:8px;
+            padding:0.65rem 0.875rem;
+            font-size:0.8rem;
+            color:var(--text-2);
+            font-style:italic;
+            margin-bottom:0.6rem;
+            line-height:1.6;
+        }
+        .sess-private-note {
+            background:var(--purple-bg);
+            border:1px solid #DDD6FE;
+            border-radius:8px;
+            padding:0.65rem 0.875rem;
+            font-size:0.78rem;
+            color:var(--purple-text);
+            margin-bottom:0.6rem;
+            line-height:1.6;
+        }
+        .sess-private-note strong { font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; }
+
+        /* Actions */
+        .sess-actions { display:flex; gap:0.4rem; flex-wrap:wrap; margin-top:0.5rem; }
+        .sess-btn {
+            padding:0.45rem 0.9rem;
+            border:none;
+            border-radius:7px;
+            font-size:0.78rem;
+            font-weight:700;
+            cursor:pointer;
+            transition:all 0.2s;
+            font-family:inherit;
+        }
+        .sess-btn:hover { opacity:0.85; }
+        .sess-btn.complete { background:var(--green-bg); color:var(--green-text); }
+        .sess-btn.cancel { background:var(--red-bg); color:var(--red-text); }
+        .sess-btn.note { background:var(--purple-bg); color:var(--purple-text); }
+        .sess-btn.reschedule { background:var(--blue-bg); color:var(--blue-text); }
+
+        /* Count badge */
+        .tab-count { font-size:0.68rem; background:rgba(0,0,0,0.12); border-radius:4px; padding:0.1rem 0.35rem; margin-left:0.25rem; }
+
+        .empty-state { text-align:center; padding:4rem 1rem; color:var(--text-4); }
+        .empty-state .ei { font-size:3rem; display:block; margin-bottom:1rem; }
+        .empty-state h3 { color:var(--text-2); font-size:0.97rem; font-weight:600; }
+        .empty-state p { font-size:0.82rem; margin-top:0.3rem; }
+
+        @media(max-width:600px) { .sess-details { grid-template-columns:1fr 1fr; } }
+    </style>
+</head>
+<body>
+    <script src="/loader.js"></script>
+    <div class="portal-layout">
+        <div id="portalSidebar"></div>
+        <script src="/professional/nav.js"></script>
+
+        <main class="portal-main">
+            <header class="portal-header">
+                <button class="portal-menu-toggle" onclick="document.getElementById('portalSidebar').classList.toggle('open')">☰</button>
+                <h1>My Sessions</h1>
+                <span style="font-size:0.82rem;color:var(--text-3)" id="sessCount"></span>
+            </header>
+
+            <div class="portal-content">
+                <div class="sess-tabs">
+                    <button class="sess-tab active" data-status="" onclick="loadSessions('')">All</button>
+                    <button class="sess-tab" data-status="confirmed" onclick="loadSessions('confirmed')">📅 Upcoming</button>
+                    <button class="sess-tab" data-status="requested" onclick="loadSessions('requested')">⏳ Pending</button>
+                    <button class="sess-tab" data-status="completed" onclick="loadSessions('completed')">✅ Completed</button>
+                    <button class="sess-tab" data-status="cancelled" onclick="loadSessions('cancelled')">❌ Cancelled</button>
+                    <button class="sess-tab" data-status="rejected" onclick="loadSessions('rejected')">🚫 Rejected</button>
+                </div>
+
+                <div id="sessionsList">
+                    <div class="empty-state"><span class="ei">⏳</span><h3>Loading sessions...</h3></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+    const token = localStorage.getItem('professionalToken');
+    if (!token) window.location.href = '/professional/login.html';
+    const headers = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+    let activeStatus = '';
+
+    async function loadSessions(status) {
+        activeStatus = status;
+        document.querySelectorAll('.sess-tab').forEach(t => t.classList.remove('active'));
+        document.querySelector(`.sess-tab[data-status="${status}"]`).classList.add('active');
+        try {
+            const url = '/professional/api/sessions' + (status ? '?status=' + status : '');
+            const res = await fetch(url, { headers });
+            if (res.status === 401) { localStorage.removeItem('professionalToken'); window.location.href = '/professional/login.html'; return; }
+            const data = await res.json();
+            const sessions = data.sessions || [];
+            renderSessions(sessions, status);
+        } catch(e) {
+            document.getElementById('sessionsList').innerHTML = '<div class="empty-state"><span class="ei">⚠️</span><h3>Error loading sessions</h3></div>';
+        }
+    }
+
+    function renderSessions(sessions, status) {
+        document.getElementById('sessCount').textContent = sessions.length + ' session' + (sessions.length !== 1 ? 's' : '');
+        if (!sessions.length) {
+            const labels = { '':'sessions', confirmed:'upcoming sessions', requested:'pending requests', completed:'completed sessions', cancelled:'cancelled sessions', rejected:'rejected sessions' };
+            document.getElementById('sessionsList').innerHTML = `<div class="empty-state"><span class="ei">📋</span><h3>No ${labels[status]||'sessions'} found</h3><p>Check back later or try a different filter</p></div>`;
+            return;
+        }
+
+        document.getElementById('sessionsList').innerHTML = sessions.map(s => {
+            const initial = (s.userId?.name || 'U')[0].toUpperCase();
+            const reqTime = s.requestedAt ? fmtDate(s.requestedAt) : '—';
+            const schTime = s.scheduledAt ? fmtDate(s.scheduledAt) : null;
+
+            const actions = [];
+            if (s.status === 'confirmed' || s.status === 'accepted') {
+                actions.push(`<button class="sess-btn complete" onclick="markComplete('${s._id}')">✓ Mark Completed</button>`);
+                actions.push(`<button class="sess-btn cancel" onclick="cancelSession('${s._id}')">Cancel</button>`);
+            }
+            if (s.status !== 'completed' && s.status !== 'cancelled' && s.status !== 'rejected') {
+                actions.push(`<button class="sess-btn note" onclick="addNote('${s._id}')">🔒 Private Note</button>`);
+            }
+            if (s.status === 'completed' && s.professionalPrivateNote) {
+                // Already shown below
+            }
+
+            return `
+            <div class="sess-card">
+                <div class="sess-card-top">
+                    <div class="sess-client-avatar">${initial}</div>
+                    <div class="sess-client-info">
+                        <div class="sess-client-name">${s.userId?.name || 'Anonymous User'}</div>
+                        <div class="sess-client-meta">${s.concern} &bull; ${sessionIcon(s.sessionType)} ${s.sessionType}</div>
+                    </div>
+                    <span class="sess-status ${s.status}">${s.status.replace(/_/g,' ')}</span>
+                </div>
+
+                <div class="sess-details">
+                    <div class="sess-detail">
+                        <span class="dl">Requested For</span>
+                        <span class="dv">${reqTime}</span>
+                    </div>
+                    ${schTime ? `<div class="sess-detail"><span class="dl">Scheduled At</span><span class="dv" style="color:var(--green)">${schTime}</span></div>` : ''}
+                    ${s.suggestedNewTime ? `<div class="sess-detail"><span class="dl">Suggested New Time</span><span class="dv" style="color:var(--purple)">${fmtDate(s.suggestedNewTime)}</span></div>` : ''}
+                    <div class="sess-detail">
+                        <span class="dl">Created</span>
+                        <span class="dv">${timeAgo(s.createdAt)}</span>
+                    </div>
+                    ${s.rejectReason ? `<div class="sess-detail"><span class="dl">Reject Reason</span><span class="dv" style="color:var(--red-text)">${s.rejectReason}</span></div>` : ''}
+                    ${s.cancelReason ? `<div class="sess-detail"><span class="dl">Cancel Reason</span><span class="dv">${s.cancelReason}</span></div>` : ''}
+                </div>
+
+                ${s.userNote ? `<div class="sess-user-note">Client note: "${s.userNote}"</div>` : ''}
+                ${s.professionalPrivateNote ? `<div class="sess-private-note"><strong>🔒 Private Note (only you see this)</strong><br>${s.professionalPrivateNote}</div>` : ''}
+                ${s.meetingLink ? `<div style="margin-bottom:0.6rem;font-size:0.82rem">📎 Meeting Link: <a href="${s.meetingLink}" target="_blank" style="color:var(--blue);font-weight:600">${s.meetingLink}</a></div>` : ''}
+
+                ${actions.length ? `<div class="sess-actions">${actions.join('')}</div>` : ''}
+            </div>`;
+        }).join('');
+    }
+
+    async function markComplete(id) {
+        if (!confirm('Mark this session as completed?')) return;
+        await fetch('/professional/api/sessions/' + id + '/complete', { method:'PUT', headers });
+        loadSessions(activeStatus);
+        showToast('✅ Session marked as completed');
+    }
+
+    async function cancelSession(id) {
+        const reason = prompt('Reason for cancellation:');
+        if (!reason?.trim()) return;
+        await fetch('/professional/api/sessions/' + id + '/cancel', { method:'PUT', headers, body: JSON.stringify({ reason }) });
+        loadSessions(activeStatus);
+        showToast('Session cancelled');
+    }
+
+    async function addNote(id) {
+        const note = prompt('Private note (only visible to you, max 2000 chars):');
+        if (!note?.trim()) return;
+        await fetch('/professional/api/sessions/' + id + '/private-note', { method:'PUT', headers, body: JSON.stringify({ note }) });
+        loadSessions(activeStatus);
+        showToast('🔒 Private note saved');
+    }
+
+    function sessionIcon(type) {
+        const icons = { video:'📹', audio:'📞', chat:'💬', 'in-person':'🏢' };
+        return icons[type] || '📋';
+    }
+
+    function fmtDate(d) {
+        return new Date(d).toLocaleString('en-IN', { weekday:'short', day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+    }
+
+    function timeAgo(d) {
+        const s = Math.floor((Date.now() - new Date(d)) / 1000);
+        if (s < 60) return 'just now';
+        if (s < 3600) return Math.floor(s / 60) + 'm ago';
+        if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+        return Math.floor(s / 86400) + 'd ago';
+    }
+
+    function showToast(msg) {
+        const t = document.createElement('div');
+        t.style.cssText = 'position:fixed;bottom:1.5rem;right:1.5rem;padding:0.85rem 1.5rem;background:#ECFDF5;color:#065F46;border-radius:12px;font-size:0.88rem;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.12);border:1px solid #A7F3D0;animation:fadeIn 0.3s ease';
+        t.textContent = msg;
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 3000);
+    }
+
+    loadSessions('');
+    </script>
+    <style>@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}</style>
+</body>
+</html>

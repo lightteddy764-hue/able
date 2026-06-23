@@ -6,21 +6,12 @@
     <title>My Voice - ABLE</title>
     <link rel="stylesheet" href="dashboard-styles.css">
     <link rel="stylesheet" href="my-voice.css">
+<link rel="stylesheet" href="/loader.css">
 </head>
 <body>
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header"><img src="images/logo.svg" alt="ABLE" class="sidebar-logo"></div>
-        <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2"/><path d="M9 22V12h6v10" stroke="currentColor" stroke-width="2"/></svg><span>Dashboard</span></a>
-            <a href="healing-zone.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2"/></svg><span>Healing Zone</span></a>
-            <a href="body-mind.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Body-Mind</span></a>
-            <a href="community.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg><span>Community</span></a>
-            <a href="youth-support.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke="currentColor" stroke-width="2"/></svg><span>Youth Support</span></a>
-            <a href="my-voice.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2"/></svg><span>My Voice</span></a>
-            <a href="settings.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09" stroke="currentColor" stroke-width="2"/></svg><span>Settings</span></a>
-        </nav>
-        <div class="sidebar-footer"><a href="login.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2"/><path d="M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Logout</span></a></div>
-    </aside>
+    <script src="/loader.js"></script>
+        <div id="sidebar"></div>
+    <script src="sidebar-nav.js"></script>
 
     <div class="main-content">
         <header class="topbar">
@@ -167,14 +158,22 @@
             image: document.getElementById('compImage').value
         };
 
+        const editId = document.getElementById('composeSection').dataset.editId;
+
         try {
-            const res = await fetch('/api/stories', { method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token}, body:JSON.stringify(body) });
+            let res;
+            if (editId) {
+                res = await fetch('/api/stories/' + editId, { method:'PUT', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token}, body:JSON.stringify(body) });
+            } else {
+                res = await fetch('/api/stories', { method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token}, body:JSON.stringify(body) });
+            }
             const data = await res.json();
             if (data.error) { alert(data.error); return; }
             document.getElementById('storyForm').reset();
+            delete document.getElementById('composeSection').dataset.editId;
             document.getElementById('compStatus').style.display = 'block';
-            document.getElementById('compStatus').textContent = '✓ Story submitted for review! Our team will review it shortly.';
-            setTimeout(()=>{ document.getElementById('composeSection').style.display='none'; document.getElementById('compStatus').style.display='none'; loadMyStories(); }, 3000);
+            document.getElementById('compStatus').textContent = editId ? '✓ Story updated!' : '✓ Story submitted for review!';
+            setTimeout(()=>{ document.getElementById('composeSection').style.display='none'; document.getElementById('compStatus').style.display='none'; loadMyStories(); loadStories(); }, 2000);
         } catch(e) { alert('Error submitting story'); }
     });
 
@@ -199,7 +198,7 @@
 
             const tagColors = {recovery:'blue',anxiety:'green',growth:'purple',gratitude:'orange',advice:'blue',relationships:'orange'};
             feed.innerHTML = stories.map(s => `
-                <article class="mv-story" onclick="window.location.href='story.html?id=${s._id}'" style="cursor:pointer">
+                <article class="mv-story" onclick="openStoryDetail('${s._id}')" style="cursor:pointer">
                     <div class="mv-story-top">
                         ${s.isAnonymous ? '<div class="mv-anon-av">🌿</div>' : `<img src="https://ui-avatars.com/api/?name=${encodeURIComponent(s.authorName||'U')}&background=E67E22&color=fff&size=40" class="mv-story-av">`}
                         <div><strong>${s.isAnonymous ? 'Anonymous' : (s.authorName||'Unknown')}</strong><span>${timeAgo(s.createdAt)} • ${s.readTime||3} min read</span></div>
@@ -240,13 +239,37 @@
                 if(s.status==='rejected') return '<span style="background:#fef2f2;color:#ef4444;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.7rem;font-weight:600">Rejected</span>';
                 return '';
             };
-            document.getElementById('myStoriesList').innerHTML = stories.map(s => `
-                <div style="display:flex;justify-content:space-between;align-items:center;padding:0.75rem;background:white;border-radius:10px;border:1px solid #e5e7eb;margin-bottom:0.5rem">
-                    <div><strong style="font-size:0.85rem">${s.title}</strong><br><span style="font-size:0.7rem;color:#9ca3af">${timeAgo(s.createdAt)}</span></div>
-                    ${statusBadge(s)}
-                </div>
-            `).join('');
+            document.getElementById('myStoriesList').innerHTML = stories.map(s => {
+                const canEdit = ['pending', 'draft'].includes(s.status);
+                return `<div style="display:flex;justify-content:space-between;align-items:center;padding:0.75rem;background:white;border-radius:10px;border:1px solid #e5e7eb;margin-bottom:0.5rem;flex-wrap:wrap;gap:0.5rem">
+                    <div style="flex:1;min-width:150px"><strong style="font-size:0.85rem">${s.title}</strong><br><span style="font-size:0.7rem;color:#9ca3af">${timeAgo(s.createdAt)} • ${s.category}</span></div>
+                    <div style="display:flex;align-items:center;gap:0.4rem">
+                        ${statusBadge(s)}
+                        ${canEdit ? '<button onclick="editMyStory(\''+s._id+'\',\''+s.title.replace(/'/g,"\\'")+'\',\''+s.category+'\',\''+s.content.replace(/'/g,"\\'").replace(/\n/g,'\\n').substring(0,200)+'\')" style="font-size:0.7rem;padding:0.2rem 0.5rem;border:1px solid #E5E7EB;border-radius:4px;background:white;cursor:pointer;color:#3B82F6">Edit</button>' : ''}
+                        ${canEdit ? '<button onclick="deleteMyStory(\''+s._id+'\')" style="font-size:0.7rem;padding:0.2rem 0.5rem;border:1px solid #FECACA;border-radius:4px;background:#FEF2F2;cursor:pointer;color:#DC2626">Del</button>' : ''}
+                    </div>
+                </div>`;
+            }).join('');
         } catch(e) {}
+    }
+
+    function editMyStory(id, title, category, content) {
+        document.getElementById('composeSection').style.display = 'block';
+        document.getElementById('compTitle').value = title;
+        document.getElementById('compCat').value = category;
+        document.getElementById('compContent').value = content.replace(/\\n/g, '\n');
+        document.getElementById('composeSection').dataset.editId = id;
+        document.getElementById('composeSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function deleteMyStory(id) {
+        if (!confirm('Delete this story?')) return;
+        const token = localStorage.getItem('token');
+        try {
+            const res = await fetch('/api/stories/' + id, { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } });
+            const data = await res.json();
+            if (res.ok) { loadMyStories(); } else { alert(data.error || 'Cannot delete'); }
+        } catch(e) { alert('Failed'); }
     }
 
     function timeAgo(date) {
@@ -259,6 +282,90 @@
 
     loadStories();
     loadMyStories();
+
+    // ===== STORY DETAIL MODAL =====
+    async function openStoryDetail(storyId) {
+        try {
+            const token = localStorage.getItem('token');
+            const headers = token ? { 'Authorization': 'Bearer ' + token } : {};
+            const res = await fetch('/api/stories/' + storyId, { headers });
+            const data = await res.json();
+            const s = data.story;
+            if (!s) return;
+
+            const modal = document.createElement('div');
+            modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem;overflow-y:auto';
+            modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+
+            const reactions = s.reactions || {};
+            const userReactions = data.userReactions || [];
+            const comments = s.comments || [];
+
+            modal.innerHTML = `<div style="background:white;border-radius:20px;padding:2rem;max-width:600px;width:100%;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.2)">
+                <button id="storyDetailCloseX" style="position:absolute;top:1rem;right:1.25rem;background:none;border:none;font-size:1.4rem;cursor:pointer;color:#9CA3AF">✕</button>
+                <div style="margin-bottom:1rem"><span style="font-size:0.7rem;padding:0.2rem 0.5rem;background:#EFF6FF;color:#2563EB;border-radius:4px;font-weight:600">${s.category}</span><span style="font-size:0.7rem;color:#9CA3AF;margin-left:0.5rem">${s.readTime || 3} min read • ${s.readCount || 0} reads</span></div>
+                <h2 style="font-size:1.3rem;font-weight:700;color:#1a1a2e;margin-bottom:0.5rem">${s.title}</h2>
+                <p style="font-size:0.8rem;color:#6B7280;margin-bottom:1.25rem">By ${s.isAnonymous ? 'Anonymous' : (s.authorName || 'Unknown')} • ${timeAgo(s.createdAt)}</p>
+                ${s.image ? '<img src="'+s.image+'" style="width:100%;border-radius:12px;margin-bottom:1rem;max-height:250px;object-fit:cover">' : ''}
+                <div style="font-size:0.9rem;color:#374151;line-height:1.8;margin-bottom:1.5rem;white-space:pre-wrap">${s.content}</div>
+                <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.5rem;padding:1rem 0;border-top:1px solid #F3F4F6;border-bottom:1px solid #F3F4F6">
+                    <button class="mv-react-btn ${userReactions.includes('inspired')?'active':''}" onclick="reactToStory('${s._id}','inspired',this)">💜 Inspired (${(reactions.inspired||[]).length})</button>
+                    <button class="mv-react-btn ${userReactions.includes('relatable')?'active':''}" onclick="reactToStory('${s._id}','relatable',this)">🤝 Relatable (${(reactions.relatable||[]).length})</button>
+                    <button class="mv-react-btn ${userReactions.includes('hopeful')?'active':''}" onclick="reactToStory('${s._id}','hopeful',this)">🌟 Hopeful (${(reactions.hopeful||[]).length})</button>
+                    <button class="mv-react-btn ${userReactions.includes('thankYou')?'active':''}" onclick="reactToStory('${s._id}','thankYou',this)">🙏 Thank You (${(reactions.thankYou||[]).length})</button>
+                    <button class="mv-react-btn" onclick="bookmarkStory('${s._id}')">🔖 Save</button>
+                    <button class="mv-react-btn" onclick="reportStory('${s._id}')" style="margin-left:auto;color:#9CA3AF">⚠️ Report</button>
+                </div>
+                <h4 style="font-size:0.9rem;font-weight:700;margin-bottom:0.75rem">💬 Comments (${comments.length})</h4>
+                <div id="storyComments" style="margin-bottom:1rem">${comments.length ? comments.map(c => '<div style="padding:0.6rem 0;border-bottom:1px solid #F3F4F6;font-size:0.83rem"><strong>'+((c.user?.name)||(c.isAnonymous?'Anonymous':'User'))+'</strong><p style="color:#374151;margin-top:0.2rem">'+c.text+'</p></div>').join('') : '<p style="color:#9CA3AF;font-size:0.82rem">No comments yet</p>'}</div>
+                ${token ? '<div style="display:flex;gap:0.5rem"><input type="text" id="storyCommentInput" placeholder="Write a comment..." style="flex:1;padding:0.6rem 1rem;border:1.5px solid #E5E7EB;border-radius:8px;font-size:0.85rem;outline:none"><button onclick="addComment(\''+s._id+'\')" style="padding:0.6rem 1rem;background:#E67E22;color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer">Post</button></div>' : '<p style="font-size:0.8rem;color:#6B7280">Log in to comment</p>'}
+            </div>`;
+            document.body.appendChild(modal);
+            document.getElementById('storyDetailCloseX').addEventListener('click', function() { modal.remove(); });
+        } catch(e) { console.error(e); }
+    }
+
+    async function reactToStory(storyId, reaction, btn) {
+        const token = localStorage.getItem('token');
+        if (!token) { alert('Log in to react'); return; }
+        try {
+            const res = await fetch('/api/stories/' + storyId + '/react', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ reaction }) });
+            const data = await res.json();
+            if (data.toggled !== undefined) { btn.classList.toggle('active'); }
+            // Update count in button text
+            if (data.reactions) { const count = data.reactions[reaction] || 0; const emoji = {inspired:'💜',relatable:'🤝',hopeful:'🌟',thankYou:'🙏'}[reaction]; btn.textContent = emoji + ' ' + reaction.charAt(0).toUpperCase()+reaction.slice(1) + ' (' + count + ')'; }
+        } catch(e) {}
+    }
+
+    async function addComment(storyId) {
+        const token = localStorage.getItem('token');
+        const input = document.getElementById('storyCommentInput');
+        const text = input?.value?.trim();
+        if (!text) return;
+        try {
+            await fetch('/api/stories/' + storyId + '/comment', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ text }) });
+            input.value = '';
+            // Reload modal
+            document.querySelector('div[style*="position:fixed"]')?.remove();
+            openStoryDetail(storyId);
+        } catch(e) {}
+    }
+
+    async function bookmarkStory(storyId) {
+        const token = localStorage.getItem('token');
+        if (!token) { alert('Log in to bookmark'); return; }
+        const res = await fetch('/api/stories/' + storyId + '/bookmark', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token } });
+        const data = await res.json();
+        alert(data.message || 'Bookmarked!');
+    }
+
+    async function reportStory(storyId) {
+        if (!confirm('Report this story for review?')) return;
+        const token = localStorage.getItem('token');
+        if (!token) { alert('Log in to report'); return; }
+        await fetch('/api/stories/' + storyId + '/report', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ reason: 'User reported' }) });
+        alert('Story reported. Our team will review it.');
+    }
     </script>
 </body>
 </html>

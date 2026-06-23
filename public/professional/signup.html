@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Registration - ABLE</title>
+    <link rel="stylesheet" href="/professional/auth.css">
+</head>
+<body>
+    <div class="auth-page">
+        <div class="auth-left">
+            <div class="auth-left-content">
+                <img src="/images/logo.svg" alt="ABLE">
+                <h1>Join Our Professional Network</h1>
+                <p>Help people heal. Connect with clients who need your expertise. Build your practice on ABLE.</p>
+                <div class="auth-features">
+                    <div class="auth-feat"><span>🎯</span> AI-matched client referrals</div>
+                    <div class="auth-feat"><span>📅</span> Flexible scheduling</div>
+                    <div class="auth-feat"><span>🔒</span> Secure video, audio & chat sessions</div>
+                    <div class="auth-feat"><span>👥</span> 50,000+ active wellness seekers</div>
+                    <div class="auth-feat"><span>📊</span> Professional dashboard & tools</div>
+                </div>
+            </div>
+        </div>
+        <div class="auth-right">
+            <div class="auth-form-box" id="formBox">
+                <h2>Professional Registration</h2>
+                <p class="auth-sub">Complete your application to join ABLE</p>
+
+                <div class="step-indicator">
+                    <div class="step-tab active" data-s="1"><span class="num">1</span> Personal</div>
+                    <div class="step-tab" data-s="2"><span class="num">2</span> Professional</div>
+                    <div class="step-tab" data-s="3"><span class="num">3</span> License</div>
+                </div>
+
+                <form id="profForm" onsubmit="submitForm(event)">
+                    <!-- Step 1 -->
+                    <div class="form-step active" id="s1">
+                        <div class="input-row">
+                            <div class="input-group"><label>Full Name *</label><input type="text" id="fullName" required placeholder="Dr. Jane Smith"></div>
+                            <div class="input-group"><label>Email *</label><input type="email" id="email" required placeholder="jane@practice.com"></div>
+                        </div>
+                        <div class="input-row">
+                            <div class="input-group"><label>Password *</label><input type="password" id="password" required minlength="8" placeholder="Min 8 characters"></div>
+                            <div class="input-group"><label>Confirm Password *</label><input type="password" id="confirmPass" required placeholder="••••••••"></div>
+                        </div>
+                        <div class="input-group"><label>Phone (optional)</label><input type="tel" id="phone" placeholder="+1 (555) 000-0000"></div>
+                        <button type="button" class="btn-primary" onclick="goStep(2)">Continue →</button>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="form-step" id="s2">
+                        <div class="input-row">
+                            <div class="input-group"><label>Professional Title *</label><input type="text" id="title" required placeholder="Clinical Psychologist"></div>
+                            <div class="input-group"><label>Years of Experience *</label><input type="number" id="exp" min="0" max="60" value="1" required></div>
+                        </div>
+                        <div class="input-group"><label>Specializations * (select at least 1)</label>
+                            <div class="chips" id="specChips"><span class="chip-item" data-v="Anxiety">Anxiety</span><span class="chip-item" data-v="Depression">Depression</span><span class="chip-item" data-v="Trauma">Trauma</span><span class="chip-item" data-v="PTSD">PTSD</span><span class="chip-item" data-v="Relationships">Relationships</span><span class="chip-item" data-v="Stress">Stress</span><span class="chip-item" data-v="Self-Esteem">Self-Esteem</span><span class="chip-item" data-v="Grief">Grief</span><span class="chip-item" data-v="Family">Family</span><span class="chip-item" data-v="Addiction">Addiction</span><span class="chip-item" data-v="Youth">Youth</span><span class="chip-item" data-v="Career">Career</span></div>
+                        </div>
+                        <div class="input-group"><label>Session Types * (select at least 1)</label>
+                            <div class="chips" id="sessChips"><span class="chip-item" data-v="video">📹 Video</span><span class="chip-item" data-v="audio">📞 Audio</span><span class="chip-item" data-v="chat">💬 Chat</span><span class="chip-item" data-v="in-person">🏢 In-Person</span></div>
+                        </div>
+                        <div class="input-group"><label>Languages</label><input type="text" id="langs" placeholder="English, Hindi, Spanish"></div>
+                        <div class="input-group"><label>Bio * (50-1000 chars)</label><textarea id="bio" required minlength="50" maxlength="1000" placeholder="Your approach, experience, and what clients can expect..."></textarea></div>
+                        <div class="btn-row"><button type="button" class="btn-secondary" onclick="goStep(1)">← Back</button><button type="button" class="btn-primary" onclick="goStep(3)">Continue →</button></div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="form-step" id="s3">
+                        <div class="input-row">
+                            <div class="input-group"><label>License Number *</label><input type="text" id="licNum" required placeholder="PSY-12345"></div>
+                            <div class="input-group"><label>Licensing Authority *</label><input type="text" id="licAuth" required placeholder="APA, BPS, RCI..."></div>
+                        </div>
+                        <div class="input-row">
+                            <div class="input-group"><label>Country</label><input type="text" id="licCountry" placeholder="India, USA, UK..."></div>
+                            <div class="input-group"><label>State / Province</label><input type="text" id="licState" placeholder="California, Maharashtra..."></div>
+                        </div>
+                        <div class="terms-row"><input type="checkbox" id="terms" required><span>I confirm I am a licensed mental health professional and agree to ABLE's <a href="#">Terms</a> and <a href="#">Professional Guidelines</a>.</span></div>
+                        <div class="msg-error" id="errMsg"></div>
+                        <div class="btn-row"><button type="button" class="btn-secondary" onclick="goStep(2)">← Back</button><button type="submit" class="btn-primary">Submit Application</button></div>
+                    </div>
+                </form>
+                <div class="auth-bottom">Already registered? <a href="/professional/login.html">Log in</a></div>
+            </div>
+
+            <!-- Success -->
+            <div class="success-panel" id="successPanel" style="display:none">
+                <div class="icon">✅</div>
+                <h2>Application Submitted!</h2>
+                <p>Your professional account has been submitted for review. You'll receive access to the professional dashboard after admin approval.</p>
+                <a href="/professional/login.html" class="btn-primary" style="display:inline-block;width:auto;padding:0.85rem 2rem;margin-top:1.5rem;text-decoration:none">Go to Login →</a>
+            </div>
+        </div>
+    </div>
+    <script>
+    document.querySelectorAll('.chip-item').forEach(c => c.addEventListener('click', () => c.classList.toggle('on')));
+    function getChips(id) { return [...document.querySelectorAll('#'+id+' .chip-item.on')].map(c => c.dataset.v); }
+
+    function goStep(n) {
+        document.querySelectorAll('.form-step').forEach(s => s.classList.remove('active'));
+        document.getElementById('s'+n).classList.add('active');
+        document.querySelectorAll('.step-tab').forEach(t => { const s = parseInt(t.dataset.s); t.classList.remove('active','done'); if (s < n) t.classList.add('done'); if (s === n) t.classList.add('active'); });
+    }
+
+    async function submitForm(e) {
+        e.preventDefault();
+        const err = document.getElementById('errMsg'); err.style.display = 'none';
+        if (document.getElementById('password').value !== document.getElementById('confirmPass').value) { err.textContent = 'Passwords do not match'; err.style.display = 'block'; return; }
+        const specializations = getChips('specChips'), sessionTypes = getChips('sessChips');
+        if (!specializations.length) { err.textContent = 'Select at least one specialization'; err.style.display = 'block'; return; }
+        if (!sessionTypes.length) { err.textContent = 'Select at least one session type'; err.style.display = 'block'; return; }
+
+        const body = { fullName: document.getElementById('fullName').value, email: document.getElementById('email').value, password: document.getElementById('password').value, phone: document.getElementById('phone').value, title: document.getElementById('title').value, experienceYears: parseInt(document.getElementById('exp').value), specializations, sessionTypes, languages: document.getElementById('langs').value.split(',').map(s=>s.trim()).filter(Boolean), bio: document.getElementById('bio').value, licenseNumber: document.getElementById('licNum').value, licensingAuthority: document.getElementById('licAuth').value, licenseCountry: document.getElementById('licCountry').value, licenseState: document.getElementById('licState').value };
+
+        try {
+            const res = await fetch('/professional/api/signup', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+            const data = await res.json();
+            if (!res.ok) { err.textContent = data.error; err.style.display = 'block'; return; }
+            document.getElementById('formBox').style.display = 'none';
+            document.getElementById('successPanel').style.display = 'block';
+        } catch(e) { err.textContent = 'Network error. Try again.'; err.style.display = 'block'; }
+    }
+    </script>
+</body>
+</html>

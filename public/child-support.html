@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child Support Guide - ABLE</title>
+    <link rel="stylesheet" href="dashboard-styles.css">
+    <link rel="stylesheet" href="care-hub.css">
+<link rel="stylesheet" href="/loader.css">
+</head>
+<body>
+    <script src="/loader.js"></script>
+    <div id="sidebar"></div>
+    <script src="sidebar-nav.js"></script>
+
+    <div class="main-content">
+        <header class="topbar">
+            <button class="menu-toggle" id="menuToggle"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="search-bar"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input type="text" placeholder="Search child support guides..."></div>
+            <div class="topbar-actions"><div class="user-profile"><img src="https://ui-avatars.com/api/?name=User&background=E67E22&color=fff" alt="User"><div class="user-info"><span class="user-name">User</span><span class="user-role">Caregiver</span></div></div></div>
+        </header>
+
+        <main class="dashboard-content">
+            <!-- Hero -->
+            <div class="care-hero" style="background:linear-gradient(135deg,#F0F7FF,#EFF6FF,#F5F3FF)">
+                <div class="care-hero-content">
+                    <h1>Child Support Guide</h1>
+                    <p class="hero-subtitle">Gentle tools to understand, support, and guide your child. This is not a diagnosis tool — it's a compass for caregivers.</p>
+                    <div class="care-hero-actions">
+                        <button class="ch-btn-primary" onclick="scrollToSection('ageSection')">🧒 Start Support Guide</button>
+                        <button class="ch-btn-secondary" onclick="scrollToSection('scriptsSection')">💬 Conversation Scripts</button>
+                    </div>
+                    <p class="care-disclaimer">⚠️ ABLE provides educational guidance for parents/caregivers. It is not a medical provider, therapist, or emergency service. For serious concerns, consult a professional.</p>
+                </div>
+            </div>
+
+            <!-- Step 1: Age Group -->
+            <div class="ch-section" id="ageSection">
+                <h3 class="ch-section-title">Step 1: Select Child's Age Group</h3>
+                <p class="ch-section-desc">Content and guidance are tailored for each developmental stage.</p>
+                <div class="ch-age-grid" id="ageGroups">
+                    <div class="ch-skeleton ch-skeleton-card"></div>
+                    <div class="ch-skeleton ch-skeleton-card"></div>
+                </div>
+            </div>
+
+            <!-- Step 2: Concern -->
+            <div class="ch-section" id="concernSection" style="display:none">
+                <h3 class="ch-section-title">Step 2: What are you noticing?</h3>
+                <p class="ch-section-desc">Select the concern that best describes what you're observing.</p>
+                <div class="ch-concern-chips" id="concerns"></div>
+            </div>
+
+            <!-- Result -->
+            <div class="ch-section" id="resultSection" style="display:none">
+                <div class="ch-focus-result" id="resultContent"></div>
+            </div>
+
+            <!-- Conversation Scripts -->
+            <div class="ch-section" id="scriptsSection">
+                <h3 class="ch-section-title">💬 Conversation Scripts</h3>
+                <p class="ch-section-desc">Ready-to-use phrases for difficult moments</p>
+                <div id="scriptCards"></div>
+            </div>
+
+            <!-- Emergency -->
+            <div class="ch-emergency">
+                <div class="ch-emergency-icon">🚨</div>
+                <div class="ch-emergency-text">
+                    <h4>Is the child in immediate danger?</h4>
+                    <p>If a child is at risk of harm, being abused, or expressing suicidal thoughts — do not show this page. Contact emergency services immediately.</p>
+                    <p style="margin-top:0.3rem;font-size:0.72rem">📞 Emergency: 911 • 📞 Childhelp Hotline: 1-800-422-4453 • 📞 Crisis Lifeline: 988</p>
+                </div>
+                <a href="tel:911" class="ch-emergency-btn">Call 911</a>
+            </div>
+        </main>
+    </div>
+
+    <div class="ch-toast" id="toast"></div>
+    <script src="dashboard.js"></script>
+
+    <script>
+    const token = localStorage.getItem('token');
+    let pageData = null;
+    let selectedAge = '';
+
+    function scrollToSection(id) { document.getElementById(id)?.scrollIntoView({ behavior:'smooth', block:'start' }); }
+    function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
+
+    async function loadPage() {
+        try {
+            const res = await fetch('/api/child-support');
+            pageData = await res.json();
+            renderAgeGroups();
+            renderScripts();
+        } catch(e) { document.getElementById('ageGroups').innerHTML = '<div class="ch-empty"><div class="ch-empty-icon">📡</div><h4>Unable to load</h4><p>Check your connection and refresh the page.</p></div>'; }
+    }
+
+    function renderAgeGroups() {
+        const groups = (pageData.ageGroups || []).filter(g => g.isActive !== false);
+        document.getElementById('ageGroups').innerHTML = groups.map(g => `
+            <div class="ch-age-btn" onclick="selectAge('${g.range}', this)">
+                <h4>${g.label}</h4>
+                <p>${g.description}</p>
+            </div>
+        `).join('');
+    }
+
+    function selectAge(range, el) {
+        selectedAge = range;
+        document.querySelectorAll('.ch-age-btn').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        renderConcerns();
+        document.getElementById('resultSection').style.display = 'none';
+    }
+
+    function renderConcerns() {
+        const concerns = (pageData.concerns || []).filter(c => c.isActive && c.ageGroups.includes(selectedAge));
+        document.getElementById('concernSection').style.display = 'block';
+        document.getElementById('concerns').innerHTML = concerns.map(c => `
+            <button class="ch-concern-chip" onclick="selectConcern('${c.slug}', this)">${c.title}</button>
+        `).join('');
+        setTimeout(() => scrollToSection('concernSection'), 100);
+    }
+
+    async function selectConcern(slug, el) {
+        document.querySelectorAll('.ch-concern-chip').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+
+        let concern = null;
+        if (token) {
+            try {
+                const res = await fetch('/api/child-support/recommend', { method:'POST', headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'}, body: JSON.stringify({ ageGroup: selectedAge, concern: slug }) });
+                const data = await res.json();
+                if (data.found) concern = data.concern;
+            } catch(e) {}
+        }
+        if (!concern) concern = (pageData.concerns || []).find(c => c.slug === slug && c.ageGroups.includes(selectedAge));
+        if (concern) renderResult(concern);
+    }
+
+    function renderResult(c) {
+        document.getElementById('resultSection').style.display = 'block';
+        document.getElementById('resultContent').innerHTML = `
+            <h3>Supporting a ${selectedAge} year old with: ${c.title}</h3>
+            ${c.signs?.length ? `<div class="ch-result-block"><h4>⚠️ Signs you may notice</h4><ul>${c.signs.map(s=>'<li>'+s+'</li>').join('')}</ul></div>` : ''}
+            ${c.whatToDo?.length ? `<div class="ch-result-block do-block"><h4>✅ What you can do today</h4><ul>${c.whatToDo.map(s=>'<li>'+s+'</li>').join('')}</ul></div>` : ''}
+            ${c.whatToAvoid?.length ? `<div class="ch-result-block avoid-block"><h4>❌ What to avoid</h4><ul>${c.whatToAvoid.map(s=>'<li>'+s+'</li>').join('')}</ul></div>` : ''}
+            ${c.conversationStarters?.length ? `<div class="ch-result-block convo-block"><h4>💬 Try saying this</h4>${c.conversationStarters.map(s=>'<div class="ch-script-card"><div class="ch-script-say">"'+s+'"</div></div>').join('')}</div>` : ''}
+            ${c.activities?.length ? `<div class="ch-result-block"><h4>🎯 Activities to try</h4><ul>${c.activities.map(s=>'<li>'+s+'</li>').join('')}</ul></div>` : ''}
+            ${c.whenToSeekHelp?.length ? `<div class="ch-result-block seek-block"><h4>🩺 Seek professional help if...</h4><ul>${c.whenToSeekHelp.map(s=>'<li>'+s+'</li>').join('')}</ul></div>` : ''}
+        `;
+        setTimeout(() => scrollToSection('resultSection'), 100);
+        showToast('✓ Guidance loaded for ' + c.title);
+    }
+
+    function renderScripts() {
+        const concerns = (pageData.concerns || []).filter(c => c.isActive && c.conversationStarters?.length);
+        const scripts = concerns.slice(0, 4).map(c => ({
+            situation: c.title,
+            say: c.conversationStarters[0],
+            avoid: c.whatToAvoid?.[0] || ''
+        }));
+        document.getElementById('scriptCards').innerHTML = scripts.map(s => `
+            <div class="ch-script-card">
+                <div class="ch-script-situation">When child shows: ${s.situation}</div>
+                <div class="ch-script-say">"${s.say}"</div>
+                ${s.avoid ? '<div class="ch-script-avoid">"'+s.avoid+'"</div>' : ''}
+            </div>
+        `).join('');
+    }
+
+    loadPage();
+    </script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Posts - Professional Portal</title>
+    <link rel="stylesheet" href="/professional/portal.css">
+<link rel="stylesheet" href="/loader.css">
+</head>
+<body>
+    <script src="/loader.js"></script>
+    <div class="portal-layout">
+            <div id="portalSidebar"></div>
+    <script src="/professional/nav.js"></script>
+        <main class="portal-main">
+            <header class="portal-header">
+                <button class="portal-menu-toggle" onclick="document.getElementById('portalSidebar').classList.toggle('open')">☰</button>
+                <h1>My Posts & Tips</h1>
+                <button style="padding:0.5rem 1.25rem;background:#E67E22;color:white;border:none;border-radius:8px;font-weight:600;font-size:0.85rem;cursor:pointer" onclick="showCompose()">+ New Post</button>
+            </header>
+            <div class="portal-content">
+                <p style="font-size:0.85rem;color:#6B7280;margin-bottom:1.5rem">Share tips, insights, and articles that appear on your public profile. Help potential clients understand your approach.</p>
+
+                <!-- Compose -->
+                <div class="portal-card" id="composeCard" style="display:none">
+                    <h3 id="composeTitle">Create Post</h3>
+                    <div class="p-field"><label>Title *</label><input type="text" id="postTitle" maxlength="200" placeholder="e.g. 5 Tips for Managing Anxiety at Work"></div>
+                    <div class="p-field"><label>Category</label>
+                        <select id="postCategory" style="width:100%;padding:0.7rem;border:1.5px solid #E5E7EB;border-radius:10px;font-size:0.88rem">
+                            <option value="tip">💡 Tip</option>
+                            <option value="article">📝 Article</option>
+                            <option value="insight">🧠 Insight</option>
+                            <option value="resource">📚 Resource</option>
+                            <option value="announcement">📢 Announcement</option>
+                        </select>
+                    </div>
+                    <div class="p-field"><label>Content * (max 5000 chars)</label><textarea id="postContent" rows="8" maxlength="5000" placeholder="Write your post content here... Share your expertise, tips, or insights that would help potential clients."></textarea></div>
+                    <div style="display:flex;gap:0.5rem">
+                        <button style="padding:0.7rem 1.5rem;background:#E67E22;color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer" onclick="submitPost()">Publish Post</button>
+                        <button style="padding:0.7rem 1.5rem;background:white;color:#374151;border:1.5px solid #E5E7EB;border-radius:8px;font-weight:600;cursor:pointer" onclick="hideCompose()">Cancel</button>
+                    </div>
+                    <div id="postMsg" style="display:none;margin-top:0.75rem;font-size:0.8rem;padding:0.5rem;border-radius:6px;text-align:center"></div>
+                </div>
+
+                <!-- Posts List -->
+                <div id="postsList"><p class="portal-empty">Loading posts...</p></div>
+            </div>
+        </main>
+    </div>
+    <style>
+        .p-field { margin-bottom:1rem; }
+        .p-field label { display:block; font-size:0.78rem; font-weight:600; color:#374151; margin-bottom:0.3rem; }
+        .p-field input, .p-field textarea { width:100%; padding:0.7rem 1rem; border:1.5px solid #E5E7EB; border-radius:10px; font-size:0.88rem; outline:none; font-family:inherit; }
+        .p-field input:focus, .p-field textarea:focus { border-color:#E67E22; }
+        .post-card { background:white; border:1px solid #E5E7EB; border-radius:14px; padding:1.5rem; margin-bottom:1rem; }
+        .post-card h4 { font-size:1rem; font-weight:700; color:#1a1a2e; margin-bottom:0.3rem; }
+        .post-meta { font-size:0.75rem; color:#6B7280; margin-bottom:0.75rem; display:flex; gap:0.75rem; align-items:center; }
+        .post-cat { font-size:0.7rem; padding:0.2rem 0.5rem; border-radius:4px; font-weight:600; }
+        .post-cat-tip { background:#FEF3C7; color:#92400E; }
+        .post-cat-article { background:#EFF6FF; color:#2563EB; }
+        .post-cat-insight { background:#F3E8FF; color:#7C3AED; }
+        .post-cat-resource { background:#ECFDF5; color:#059669; }
+        .post-cat-announcement { background:#FEF2F2; color:#DC2626; }
+        .post-content { font-size:0.85rem; color:#374151; line-height:1.7; white-space:pre-wrap; }
+        .post-actions { display:flex; gap:0.4rem; margin-top:1rem; }
+        .post-btn { padding:0.35rem 0.75rem; border-radius:6px; font-size:0.75rem; font-weight:600; border:1px solid #E5E7EB; background:white; cursor:pointer; color:#374151; }
+        .post-btn:hover { border-color:#E67E22; color:#E67E22; }
+        .post-btn.del { color:#DC2626; border-color:#FECACA; }
+        .post-btn.del:hover { background:#FEF2F2; }
+    </style>
+    <script>
+    const token = localStorage.getItem('professionalToken');
+    if (!token) window.location.href = '/professional/login.html';
+    const headers = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+    let editingId = null;
+
+    function showCompose() { document.getElementById('composeCard').style.display = 'block'; editingId = null; document.getElementById('composeTitle').textContent = 'Create Post'; document.getElementById('postTitle').value = ''; document.getElementById('postContent').value = ''; document.getElementById('postCategory').value = 'tip'; }
+    function hideCompose() { document.getElementById('composeCard').style.display = 'none'; }
+
+    async function loadPosts() {
+        try {
+            const res = await fetch('/professional/api/posts', { headers });
+            if (res.status === 401) { localStorage.removeItem('professionalToken'); window.location.href = '/professional/login.html'; return; }
+            const data = await res.json();
+            const posts = data.posts || [];
+            if (!posts.length) { document.getElementById('postsList').innerHTML = '<div class="portal-empty" style="padding:2rem"><h4 style="margin-bottom:0.5rem">No posts yet</h4><p style="font-size:0.85rem;color:#6B7280">Create your first post to share tips and insights with potential clients.</p></div>'; return; }
+            document.getElementById('postsList').innerHTML = posts.map(p => `
+                <div class="post-card">
+                    <h4>${esc(p.title)}</h4>
+                    <div class="post-meta"><span class="post-cat post-cat-${p.category}">${p.category}</span><span>${timeAgo(p.createdAt)}</span><span>${p.isPublished ? '🟢 Published' : '🔴 Draft'}</span>${p.likes ? '<span>❤️ '+p.likes+'</span>' : ''}</div>
+                    <div class="post-content">${esc(p.content).substring(0, 300)}${p.content.length > 300 ? '...' : ''}</div>
+                    <div class="post-actions">
+                        <button class="post-btn" onclick="editPost('${p._id}','${esc(p.title).replace(/'/g,"\\'")}','${esc(p.content).replace(/'/g,"\\'")}','${p.category}')">Edit</button>
+                        <button class="post-btn ${p.isPublished ? '' : 'del'}" onclick="togglePublish('${p._id}',${!p.isPublished})">${p.isPublished ? 'Unpublish' : 'Publish'}</button>
+                        <button class="post-btn del" onclick="deletePost('${p._id}')">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        } catch(e) { document.getElementById('postsList').innerHTML = '<p class="portal-empty">Error loading posts</p>'; }
+    }
+
+    async function submitPost() {
+        const msg = document.getElementById('postMsg');
+        msg.style.display = 'none';
+        const title = document.getElementById('postTitle').value.trim();
+        const content = document.getElementById('postContent').value.trim();
+        const category = document.getElementById('postCategory').value;
+        if (!title || !content) { msg.textContent = 'Title and content required'; msg.style.background = '#FEF2F2'; msg.style.color = '#DC2626'; msg.style.display = 'block'; return; }
+
+        let res;
+        if (editingId) {
+            res = await fetch('/professional/api/posts/' + editingId, { method: 'PUT', headers, body: JSON.stringify({ title, content, category }) });
+        } else {
+            res = await fetch('/professional/api/posts', { method: 'POST', headers, body: JSON.stringify({ title, content, category }) });
+        }
+        if (res.ok) { hideCompose(); loadPosts(); }
+        else { const d = await res.json(); msg.textContent = d.error; msg.style.background = '#FEF2F2'; msg.style.color = '#DC2626'; msg.style.display = 'block'; }
+    }
+
+    function editPost(id, title, content, category) {
+        editingId = id;
+        document.getElementById('composeCard').style.display = 'block';
+        document.getElementById('composeTitle').textContent = 'Edit Post';
+        document.getElementById('postTitle').value = title;
+        document.getElementById('postContent').value = content;
+        document.getElementById('postCategory').value = category;
+        document.getElementById('composeCard').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function togglePublish(id, publish) { await fetch('/professional/api/posts/' + id, { method: 'PUT', headers, body: JSON.stringify({ isPublished: publish }) }); loadPosts(); }
+    async function deletePost(id) { if (!confirm('Delete this post?')) return; await fetch('/professional/api/posts/' + id, { method: 'DELETE', headers }); loadPosts(); }
+
+    function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function timeAgo(d) { const s = Math.floor((Date.now()-new Date(d))/1000); if(s<60)return 'Just now'; if(s<3600)return Math.floor(s/60)+'m ago'; if(s<86400)return Math.floor(s/3600)+'h ago'; return Math.floor(s/86400)+'d ago'; }
+    function logout() { localStorage.removeItem('professionalToken'); window.location.href = '/professional/login.html'; }
+    loadPosts();
+    </script>
+</body>
+</html>

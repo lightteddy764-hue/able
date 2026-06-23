@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page Manager - ABLE Admin</title>
+    <link rel="stylesheet" href="admin.css">
+    <style>
+        .tabs{display:flex;gap:0.25rem;flex-wrap:wrap;margin-bottom:1.5rem;border-bottom:2px solid #e5e7eb;padding-bottom:0}
+        .tab{padding:0.6rem 1rem;border:none;background:none;font-size:0.8rem;font-weight:600;color:#6b7280;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.2s;white-space:nowrap}
+        .tab.active{color:#E67E22;border-bottom-color:#E67E22}
+        .tab:hover{color:#E67E22}
+        .tab-content{display:none}
+        .tab-content.active{display:block}
+        .edit-card{background:white;border:1px solid #e5e7eb;border-radius:10px;padding:1.5rem;margin-bottom:1rem}
+        .edit-card h3{font-size:0.95rem;font-weight:700;margin-bottom:1rem;color:#111}
+        .item-row{display:flex;align-items:center;gap:0.75rem;padding:0.6rem 0;border-bottom:1px solid #f3f4f6}
+        .item-row:last-child{border-bottom:none}
+        .item-row .item-text{flex:1;font-size:0.85rem;color:#374151}
+        .add-btn{display:inline-flex;align-items:center;gap:0.4rem;padding:0.5rem 1rem;background:#f0fdf4;color:#10b981;border:1px solid #bbf7d0;border-radius:6px;font-size:0.8rem;font-weight:600;cursor:pointer;margin-top:0.75rem}
+        .add-btn:hover{background:#dcfce7}
+        .toast{position:fixed;bottom:2rem;right:2rem;background:#111827;color:white;padding:1rem 1.5rem;border-radius:8px;font-size:0.85rem;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none}
+        .toast.show{opacity:1}
+        .array-item{background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:1rem;margin-bottom:0.75rem;position:relative}
+        .array-item .remove-btn{position:absolute;top:0.5rem;right:0.5rem;background:none;border:none;color:#ef4444;cursor:pointer;font-size:1.1rem}
+    </style>
+</head>
+<body>
+    <div class="main">
+        <header class="header">
+            <div style="display:flex;align-items:center;gap:1rem">
+                <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+                <h1>Landing Page Manager</h1>
+            </div>
+            <div class="header-right">
+                <button class="btn-primary" onclick="saveAll()">💾 Save All Changes</button>
+            </div>
+        </header>
+        <div class="container">
+            <div class="tabs" id="tabs">
+                <button class="tab active" data-tab="hero">Hero</button>
+                <button class="tab" data-tab="features">Features</button>
+                <button class="tab" data-tab="showcase">Showcase</button>
+                <button class="tab" data-tab="howitworks">How It Works</button>
+                <button class="tab" data-tab="stats">Stats</button>
+                <button class="tab" data-tab="therapists">Therapists</button>
+                <button class="tab" data-tab="testimonials">Testimonials</button>
+                <button class="tab" data-tab="pricing">Pricing</button>
+                <button class="tab" data-tab="faq">FAQ</button>
+                <button class="tab" data-tab="footer">Footer & Social</button>
+            </div>
+
+            <!-- Hero Tab -->
+            <div class="tab-content active" id="tab-hero">
+                <div class="edit-card">
+                    <h3>Hero Section</h3>
+                    <div class="form-group">
+                        <label>Badge Text</label>
+                        <input type="text" id="heroBadge">
+                    </div>
+                    <div class="form-group">
+                        <label>Headline</label>
+                        <textarea id="heroHeadline" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Subtitle</label>
+                        <textarea id="heroSubtitle" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="edit-card">
+                    <h3>CTA Buttons</h3>
+                    <div id="heroCTAsList"></div>
+                    <button class="add-btn" onclick="addCTA()">+ Add CTA</button>
+                </div>
+                <div class="edit-card">
+                    <h3>Trust Items</h3>
+                    <div id="heroTrustList"></div>
+                    <button class="add-btn" onclick="addTrustItem()">+ Add Trust Item</button>
+                </div>
+            </div>
+
+            <!-- Features Tab -->
+            <div class="tab-content" id="tab-features">
+                <div class="edit-card">
+                    <h3>Feature Cards</h3>
+                    <div id="featuresList"></div>
+                    <button class="add-btn" onclick="addFeature()">+ Add Feature</button>
+                </div>
+            </div>
+
+            <!-- Showcase Tab -->
+            <div class="tab-content" id="tab-showcase">
+                <div class="edit-card">
+                    <h3>Platform Showcase Tabs</h3>
+                    <div id="showcaseList"></div>
+                    <button class="add-btn" onclick="addShowcase()">+ Add Showcase Tab</button>
+                </div>
+            </div>
+
+            <!-- How It Works Tab -->
+            <div class="tab-content" id="tab-howitworks">
+                <div class="edit-card">
+                    <h3>Steps</h3>
+                    <div id="stepsList"></div>
+                    <button class="add-btn" onclick="addStep()">+ Add Step</button>
+                </div>
+            </div>
+
+            <!-- Stats Tab -->
+            <div class="tab-content" id="tab-stats">
+                <div class="edit-card">
+                    <h3>Stat Blocks</h3>
+                    <div id="statsList"></div>
+                    <button class="add-btn" onclick="addStat()">+ Add Stat</button>
+                </div>
+            </div>
+
+            <!-- Therapists Tab -->
+            <div class="tab-content" id="tab-therapists">
+                <div class="edit-card">
+                    <h3>Therapist Showcase Cards</h3>
+                    <div id="therapistsList"></div>
+                    <button class="add-btn" onclick="addTherapist()">+ Add Therapist</button>
+                </div>
+            </div>
+
+            <!-- Testimonials Tab -->
+            <div class="tab-content" id="tab-testimonials">
+                <div class="edit-card">
+                    <h3>Testimonials</h3>
+                    <div id="testimonialsList"></div>
+                    <button class="add-btn" onclick="addTestimonial()">+ Add Testimonial</button>
+                </div>
+            </div>
+
+            <!-- Pricing Tab -->
+            <div class="tab-content" id="tab-pricing">
+                <div class="edit-card">
+                    <h3>Pricing Plans</h3>
+                    <div id="pricingList"></div>
+                    <button class="add-btn" onclick="addPricing()">+ Add Plan</button>
+                </div>
+            </div>
+
+            <!-- FAQ Tab -->
+            <div class="tab-content" id="tab-faq">
+                <div class="edit-card">
+                    <h3>FAQ Items</h3>
+                    <div id="faqList"></div>
+                    <button class="add-btn" onclick="addFAQ()">+ Add FAQ</button>
+                </div>
+            </div>
+
+            <!-- Footer & Social Tab -->
+            <div class="tab-content" id="tab-footer">
+                <div class="edit-card">
+                    <h3>Brand Description</h3>
+                    <div class="form-group">
+                        <label>Footer Brand Text</label>
+                        <textarea id="footerBrandDescription" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="edit-card">
+                    <h3>Product Links</h3>
+                    <div id="productLinksList"></div>
+                    <button class="add-btn" onclick="addFooterLink('product')">+ Add Link</button>
+                </div>
+                <div class="edit-card">
+                    <h3>Company Links</h3>
+                    <div id="companyLinksList"></div>
+                    <button class="add-btn" onclick="addFooterLink('company')">+ Add Link</button>
+                </div>
+                <div class="edit-card">
+                    <h3>Legal Links</h3>
+                    <div id="legalLinksList"></div>
+                    <button class="add-btn" onclick="addFooterLink('legal')">+ Add Link</button>
+                </div>
+                <div class="edit-card">
+                    <h3>Social Proof</h3>
+                    <div class="form-group">
+                        <label>Rating Text</label>
+                        <input type="text" id="socialProofRating">
+                    </div>
+                    <div class="form-group">
+                        <label>User Count</label>
+                        <input type="text" id="socialProofUserCount">
+                    </div>
+                    <div class="form-group">
+                        <label>Media Logos (comma-separated)</label>
+                        <input type="text" id="socialProofLogos">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="admin-nav.js"></script>
+    <script>
+    const TOKEN = localStorage.getItem('adminToken');
+    if (!TOKEN) window.location.href = '/admin/';
+    let pageData = {};
+
+    // Tabs
+    document.querySelectorAll('.tab').forEach(t => {
+        t.addEventListener('click', () => {
+            document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
+            t.classList.add('active');
+            document.getElementById('tab-' + t.dataset.tab).classList.add('active');
+        });
+    });
+
+    function toast(msg, isError) {
+        const el = document.getElementById('toast');
+        el.textContent = msg;
+        el.style.background = isError ? '#ef4444' : '#111827';
+        el.classList.add('show');
+        setTimeout(() => el.classList.remove('show'), 3000);
+    }
+
+    async function loadData() {
+        try {
+            const res = await fetch('/admin/api/landing', { headers: { Authorization: 'Bearer ' + TOKEN } });
+            if (!res.ok) throw new Error('Failed to load');
+            pageData = await res.json();
+            renderAll();
+        } catch (e) {
+            toast('Error loading data: ' + e.message, true);
+        }
+    }
+
+    async function saveAll() {
+        collectData();
+        try {
+            const res = await fetch('/admin/api/landing', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + TOKEN },
+                body: JSON.stringify(pageData)
+            });
+            if (!res.ok) throw new Error('Save failed');
+            pageData = await res.json();
+            toast('✅ Landing page saved successfully!');
+            renderAll();
+        } catch (e) {
+            toast('Error: ' + e.message, true);
+        }
+    }
+
+    function renderAll() {
+        // Hero
+        document.getElementById('heroBadge').value = pageData.heroBadge || '';
+        document.getElementById('heroHeadline').value = pageData.heroHeadline || '';
+        document.getElementById('heroSubtitle').value = pageData.heroSubtitle || '';
+        renderCTAs();
+        renderTrustItems();
+        renderFeatures();
+        renderShowcase();
+        renderSteps();
+        renderStats();
+        renderTherapists();
+        renderTestimonials();
+        renderPricing();
+        renderFAQ();
+        renderFooter();
+    }
+
+    function collectData() {
+        pageData.heroBadge = document.getElementById('heroBadge').value;
+        pageData.heroHeadline = document.getElementById('heroHeadline').value;
+        pageData.heroSubtitle = document.getElementById('heroSubtitle').value;
+        pageData.footerBrandDescription = document.getElementById('footerBrandDescription').value;
+        pageData.socialProofRating = document.getElementById('socialProofRating').value;
+        pageData.socialProofUserCount = document.getElementById('socialProofUserCount').value;
+        pageData.socialProofLogos = document.getElementById('socialProofLogos').value.split(',').map(s => s.trim()).filter(Boolean);
+
+        // Collect CTAs
+        pageData.heroCTAs = [...document.querySelectorAll('#heroCTAsList .array-item')].map(el => ({
+            text: el.querySelector('[data-field="text"]').value,
+            link: el.querySelector('[data-field="link"]').value,
+            style: el.querySelector('[data-field="style"]').value
+        }));
+
+        // Trust items
+        pageData.heroTrustItems = [...document.querySelectorAll('#heroTrustList .array-item')].map(el => el.querySelector('input').value);
+
+        // Features
+        pageData.features = [...document.querySelectorAll('#featuresList .array-item')].map(el => ({
+            icon: el.querySelector('[data-field="icon"]').value,
+            title: el.querySelector('[data-field="title"]').value,
+            description: el.querySelector('[data-field="description"]').value
+        }));
+
+        // Showcase
+        pageData.platformShowcase = [...document.querySelectorAll('#showcaseList .array-item')].map(el => ({
+            tabId: el.querySelector('[data-field="tabId"]').value,
+            tabLabel: el.querySelector('[data-field="tabLabel"]').value,
+            badge: el.querySelector('[data-field="badge"]').value,
+            title: el.querySelector('[data-field="title"]').value,
+            description: el.querySelector('[data-field="description"]').value,
+            features: el.querySelector('[data-field="features"]').value.split('\n').filter(Boolean),
+            ctaText: el.querySelector('[data-field="ctaText"]').value,
+            ctaLink: el.querySelector('[data-field="ctaLink"]').value,
+            mockupHtml: el.querySelector('[data-field="mockupHtml"]').value
+        }));
+
+        // Steps
+        pageData.howItWorks = [...document.querySelectorAll('#stepsList .array-item')].map(el => ({
+            title: el.querySelector('[data-field="title"]').value,
+            description: el.querySelector('[data-field="description"]').value
+        }));
+
+        // Stats
+        pageData.stats = [...document.querySelectorAll('#statsList .array-item')].map(el => ({
+            number: el.querySelector('[data-field="number"]').value,
+            description: el.querySelector('[data-field="description"]').value
+        }));
+
+        // Therapists
+        pageData.therapists = [...document.querySelectorAll('#therapistsList .array-item')].map(el => ({
+            name: el.querySelector('[data-field="name"]').value,
+            role: el.querySelector('[data-field="role"]').value,
+            experience: el.querySelector('[data-field="experience"]').value,
+            color: el.querySelector('[data-field="color"]').value
+        }));
+
+        // Testimonials
+        pageData.testimonials = [...document.querySelectorAll('#testimonialsList .array-item')].map(el => ({
+            stars: parseInt(el.querySelector('[data-field="stars"]').value) || 5,
+            quote: el.querySelector('[data-field="quote"]').value,
+            authorName: el.querySelector('[data-field="authorName"]').value,
+            authorRole: el.querySelector('[data-field="authorRole"]').value
+        }));
+
+        // Pricing
+        pageData.pricing = [...document.querySelectorAll('#pricingList .array-item')].map(el => ({
+            name: el.querySelector('[data-field="name"]').value,
+            price: el.querySelector('[data-field="price"]').value,
+            features: el.querySelector('[data-field="features"]').value.split('\n').filter(Boolean),
+            ctaText: el.querySelector('[data-field="ctaText"]').value,
+            ctaLink: el.querySelector('[data-field="ctaLink"]').value,
+            isPopular: el.querySelector('[data-field="isPopular"]').checked
+        }));
+
+        // FAQ
+        pageData.faqItems = [...document.querySelectorAll('#faqList .array-item')].map(el => ({
+            question: el.querySelector('[data-field="question"]').value,
+            answer: el.querySelector('[data-field="answer"]').value
+        }));
+
+        // Footer links
+        pageData.footerProductLinks = [...document.querySelectorAll('#productLinksList .array-item')].map(el => ({
+            label: el.querySelector('[data-field="label"]').value,
+            href: el.querySelector('[data-field="href"]').value
+        }));
+        pageData.footerCompanyLinks = [...document.querySelectorAll('#companyLinksList .array-item')].map(el => ({
+            label: el.querySelector('[data-field="label"]').value,
+            href: el.querySelector('[data-field="href"]').value
+        }));
+        pageData.footerLegalLinks = [...document.querySelectorAll('#legalLinksList .array-item')].map(el => ({
+            label: el.querySelector('[data-field="label"]').value,
+            href: el.querySelector('[data-field="href"]').value
+        }));
+    }
+
+    // Render helpers
+    function renderCTAs() {
+        const c = document.getElementById('heroCTAsList');
+        c.innerHTML = (pageData.heroCTAs || []).map((item, i) => `
+            <div class="array-item">
+                <button class="remove-btn" onclick="this.parentElement.remove()">✕</button>
+                <div class="form-row">
+                    <div class="form-group"><label>Text</label><input data-field="text" value="${esc(item.text)}"></div>
+                    <div class="form-group"><label>Link</label><input data-field="link" value="${esc(item.link)}"></div>
+                </div>
+                <div class="form-group"><label>Style</label><select data-field="style"><option value="primary" ${item.style==='primary'?'selected':''}>Primary</option><option value="ghost" ${item.style==='ghost'?'selected':''}>Ghost</option></select></div>
+            </div>`).join('');
+    }
+    function addCTA() {
+        pageData.heroCTAs = pageData.heroCTAs || [];
+        pageData.heroCTAs.push({ text: '', link: '', style: 'primary' });
+        renderCTAs();
+    }
+
+    function renderTrustItems() {
+        const c = document.getElementById('heroTrustList');
+        c.innerHTML = (pageData.heroTrustItems || []).map((item, i) => `
+            <div class="array-item">
+                <button class="remove-btn" onclick="this.parentElement.remove()">✕</button>
+                <div class="form-group"><label>Trust Item</label><input value="${esc(item)}"></div>
+            </div>`).join('');
+    }
+    function addTrustItem() {
+        pageData.heroTrustItems = pageData.heroTrustItems || [];
+        pageData.heroTrustItems.push('');
+        renderTrustItems();
+    }
+
+    function renderFeatures() {
+        const c = document.getElementById('featuresList');
+        c.innerHTML = (pageData.features || []).map((item, i) => `
+            <div class="array-item">
+                <button class="remove-btn" onclick="this.parentElement.remove()">✕</button>
+                <div class="form-row">
+                    <div class="form-group"><label>Icon Key</label><input data-field="icon" value="${esc(item.icon)}"></div>
+                    <div class="form-group"><label>Title</label><input data-field="title" value="${esc(item.title)}"></div>
+                </div>
+                <div class="form-group"><label>Description</label><textarea data-field="description" rows="2">${esc(item.description)}</textarea></div>
+            </div>`).join('');
+    }
+    function addFeature() {
+        pageData.features = pageData.features || [];
+        pageData.features.push({ icon: '', title: '', description: '' });
+        renderFeatures();
+    }
+
+    function renderShowcase() {
+        const c = document.getElementById('showcaseList');
+        c.innerHTML = (pageData.platformShowcase || []).map((item, i) => `
+            <div class="array-item">
+                <button class="remove-btn" onclick="this.parentElement.remove()">✕</button>
+                <div class="form-row">
+                    <div class="form-group"><label>Tab ID</label><input data-field="tabId" value="${esc(item.tabId)}"></div>
+                    <div class="form-group"><label>Tab Label</label><input data-field="tabLabel" value="${esc(item.tabLabel)}"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Badge</label><input data-field="badge" value="${esc(item.badge)}"></div>
+                    <div class="form-group"><label>Title</label><input data-field="title" value="${esc(item.title)}"></div>
+                </div>
+                <div class="form-group"><label>Description</label><textarea data-field="description" rows="2">${esc(item.description)}</textarea></div>
+                <div class="form-group"><label>Features (one per line)</label><textarea data-field="features" rows="4">${(item.features||[]).join('\n')}</textarea></div>
+                <div class="form-row">
+                    <div class="form-group"><label>CTA Text</label><input data-field="ctaText" value="${esc(item.ctaText)}"></div>
+                    <div class="form-group"><label>CTA Link</label><input data-field="ctaLink" value="${esc(item.ctaLink)}"></div>
+                </div>
+                <div class="form-group"><label>Mockup HTML</label><textarea data-field="mockupHtml" rows="3">${esc(item.mockupHtml||'')}</textarea></div>
+            </div>`).join('');
+    }
+    function addShowcase() {
+        pageData.platformShowcase = pageData.platformShowcase || [];
+        pageData.platformShowcase.push({ tabId: '', tabLabel: '', badge: '', title: '', description: '', features: [], ctaText: '', ctaLink: '', mockupHtml: '' });
+        renderShowcase();
+    }
+
+    function renderSteps() {
+        const c = document.getElementById('stepsList');
+        c.innerHTML = (pageData.howItWorks || []).map((item, i) => `
+            <div class="array-item">
+                <button class="remove-btn" onclick="this.parentElement.remove()">✕</button>
+                <div class="form-group"><label>Title</label><input data-field="title" value="${esc(item.title)}"></div>
+                <div class="form-group"><label>Description</label><textarea data-field="description" rows="2">${esc(item.description)}</textarea></div>
+            </div>`).join('');
+    }
+    function addStep() {
+        pageData.howItWorks = pageData.howItWorks || [];
+        pageData.howItWorks.push({ title: '', description: '' });
+        renderSteps();
+    }
+
+    function renderStats() {
+        const c = document.getElementById('statsList');
+        c.innerHTML = (pageData.stats || []).map((item, i) => `
+            <div class="array-item">
+                <button class="remove-btn" onclick="this.parentElement.remove()">✕</button>
+                <div class="form-row">
+                    <div class="form-group"><label>Number</label><input data-field="number" value="${esc(item.number)}"></div>
+                    <div class="form-group"><label>Description</label><input data-field="description" value="${esc(item.description)}"></div>
+                </div>
+            </div>`).join('');
+    }
+    function addStat() {
+        pageData.stats = pageData.stats || [];
+        pageData.stats.push({ number: '', description: '' });
+        renderStats();
+    }
+
+    function renderTherapists() {
+        const c = document.getElementById('therapistsList');
+        c.innerHTML = (pageData.therapists || []).map((item, i) => `
+            <div class="array-item">
+                <button class="remove-btn" onclick="this.parentElement.remove()">✕</button>
+                <div class="form-row">
+                    <div class="form-group"><label>Name</label><input data-field="name" value="${esc(item.name)}"></div>
+                    <div class="form-group"><label>Role</label><input data-field="role" value="${esc(item.role)}"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Experience</label><input data-field="experience" value="${esc(item.experience)}"></div>
+                    <div class="form-group"><label>Color</label><input type="color" data-field="color" value="${item.color || '#E67E22'}"></div>
+                </div>
+            </div>`).join('');
+    }
+    function addTherapist() {
+        pageData.therapists = pageData.therapists || [];
+        pageData.therapists.push({ name: '', role: '', experience: '', color: '#E67E22' });
+        renderTherapists();
+    }
+
+    function renderTestimonials() {
+        const c = document.getElementById('testimonialsList');
+        c.innerHTML = (pageData.testimonials || []).map((item, i) => `
+            <div class="array-item">
+                <button class="remove-btn" onclick="this.parentElement.remove()">✕</button>
+                <div class="form-row">
+                    <div class="form-group"><label>Stars (1-5)</label><input type="number" min="1" max="5" data-field="stars" value="${item.stars||5}"></div>
+                    <div class="form-group"><label>Author Name</label><input data-field="authorName" value="${esc(item.authorName)}"></div>
+                </div>
+                <div class="form-group"><label>Author Role</label><input data-field="authorRole" value="${esc(item.authorRole)}"></div>
+                <div class="form-group"><label>Quote</label><textarea data-field="quote" rows="2">${esc(item.quote)}</textarea></div>
+            </div>`).join('');
+    }
+    function addTestimonial() {
+        pageData.testimonials = pageData.testimonials || [];
+        pageData.testimonials.push({ stars: 5, quote: '', authorName: '', authorRole: '' });
+        renderTestimonials();
+    }
+
+    function renderPricing() {
+        const c = document.getElementById('pricingList');
+        c.innerHTML = (pageData.pricing || []).map((item, i) => `
+            <div class="array-item">
+                <button class="remove-btn" onclick="this.parentElement.remove()">✕</button>
+                <div class="form-row">
+                    <div class="form-group"><label>Plan Name</label><input data-field="name" value="${esc(item.name)}"></div>
+                    <div class="form-group"><label>Price</label><input data-field="price" value="${esc(item.price)}"></div>
+                </div>
+                <div class="form-group"><label>Features (one per line)</label><textarea data-field="features" rows="4">${(item.features||[]).join('\n')}</textarea></div>
+                <div class="form-row">
+                    <div class="form-group"><label>CTA Text</label><input data-field="ctaText" value="${esc(item.ctaText)}"></div>
+                    <div class="form-group"><label>CTA Link</label><input data-field="ctaLink" value="${esc(item.ctaLink)}"></div>
+                </div>
+                <div class="form-group"><label class="check-label"><input type="checkbox" data-field="isPopular" ${item.isPopular?'checked':''}> Mark as Popular</label></div>
+            </div>`).join('');
+    }
+    function addPricing() {
+        pageData.pricing = pageData.pricing || [];
+        pageData.pricing.push({ name: '', price: '', features: [], ctaText: '', ctaLink: '', isPopular: false });
+        renderPricing();
+    }
+
+    function renderFAQ() {
+        const c = document.getElementById('faqList');
+        c.innerHTML = (pageData.faqItems || []).map((item, i) => `
+            <div class="array-item">
+                <button class="remove-btn" onclick="this.parentElement.remove()">✕</button>
+                <div class="form-group"><label>Question</label><input data-field="question" value="${esc(item.question)}"></div>
+                <div class="form-group"><label>Answer</label><textarea data-field="answer" rows="3">${esc(item.answer)}</textarea></div>
+            </div>`).join('');
+    }
+    function addFAQ() {
+        pageData.faqItems = pageData.faqItems || [];
+        pageData.faqItems.push({ question: '', answer: '' });
+        renderFAQ();
+    }
+
+    function renderFooter() {
+        document.getElementById('footerBrandDescription').value = pageData.footerBrandDescription || '';
+        document.getElementById('socialProofRating').value = pageData.socialProofRating || '';
+        document.getElementById('socialProofUserCount').value = pageData.socialProofUserCount || '';
+        document.getElementById('socialProofLogos').value = (pageData.socialProofLogos || []).join(', ');
+
+        renderFooterLinks('product', pageData.footerProductLinks);
+        renderFooterLinks('company', pageData.footerCompanyLinks);
+        renderFooterLinks('legal', pageData.footerLegalLinks);
+    }
+
+    function renderFooterLinks(type, items) {
+        const c = document.getElementById(type + 'LinksList');
+        c.innerHTML = (items || []).map((item, i) => `
+            <div class="array-item">
+                <button class="remove-btn" onclick="this.parentElement.remove()">✕</button>
+                <div class="form-row">
+                    <div class="form-group"><label>Label</label><input data-field="label" value="${esc(item.label)}"></div>
+                    <div class="form-group"><label>URL</label><input data-field="href" value="${esc(item.href)}"></div>
+                </div>
+            </div>`).join('');
+    }
+    function addFooterLink(type) {
+        const key = 'footer' + type.charAt(0).toUpperCase() + type.slice(1) + 'Links';
+        pageData[key] = pageData[key] || [];
+        pageData[key].push({ label: '', href: '#' });
+        renderFooterLinks(type, pageData[key]);
+    }
+
+    function esc(str) {
+        if (!str) return '';
+        return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // Init
+    loadData();
+    </script>
+</body>
+</html>

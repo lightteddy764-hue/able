@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ABLE - A Better Life Enabled | Your Mental Wellness Companion</title>
     <link rel="stylesheet" href="landing.css">
+<link rel="stylesheet" href="/loader.css">
 </head>
 <body>
+    <script src="/loader.js"></script>
     <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <div class="container">
@@ -14,11 +16,11 @@
                 <a href="/" class="logo"><img src="images/logo.svg" alt="ABLE" class="logo-icon"></a>
                 <ul class="nav-links" id="navLinks">
                     <li><a href="#features">Features</a></li>
+                    <li><a href="#platform">Platform</a></li>
                     <li><a href="#how-it-works">How It Works</a></li>
                     <li><a href="#therapists">Therapists</a></li>
                     <li><a href="#testimonials">Testimonials</a></li>
                     <li><a href="#pricing">Pricing</a></li>
-                    <li><a href="#faq">FAQ</a></li>
                 </ul>
                 <div class="nav-actions">
                     <a href="login.html" class="nav-login">Log In</a>
@@ -38,11 +40,11 @@
         </div>
         <ul class="mobile-menu-links">
             <li><a href="#features">Features</a></li>
+            <li><a href="#platform">Platform</a></li>
             <li><a href="#how-it-works">How It Works</a></li>
             <li><a href="#therapists">Therapists</a></li>
             <li><a href="#testimonials">Testimonials</a></li>
             <li><a href="#pricing">Pricing</a></li>
-            <li><a href="#faq">FAQ</a></li>
         </ul>
         <div class="mobile-menu-actions">
             <a href="login.html" class="mobile-btn-login">Log In</a>
@@ -56,17 +58,17 @@
         <div class="container">
             <div class="hero-grid">
                 <div class="hero-left">
-                    <div class="hero-badge">✨ Trusted by 50,000+ users worldwide</div>
-                    <h1>Transform Your Mental Wellness Journey With <span class="gradient-text">Expert Support</span> & AI Guidance</h1>
-                    <p class="hero-subtitle">Connect with licensed therapists, wellness coaches, and a supportive community designed to help you build a healthier and happier life.</p>
-                    <div class="hero-ctas">
+                    <div class="hero-badge" id="lp-hero-badge">✨ Trusted by 50,000+ users worldwide</div>
+                    <h1 id="lp-hero-headline">Transform Your Mental Wellness Journey With <span class="gradient-text">Expert Support</span> & AI Guidance</h1>
+                    <p class="hero-subtitle" id="lp-hero-subtitle">Connect with licensed therapists, wellness coaches, and a supportive community designed to help you build a healthier and happier life.</p>
+                    <div class="hero-ctas" id="lp-hero-ctas">
                         <a href="signup.html" class="btn-primary-lg">Start Free Assessment</a>
                         <a href="#how-it-works" class="btn-ghost">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><polygon points="5,3 19,12 5,21" fill="currentColor"/></svg>
                             Watch Demo
                         </a>
                     </div>
-                    <div class="hero-trust-row">
+                    <div class="hero-trust-row" id="lp-hero-trust">
                         <div class="trust-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"/><path d="M22 4L12 14.01l-3-3" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> 1,200+ Licensed Therapists</div>
                         <div class="trust-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"/><path d="M22 4L12 14.01l-3-3" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> 50,000+ Wellness Sessions</div>
                         <div class="trust-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"/><path d="M22 4L12 14.01l-3-3" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> 4.9/5 Average Rating</div>
@@ -94,7 +96,7 @@
     <!-- Social Proof -->
     <section class="social-proof">
         <div class="container">
-            <div class="sp-inner">
+            <div class="sp-inner" id="lp-social-proof">
                 <div class="sp-rating">
                     <div class="sp-stars">★★★★★</div>
                     <span>4.9/5 based on 12,000+ reviews</span>
@@ -123,7 +125,7 @@
             <div class="section-label">Features</div>
             <h2 class="section-title">Everything You Need for <span class="gradient-text">Mental Wellness</span></h2>
             <p class="section-subtitle">Comprehensive tools and support designed to guide every step of your wellness journey</p>
-            <div class="features-grid">
+            <div class="features-grid" id="lp-features-grid">
                 <div class="feature-card">
                     <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke="currentColor" stroke-width="2"/><path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9 9h.01M15 9h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></div>
                     <h3>AI Wellness Assessment</h3>
@@ -158,12 +160,207 @@
         </div>
     </section>
 
+    <!-- Platform Showcase -->
+    <section id="platform" class="platform-showcase">
+        <div class="container">
+            <div class="section-label">Inside ABLE</div>
+            <h2 class="section-title">See What Awaits You <span class="gradient-text">After Sign Up</span></h2>
+            <p class="section-subtitle">A full wellness ecosystem built around your needs — here's what you'll unlock with your free account</p>
+            
+            <div class="showcase-tabs" id="lp-showcase-tabs">
+                <button class="sc-tab active" data-showcase="dashboard">Dashboard</button>
+                <button class="sc-tab" data-showcase="healing">Healing Zone</button>
+                <button class="sc-tab" data-showcase="bodymind">Body-Mind</button>
+                <button class="sc-tab" data-showcase="community">Community</button>
+                <button class="sc-tab" data-showcase="youth">Youth Support</button>
+                <button class="sc-tab" data-showcase="voice">My Voice</button>
+            </div>
+
+            <div class="showcase-content" id="lp-showcase-content">
+                <!-- Dashboard -->
+                <div class="sc-panel active" id="sc-dashboard">
+                    <div class="sc-panel-grid">
+                        <div class="sc-info">
+                            <span class="sc-badge">🏠 Your Home Base</span>
+                            <h3>Personalized Wellness Dashboard</h3>
+                            <p>Track your daily progress, mood patterns, task completion, and wellness score — all in one beautiful overview.</p>
+                            <ul class="sc-features">
+                                <li><span>📊</span> Daily wellness score & mood tracking</li>
+                                <li><span>✅</span> Personalized daily wellness tasks</li>
+                                <li><span>🔥</span> Streak tracking & habit building</li>
+                                <li><span>📈</span> Weekly progress insights</li>
+                                <li><span>🤖</span> AI wellness chatbot (24/7)</li>
+                            </ul>
+                            <a href="signup.html" class="btn-primary-lg" style="margin-top:1.5rem">Get Your Dashboard →</a>
+                        </div>
+                        <div class="sc-preview">
+                            <div class="sc-mockup">
+                                <div class="sc-mockup-bar"><span></span><span></span><span></span></div>
+                                <div class="sc-mockup-body">
+                                    <div class="sc-mock-stat"><span class="sc-mock-emoji">😊</span><div><strong>Today's Mood</strong><span>Feeling Good</span></div></div>
+                                    <div class="sc-mock-progress"><span>Wellness Score</span><div class="sc-mock-bar"><div style="width:78%"></div></div><span>78%</span></div>
+                                    <div class="sc-mock-tasks"><strong>Today's Tasks</strong><div class="sc-mock-task done">✓ Morning breathing exercise</div><div class="sc-mock-task done">✓ Drink 8 glasses of water</div><div class="sc-mock-task">○ Journal reflection</div><div class="sc-mock-task">○ 30 min screen-free time</div></div>
+                                    <div class="sc-mock-streak">🔥 7-Day Streak</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Healing Zone -->
+                <div class="sc-panel" id="sc-healing">
+                    <div class="sc-panel-grid">
+                        <div class="sc-info">
+                            <span class="sc-badge">💜 Professional Support</span>
+                            <h3>Healing Zone — Licensed Therapy</h3>
+                            <p>Browse verified therapists, book sessions that fit your schedule, and get ongoing professional support for your mental health.</p>
+                            <ul class="sc-features">
+                                <li><span>👨‍⚕️</span> 1,200+ licensed & verified therapists</li>
+                                <li><span>📅</span> Flexible scheduling (video, audio, text)</li>
+                                <li><span>🎯</span> AI-powered therapist matching</li>
+                                <li><span>📝</span> Session notes & progress tracking</li>
+                                <li><span>🔒</span> End-to-end encrypted sessions</li>
+                            </ul>
+                            <a href="signup.html" class="btn-primary-lg" style="margin-top:1.5rem">Find Your Therapist →</a>
+                        </div>
+                        <div class="sc-preview">
+                            <div class="sc-mockup">
+                                <div class="sc-mockup-bar"><span></span><span></span><span></span></div>
+                                <div class="sc-mockup-body">
+                                    <div class="sc-mock-therapist"><img src="https://ui-avatars.com/api/?name=Dr+Sarah&background=8B5CF6&color=fff&size=48" alt=""><div><strong>Dr. Sarah Wilson</strong><span>Clinical Psychologist • ⭐ 4.9</span><span class="sc-avail">Available Today</span></div></div>
+                                    <div class="sc-mock-therapist"><img src="https://ui-avatars.com/api/?name=Dr+James&background=10B981&color=fff&size=48" alt=""><div><strong>Dr. James Chen</strong><span>Psychiatrist • ⭐ 4.8</span><span class="sc-avail">Next: Tomorrow 2PM</span></div></div>
+                                    <div class="sc-mock-therapist"><img src="https://ui-avatars.com/api/?name=Dr+Priya&background=E67E22&color=fff&size=48" alt=""><div><strong>Dr. Priya Sharma</strong><span>Anxiety Specialist • ⭐ 5.0</span><span class="sc-avail">Available Today</span></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Body-Mind -->
+                <div class="sc-panel" id="sc-bodymind">
+                    <div class="sc-panel-grid">
+                        <div class="sc-info">
+                            <span class="sc-badge">🧘 Holistic Wellness</span>
+                            <h3>Body-Mind Connection</h3>
+                            <p>Guided yoga, breathing exercises, nutrition plans, and daily routines to nurture both your physical and mental health.</p>
+                            <ul class="sc-features">
+                                <li><span>🧘</span> Guided yoga & meditation library</li>
+                                <li><span>🫁</span> Breathing exercises for anxiety relief</li>
+                                <li><span>🥗</span> Personalized nutrition guidance</li>
+                                <li><span>⏰</span> Daily routine builder</li>
+                                <li><span>📱</span> Quick 3-minute wellness breaks</li>
+                            </ul>
+                            <a href="signup.html" class="btn-primary-lg" style="margin-top:1.5rem">Start Body-Mind →</a>
+                        </div>
+                        <div class="sc-preview">
+                            <div class="sc-mockup">
+                                <div class="sc-mockup-bar"><span></span><span></span><span></span></div>
+                                <div class="sc-mockup-body">
+                                    <div class="sc-mock-module" style="background:linear-gradient(135deg,#10B981,#34D399)"><span>🧘</span><strong>Morning Yoga</strong><span>15 min • Beginner</span></div>
+                                    <div class="sc-mock-module" style="background:linear-gradient(135deg,#3B82F6,#60A5FA)"><span>🫁</span><strong>Calm Breathing</strong><span>5 min • Anxiety Relief</span></div>
+                                    <div class="sc-mock-module" style="background:linear-gradient(135deg,#8B5CF6,#A78BFA)"><span>🥗</span><strong>Mood-Boost Foods</strong><span>Nutrition Guide</span></div>
+                                    <div class="sc-mock-module" style="background:linear-gradient(135deg,#F59E0B,#FBBF24)"><span>😴</span><strong>Sleep Routine</strong><span>Wind-down Protocol</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Community -->
+                <div class="sc-panel" id="sc-community">
+                    <div class="sc-panel-grid">
+                        <div class="sc-info">
+                            <span class="sc-badge">👥 You're Not Alone</span>
+                            <h3>Wellness Community</h3>
+                            <p>Join circles of people who understand. Mental Spa for relaxation, Wellness Dating for connections, and Meetups for group activities.</p>
+                            <ul class="sc-features">
+                                <li><span>🧖</span> Mental Spa — immersive relaxation rooms</li>
+                                <li><span>💕</span> Wellness Dating — meaningful connections</li>
+                                <li><span>🎉</span> Weekly meetups & wellness events</li>
+                                <li><span>💬</span> Support circles & group discussions</li>
+                                <li><span>🏆</span> Community achievements & badges</li>
+                            </ul>
+                            <a href="signup.html" class="btn-primary-lg" style="margin-top:1.5rem">Join Community →</a>
+                        </div>
+                        <div class="sc-preview">
+                            <div class="sc-mockup">
+                                <div class="sc-mockup-bar"><span></span><span></span><span></span></div>
+                                <div class="sc-mockup-body">
+                                    <div class="sc-mock-circle"><div class="sc-circle-dot" style="background:#10B981"></div><div><strong>Anxiety Support Circle</strong><span>48 members • 92% match</span></div></div>
+                                    <div class="sc-mock-circle"><div class="sc-circle-dot" style="background:#8B5CF6"></div><div><strong>Mindfulness Explorers</strong><span>35 members • 88% match</span></div></div>
+                                    <div class="sc-mock-circle"><div class="sc-circle-dot" style="background:#E67E22"></div><div><strong>Career Growth Hub</strong><span>62 members • 85% match</span></div></div>
+                                    <div class="sc-mock-event"><span>📅</span><div><strong>Wellness Meetup: Saturday</strong><span>Group Meditation • 12 attending</span></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Youth Support -->
+                <div class="sc-panel" id="sc-youth">
+                    <div class="sc-panel-grid">
+                        <div class="sc-info">
+                            <span class="sc-badge">🎓 Ages 13-24</span>
+                            <h3>Youth Support Program</h3>
+                            <p>Career discovery, confidence building, wellness check-ins, and personal coaching designed specifically for young people.</p>
+                            <ul class="sc-features">
+                                <li><span>🧭</span> Career aptitude testing & matching</li>
+                                <li><span>💪</span> Confidence building challenges</li>
+                                <li><span>📋</span> Weekly wellness check-ins</li>
+                                <li><span>👩‍🏫</span> Personal youth counselors</li>
+                                <li><span>🛡️</span> Anti-bullying & peer pressure support</li>
+                            </ul>
+                            <a href="signup.html" class="btn-primary-lg" style="margin-top:1.5rem">Start Youth Program →</a>
+                        </div>
+                        <div class="sc-preview">
+                            <div class="sc-mockup">
+                                <div class="sc-mockup-bar"><span></span><span></span><span></span></div>
+                                <div class="sc-mockup-body">
+                                    <div class="sc-mock-score"><span class="sc-score-num">78%</span><span>Growth Score</span><span class="sc-score-trend">↑ 8% This Month</span></div>
+                                    <div class="sc-mock-careers"><strong>Your Top Matches</strong><div class="sc-career-item"><span>92%</span> Software Engineer</div><div class="sc-career-item"><span>87%</span> Graphic Designer</div><div class="sc-career-item"><span>84%</span> Psychologist</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Voice -->
+                <div class="sc-panel" id="sc-voice">
+                    <div class="sc-panel-grid">
+                        <div class="sc-info">
+                            <span class="sc-badge">💬 Be Heard</span>
+                            <h3>My Voice — Story Platform</h3>
+                            <p>Share your wellness journey, read inspiring stories, post anonymously, and connect through community storytelling.</p>
+                            <ul class="sc-features">
+                                <li><span>✍️</span> Share your story (anonymous option)</li>
+                                <li><span>📖</span> Read inspiring recovery stories</li>
+                                <li><span>💝</span> React & support other members</li>
+                                <li><span>💬</span> Discussion forums & comments</li>
+                                <li><span>🌟</span> Featured stories & community spotlight</li>
+                            </ul>
+                            <a href="signup.html" class="btn-primary-lg" style="margin-top:1.5rem">Share Your Story →</a>
+                        </div>
+                        <div class="sc-preview">
+                            <div class="sc-mockup">
+                                <div class="sc-mockup-bar"><span></span><span></span><span></span></div>
+                                <div class="sc-mockup-body">
+                                    <div class="sc-mock-story"><div class="sc-story-cat">Recovery</div><strong>How I Overcame Social Anxiety</strong><span>By Sarah M. • 4 min read</span><div class="sc-story-reactions">💜 Inspired (42) • 🤝 Relatable (38) • 🌟 Hopeful (29)</div></div>
+                                    <div class="sc-mock-story"><div class="sc-story-cat">Growth</div><strong>Finding My Career at 19</strong><span>Anonymous • 3 min read</span><div class="sc-story-reactions">💜 Inspired (67) • 🤝 Relatable (51)</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- How It Works -->
     <section id="how-it-works" class="how-it-works">
         <div class="container">
             <div class="section-label">How It Works</div>
             <h2 class="section-title">Your Wellness Journey in <span class="gradient-text">4 Simple Steps</span></h2>
-            <div class="steps-grid">
+            <div class="steps-grid" id="lp-steps-grid">
                 <div class="step-card">
                     <div class="step-num">1</div>
                     <h3>Take Assessment</h3>
@@ -191,7 +388,7 @@
     <!-- Stats -->
     <section class="stats-section">
         <div class="container">
-            <div class="stats-grid">
+            <div class="stats-grid" id="lp-stats-grid">
                 <div class="stat-block">
                     <span class="stat-num">85%</span>
                     <span class="stat-desc">Users report improved wellbeing within 60 days</span>
@@ -218,7 +415,7 @@
             <div class="section-label">Our Experts</div>
             <h2 class="section-title">Meet Our <span class="gradient-text">Licensed Professionals</span></h2>
             <p class="section-subtitle">World-class therapists passionate about guiding you on your path to wellness</p>
-            <div class="therapists-grid">
+            <div class="therapists-grid" id="lp-therapists-grid">
                 <div class="therapist-showcase">
                     <img src="https://ui-avatars.com/api/?name=Dr+Sarah+Wilson&background=E67E22&color=fff&size=120" alt="Dr. Sarah Wilson">
                     <h4>Dr. Sarah Wilson</h4>
@@ -253,7 +450,7 @@
         <div class="container">
             <div class="section-label">Testimonials</div>
             <h2 class="section-title">Stories That <span class="gradient-text">Inspire Hope</span></h2>
-            <div class="testimonials-grid">
+            <div class="testimonials-grid" id="lp-testimonials-grid">
                 <div class="testimonial-card">
                     <div class="tc-stars">★★★★★</div>
                     <p>"ABLE connected me with a therapist who truly understood my struggles. For the first time in years, I feel hopeful about the future."</p>
@@ -279,7 +476,7 @@
             <div class="section-label">Pricing</div>
             <h2 class="section-title">Simple, Transparent <span class="gradient-text">Pricing</span></h2>
             <p class="section-subtitle">Start free, upgrade when you're ready</p>
-            <div class="pricing-grid">
+            <div class="pricing-grid" id="lp-pricing-grid">
                 <div class="pricing-card">
                     <h3>Free</h3>
                     <div class="price"><span>$0</span>/month</div>
@@ -328,7 +525,7 @@
         <div class="container">
             <div class="section-label">FAQ</div>
             <h2 class="section-title">Frequently Asked <span class="gradient-text">Questions</span></h2>
-            <div class="faq-list">
+            <div class="faq-list" id="lp-faq-list">
                 <details class="faq-item">
                     <summary>Are therapists licensed and verified?</summary>
                     <p>Yes, all therapists on ABLE are licensed mental health professionals with verified credentials. Each therapist undergoes a thorough background check and credential verification process before joining our platform.</p>
@@ -365,7 +562,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-grid">
+            <div class="footer-grid" id="lp-footer-grid">
                 <div class="footer-brand">
                     <img src="images/logo.svg" alt="ABLE" class="footer-logo">
                     <p>A Better Life Enabled — your companion for mental wellness, personal growth, and a healthier life.</p>
@@ -418,7 +615,173 @@
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); } });
     }, { threshold: 0.1 });
-    document.querySelectorAll('.feature-card, .step-card, .testimonial-card, .pricing-card, .therapist-showcase, .stat-block').forEach(el => observer.observe(el));
+    document.querySelectorAll('.feature-card, .step-card, .testimonial-card, .pricing-card, .therapist-showcase, .stat-block, .sc-panel-grid').forEach(el => observer.observe(el));
+
+    // Platform Showcase Tabs
+    document.querySelectorAll('.sc-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.sc-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.sc-panel').forEach(p => p.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById('sc-' + tab.dataset.showcase).classList.add('active');
+        });
+    });
+    </script>
+
+    <!-- Dynamic Landing Page Content -->
+    <script>
+    (async function loadLandingData() {
+        try {
+            const res = await fetch('/api/landing');
+            if (!res.ok) return; // graceful fallback to hardcoded
+            const d = await res.json();
+            if (!d) return;
+
+            // Hero
+            if (d.heroBadge) document.getElementById('lp-hero-badge').textContent = d.heroBadge;
+            if (d.heroHeadline) document.getElementById('lp-hero-headline').innerHTML = d.heroHeadline.replace(/Expert Support|AI Guidance/g, '<span class="gradient-text">$&</span>');
+            if (d.heroSubtitle) document.getElementById('lp-hero-subtitle').textContent = d.heroSubtitle;
+
+            // Hero CTAs
+            if (d.heroCTAs && d.heroCTAs.length) {
+                const ctaEl = document.getElementById('lp-hero-ctas');
+                ctaEl.innerHTML = d.heroCTAs.map(c => c.style === 'ghost'
+                    ? `<a href="${c.link}" class="btn-ghost"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><polygon points="5,3 19,12 5,21" fill="currentColor"/></svg>${c.text}</a>`
+                    : `<a href="${c.link}" class="btn-primary-lg">${c.text}</a>`
+                ).join('');
+            }
+
+            // Trust items
+            if (d.heroTrustItems && d.heroTrustItems.length) {
+                const trustEl = document.getElementById('lp-hero-trust');
+                trustEl.innerHTML = d.heroTrustItems.map(t => `<div class="trust-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"/><path d="M22 4L12 14.01l-3-3" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg> ${t}</div>`).join('');
+            }
+
+            // Features
+            if (d.features && d.features.length) {
+                document.getElementById('lp-features-grid').innerHTML = d.features.map(f => `
+                    <div class="feature-card">
+                        <div class="fc-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/></svg></div>
+                        <h3>${f.title}</h3>
+                        <p>${f.description}</p>
+                    </div>`).join('');
+            }
+
+            // How It Works
+            if (d.howItWorks && d.howItWorks.length) {
+                document.getElementById('lp-steps-grid').innerHTML = d.howItWorks.map((s, i) => `
+                    <div class="step-card"><div class="step-num">${i+1}</div><h3>${s.title}</h3><p>${s.description}</p></div>`).join('');
+            }
+
+            // Stats
+            if (d.stats && d.stats.length) {
+                document.getElementById('lp-stats-grid').innerHTML = d.stats.map(s => `
+                    <div class="stat-block"><span class="stat-num">${s.number}</span><span class="stat-desc">${s.description}</span></div>`).join('');
+            }
+
+            // Therapists
+            if (d.therapists && d.therapists.length) {
+                document.getElementById('lp-therapists-grid').innerHTML = d.therapists.map(t => `
+                    <div class="therapist-showcase">
+                        <img src="https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=${(t.color||'#E67E22').replace('#','')}&color=fff&size=120" alt="${t.name}">
+                        <h4>${t.name}</h4>
+                        <span class="ts-role">${t.role}</span>
+                        <span class="ts-exp">${t.experience}</span>
+                    </div>`).join('');
+            }
+
+            // Testimonials
+            if (d.testimonials && d.testimonials.length) {
+                document.getElementById('lp-testimonials-grid').innerHTML = d.testimonials.map(t => `
+                    <div class="testimonial-card">
+                        <div class="tc-stars">${'★'.repeat(t.stars)}</div>
+                        <p>"${t.quote}"</p>
+                        <div class="tc-author"><img src="https://ui-avatars.com/api/?name=${encodeURIComponent(t.authorName)}&background=E67E22&color=fff&size=40" alt=""><div><strong>${t.authorName}</strong><span>${t.authorRole}</span></div></div>
+                    </div>`).join('');
+            }
+
+            // Pricing
+            if (d.pricing && d.pricing.length) {
+                document.getElementById('lp-pricing-grid').innerHTML = d.pricing.map(p => `
+                    <div class="pricing-card${p.isPopular?' popular':''}">
+                        ${p.isPopular?'<div class="popular-badge">Most Popular</div>':''}
+                        <h3>${p.name}</h3>
+                        <div class="price"><span>${p.price}</span>${p.price!=='Custom'?'/month':''}</div>
+                        <ul>${(p.features||[]).map(f=>'<li>'+f+'</li>').join('')}</ul>
+                        <a href="${p.ctaLink}" class="${p.isPopular?'btn-primary-lg':'btn-outline-lg'}">${p.ctaText}</a>
+                    </div>`).join('');
+            }
+
+            // FAQ
+            if (d.faqItems && d.faqItems.length) {
+                document.getElementById('lp-faq-list').innerHTML = d.faqItems.map(f => `
+                    <details class="faq-item"><summary>${f.question}</summary><p>${f.answer}</p></details>`).join('');
+            }
+
+            // Social Proof
+            if (d.socialProofRating) {
+                document.getElementById('lp-social-proof').innerHTML = `
+                    <div class="sp-rating"><div class="sp-stars">★★★★★</div><span>${d.socialProofRating}</span></div>
+                    <div class="sp-avatars">
+                        <img src="https://ui-avatars.com/api/?name=A&background=E67E22&color=fff&size=32" alt="">
+                        <img src="https://ui-avatars.com/api/?name=B&background=10B981&color=fff&size=32" alt="">
+                        <img src="https://ui-avatars.com/api/?name=C&background=8B5CF6&color=fff&size=32" alt="">
+                        <img src="https://ui-avatars.com/api/?name=D&background=3B82F6&color=fff&size=32" alt="">
+                        <img src="https://ui-avatars.com/api/?name=E&background=EF4444&color=fff&size=32" alt="">
+                        <span>${d.socialProofUserCount}</span>
+                    </div>
+                    <div class="sp-logos">${(d.socialProofLogos||[]).map(l=>'<span>'+l+'</span>').join('')}</div>`;
+            }
+
+            // Footer
+            if (d.footerBrandDescription || d.footerProductLinks) {
+                document.getElementById('lp-footer-grid').innerHTML = `
+                    <div class="footer-brand"><img src="images/logo.svg" alt="ABLE" class="footer-logo"><p>${d.footerBrandDescription||''}</p></div>
+                    <div class="footer-col"><h4>Product</h4>${(d.footerProductLinks||[]).map(l=>'<a href="'+l.href+'">'+l.label+'</a>').join('')}</div>
+                    <div class="footer-col"><h4>Company</h4>${(d.footerCompanyLinks||[]).map(l=>'<a href="'+l.href+'">'+l.label+'</a>').join('')}</div>
+                    <div class="footer-col"><h4>Legal</h4>${(d.footerLegalLinks||[]).map(l=>'<a href="'+l.href+'">'+l.label+'</a>').join('')}</div>`;
+            }
+
+            // Platform Showcase
+            if (d.platformShowcase && d.platformShowcase.length) {
+                document.getElementById('lp-showcase-tabs').innerHTML = d.platformShowcase.map((s, i) =>
+                    `<button class="sc-tab${i===0?' active':''}" data-showcase="${s.tabId}">${s.tabLabel}</button>`
+                ).join('');
+                document.getElementById('lp-showcase-content').innerHTML = d.platformShowcase.map((s, i) => `
+                    <div class="sc-panel${i===0?' active':''}" id="sc-${s.tabId}">
+                        <div class="sc-panel-grid">
+                            <div class="sc-info">
+                                <span class="sc-badge">${s.badge}</span>
+                                <h3>${s.title}</h3>
+                                <p>${s.description}</p>
+                                <ul class="sc-features">${(s.features||[]).map(f=>'<li><span>'+f.substring(0,2)+'</span>'+f.substring(2)+'</li>').join('')}</ul>
+                                <a href="${s.ctaLink}" class="btn-primary-lg" style="margin-top:1.5rem">${s.ctaText}</a>
+                            </div>
+                            <div class="sc-preview"><div class="sc-mockup"><div class="sc-mockup-bar"><span></span><span></span><span></span></div><div class="sc-mockup-body">${s.mockupHtml||''}</div></div></div>
+                        </div>
+                    </div>`).join('');
+
+                // Re-bind showcase tabs
+                document.querySelectorAll('.sc-tab').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        document.querySelectorAll('.sc-tab').forEach(t => t.classList.remove('active'));
+                        document.querySelectorAll('.sc-panel').forEach(p => p.classList.remove('active'));
+                        tab.classList.add('active');
+                        document.getElementById('sc-' + tab.dataset.showcase).classList.add('active');
+                    });
+                });
+            }
+
+            // Re-observe for animations
+            const obs = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('revealed'); });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.feature-card, .step-card, .testimonial-card, .pricing-card, .therapist-showcase, .stat-block, .sc-panel-grid').forEach(el => obs.observe(el));
+        } catch (e) {
+            // Graceful degradation — hardcoded content remains
+            console.log('Landing page API unavailable, using static content');
+        }
+    })();
     </script>
 </body>
 </html>

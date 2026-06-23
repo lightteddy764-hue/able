@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Profile - ABLE</title>
+    <link rel="stylesheet" href="dashboard-styles.css">
+    <link rel="stylesheet" href="healing-zone.css">
+    <style>
+        .prof-page { max-width: 800px; margin: 0 auto; }
+        .prof-hero { display: flex; gap: 2rem; align-items: flex-start; margin-bottom: 2rem; padding: 2rem; background: white; border-radius: 16px; border: 1px solid #E5E7EB; box-shadow: 0 2px 8px rgba(0,0,0,0.04); flex-wrap: wrap; }
+        .prof-avatar { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #E67E22; flex-shrink: 0; }
+        .prof-info { flex: 1; min-width: 200px; }
+        .prof-info h1 { font-size: 1.5rem; font-weight: 800; color: #1a1a2e; margin-bottom: 0.2rem; }
+        .prof-info .prof-title { font-size: 0.9rem; color: #6B7280; margin-bottom: 0.75rem; }
+        .prof-badges { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+        .prof-badge { font-size: 0.72rem; padding: 0.25rem 0.6rem; border-radius: 6px; font-weight: 600; }
+        .prof-badge.verified { background: #ECFDF5; color: #059669; }
+        .prof-badge.avail { background: #EFF6FF; color: #2563EB; }
+        .prof-badge.rating { background: #FEF3C7; color: #92400E; }
+        .prof-stats { display: flex; gap: 1.5rem; font-size: 0.8rem; color: #6B7280; margin-top: 0.75rem; }
+        .prof-stats strong { color: #1a1a2e; }
+        .prof-section { background: white; border: 1px solid #E5E7EB; border-radius: 14px; padding: 1.5rem; margin-bottom: 1.25rem; }
+        .prof-section h3 { font-size: 1rem; font-weight: 700; color: #1a1a2e; margin-bottom: 1rem; }
+        .prof-bio { font-size: 0.9rem; color: #374151; line-height: 1.7; }
+        .prof-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+        .prof-tag { padding: 0.35rem 0.8rem; background: #F3F4F6; color: #374151; border-radius: 100px; font-size: 0.78rem; font-weight: 500; }
+        .prof-post { padding: 1.25rem; background: #F9FAFB; border-radius: 12px; margin-bottom: 0.75rem; border: 1px solid #F3F4F6; }
+        .prof-post h4 { font-size: 0.92rem; font-weight: 700; color: #1a1a2e; margin-bottom: 0.3rem; }
+        .prof-post-meta { font-size: 0.7rem; color: #9CA3AF; margin-bottom: 0.5rem; }
+        .prof-post-content { font-size: 0.83rem; color: #374151; line-height: 1.6; white-space: pre-wrap; }
+        .prof-book-btn { width: 100%; padding: 0.9rem; background: #E67E22; color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 1rem; }
+        .prof-book-btn:hover { background: #D35400; }
+        .back-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: #6B7280; text-decoration: none; margin-bottom: 1.5rem; }
+        .back-link:hover { color: #E67E22; }
+        @media(max-width:600px) { .prof-hero { flex-direction: column; align-items: center; text-align: center; } .prof-stats { justify-content: center; } .prof-badges { justify-content: center; } }
+    </style>
+<link rel="stylesheet" href="/loader.css">
+</head>
+<body>
+    <script src="/loader.js"></script>
+    <div id="sidebar"></div>
+    <script src="sidebar-nav.js"></script>
+    <div class="main-content">
+        <header class="topbar">
+            <button class="menu-toggle" id="menuToggle"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="search-bar"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input type="text" placeholder="Search..."></div>
+            <div class="topbar-actions"><div class="user-profile"><img src="https://ui-avatars.com/api/?name=User&background=E67E22&color=fff" alt=""><div class="user-info"><span class="user-name">User</span></div></div></div>
+        </header>
+        <main class="dashboard-content prof-page">
+            <a href="healing-zone.html" class="back-link">← Back to Healing Zone</a>
+            <div id="profileContent"><p style="text-align:center;color:#9CA3AF;padding:3rem">Loading profile...</p></div>
+        </main>
+    </div>
+    <script src="dashboard.js"></script>
+    <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const profId = urlParams.get('id');
+    if (!profId) { window.location.href = 'healing-zone.html'; }
+
+    async function loadProfile() {
+        try {
+            const [profRes, postsRes] = await Promise.all([
+                fetch('/api/professionals/' + profId),
+                fetch('/api/professionals/' + profId + '/posts')
+            ]);
+            if (!profRes.ok) { document.getElementById('profileContent').innerHTML = '<p style="text-align:center;color:#9CA3AF;padding:3rem">Professional not found</p>'; return; }
+            const prof = await profRes.json();
+            const postsData = await postsRes.json();
+            renderProfile(prof, postsData.posts || []);
+        } catch(e) { document.getElementById('profileContent').innerHTML = '<p style="text-align:center;color:#EF4444;padding:3rem">Error loading profile</p>'; }
+    }
+
+    function renderProfile(p, posts) {
+        const avatar = p.profilePhoto || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(p.fullName) + '&background=E67E22&color=fff&size=100';
+        const stars = '★'.repeat(Math.floor(p.rating)) + (p.rating % 1 >= 0.5 ? '★' : '☆');
+
+        document.title = p.fullName + ' - ABLE Professional';
+
+        document.getElementById('profileContent').innerHTML = `
+            <div class="prof-hero">
+                <img src="${avatar}" alt="${p.fullName}" class="prof-avatar">
+                <div class="prof-info">
+                    <h1>${p.fullName}</h1>
+                    <div class="prof-title">${p.title}</div>
+                    <div class="prof-badges">
+                        <span class="prof-badge verified">✓ Verified License</span>
+                        ${p.isAvailableToday ? '<span class="prof-badge avail">Available Today</span>' : ''}
+                        <span class="prof-badge rating">${stars} ${p.rating} (${p.reviewCount} reviews)</span>
+                    </div>
+                    <div class="prof-stats">
+                        <span><strong>${p.experienceYears}</strong> years exp.</span>
+                        <span><strong>${p.totalSessions}</strong> sessions</span>
+                        <span>Responds in <strong>${p.responseTime || '< 1 hour'}</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prof-section">
+                <h3>About</h3>
+                <p class="prof-bio">${p.bio || 'No bio available.'}</p>
+            </div>
+
+            <div class="prof-section">
+                <h3>Specializations</h3>
+                <div class="prof-tags">${(p.specializations||[]).map(s => '<span class="prof-tag">'+s+'</span>').join('')}</div>
+            </div>
+
+            <div class="prof-section">
+                <h3>Session Types & Languages</h3>
+                <div style="display:flex;gap:2rem;flex-wrap:wrap">
+                    <div><strong style="font-size:0.8rem;color:#6B7280">Sessions:</strong><div class="prof-tags" style="margin-top:0.4rem">${(p.sessionTypes||[]).map(s => '<span class="prof-tag">'+s+'</span>').join('')}</div></div>
+                    <div><strong style="font-size:0.8rem;color:#6B7280">Languages:</strong><div class="prof-tags" style="margin-top:0.4rem">${(p.languages||[]).map(s => '<span class="prof-tag">'+s+'</span>').join('')}</div></div>
+                </div>
+            </div>
+
+            ${posts.length ? '<div class="prof-section"><h3>✍️ Posts & Tips (' + posts.length + ')</h3>' + posts.map(post => '<div class="prof-post"><h4>' + esc(post.title) + '</h4><div class="prof-post-meta">' + post.category + ' • ' + timeAgo(post.createdAt) + '</div><div class="prof-post-content">' + esc(post.content) + '</div></div>').join('') + '</div>' : ''}
+
+            <button class="prof-book-btn" onclick="requestSession()">Request Session with ${p.fullName}</button>
+        `;
+    }
+
+    function requestSession() {
+        // Redirect to healing zone with this professional highlighted (or reuse booking logic)
+        const token = localStorage.getItem('token');
+        if (!token) { alert('Please log in to request a session'); window.location.href = 'login.html'; return; }
+        window.location.href = 'healing-zone.html#recommended';
+    }
+
+    function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function timeAgo(d) { const s = Math.floor((Date.now()-new Date(d))/1000); if(s<60)return 'Just now'; if(s<3600)return Math.floor(s/60)+'m ago'; if(s<86400)return Math.floor(s/3600)+'h ago'; if(s<604800)return Math.floor(s/86400)+'d ago'; return new Date(d).toLocaleDateString(); }
+    loadProfile();
+    </script>
+</body>
+</html>

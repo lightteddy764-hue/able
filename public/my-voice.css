@@ -112,3 +112,9 @@
 @media(max-width:968px) { .mv-hero{flex-direction:column;text-align:center;gap:1.5rem;padding:2rem} .mv-hero-left p{max-width:100%} .mv-hero-stats{justify-content:center} .mv-hero-ctas{justify-content:center} .mv-featured-body{flex-direction:column;align-items:flex-start} .mv-challenge{flex-direction:column;gap:1rem;text-align:center} .mv-sidebar{grid-template-columns:1fr} }
 @media(max-width:768px) { .mv-page{padding:1rem} .mv-hero-left h1{font-size:1.4rem} .mv-compose-footer{flex-direction:column;gap:1rem;align-items:stretch} .mv-compose-btns{justify-content:flex-end} }
 @media(max-width:480px) { .mv-hero{padding:1.5rem} .mv-hero-left h1{font-size:1.2rem} .mv-story-actions{gap:0.3rem} .mv-react{padding:0.3rem 0.5rem;font-size:0.65rem} }
+
+
+/* Story Detail Modal - Reaction Buttons */
+.mv-react-btn { display:inline-flex; align-items:center; gap:0.3rem; padding:0.45rem 0.8rem; border:1.5px solid #E5E7EB; border-radius:8px; background:white; font-size:0.75rem; color:#6B7280; cursor:pointer; transition:all 0.2s; font-weight:500; }
+.mv-react-btn:hover { border-color:#E67E22; color:#E67E22; background:#FDF2E9; }
+.mv-react-btn.active { border-color:#E67E22; color:#E67E22; background:#FEF3E2; font-weight:600; }

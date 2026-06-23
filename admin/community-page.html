@@ -74,6 +74,7 @@
                 <button class="tab" data-tab="discussions">Discussions</button>
                 <button class="tab" data-tab="events">Events</button>
                 <button class="tab" data-tab="achievements">Achievements</button>
+                <button class="tab" data-tab="official">🏛️ Official Groups</button>
                 <button class="tab" data-tab="moderation">Moderation</button>
             </div>
 
@@ -158,6 +159,36 @@
                     <thead><tr><th>Order</th><th>Icon</th><th>Title</th><th>Color</th><th>Completed (default)</th><th>Visible</th><th>Actions</th></tr></thead>
                     <tbody id="achievementsTable"><tr><td colspan="7" class="empty-row">Loading...</td></tr></tbody>
                 </table>
+            </div>
+
+            <!-- ===== OFFICIAL GROUPS TAB ===== -->
+            <div class="tab-content" id="tab-official">
+                <!-- Groups list view -->
+                <div id="officialGroupsView">
+                    <div class="section-title-row">
+                        <h2>🏛️ Official ABLE Groups</h2>
+                        <button class="btn-add" onclick="openOfficialGroupModal()">+ Create Group</button>
+                    </div>
+                    <p style="font-size:0.8rem;color:#6b7280;margin-bottom:1rem">Admin-created groups for announcements, learning content, and professional guidance. Only admin/professionals can post — users join, react, and comment.</p>
+                    <table>
+                        <thead><tr><th>Name</th><th>Category</th><th>Posting</th><th>Members</th><th>Posts</th><th>Featured</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody id="officialGroupsTable"><tr><td colspan="8" class="empty-row">Loading...</td></tr></tbody>
+                    </table>
+                </div>
+
+                <!-- Posts management view (hidden until group selected) -->
+                <div id="officialPostsView" style="display:none">
+                    <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem">
+                        <button class="btn-sm" onclick="backToGroupsList()">← Back to groups</button>
+                        <h2 id="postsViewGroupName" style="font-size:1rem;font-weight:700;margin:0">Group posts</h2>
+                        <button class="btn-add" style="margin-left:auto" onclick="openOfficialPostModal()">+ New Post</button>
+                    </div>
+                    <div id="postsViewMeta" style="font-size:0.78rem;color:#6b7280;padding:0.6rem 0.9rem;background:#f9fafb;border-radius:8px;margin-bottom:0.9rem"></div>
+                    <table>
+                        <thead><tr><th>Pinned</th><th>Title</th><th>Type</th><th>Author</th><th>Reactions</th><th>Comments</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody id="officialPostsTable"><tr><td colspan="8" class="empty-row">Loading...</td></tr></tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- ===== MODERATION TAB ===== -->
@@ -265,6 +296,7 @@
                 <td><span class="accent-dot accent-${c.accentColor}"></span></td>
                 <td>${toggleSwitch('circles', c._id, 'isVisible', c.isVisible)}</td>
                 <td class="row-actions">
+                    <button class="btn-sm" onclick="viewCirclePosts('${c._id}','${escapeAttr(c.title)}')" style="background:#FEF3C7;color:#92400E">📝 Posts</button>
                     <button class="btn-sm" onclick='editItem("circle", ${JSON.stringify(c)})'>Edit</button>
                     <button class="btn-sm btn-del" onclick="deleteItem('circles','${c._id}')">Delete</button>
                 </td>
@@ -518,6 +550,68 @@
             <div class="check-row">
                 <label class="check-label"><input type="checkbox" name="isCompleted" ${item.isCompleted ? 'checked' : ''}> Completed (default)</label>
                 <label class="check-label"><input type="checkbox" name="isVisible" ${item.isVisible !== false ? 'checked' : ''}> Visible</label>
+            </div>`,
+
+        officialGroup: (item = {}) => `
+            <div class="form-group"><label>Group Name *</label><input name="name" required value="${escapeHtml(item.name)}" placeholder="ABLE Official Updates"></div>
+            <div class="form-group"><label>Description</label><textarea name="description" rows="2" placeholder="What this group is for...">${escapeHtml(item.description)}</textarea></div>
+            <div class="form-row">
+                <div class="form-group"><label>Category</label><input name="category" placeholder="announcements / learning / youth / professional / challenges" value="${escapeHtml(item.category)}"></div>
+                <div class="form-group"><label>Group Type</label><select name="type">
+                    <option value="support-circle" ${item.type==='support-circle'?'selected':''}>Support Circle</option>
+                    <option value="mental-spa" ${item.type==='mental-spa'?'selected':''}>Mental Spa</option>
+                    <option value="connections" ${item.type==='connections'?'selected':''}>Connections</option>
+                    <option value="meetups" ${item.type==='meetups'?'selected':''}>Meetups</option>
+                </select></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>Posting Permission *</label><select name="postingPermission">
+                    <option value="admin_only" ${(item.postingPermission||'admin_only')==='admin_only'?'selected':''}>Admin only</option>
+                    <option value="admin_and_professionals" ${item.postingPermission==='admin_and_professionals'?'selected':''}>Admin + Professionals</option>
+                    <option value="members_can_request_post" ${item.postingPermission==='members_can_request_post'?'selected':''}>Members can request</option>
+                    <option value="all_members" ${item.postingPermission==='all_members'?'selected':''}>All members</option>
+                </select></div>
+                <div class="form-group"><label>Join Policy</label><select name="joinPolicy">
+                    <option value="open" ${(item.joinPolicy||'open')==='open'?'selected':''}>Open (anyone joins)</option>
+                    <option value="approval_required" ${item.joinPolicy==='approval_required'?'selected':''}>Approval required</option>
+                    <option value="invite_only" ${item.joinPolicy==='invite_only'?'selected':''}>Invite only</option>
+                </select></div>
+            </div>
+            <div class="form-group">
+                <label>Cover Image</label>
+                <input type="file" accept="image/*" onchange="readImage(event,'coverImage')">
+                <input type="hidden" name="coverImage" value="${escapeHtml(item.coverImage)}">
+                <div id="imagePreview">${item.coverImage ? `<img class="img-preview" src="${item.coverImage}">` : ''}</div>
+            </div>
+            <div class="form-group"><label>Community Rules</label><textarea name="rules" rows="3" placeholder="One rule per line — e.g.&#10;1. Be kind and respectful&#10;2. No medical advice&#10;3. Keep it on-topic">${escapeHtml(item.rules)}</textarea></div>
+            <div class="check-row">
+                <label class="check-label"><input type="checkbox" name="commentingEnabled" ${item.commentingEnabled !== false ? 'checked' : ''}> Comments enabled</label>
+                <label class="check-label"><input type="checkbox" name="reactionsEnabled" ${item.reactionsEnabled !== false ? 'checked' : ''}> Reactions enabled</label>
+                <label class="check-label"><input type="checkbox" name="isFeatured" ${item.isFeatured ? 'checked' : ''}> Featured</label>
+            </div>`,
+
+        officialPost: (item = {}) => `
+            <div class="form-group"><label>Title *</label><input name="title" required value="${escapeHtml(item.title)}" maxlength="200" placeholder="A clear, helpful headline"></div>
+            <div class="form-row">
+                <div class="form-group"><label>Content Type</label><select name="contentType">
+                    <option value="announcement" ${(item.contentType||'announcement')==='announcement'?'selected':''}>📢 Announcement</option>
+                    <option value="guide" ${item.contentType==='guide'?'selected':''}>📘 Guide</option>
+                    <option value="learning" ${item.contentType==='learning'?'selected':''}>🎓 Learning</option>
+                    <option value="challenge" ${item.contentType==='challenge'?'selected':''}>🎯 Challenge</option>
+                    <option value="resource" ${item.contentType==='resource'?'selected':''}>📂 Resource</option>
+                    <option value="safety" ${item.contentType==='safety'?'selected':''}>🛡️ Safety</option>
+                </select></div>
+                <div class="form-group"><label>Status</label><select name="status">
+                    <option value="published" ${(item.status||'published')==='published'?'selected':''}>Published</option>
+                    <option value="draft" ${item.status==='draft'?'selected':''}>Draft</option>
+                    <option value="hidden" ${item.status==='hidden'?'selected':''}>Hidden</option>
+                </select></div>
+            </div>
+            <div class="form-group"><label>Summary (optional, max 500)</label><textarea name="summary" rows="2" maxlength="500" placeholder="A short blurb shown in feeds">${escapeHtml(item.summary)}</textarea></div>
+            <div class="form-group"><label>Content *</label><textarea name="content" rows="8" required maxlength="10000" placeholder="Full post body. Use blank lines for paragraphs.">${escapeHtml(item.content)}</textarea></div>
+            <div class="form-group"><label>Source links (one per line)</label><textarea name="sourceRefs" rows="2" placeholder="https://example.com/source-1&#10;https://example.com/source-2">${(item.sourceRefs||[]).join('\n')}</textarea></div>
+            <div class="check-row">
+                <label class="check-label"><input type="checkbox" name="isPinned" ${item.isPinned ? 'checked' : ''}> Pin to top</label>
             </div>`
     };
 
@@ -533,7 +627,9 @@
         space: 'Community Space',
         discussion: 'Trending Discussion',
         event: 'Upcoming Event',
-        achievement: 'Achievement'
+        achievement: 'Achievement',
+        officialGroup: 'Official Group',
+        officialPost: 'Official Post'
     };
 
     let editingId = null;
@@ -563,6 +659,39 @@
             else if (el.type === 'date') data[el.name] = el.value ? new Date(el.value).toISOString() : null;
             else data[el.name] = el.value;
         }
+
+        // Special handling for Official Groups + Posts
+        if (editingType === 'officialGroup') {
+            const url = editingId ? `/admin/api/community-page/official-groups/${editingId}` : `/admin/api/community-page/official-groups`;
+            const r = await api(url, { method: editingId ? 'PUT' : 'POST', body: JSON.stringify(data) });
+            if (r._id || r.group) {
+                toast(editingId ? 'Group updated' : 'Group created', 'success');
+                closeModal();
+                loadOfficialGroups();
+            } else { toast(r.error || 'Save failed', 'error'); }
+            return;
+        }
+        if (editingType === 'officialPost') {
+            // Split sourceRefs into array
+            data.sourceRefs = (data.sourceRefs || '').split('\n').map(s => s.trim()).filter(Boolean);
+            let url;
+            if (editingId) {
+                // Edit by post ID — same endpoint regardless of group type
+                url = `/admin/api/community-page/official-posts/${editingId}`;
+            } else if (currentPostsContext === 'circle') {
+                url = `/admin/api/community-page/circles/${currentOfficialGroupId}/posts`;
+            } else {
+                url = `/admin/api/community-page/official-groups/${currentOfficialGroupId}/posts`;
+            }
+            const r = await api(url, { method: editingId ? 'PUT' : 'POST', body: JSON.stringify(data) });
+            if (r._id || r.post) {
+                toast(editingId ? 'Post updated' : 'Post created', 'success');
+                closeModal();
+                reloadCurrentPosts();
+            } else { toast(r.error || 'Save failed', 'error'); }
+            return;
+        }
+
         const resource = resourceMap[editingType];
         const url = editingId
             ? `/admin/api/community-page/${resource}/${editingId}`
@@ -599,9 +728,221 @@
             discussions: loadDiscussions,
             events: loadEvents,
             achievements: loadAchievements,
+            official: loadOfficialGroups,
             moderation: loadModeration
         };
         (map[name] || (() => {}))();
+    }
+
+    /* ---------- Official Groups & Posts ---------- */
+    let currentOfficialGroupId = null;
+    let currentOfficialGroupName = '';
+    let currentPostsContext = 'official'; // 'official' (Community/Official Group) or 'circle' (FeaturedCircle)
+    const permissionLabels = {
+        admin_only: 'Admin only',
+        admin_and_professionals: 'Admin + Pros',
+        members_can_request_post: 'Members request',
+        all_members: 'All members'
+    };
+    const contentTypeIcons = {
+        announcement: '📢', guide: '📘', learning: '🎓',
+        challenge: '🎯', resource: '📂', safety: '🛡️'
+    };
+
+    async function loadOfficialGroups() {
+        document.getElementById('officialGroupsView').style.display = 'block';
+        document.getElementById('officialPostsView').style.display = 'none';
+        const r = await api('/admin/api/community-page/official-groups');
+        const groups = r.groups || [];
+        const tb = document.getElementById('officialGroupsTable');
+        if (!groups.length) {
+            tb.innerHTML = '<tr><td colspan="8" class="empty-row">No official groups yet — create the first one</td></tr>';
+            return;
+        }
+        tb.innerHTML = groups.map(g => `
+            <tr>
+                <td><strong>${escapeHtml(g.name)}</strong><br><span style="font-size:0.7rem;color:#9ca3af">${escapeHtml((g.description||'').slice(0,80))}</span></td>
+                <td><span class="badge-pill">${escapeHtml(g.category || '—')}</span></td>
+                <td><span class="badge-pill badge-active">${permissionLabels[g.postingPermission] || g.postingPermission}</span></td>
+                <td>${g.memberCount || 0}</td>
+                <td><a href="#" onclick="viewOfficialGroupPosts('${g._id}','${escapeAttr(g.name)}');return false" style="color:#E67E22;font-weight:600">View posts →</a></td>
+                <td>${g.isFeatured ? '<span class="badge-pill badge-popular">★ Featured</span>' : '—'}</td>
+                <td><span class="badge-pill ${g.status==='approved'?'badge-new':'badge-hot'}">${escapeHtml(g.status || 'approved')}</span></td>
+                <td class="row-actions">
+                    <button class="btn-sm" onclick='openOfficialGroupModal(${JSON.stringify(g)})'>Edit</button>
+                    <button class="btn-sm btn-del" onclick="deleteOfficialGroup('${g._id}')">Delete</button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function escapeAttr(s) { return (s ?? '').toString().replace(/'/g, "\\'").replace(/"/g, '&quot;'); }
+
+    function openOfficialGroupModal(group = null) {
+        editingType = 'officialGroup';
+        editingId = group?._id || null;
+        document.getElementById('modalTitle').textContent = (editingId ? 'Edit ' : 'Create ') + 'Official Group';
+        document.getElementById('modalForm').innerHTML = formTemplates.officialGroup(group || {}) +
+            `<div class="modal-actions"><button type="submit" class="btn-primary">${editingId ? 'Save changes' : 'Create group'}</button><button type="button" class="btn-action" onclick="closeModal()">Cancel</button></div>`;
+        document.getElementById('modal').style.display = 'flex';
+    }
+
+    async function deleteOfficialGroup(id) {
+        if (!confirm('Delete this group? All posts inside will be permanently removed.')) return;
+        const r = await api('/admin/api/community-page/official-groups/' + id, { method: 'DELETE' });
+        if (r.message) {
+            toast('Group deleted', 'success');
+            loadOfficialGroups();
+        } else { toast(r.error || 'Delete failed', 'error'); }
+    }
+
+    async function viewOfficialGroupPosts(groupId, groupName) {
+        currentPostsContext = 'official';
+        currentOfficialGroupId = groupId;
+        currentOfficialGroupName = groupName;
+        document.getElementById('officialGroupsView').style.display = 'none';
+        document.getElementById('officialPostsView').style.display = 'block';
+        document.getElementById('postsViewGroupName').textContent = groupName;
+        // Switch to Official Groups tab so the Posts view is visible
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.querySelector('[data-tab="official"]').classList.add('active');
+        document.getElementById('tab-official').classList.add('active');
+        await loadOfficialPosts(groupId);
+    }
+
+    async function viewCirclePosts(circleId, circleName) {
+        currentPostsContext = 'circle';
+        currentOfficialGroupId = circleId;
+        currentOfficialGroupName = circleName;
+        // Reuse the same posts view UI inside Official Groups tab so we don't duplicate markup
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.querySelector('[data-tab="official"]').classList.add('active');
+        document.getElementById('tab-official').classList.add('active');
+        document.getElementById('officialGroupsView').style.display = 'none';
+        document.getElementById('officialPostsView').style.display = 'block';
+        document.getElementById('postsViewGroupName').textContent = '📝 Circle: ' + circleName;
+        await loadCirclePosts(circleId);
+    }
+
+    function backToGroupsList() {
+        currentOfficialGroupId = null;
+        if (currentPostsContext === 'circle') {
+            // Send admin back to Featured Circles tab
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector('[data-tab="circles"]').classList.add('active');
+            document.getElementById('tab-circles').classList.add('active');
+            document.getElementById('officialGroupsView').style.display = 'block';
+            document.getElementById('officialPostsView').style.display = 'none';
+            loadCircles();
+        } else {
+            loadOfficialGroups();
+        }
+    }
+
+    async function loadOfficialPosts(groupId) {
+        // Fetch group meta + posts (admin endpoints — return all statuses)
+        const groupRes = await api('/admin/api/community-page/official-groups/' + groupId);
+        const postsRes = await api('/admin/api/community-page/official-groups/' + groupId + '/posts');
+        const group = groupRes.group || {};
+        const posts = postsRes.posts || [];
+
+        const meta = document.getElementById('postsViewMeta');
+        meta.innerHTML = `<strong>${escapeHtml(group.name || '')}</strong> · ${escapeHtml(group.category || '—')} · ` +
+            `${permissionLabels[group.postingPermission] || ''} · ` +
+            `${group.memberCount || 0} members · ` +
+            `Comments: ${group.commentingEnabled === false ? 'off' : 'on'} · ` +
+            `Reactions: ${group.reactionsEnabled === false ? 'off' : 'on'}`;
+
+        renderPostsTable(posts);
+    }
+
+    async function loadCirclePosts(circleId) {
+        const res = await api('/admin/api/community-page/circles/' + circleId + '/posts');
+        const circle = res.circle || {};
+        const posts = res.posts || [];
+
+        const meta = document.getElementById('postsViewMeta');
+        meta.innerHTML = `<strong>${escapeHtml(circle.title || '')}</strong> · ` +
+            `${circle.memberCount || 0} members · ` +
+            `Match ${circle.matchPercent || 0}% · ` +
+            `Admin-only posting`;
+
+        renderPostsTable(posts);
+    }
+
+    function renderPostsTable(posts) {
+        const tb = document.getElementById('officialPostsTable');
+        if (!posts.length) {
+            tb.innerHTML = '<tr><td colspan="8" class="empty-row">No posts yet — click + New Post to create one</td></tr>';
+            return;
+        }
+        tb.innerHTML = posts.map(p => {
+            const author = p.authorType === 'admin'
+                ? '👑 Admin'
+                : (p.professionalId?.fullName ? '🩺 ' + escapeHtml(p.professionalId.fullName) : '🩺 Professional');
+            const reactionCount = (p.reactions || []).length;
+            const commentCount = (p.comments || []).length;
+            return `
+            <tr>
+                <td>${p.isPinned ? '📌' : '—'}</td>
+                <td><strong>${escapeHtml(p.title)}</strong><br><span style="font-size:0.7rem;color:#9ca3af">${escapeHtml((p.summary || p.content || '').slice(0,70))}</span></td>
+                <td><span class="badge-pill">${contentTypeIcons[p.contentType] || ''} ${escapeHtml(p.contentType || '—')}</span></td>
+                <td style="font-size:0.78rem">${author}</td>
+                <td>${reactionCount}</td>
+                <td>${commentCount}</td>
+                <td><span class="badge-pill ${p.status==='published'?'badge-new':(p.status==='hidden'?'badge-hot':'')}">${escapeHtml(p.status || 'published')}</span></td>
+                <td class="row-actions">
+                    <button class="btn-sm" onclick="togglePinPost('${p._id}')">${p.isPinned ? 'Unpin' : 'Pin'}</button>
+                    <button class="btn-sm" onclick="toggleHidePost('${p._id}','${p.status}')">${p.status==='hidden' ? 'Show' : 'Hide'}</button>
+                    <button class="btn-sm" onclick='openOfficialPostModal(${JSON.stringify(p)})'>Edit</button>
+                    <button class="btn-sm btn-del" onclick="deleteOfficialPost('${p._id}')">Delete</button>
+                </td>
+            </tr>`;
+        }).join('');
+    }
+
+    function reloadCurrentPosts() {
+        if (currentPostsContext === 'circle') loadCirclePosts(currentOfficialGroupId);
+        else loadOfficialPosts(currentOfficialGroupId);
+    }
+
+    function openOfficialPostModal(post = null) {
+        if (!currentOfficialGroupId && !post) { toast('Open a group or circle first', 'error'); return; }
+        editingType = 'officialPost';
+        editingId = post?._id || null;
+        const contextLabel = currentPostsContext === 'circle' ? 'Circle' : 'Group';
+        document.getElementById('modalTitle').textContent = (editingId ? 'Edit ' : 'New ') + 'Post — ' + contextLabel + ': ' + currentOfficialGroupName;
+        document.getElementById('modalForm').innerHTML = formTemplates.officialPost(post || {}) +
+            `<div class="modal-actions"><button type="submit" class="btn-primary">${editingId ? 'Save changes' : 'Publish post'}</button><button type="button" class="btn-action" onclick="closeModal()">Cancel</button></div>`;
+        document.getElementById('modal').style.display = 'flex';
+    }
+
+    async function deleteOfficialPost(postId) {
+        if (!confirm('Permanently delete this post?')) return;
+        const r = await api('/admin/api/community-page/official-posts/' + postId, { method: 'DELETE' });
+        if (r.message) {
+            toast('Post deleted', 'success');
+            reloadCurrentPosts();
+        } else { toast(r.error || 'Delete failed', 'error'); }
+    }
+
+    async function togglePinPost(postId) {
+        const r = await api('/admin/api/community-page/official-posts/' + postId + '/pin', { method: 'PUT' });
+        if (r.isPinned !== undefined) {
+            toast(r.isPinned ? 'Pinned' : 'Unpinned', 'success');
+            reloadCurrentPosts();
+        } else { toast(r.error || 'Failed', 'error'); }
+    }
+
+    async function toggleHidePost(postId, currentStatus) {
+        const r = await api('/admin/api/community-page/official-posts/' + postId + '/hide', { method: 'PUT' });
+        if (r.status) {
+            toast(r.status === 'hidden' ? 'Post hidden' : 'Post visible', 'success');
+            reloadCurrentPosts();
+        } else { toast(r.error || 'Failed', 'error'); }
     }
 
     // Initial load

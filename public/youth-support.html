@@ -6,21 +6,12 @@
     <title>Youth Support - ABLE</title>
     <link rel="stylesheet" href="dashboard-styles.css">
     <link rel="stylesheet" href="youth-support.css">
+<link rel="stylesheet" href="/loader.css">
 </head>
 <body>
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header"><img src="images/logo.svg" alt="ABLE" class="sidebar-logo"></div>
-        <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2"/><path d="M9 22V12h6v10" stroke="currentColor" stroke-width="2"/></svg><span>Dashboard</span></a>
-            <a href="healing-zone.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2"/></svg><span>Healing Zone</span></a>
-            <a href="body-mind.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Body-Mind</span></a>
-            <a href="community.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg><span>Community</span></a>
-            <a href="youth-support.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none"><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke="currentColor" stroke-width="2"/></svg><span>Youth Support</span></a>
-            <a href="my-voice.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2"/></svg><span>My Voice</span></a>
-            <a href="settings.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51" stroke="currentColor" stroke-width="2"/></svg><span>Settings</span></a>
-        </nav>
-        <div class="sidebar-footer"><a href="login.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2"/><path d="M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Logout</span></a></div>
-    </aside>
+    <script src="/loader.js"></script>
+        <div id="sidebar"></div>
+    <script src="sidebar-nav.js"></script>
 
     <div class="main-content">
         <header class="topbar">
@@ -127,8 +118,12 @@
         document.getElementById('ysBadge').textContent = s.heroBadge;
         document.getElementById('ysHeadline').textContent = s.heroHeadline;
         document.getElementById('ysDescription').textContent = s.heroDescription;
-        document.getElementById('ysHeroBtn').textContent = s.heroButtonText;
-        document.getElementById('ysHeroBtn').href = s.heroButtonLink;
+        var heroBtn = document.getElementById('ysHeroBtn');
+        // Only set CMS text if assessment NOT yet complete — otherwise keep "Assessment Complete" label
+        if (!(youthProfile && youthProfile.assessmentCompleted)) {
+            heroBtn.textContent = s.heroButtonText;
+        }
+        heroBtn.href = s.heroButtonLink;
         document.getElementById('ysGrowthScore').textContent = s.heroGrowthScore + '%';
         document.getElementById('ysGrowthLabel').textContent = s.heroGrowthLabel;
         document.getElementById('ysGrowthTrend').textContent = s.heroGrowthTrend;
@@ -152,9 +147,46 @@
 
     function renderPrograms(items) {
         if (!items || !items.length) return;
-        document.getElementById('ysModulesGrid').innerHTML = items.map(p => `
-            <div class="ys-module"><div class="ys-mod-header" style="background:linear-gradient(135deg,${p.gradientStart},${p.gradientEnd})"><img src="${p.image}" alt="" loading="lazy"></div><div class="ys-mod-body"><h4>${p.title}</h4><p>${p.description}</p><span class="ys-mod-stat">${p.progressText}</span><button class="ys-mod-btn" onclick="window.location.href='${p.buttonLink}'">${p.buttonText}</button></div></div>
-        `).join('');
+        cachedModules = items;
+        var grid = document.getElementById('ysModulesGrid');
+        grid.innerHTML = items.map((p, idx) => {
+            var prog = moduleProgressText(p);
+            return `<div class="ys-module"><div class="ys-mod-header" style="background:linear-gradient(135deg,${p.gradientStart},${p.gradientEnd})"><img src="${p.image}" alt="" loading="lazy"></div><div class="ys-mod-body"><h4>${p.title}</h4><p>${p.description}</p><span class="ys-mod-stat">${prog}</span><button class="ys-mod-btn" data-mod-idx="${idx}">${p.buttonText}</button></div></div>`;
+        }).join('');
+
+        // Attach delegated click handler once
+        if (!grid.dataset.bound) {
+            grid.dataset.bound = '1';
+            grid.addEventListener('click', function(e) {
+                var btn = e.target.closest('.ys-mod-btn');
+                if (!btn) return;
+                var idx = parseInt(btn.dataset.modIdx);
+                if (!isNaN(idx) && cachedModules[idx]) openModuleDetail(cachedModules[idx]);
+            });
+        }
+    }
+    var cachedModules = [];
+
+    // Compute the stat label for a module card based on real completion
+    function moduleProgressText(mod) {
+        if (mod.moduleType === 'wellness') return 'Mood check-in';
+        if (mod.moduleType === 'counselor') return 'Book 1-on-1';
+        var lessons = mod.lessons || [];
+        if (!lessons.length) return mod.progressText || 'Get started';
+        var done = countCompletedLessons(mod);
+        if (done === 0) return lessons.length + ' lessons';
+        if (done >= lessons.length) return '✓ Completed';
+        return done + '/' + lessons.length + ' done · ' + Math.round(done / lessons.length * 100) + '%';
+    }
+
+    function countCompletedLessons(mod) {
+        if (!youthProfile || !youthProfile.completedLessons) return 0;
+        var lessons = mod.lessons || [];
+        var count = 0;
+        for (var i = 0; i < lessons.length; i++) {
+            if (youthProfile.completedLessons.indexOf(mod._id + ':' + i) > -1) count++;
+        }
+        return count;
     }
 
     function renderCareers(items) {
@@ -196,6 +228,329 @@
     }
 
     loadYouthSupport();
+
+    // ===== YOUTH INTERACTIVE FEATURES =====
+    const ysToken = localStorage.getItem('token');
+    let youthProfile = null;
+
+    async function loadYouthProfile() {
+        if (!ysToken) return;
+        try {
+            const res = await fetch('/api/youth/me', { headers: { 'Authorization': 'Bearer ' + ysToken } });
+            if (res.ok) {
+                youthProfile = await res.json();
+                applyUserProgress();
+                // Re-render module cards now that we know completion state
+                if (cachedModules && cachedModules.length) renderPrograms(cachedModules);
+            }
+        } catch(e) {}
+    }
+
+    function applyUserProgress() {
+        if (!youthProfile || !youthProfile.assessmentCompleted) return;
+        // Override progress bars with user's real scores
+        document.getElementById('ysProgressRow').innerHTML = [
+            { label: 'Confidence', pct: youthProfile.confidenceScore, color: '#8B5CF6' },
+            { label: 'Wellness', pct: youthProfile.wellnessScore, color: '#10B981' },
+            { label: 'Career Clarity', pct: youthProfile.careerClarityScore, color: '#3B82F6' },
+            { label: 'Social Skills', pct: youthProfile.socialSkillsScore, color: '#F59E0B' }
+        ].map(p => `<div class="ys-prog-item"><span class="ys-prog-label">${p.label}</span><div class="ys-prog-bar"><div class="ys-prog-fill" style="width:${p.pct}%;background:${p.color}"></div></div><span class="ys-prog-val">${p.pct}%</span></div>`).join('');
+        // Update growth score
+        const avg = Math.round((youthProfile.confidenceScore + youthProfile.wellnessScore + youthProfile.careerClarityScore + youthProfile.socialSkillsScore) / 4);
+        document.getElementById('ysGrowthScore').textContent = avg + '%';
+        // Reflect completed state on hero CTA
+        markAssessmentDone();
+    }
+
+    function escapeHtml(s) {
+        return (s == null ? '' : String(s)).replace(/[&<>"']/g, function(c) {
+            return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
+        });
+    }
+
+    // Assessment Modal
+    let assessmentModal = null;
+
+    function openAssessment() {
+        if (!ysToken) { alert('Please log in to take the assessment'); return; }
+        if (assessmentModal) assessmentModal.remove();
+        assessmentModal = document.createElement('div');
+        assessmentModal.id = 'ysAssessmentModal';
+        assessmentModal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem;overflow-y:auto';
+        assessmentModal.addEventListener('click', (e) => { if (e.target === assessmentModal) { assessmentModal.remove(); assessmentModal = null; } });
+        assessmentModal.innerHTML = '<style>.ys-chip{padding:0.5rem 1rem;border:1.5px solid #E5E7EB;border-radius:100px;font-size:0.82rem;cursor:pointer;transition:all 0.2s;user-select:none;background:white}.ys-chip.on{border-color:#E67E22;background:#FEF3E2;color:#D35400;font-weight:600}.ys-slider{width:100%;accent-color:#E67E22}</style><div style="background:white;border-radius:20px;padding:2.5rem;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.2)"><button id="ysCloseBtn" style="position:absolute;top:1rem;right:1.25rem;background:none;border:none;font-size:1.4rem;cursor:pointer;color:#9CA3AF;line-height:1">\u2715</button><h3 style="font-size:1.3rem;font-weight:800;color:#1a1a2e;margin-bottom:0.3rem">Youth Growth Assessment</h3><p style="font-size:0.82rem;color:#6B7280;margin-bottom:1.75rem">Tell us about yourself to personalize your growth plan</p><div style="margin-bottom:1.25rem"><label style="font-size:0.8rem;font-weight:600;color:#374151;display:block;margin-bottom:0.4rem">Age Group *</label><select id="ysAge" style="width:100%;padding:0.75rem 1rem;border:1.5px solid #E5E7EB;border-radius:10px;font-size:0.9rem;outline:none;background:white"><option value="13-15">13\u201315</option><option value="16-18" selected>16\u201318</option><option value="19-24">19\u201324</option></select></div><div style="margin-bottom:1.25rem"><label style="font-size:0.8rem;font-weight:600;color:#374151;display:block;margin-bottom:0.5rem">Focus Areas * (select at least 1)</label><div id="ysFocusChips" style="display:flex;flex-wrap:wrap;gap:0.4rem"></div></div><div style="margin-bottom:1.25rem"><label style="font-size:0.8rem;font-weight:600;color:#374151;display:block;margin-bottom:0.3rem">Confidence: <span id="ysConfVal" style="color:#E67E22">5</span>/10</label><input type="range" class="ys-slider" id="ysConf" min="1" max="10" value="5"></div><div style="margin-bottom:1.25rem"><label style="font-size:0.8rem;font-weight:600;color:#374151;display:block;margin-bottom:0.3rem">Career Clarity: <span id="ysCareerVal" style="color:#E67E22">3</span>/10</label><input type="range" class="ys-slider" id="ysCareer" min="1" max="10" value="3"></div><div style="margin-bottom:1.25rem"><label style="font-size:0.8rem;font-weight:600;color:#374151;display:block;margin-bottom:0.3rem">Wellness: <span id="ysWellnessVal" style="color:#E67E22">5</span>/10</label><input type="range" class="ys-slider" id="ysWellness" min="1" max="10" value="5"></div><div style="margin-bottom:1.25rem"><label style="font-size:0.8rem;font-weight:600;color:#374151;display:block;margin-bottom:0.5rem">Interests</label><div id="ysInterests" style="display:flex;flex-wrap:wrap;gap:0.4rem"></div></div><div style="margin-bottom:1.5rem"><label style="font-size:0.8rem;font-weight:600;color:#374151;display:block;margin-bottom:0.4rem">Learning Style</label><select id="ysLearn" style="width:100%;padding:0.75rem 1rem;border:1.5px solid #E5E7EB;border-radius:10px;font-size:0.9rem;outline:none;background:white"><option value="videos">Videos</option><option value="reading">Reading</option><option value="tasks">Hands-on Tasks</option><option value="mentorship">Mentorship</option></select></div><div id="ysError" style="display:none;color:#EF4444;font-size:0.8rem;text-align:center;padding:0.5rem;background:#FEF2F2;border-radius:8px;margin-bottom:0.75rem"></div><button id="ysSubmitBtn" style="width:100%;padding:0.9rem;background:#E67E22;color:white;border:none;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer">Save Assessment</button></div>';
+        document.body.appendChild(assessmentModal);
+        // Populate chips
+        var focusOpts = ['Career','Confidence','Stress','Social Skills','Study Pressure'];
+        var interestOpts = ['Technology','Design','Health','Business','Education','Creative','Social Work'];
+        document.getElementById('ysFocusChips').innerHTML = focusOpts.map(function(f){return '<span class="ys-chip" data-v="'+f+'">'+f+'</span>';}).join('');
+        document.getElementById('ysInterests').innerHTML = interestOpts.map(function(f){return '<span class="ys-chip" data-v="'+f+'">'+f+'</span>';}).join('');
+        assessmentModal.querySelectorAll('.ys-chip').forEach(function(c){c.addEventListener('click',function(){c.classList.toggle('on')})});
+        document.getElementById('ysConf').addEventListener('input',function(e){document.getElementById('ysConfVal').textContent=e.target.value});
+        document.getElementById('ysCareer').addEventListener('input',function(e){document.getElementById('ysCareerVal').textContent=e.target.value});
+        document.getElementById('ysWellness').addEventListener('input',function(e){document.getElementById('ysWellnessVal').textContent=e.target.value});
+        document.getElementById('ysCloseBtn').addEventListener('click',function(){assessmentModal.remove();assessmentModal=null});
+        document.getElementById('ysSubmitBtn').addEventListener('click',submitAssessment);
+    }
+
+    async function submitAssessment() {
+        var err = document.getElementById('ysError');
+        var btn = document.getElementById('ysSubmitBtn');
+        err.style.display = 'none';
+        var focus = [...document.querySelectorAll('#ysFocusChips .ys-chip.on')].map(function(s){return s.dataset.v});
+        var interests = [...document.querySelectorAll('#ysInterests .ys-chip.on')].map(function(s){return s.dataset.v});
+        if (!focus.length) { err.textContent = 'Select at least one focus area'; err.style.display = 'block'; return; }
+        btn.disabled = true; btn.textContent = 'Saving...'; btn.style.opacity = '0.6';
+        var body = { ageGroup: document.getElementById('ysAge').value, focusAreas: focus, confidenceScore: parseInt(document.getElementById('ysConf').value) * 10, careerClarityScore: parseInt(document.getElementById('ysCareer').value) * 10, wellnessScore: parseInt(document.getElementById('ysWellness').value) * 10, socialSkillsScore: 40, interests: interests, learningStyle: document.getElementById('ysLearn').value };
+        try {
+            var res = await fetch('/api/youth/assessment', { method: 'POST', headers: { 'Authorization': 'Bearer ' + ysToken, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+            var data = await res.json();
+            if (res.ok) {
+                youthProfile = data.profile;
+                applyUserProgress();
+                markAssessmentDone();
+                if (assessmentModal) { assessmentModal.remove(); assessmentModal = null; }
+                ysToast('\u2713 Assessment saved! Your personalized plan is ready.');
+                // Smooth scroll to progress
+                setTimeout(function() {
+                    var pr = document.getElementById('ysProgressRow');
+                    if (pr) pr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            }
+            else { err.textContent = data.error || 'Failed'; err.style.display = 'block'; btn.disabled = false; btn.textContent = 'Save Assessment'; btn.style.opacity = '1'; }
+        } catch(e) { err.textContent = 'Network error'; err.style.display = 'block'; btn.disabled = false; btn.textContent = 'Save Assessment'; btn.style.opacity = '1'; }
+    }
+
+    function markAssessmentDone() {
+        var heroBtn = document.getElementById('ysHeroBtn');
+        if (heroBtn) {
+            heroBtn.textContent = '\u2713 Assessment Complete \u00b7 Retake';
+            heroBtn.style.background = '#10B981';
+            heroBtn.style.color = 'white';
+        }
+    }
+
+    function ysToast(msg) {
+        var t = document.createElement('div');
+        t.style.cssText = 'position:fixed;bottom:2rem;right:2rem;background:#1a1a2e;color:white;padding:0.85rem 1.5rem;border-radius:10px;font-size:0.85rem;z-index:9999;box-shadow:0 10px 30px rgba(0,0,0,0.2);max-width:320px';
+        t.textContent = msg;
+        document.body.appendChild(t);
+        setTimeout(function() { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; setTimeout(function() { t.remove(); }, 300); }, 3500);
+    }
+
+    // ===== MODULE DETAIL MODAL =====
+    function openModuleDetail(mod) {
+        // Route special module types
+        if (mod.moduleType === 'wellness') { openWellnessCheckIn(); return; }
+        if (mod.moduleType === 'counselor') {
+            var c = document.getElementById('ysCounselor');
+            if (c) c.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+
+        var lessons = mod.lessons || [];
+        if (!lessons.length) {
+            if (mod.buttonLink && mod.buttonLink !== '#') window.location.href = mod.buttonLink;
+            return;
+        }
+
+        var existing = document.getElementById('ysModuleModal');
+        if (existing) existing.remove();
+        var m = document.createElement('div');
+        m.id = 'ysModuleModal';
+        m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto';
+        m.addEventListener('click', function(e) { if (e.target === m) m.remove(); });
+
+        m.innerHTML = '<div style="background:white;border-radius:20px;max-width:560px;width:100%;overflow:hidden;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.25);margin:auto">' +
+            '<div style="background:linear-gradient(135deg,' + (mod.gradientStart||'#E67E22') + ',' + (mod.gradientEnd||'#F59E0B') + ');padding:2rem;position:relative">' +
+                '<button id="ymCloseBtn" style="position:absolute;top:1rem;right:1.25rem;background:rgba(255,255,255,0.25);border:none;width:32px;height:32px;border-radius:50%;font-size:1rem;cursor:pointer;color:white">\u2715</button>' +
+                '<h2 style="font-size:1.4rem;font-weight:800;color:white;margin-bottom:0.3rem">' + escapeHtml(mod.title) + '</h2>' +
+                '<p style="font-size:0.85rem;color:rgba(255,255,255,0.9)">' + escapeHtml(mod.description || '') + '</p>' +
+                '<div style="margin-top:1rem;background:rgba(255,255,255,0.25);border-radius:100px;height:8px;overflow:hidden"><div id="ymProgressBar" style="height:100%;background:white;width:0%;transition:width 0.4s"></div></div>' +
+                '<div id="ymProgressLabel" style="font-size:0.72rem;color:white;margin-top:0.4rem;font-weight:600"></div>' +
+            '</div>' +
+            '<div id="ymLessonList" style="padding:1.25rem 1.5rem 1.75rem;max-height:55vh;overflow-y:auto"></div>' +
+        '</div>';
+        document.body.appendChild(m);
+        document.getElementById('ymCloseBtn').addEventListener('click', function() { m.remove(); });
+
+        renderLessonList(mod);
+    }
+
+    function renderLessonList(mod) {
+        var lessons = mod.lessons || [];
+        var typeIcon = { article: '\uD83D\uDCC4', activity: '\u270F\uFE0F', tip: '\uD83D\uDCA1', reflection: '\uD83E\uDDD8' };
+        var listEl = document.getElementById('ymLessonList');
+        if (!listEl) return;
+
+        listEl.innerHTML = lessons.map(function(l, i) {
+            var key = mod._id + ':' + i;
+            var done = youthProfile && youthProfile.completedLessons && youthProfile.completedLessons.indexOf(key) > -1;
+            return '<div class="ym-lesson" data-idx="' + i + '" style="display:flex;align-items:center;gap:0.85rem;padding:0.9rem 1rem;border:1.5px solid ' + (done ? '#A7F3D0' : '#E5E7EB') + ';border-radius:12px;margin-bottom:0.6rem;cursor:pointer;background:' + (done ? '#F0FDF4' : 'white') + ';transition:all 0.2s">' +
+                '<span style="font-size:1.3rem">' + (typeIcon[l.type] || '\uD83D\uDCC4') + '</span>' +
+                '<div style="flex:1;min-width:0">' +
+                    '<div style="font-size:0.88rem;font-weight:700;color:#1a1a2e">' + escapeHtml(l.title) + '</div>' +
+                    '<div style="font-size:0.72rem;color:#9CA3AF;text-transform:capitalize">' + escapeHtml(l.type) + ' \u00b7 ' + escapeHtml(l.duration || '5 min') + '</div>' +
+                '</div>' +
+                '<span style="font-size:1.1rem;color:' + (done ? '#10B981' : '#D1D5DB') + '">' + (done ? '\u2713' : '\u203A') + '</span>' +
+            '</div>';
+        }).join('');
+
+        // Update progress bar
+        var done = countCompletedLessons(mod);
+        var pct = lessons.length ? Math.round(done / lessons.length * 100) : 0;
+        var bar = document.getElementById('ymProgressBar');
+        var label = document.getElementById('ymProgressLabel');
+        if (bar) bar.style.width = pct + '%';
+        if (label) label.textContent = done + ' of ' + lessons.length + ' lessons complete (' + pct + '%)';
+
+        // Click → open lesson reader
+        listEl.querySelectorAll('.ym-lesson').forEach(function(el) {
+            el.addEventListener('click', function() {
+                var idx = parseInt(el.dataset.idx);
+                openLessonReader(mod, idx);
+            });
+        });
+    }
+
+    function openLessonReader(mod, idx) {
+        var lesson = (mod.lessons || [])[idx];
+        if (!lesson) return;
+        var key = mod._id + ':' + idx;
+        var done = youthProfile && youthProfile.completedLessons && youthProfile.completedLessons.indexOf(key) > -1;
+
+        var existing = document.getElementById('ysLessonModal');
+        if (existing) existing.remove();
+        var m = document.createElement('div');
+        m.id = 'ysLessonModal';
+        m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:1100;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto';
+        m.addEventListener('click', function(e) { if (e.target === m) m.remove(); });
+
+        m.innerHTML = '<div style="background:white;border-radius:20px;max-width:600px;width:100%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.3);margin:auto">' +
+            '<div style="padding:2rem 2.25rem 1rem;border-bottom:1px solid #F3F4F6;position:relative">' +
+                '<button id="ylCloseBtn" style="position:absolute;top:1.25rem;right:1.25rem;background:#F3F4F6;border:none;width:32px;height:32px;border-radius:50%;font-size:1rem;cursor:pointer;color:#6B7280">\u2715</button>' +
+                '<div style="font-size:0.72rem;color:#E67E22;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.4rem">' + escapeHtml(mod.title) + '</div>' +
+                '<h2 style="font-size:1.35rem;font-weight:800;color:#1a1a2e">' + escapeHtml(lesson.title) + '</h2>' +
+                '<div style="font-size:0.75rem;color:#9CA3AF;margin-top:0.3rem;text-transform:capitalize">' + escapeHtml(lesson.type) + ' \u00b7 ' + escapeHtml(lesson.duration || '5 min') + '</div>' +
+            '</div>' +
+            '<div style="padding:1.5rem 2.25rem;font-size:0.92rem;color:#374151;line-height:1.8;white-space:pre-wrap;max-height:50vh;overflow-y:auto">' + escapeHtml(lesson.content || '') + '</div>' +
+            '<div style="padding:1rem 2.25rem 2rem;border-top:1px solid #F3F4F6">' +
+                '<button id="ylDoneBtn" style="width:100%;padding:0.9rem;background:' + (done ? '#10B981' : '#E67E22') + ';color:white;border:none;border-radius:12px;font-size:0.92rem;font-weight:700;cursor:pointer">' + (done ? '\u2713 Completed' : 'Mark as Complete') + '</button>' +
+            '</div>' +
+        '</div>';
+        document.body.appendChild(m);
+        document.getElementById('ylCloseBtn').addEventListener('click', function() { m.remove(); });
+
+        var doneBtn = document.getElementById('ylDoneBtn');
+        doneBtn.addEventListener('click', function() {
+            if (done) { m.remove(); return; }
+            if (!ysToken) { alert('Please log in to track progress'); return; }
+            doneBtn.disabled = true; doneBtn.textContent = 'Saving...';
+            fetch('/api/youth/lessons/' + encodeURIComponent(key) + '/complete', {
+                method: 'POST',
+                headers: { 'Authorization': 'Bearer ' + ysToken, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ lessonTitle: lesson.title })
+            }).then(function(r) { return r.json(); }).then(function(d) {
+                if (d.profile) {
+                    youthProfile = d.profile;
+                    applyUserProgress();
+                    renderPrograms(cachedModules);
+                    renderLessonList(mod);
+                    m.remove();
+                    ysToast('\u2713 "' + lesson.title + '" complete!');
+                } else {
+                    doneBtn.disabled = false; doneBtn.textContent = 'Mark as Complete';
+                }
+            }).catch(function() { doneBtn.disabled = false; doneBtn.textContent = 'Mark as Complete'; });
+        });
+    }
+
+    // ===== QUICK WELLNESS CHECK-IN =====
+    function openWellnessCheckIn() {
+        if (!ysToken) { alert('Log in to check in'); return; }
+        var existing = document.getElementById('ysCheckInModal');
+        if (existing) existing.remove();
+        var m = document.createElement('div');
+        m.id = 'ysCheckInModal';
+        m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem;overflow-y:auto';
+        m.addEventListener('click', function(e) { if (e.target === m) m.remove(); });
+
+        m.innerHTML = '<style>.yc-mood{padding:0.85rem;border:2px solid #E5E7EB;border-radius:14px;background:white;cursor:pointer;font-size:1.6rem;transition:all 0.2s;text-align:center}.yc-mood.on{border-color:#E67E22;background:#FEF3E2}</style><div style="background:white;border-radius:20px;padding:2rem;max-width:440px;width:100%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.25)">' +
+            '<button id="ycCloseBtn" style="position:absolute;top:1rem;right:1.25rem;background:none;border:none;font-size:1.3rem;cursor:pointer;color:#9CA3AF">\u2715</button>' +
+            '<h3 style="font-size:1.25rem;font-weight:800;color:#1a1a2e;margin-bottom:0.4rem">Wellness Check-In</h3>' +
+            '<p style="font-size:0.82rem;color:#6B7280;margin-bottom:1.5rem">How are you feeling today?</p>' +
+            '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0.5rem;margin-bottom:1.5rem" id="ycMoods">' +
+                '<div class="yc-mood" data-v="2">\uD83D\uDE22</div>' +
+                '<div class="yc-mood" data-v="4">\uD83D\uDE15</div>' +
+                '<div class="yc-mood" data-v="6">\uD83D\uDE10</div>' +
+                '<div class="yc-mood" data-v="8">\uD83D\uDE42</div>' +
+                '<div class="yc-mood" data-v="10">\uD83D\uDE04</div>' +
+            '</div>' +
+            '<label style="font-size:0.8rem;font-weight:600;color:#374151;display:block;margin-bottom:0.4rem">Quick note (optional)</label>' +
+            '<textarea id="ycNote" rows="2" placeholder="What\u2019s on your mind?" style="width:100%;padding:0.7rem;border:1.5px solid #E5E7EB;border-radius:10px;font-size:0.85rem;font-family:inherit;resize:vertical;margin-bottom:1.25rem"></textarea>' +
+            '<div id="ycError" style="display:none;color:#EF4444;font-size:0.8rem;text-align:center;padding:0.5rem;background:#FEF2F2;border-radius:8px;margin-bottom:0.5rem"></div>' +
+            '<button id="ycSubmitBtn" style="width:100%;padding:0.85rem;background:#E67E22;color:white;border:none;border-radius:12px;font-weight:700;cursor:pointer">Save Check-In</button>' +
+        '</div>';
+        document.body.appendChild(m);
+
+        var selectedMood = null;
+        m.querySelectorAll('.yc-mood').forEach(function(el) {
+            el.addEventListener('click', function() {
+                m.querySelectorAll('.yc-mood').forEach(function(x) { x.classList.remove('on'); });
+                el.classList.add('on');
+                selectedMood = parseInt(el.dataset.v);
+            });
+        });
+
+        document.getElementById('ycCloseBtn').addEventListener('click', function() { m.remove(); });
+        document.getElementById('ycSubmitBtn').addEventListener('click', async function() {
+            var err = document.getElementById('ycError');
+            err.style.display = 'none';
+            if (!selectedMood) { err.textContent = 'Pick how you\u2019re feeling'; err.style.display = 'block'; return; }
+            // Reuse assessment endpoint to update wellnessScore (multiply by 10 to scale 1-10 -> 10-100)
+            var existingFocus = (youthProfile && youthProfile.focusAreas && youthProfile.focusAreas.length) ? youthProfile.focusAreas : ['Wellness'];
+            var existingAge = (youthProfile && youthProfile.ageGroup) ? youthProfile.ageGroup : '16-18';
+            var body = {
+                ageGroup: existingAge,
+                focusAreas: existingFocus,
+                wellnessScore: selectedMood * 10,
+                confidenceScore: (youthProfile && youthProfile.confidenceScore) || 50,
+                careerClarityScore: (youthProfile && youthProfile.careerClarityScore) || 30,
+                socialSkillsScore: (youthProfile && youthProfile.socialSkillsScore) || 40,
+                interests: (youthProfile && youthProfile.interests) || [],
+                learningStyle: (youthProfile && youthProfile.learningStyle) || 'videos'
+            };
+            try {
+                var res = await fetch('/api/youth/assessment', { method: 'POST', headers: { 'Authorization': 'Bearer ' + ysToken, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+                var data = await res.json();
+                if (res.ok) {
+                    youthProfile = data.profile; applyUserProgress();
+                    m.remove();
+                    ysToast('\uD83C\uDF1F Check-in saved!');
+                } else {
+                    err.textContent = data.error || 'Failed'; err.style.display = 'block';
+                }
+            } catch(e) { err.textContent = 'Network error'; err.style.display = 'block'; }
+        });
+    }
+    // Complete challenge
+    function completeChallenge(id, title) {
+        if (!ysToken) { alert('Log in to complete challenges'); return; }
+        fetch('/api/youth/challenges/' + id + '/complete', { method: 'POST', headers: { 'Authorization': 'Bearer ' + ysToken, 'Content-Type': 'application/json' }, body: JSON.stringify({ challengeTitle: title }) })
+            .then(r => r.json()).then(d => { if (d.profile) { youthProfile = d.profile; applyUserProgress(); } });
+    }
+
+    // Save career
+    function saveCareer(id) {
+        if (!ysToken) { alert('Log in to save careers'); return; }
+        fetch('/api/youth/careers/' + id + '/save', { method: 'POST', headers: { 'Authorization': 'Bearer ' + ysToken } })
+            .then(r => r.json()).then(d => { if (d.profile) { youthProfile = d.profile; applyUserProgress(); } });
+    }
+
+    // Hook up the hero button to open assessment
+    document.getElementById('ysHeroBtn')?.addEventListener('click', (e) => { e.preventDefault(); openAssessment(); });
+
+    loadYouthProfile();
     </script>
 </body>
 </html>

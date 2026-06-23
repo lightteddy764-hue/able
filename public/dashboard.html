@@ -6,22 +6,13 @@
     <title>My Wellness Dashboard - ABLE</title>
     <link rel="stylesheet" href="dashboard-styles.css">
     <link rel="stylesheet" href="dash-premium.css">
+<link rel="stylesheet" href="/loader.css">
 </head>
 <body>
+    <script src="/loader.js"></script>
     <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header"><img src="images/logo.svg" alt="ABLE" class="sidebar-logo"></div>
-        <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9L12 2L21 9V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Dashboard</span></a>
-            <a href="healing-zone.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Healing Zone</span></a>
-            <a href="body-mind.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Body-Mind</span></a>
-            <a href="community.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg><span>Community</span></a>
-            <a href="youth-support.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Youth Support</span></a>
-            <a href="my-voice.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>My Voice</span></a>
-            <a href="settings.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Settings</span></a>
-        </nav>
-        <div class="sidebar-footer"><a href="login.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Logout</span></a></div>
-    </aside>
+    <div id="sidebar"></div>
+    <script src="sidebar-nav.js"></script>
 
     <!-- Main -->
     <div class="main-content">
@@ -77,6 +68,28 @@
                 </div>
             </div>
 
+            <!-- Care Hub Progress -->
+            <div class="dp-card dp-care-hub" id="careHubCard">
+                <h3 class="dp-card-title">🧡 Care Hub Progress</h3>
+                <div class="dp-care-progress-grid" id="careHubStats">
+                    <div class="dp-care-stat"><span class="dp-care-num">0</span><span class="dp-care-label">Check-Ins</span></div>
+                    <div class="dp-care-stat"><span class="dp-care-num">0</span><span class="dp-care-label">Tasks Done</span></div>
+                    <div class="dp-care-stat"><span class="dp-care-num">0</span><span class="dp-care-label">Challenges</span></div>
+                    <div class="dp-care-stat"><span class="dp-care-num">0</span><span class="dp-care-label">Guides</span></div>
+                </div>
+                <div class="dp-care-bars" id="careHubBars">
+                    <div class="dp-care-bar-row"><span class="dp-care-bar-label">🧘 Self-Care</span><div class="dp-care-bar-track"><div class="dp-care-bar-fill" style="width:0%;background:linear-gradient(90deg,#E67E22,#F59E0B)"></div></div><span class="dp-care-bar-val">0</span></div>
+                    <div class="dp-care-bar-row"><span class="dp-care-bar-label">📋 Check-Ins</span><div class="dp-care-bar-track"><div class="dp-care-bar-fill" style="width:0%;background:linear-gradient(90deg,#10B981,#34D399)"></div></div><span class="dp-care-bar-val">0</span></div>
+                    <div class="dp-care-bar-row"><span class="dp-care-bar-label">🏆 Parenting</span><div class="dp-care-bar-track"><div class="dp-care-bar-fill" style="width:0%;background:linear-gradient(90deg,#8B5CF6,#A78BFA)"></div></div><span class="dp-care-bar-val">0</span></div>
+                    <div class="dp-care-bar-row"><span class="dp-care-bar-label">👶 Child Guide</span><div class="dp-care-bar-track"><div class="dp-care-bar-fill" style="width:0%;background:linear-gradient(90deg,#3B82F6,#60A5FA)"></div></div><span class="dp-care-bar-val">0</span></div>
+                </div>
+                <div class="dp-care-links">
+                    <a href="self-care.html" class="dp-care-link">🧘 Self-Care</a>
+                    <a href="parenting.html" class="dp-care-link">👨‍👩‍👧 Parenting</a>
+                    <a href="child-support.html" class="dp-care-link">👶 Child Support</a>
+                </div>
+            </div>
+
             <!-- Two Column: Mood + Daily Plan -->
             <div class="dp-two-col">
                 <div class="dp-card">
@@ -111,21 +124,15 @@
 
             <!-- Therapist Recommendation + Weekly Chart -->
             <div class="dp-two-col">
-                <div class="dp-card dp-therapist-rec">
+                <div class="dp-card dp-therapist-rec" id="therapistRecCard">
                     <h3 class="dp-card-title">Recommended Therapist</h3>
-                    <div class="dp-rec-content">
-                        <img src="https://ui-avatars.com/api/?name=Dr+Sarah+Wilson&background=E67E22&color=fff&size=64" alt="Dr. Sarah Wilson" class="dp-rec-avatar">
-                        <div class="dp-rec-info">
-                            <h4>Dr. Sarah Wilson</h4>
-                            <span class="dp-rec-specialty">Anxiety & Stress Specialist</span>
-                            <div class="dp-rec-meta">
-                                <span>⭐ 4.9</span>
-                                <span>12 Years Exp.</span>
-                                <span>Available Today</span>
-                            </div>
+                    <div class="dp-rec-content" id="therapistRecContent">
+                        <div style="display:flex;gap:0.75rem;align-items:center">
+                            <div style="width:64px;height:64px;border-radius:50%;background:#F3F4F6"></div>
+                            <div style="flex:1"><div style="height:12px;background:#F3F4F6;border-radius:4px;width:60%;margin-bottom:0.4rem"></div><div style="height:10px;background:#F3F4F6;border-radius:4px;width:40%"></div></div>
                         </div>
                     </div>
-                    <a href="healing-zone.html" class="dp-rec-btn">Book Session →</a>
+                    <button class="dp-rec-btn" id="therapistRecBtn" style="cursor:pointer;border:none;width:100%;text-align:center">Book Session →</button>
                 </div>
                 <div class="dp-card">
                     <h3 class="dp-card-title">Weekly Wellness Progress</h3>
@@ -156,11 +163,8 @@
                 </div>
                 <div class="dp-card">
                     <h3 class="dp-card-title">Recent Activity</h3>
-                    <div class="dp-activity">
-                        <div class="dp-act-item"><span class="dp-act-dot green"></span>Assessment Completed<small>Today</small></div>
-                        <div class="dp-act-item"><span class="dp-act-dot blue"></span>Joined Community Circle<small>Yesterday</small></div>
-                        <div class="dp-act-item"><span class="dp-act-dot purple"></span>Read Anxiety Resource<small>2 days ago</small></div>
-                        <div class="dp-act-item"><span class="dp-act-dot orange"></span>Completed Meditation<small>3 days ago</small></div>
+                    <div class="dp-activity" id="recentActivityList">
+                        <div class="dp-act-item"><span class="dp-act-dot green"></span>Loading...<small></small></div>
                     </div>
                 </div>
             </div>
@@ -168,20 +172,18 @@
             <!-- Community Highlights -->
             <div class="dp-card dp-community-card">
                 <h3 class="dp-card-title">Community Highlights</h3>
-                <div class="dp-community-layout">
-                    <div class="dp-community-stats">
-                        <div class="dp-cm-stat"><span class="dp-cm-num">125</span><span>Discussions</span></div>
-                        <div class="dp-cm-stat"><span class="dp-cm-num">23</span><span>Stories</span></div>
-                        <div class="dp-cm-stat"><span class="dp-cm-num">18</span><span>Events</span></div>
-                    </div>
-                    <div class="dp-trending">
-                        <h4 class="dp-trending-title">Trending Today</h4>
-                        <a href="my-voice.html" class="dp-trending-item">How I Reduced Anxiety Naturally</a>
-                        <a href="community.html" class="dp-trending-item">Daily Gratitude Challenge</a>
-                        <a href="body-mind.html" class="dp-trending-item">Weekend Group Meditation Session</a>
-                    </div>
-                    <a href="community.html" class="dp-cm-btn">Explore Community →</a>
+                <div class="dp-community-stats">
+                    <div class="dp-cm-stat"><span class="dp-cm-num">125</span><span>Discussions</span></div>
+                    <div class="dp-cm-stat"><span class="dp-cm-num">23</span><span>Stories</span></div>
+                    <div class="dp-cm-stat"><span class="dp-cm-num">18</span><span>Events</span></div>
                 </div>
+                <div class="dp-trending">
+                    <h4 class="dp-trending-title">Trending Today</h4>
+                    <a href="my-voice.html" class="dp-trending-item">How I Reduced Anxiety Naturally</a>
+                    <a href="community.html" class="dp-trending-item">Daily Gratitude Challenge</a>
+                    <a href="body-mind.html" class="dp-trending-item">Weekend Group Meditation Session</a>
+                </div>
+                <a href="community.html" class="dp-cm-btn">Explore Community →</a>
             </div>
         </main>
     </div>
@@ -393,6 +395,142 @@
     // Init
     loadDashboard();
     loadTasks();
+    loadRecentActivity();
+    loadRecommendedTherapist();
+
+    // Load a real professional for the dashboard card
+    async function loadRecommendedTherapist() {
+        try {
+            const res = await fetch('/api/professionals?availableToday=true');
+            const data = await res.json();
+            const professionals = data.professionals || [];
+            if (!professionals.length) {
+                // Try any approved professional if none available today
+                const res2 = await fetch('/api/professionals');
+                const data2 = await res2.json();
+                professionals.push(...(data2.professionals || []));
+            }
+            if (!professionals.length) return;
+
+            // Pick highest rated
+            const prof = professionals.sort((a,b) => b.rating - a.rating)[0];
+            const avatar = prof.profilePhoto || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(prof.fullName) + '&background=E67E22&color=fff&size=64';
+            const specs = (prof.specializations || []).slice(0,2).join(' & ') || prof.title;
+            const avail = prof.isAvailableToday ? 'Available Today' : (prof.nextAvailable || 'Schedule Available');
+
+            document.getElementById('therapistRecContent').innerHTML = `
+                <img src="${avatar}" alt="${prof.fullName}" class="dp-rec-avatar" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(prof.fullName)}&background=E67E22&color=fff&size=64'">
+                <div class="dp-rec-info">
+                    <h4>${prof.fullName}</h4>
+                    <span class="dp-rec-specialty">${specs}</span>
+                    <div class="dp-rec-meta"><span>⭐ ${prof.rating}</span><span>${prof.experienceYears} Years Exp.</span><span>${avail}</span></div>
+                </div>
+            `;
+
+            // Book Session button — opens booking modal directly
+            document.getElementById('therapistRecBtn').onclick = () => openBookingFromDashboard(prof._id, prof.fullName, prof.sessionTypes || []);
+        } catch(e) {
+            document.getElementById('therapistRecCard').style.display = 'none';
+        }
+    }
+
+    // Booking modal inline on dashboard
+    let dashBookingOverlay = null;
+    function openBookingFromDashboard(profId, profName, sessionTypes) {
+        if (dashBookingOverlay) dashBookingOverlay.remove();
+        const typeOptions = (sessionTypes.length ? sessionTypes : ['video','audio','chat','in-person']).map(t => `<option value="${t}">${{video:'📹 Video',audio:'📞 Audio',chat:'💬 Chat','in-person':'🏢 In-Person'}[t]||t}</option>`).join('');
+        const minTime = new Date(Date.now() + 3600000).toISOString().slice(0,16);
+
+        dashBookingOverlay = document.createElement('div');
+        dashBookingOverlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem';
+        dashBookingOverlay.innerHTML = `<div style="background:white;border-radius:20px;padding:2rem;max-width:420px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.2);position:relative">
+            <button id="dbkClose" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.3rem;cursor:pointer;color:#9CA3AF">✕</button>
+            <h3 style="font-size:1.1rem;font-weight:700;margin-bottom:0.25rem">Request Session</h3>
+            <p style="font-size:0.82rem;color:#6B7280;margin-bottom:1.25rem">with <strong>${profName}</strong></p>
+            <div style="margin-bottom:0.9rem"><label style="font-size:0.78rem;font-weight:600;color:#374151;display:block;margin-bottom:0.3rem">Session Type *</label><select id="dbkType" style="width:100%;padding:0.65rem;border:1.5px solid #E5E7EB;border-radius:10px;font-size:0.88rem">${typeOptions}</select></div>
+            <div style="margin-bottom:0.9rem"><label style="font-size:0.78rem;font-weight:600;color:#374151;display:block;margin-bottom:0.3rem">Concern *</label><select id="dbkConcern" style="width:100%;padding:0.65rem;border:1.5px solid #E5E7EB;border-radius:10px;font-size:0.88rem"><option>Anxiety</option><option>Depression</option><option>Stress</option><option>Relationships</option><option>Trauma</option><option>Self-Esteem</option><option>Grief</option><option>Family</option><option>Career</option><option>Other</option></select></div>
+            <div style="margin-bottom:0.9rem"><label style="font-size:0.78rem;font-weight:600;color:#374151;display:block;margin-bottom:0.3rem">Date & Time *</label><input type="datetime-local" id="dbkTime" style="width:100%;padding:0.65rem;border:1.5px solid #E5E7EB;border-radius:10px;font-size:0.88rem" min="${minTime}"></div>
+            <div style="margin-bottom:0.9rem"><label style="font-size:0.78rem;font-weight:600;color:#374151;display:block;margin-bottom:0.3rem">Note (optional)</label><textarea id="dbkNote" rows="2" style="width:100%;padding:0.65rem;border:1.5px solid #E5E7EB;border-radius:10px;font-size:0.88rem;font-family:inherit;resize:none"></textarea></div>
+            <div id="dbkErr" style="display:none;color:#EF4444;font-size:0.78rem;text-align:center;padding:0.5rem;background:#FEF2F2;border-radius:6px;margin-bottom:0.5rem"></div>
+            <button id="dbkSubmit" style="width:100%;padding:0.8rem;background:#E67E22;color:white;border:none;border-radius:12px;font-size:0.92rem;font-weight:700;cursor:pointer">Send Request</button>
+        </div>`;
+
+        document.body.appendChild(dashBookingOverlay);
+        document.getElementById('dbkClose').addEventListener('click', () => { dashBookingOverlay.remove(); dashBookingOverlay = null; });
+        dashBookingOverlay.addEventListener('click', e => { if (e.target === dashBookingOverlay) { dashBookingOverlay.remove(); dashBookingOverlay = null; } });
+        document.getElementById('dbkSubmit').addEventListener('click', () => submitDashboardBooking(profId));
+    }
+
+    async function submitDashboardBooking(profId) {
+        const btn = document.getElementById('dbkSubmit');
+        const err = document.getElementById('dbkErr');
+        err.style.display = 'none';
+        const time = document.getElementById('dbkTime').value;
+        if (!time) { err.textContent = 'Please select a date and time'; err.style.display = 'block'; return; }
+        btn.disabled = true; btn.textContent = 'Sending...'; btn.style.opacity = '0.6';
+        try {
+            const res = await fetch('/api/professionals/' + profId + '/request-session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                body: JSON.stringify({ sessionType: document.getElementById('dbkType').value, concern: document.getElementById('dbkConcern').value, requestedAt: new Date(document.getElementById('dbkTime').value).toISOString(), userNote: document.getElementById('dbkNote').value })
+            });
+            const data = await res.json();
+            if (!res.ok) { err.textContent = data.error; err.style.display = 'block'; btn.disabled = false; btn.textContent = 'Send Request'; btn.style.opacity = '1'; return; }
+            if (dashBookingOverlay) {
+                dashBookingOverlay.innerHTML = '<div style="background:white;border-radius:20px;padding:2.5rem;max-width:380px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.2)"><div style="font-size:2.5rem;margin-bottom:0.75rem">✅</div><h3 style="color:#059669;font-size:1.1rem;margin-bottom:0.5rem">Session Requested!</h3><p style="font-size:0.83rem;color:#6B7280">The professional will review and respond within 24 hours.</p><button id="dbkDone" style="margin-top:1.25rem;padding:0.7rem 1.5rem;background:#E67E22;color:white;border:none;border-radius:10px;font-weight:600;cursor:pointer">Done</button></div>';
+                document.getElementById('dbkDone').addEventListener('click', () => { dashBookingOverlay.remove(); dashBookingOverlay = null; });
+            }
+        } catch(e) { err.textContent = 'Connection error. Try again.'; err.style.display = 'block'; btn.disabled = false; btn.textContent = 'Send Request'; btn.style.opacity = '1'; }
+    }
+
+    // Load real recent activity from API
+    async function loadRecentActivity() {
+        try {
+            const res = await fetch('/api/me/activity', { headers: { 'Authorization': 'Bearer ' + token } });
+            if (!res.ok) return;
+            const data = await res.json();
+            // Render recent activity
+            const activity = data.recentActivity || [];
+            if (activity.length) {
+                const colors = { checkin: 'green', task: 'green', challenge: 'purple', guide: 'blue', mood: 'orange', story: 'purple', session: 'orange' };
+                document.getElementById('recentActivityList').innerHTML = activity.slice(0, 6).map(a => {
+                    const ago = timeAgo(new Date(a.createdAt));
+                    const color = colors[a.type] || 'orange';
+                    return `<div class="dp-act-item"><span class="dp-act-dot ${color}"></span>${a.icon || '📋'} ${a.title}<small>${ago}</small></div>`;
+                }).join('');
+            } else {
+                document.getElementById('recentActivityList').innerHTML = '<div class="dp-act-item"><span class="dp-act-dot orange"></span>No activity yet — try a Self-Care check-in!<small></small></div>';
+            }
+            // Render care hub progress
+            const cp = data.careProgress || {};
+            document.getElementById('careHubStats').innerHTML = `
+                <div class="dp-care-stat"><span class="dp-care-num">${cp.selfCareCheckIns||0}</span><span class="dp-care-label">Check-Ins</span></div>
+                <div class="dp-care-stat"><span class="dp-care-num">${cp.selfCareTasksCompleted||0}</span><span class="dp-care-label">Tasks Done</span></div>
+                <div class="dp-care-stat"><span class="dp-care-num">${cp.parentingChallengesStarted||0}</span><span class="dp-care-label">Challenges</span></div>
+                <div class="dp-care-stat"><span class="dp-care-num">${cp.childSupportGuidesViewed||0}</span><span class="dp-care-label">Guides</span></div>
+            `;
+            // Progress bars with adaptive max
+            const maxTasks = Math.max(cp.selfCareTasksCompleted||0, 10);
+            const maxCheckins = Math.max(cp.selfCareCheckIns||0, 7);
+            const maxChallenges = Math.max(cp.parentingDaysCompleted||0, 7);
+            const maxGuides = Math.max(cp.childSupportGuidesViewed||0, 5);
+            document.getElementById('careHubBars').innerHTML = `
+                <div class="dp-care-bar-row"><span class="dp-care-bar-label">🧘 Self-Care</span><div class="dp-care-bar-track"><div class="dp-care-bar-fill" style="width:${Math.min(((cp.selfCareTasksCompleted||0)/maxTasks)*100,100)}%;background:linear-gradient(90deg,#E67E22,#F59E0B)"></div></div><span class="dp-care-bar-val">${cp.selfCareTasksCompleted||0}</span></div>
+                <div class="dp-care-bar-row"><span class="dp-care-bar-label">📋 Check-Ins</span><div class="dp-care-bar-track"><div class="dp-care-bar-fill" style="width:${Math.min(((cp.selfCareCheckIns||0)/maxCheckins)*100,100)}%;background:linear-gradient(90deg,#10B981,#34D399)"></div></div><span class="dp-care-bar-val">${cp.selfCareCheckIns||0}</span></div>
+                <div class="dp-care-bar-row"><span class="dp-care-bar-label">🏆 Parenting</span><div class="dp-care-bar-track"><div class="dp-care-bar-fill" style="width:${Math.min(((cp.parentingDaysCompleted||0)/maxChallenges)*100,100)}%;background:linear-gradient(90deg,#8B5CF6,#A78BFA)"></div></div><span class="dp-care-bar-val">${cp.parentingDaysCompleted||0}</span></div>
+                <div class="dp-care-bar-row"><span class="dp-care-bar-label">👶 Child Guide</span><div class="dp-care-bar-track"><div class="dp-care-bar-fill" style="width:${Math.min(((cp.childSupportGuidesViewed||0)/maxGuides)*100,100)}%;background:linear-gradient(90deg,#3B82F6,#60A5FA)"></div></div><span class="dp-care-bar-val">${cp.childSupportGuidesViewed||0}</span></div>
+            `;
+        } catch(e) { console.error('Activity load error:', e); }
+    }
+
+    function timeAgo(date) {
+        const seconds = Math.floor((new Date() - date) / 1000);
+        if (seconds < 60) return 'Just now';
+        if (seconds < 3600) return Math.floor(seconds / 60) + 'm ago';
+        if (seconds < 86400) return Math.floor(seconds / 3600) + 'h ago';
+        if (seconds < 604800) return Math.floor(seconds / 86400) + 'd ago';
+        return date.toLocaleDateString();
+    }
     </script>
 </body>
 </html>

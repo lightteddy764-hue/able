@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parenting Support - ABLE</title>
+    <link rel="stylesheet" href="dashboard-styles.css">
+    <link rel="stylesheet" href="care-hub.css">
+<link rel="stylesheet" href="/loader.css">
+</head>
+<body>
+    <script src="/loader.js"></script>
+    <div id="sidebar"></div>
+    <script src="sidebar-nav.js"></script>
+
+    <div class="main-content">
+        <header class="topbar">
+            <button class="menu-toggle" id="menuToggle"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="search-bar"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input type="text" placeholder="Search parenting tools..."></div>
+            <div class="topbar-actions"><div class="user-profile"><img src="https://ui-avatars.com/api/?name=User&background=E67E22&color=fff" alt="User"><div class="user-info"><span class="user-name">User</span><span class="user-role">Parent</span></div></div></div>
+        </header>
+
+        <main class="dashboard-content">
+            <!-- Hero -->
+            <div class="care-hero" style="background:linear-gradient(135deg,#F0FDF4,#ECFDF5,#F0FDFA)">
+                <div class="care-hero-content">
+                    <h1>Parenting Support</h1>
+                    <p class="hero-subtitle">Practical tools for calmer communication, stronger routines, and deeper connection with your child.</p>
+                    <div class="care-hero-actions">
+                        <button class="ch-btn-primary" onclick="scrollToSection('focusSection')">🎯 Find My Parenting Focus</button>
+                        <button class="ch-btn-secondary" onclick="scrollToSection('challengeSection')">🏆 Start 7-Day Challenge</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Focus Areas -->
+            <div class="ch-section" id="focusSection">
+                <h3 class="ch-section-title">What do you need help with?</h3>
+                <p class="ch-section-desc">Select a focus area to get practical skills, scripts, and activities</p>
+                <div class="ch-cards-grid" id="focusCards">
+                    <div class="ch-skeleton ch-skeleton-card"></div>
+                    <div class="ch-skeleton ch-skeleton-card"></div>
+                    <div class="ch-skeleton ch-skeleton-card"></div>
+                </div>
+            </div>
+
+            <!-- Focus Detail -->
+            <div class="ch-section" id="focusDetail" style="display:none">
+                <div class="ch-focus-result" id="focusContent"></div>
+            </div>
+
+            <!-- Challenges -->
+            <div class="ch-section" id="challengeSection">
+                <h3 class="ch-section-title">🏆 Parenting Challenges</h3>
+                <p class="ch-section-desc">Guided daily tasks to build better habits — one small step at a time</p>
+                <div class="ch-challenge-cards" id="challengeCards">
+                    <div class="ch-skeleton ch-skeleton-card"></div>
+                </div>
+            </div>
+
+            <!-- Script Library -->
+            <div class="ch-section" id="scriptSection">
+                <h3 class="ch-section-title">💬 Script Library</h3>
+                <p class="ch-section-desc">Ready-to-use phrases for difficult parenting moments</p>
+                <div id="parentScripts"></div>
+            </div>
+
+            <!-- Parent Self-Care -->
+            <div class="ch-section">
+                <div class="ch-parent-selfcare" id="selfCareSection">
+                    <h3>🧡 Parent Self-Care</h3>
+                    <p>Loading...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="ch-toast" id="toast"></div>
+    <script src="dashboard.js"></script>
+
+    <script>
+    const token = localStorage.getItem('token');
+    let pageData = null;
+
+    function scrollToSection(id) { document.getElementById(id)?.scrollIntoView({ behavior:'smooth', block:'start' }); }
+    function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); }
+
+    async function loadPage() {
+        try {
+            const res = await fetch('/api/parenting');
+            pageData = await res.json();
+            renderPage();
+        } catch(e) { document.getElementById('focusCards').innerHTML = '<div class="ch-empty"><div class="ch-empty-icon">📡</div><h4>Unable to load</h4><p>Check your connection and refresh.</p></div>'; }
+    }
+
+    function renderPage() {
+        if (!pageData) return;
+        renderFocusAreas();
+        renderChallenges();
+        renderScripts();
+        renderSelfCare();
+    }
+
+    function renderFocusAreas() {
+        const areas = (pageData.focusAreas || []).filter(a => a.isActive !== false);
+        document.getElementById('focusCards').innerHTML = areas.map(a => `
+            <div class="ch-card" onclick="showFocus('${a.slug}')">
+                <span class="ch-card-icon">${a.icon || '💬'}</span>
+                <h4>${a.title}</h4>
+                <p>${a.description}</p>
+                <div class="ch-card-meta"><span>${(a.scripts||[]).length} scripts</span><span>${(a.skills||[]).length} skills</span></div>
+            </div>
+        `).join('');
+    }
+
+    function showFocus(slug) {
+        const area = (pageData.focusAreas || []).find(a => a.slug === slug);
+        if (!area) return;
+        document.getElementById('focusDetail').style.display = 'block';
+        document.getElementById('focusContent').innerHTML = `
+            <h3>${area.icon||''} ${area.title}</h3>
+            <p style="color:#6B7280;margin-bottom:1.5rem;font-size:0.9rem">${area.description}</p>
+            ${area.skills?.length ? `<div class="ch-focus-block"><h4>🎯 Key Skills</h4><div class="ch-skill-tags">${area.skills.map(s=>'<span class="ch-skill-tag">'+s+'</span>').join('')}</div></div>` : ''}
+            ${area.scripts?.length ? `<div class="ch-focus-block"><h4>💬 Conversation Scripts</h4>${area.scripts.map(s=>`
+                <div class="ch-script-card">
+                    <div class="ch-script-situation">${s.situation}</div>
+                    <div class="ch-script-say">"${s.sayThis}"</div>
+                    <div class="ch-script-avoid">"${s.avoidThis}"</div>
+                </div>
+            `).join('')}</div>` : ''}
+            ${area.activities?.length ? `<div class="ch-focus-block"><h4>✅ Activities to practice</h4><ul>${area.activities.map(a=>'<li>'+a+'</li>').join('')}</ul></div>` : ''}
+        `;
+        setTimeout(() => scrollToSection('focusDetail'), 100);
+        showToast('Loaded: ' + area.title);
+    }
+
+    function renderChallenges() {
+        const challenges = (pageData.challenges || []).filter(c => c.isActive !== false);
+        document.getElementById('challengeCards').innerHTML = challenges.map(c => `
+            <div class="ch-challenge-card">
+                <h4>${c.title}</h4>
+                <p>${c.description}</p>
+                <span class="ch-challenge-badge">${c.durationDays} days</span>
+                <div style="margin-top:0.75rem"><button class="ch-btn-primary ch-btn-sm" onclick="startChallenge('${c._id}','${c.title}')">Start Challenge</button><button class="ch-btn-ghost" onclick="previewChallenge('${c._id}')">Preview Days</button></div>
+            </div>
+        `).join('');
+    }
+
+    function previewChallenge(id) {
+        const c = (pageData.challenges||[]).find(ch => ch._id === id);
+        if (!c || !c.days) return;
+        const html = c.days.map(d => `<div class="ch-script-card"><div class="ch-script-situation">Day ${d.day}</div><div style="font-size:0.85rem;color:#374151;margin-bottom:0.3rem">${d.task}</div><div style="font-size:0.75rem;color:#6B7280;font-style:italic">Reflect: ${d.reflectionPrompt}</div></div>`).join('');
+        document.getElementById('focusDetail').style.display = 'block';
+        document.getElementById('focusContent').innerHTML = `<h3>📋 ${c.title} — Daily Plan</h3><p style="color:#6B7280;margin-bottom:1.5rem">${c.description}</p>${html}<button class="ch-btn-primary" style="margin-top:1rem" onclick="startChallenge('${c._id}','${c.title}')">Start This Challenge</button>`;
+        scrollToSection('focusDetail');
+    }
+
+    async function startChallenge(id, title) {
+        if (!token) { showToast('Please log in to start a challenge'); return; }
+        try {
+            const res = await fetch('/api/parenting/challenge/start', { method:'POST', headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'}, body: JSON.stringify({ challengeId: id, challengeTitle: title }) });
+            const data = await res.json();
+            showToast('🏆 ' + (data.message || 'Challenge started! Check back daily.'));
+        } catch(e) { showToast('Failed to start challenge'); }
+    }
+
+    function renderScripts() {
+        const areas = (pageData.focusAreas || []).filter(a => a.scripts?.length);
+        const allScripts = areas.flatMap(a => (a.scripts||[]).slice(0,2).map(s => ({ ...s, area: a.title })));
+        document.getElementById('parentScripts').innerHTML = allScripts.slice(0, 6).map(s => `
+            <div class="ch-script-card">
+                <div class="ch-script-situation">${s.area}: ${s.situation}</div>
+                <div class="ch-script-say">"${s.sayThis}"</div>
+                <div class="ch-script-avoid">"${s.avoidThis}"</div>
+            </div>
+        `).join('');
+    }
+
+    function renderSelfCare() {
+        const psc = pageData.parentSelfCare || {};
+        document.getElementById('selfCareSection').innerHTML = `
+            <h3>🧡 ${psc.title || 'Parent Self-Care'}</h3>
+            <p>${psc.description || ''}</p>
+            ${(psc.tips||[]).map(t => '<div class="ch-psc-tip"><span>💡</span> '+t+'</div>').join('')}
+        `;
+    }
+
+    loadPage();
+    </script>
+</body>
+</html>

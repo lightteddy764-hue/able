@@ -3,216 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Capable-Body-Mind Connection - ABLE</title>
+    <title>Body-Mind Connection - ABLE</title>
     <link rel="stylesheet" href="dashboard-styles.css">
     <link rel="stylesheet" href="body-mind.css">
+    <link rel="stylesheet" href="loader.css">
 </head>
 <body>
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header"><img src="images/logo.svg" alt="ABLE" class="sidebar-logo"></div>
-        <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2"/><path d="M9 22V12h6v10" stroke="currentColor" stroke-width="2"/></svg><span>Dashboard</span></a>
-            <a href="healing-zone.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2"/></svg><span>Healing Zone</span></a>
-            <a href="body-mind.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Body-Mind</span></a>
-            <a href="community.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg><span>Community</span></a>
-            <a href="youth-support.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke="currentColor" stroke-width="2"/></svg><span>Youth Support</span></a>
-            <a href="my-voice.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2"/></svg><span>My Voice</span></a>
-            <a href="settings.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="2"/></svg><span>Settings</span></a>
-        </nav>
-        <div class="sidebar-footer"><a href="login.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2"/><path d="M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Logout</span></a></div>
-    </aside>
+    <script src="loader.js"></script>
+    <div id="sidebar"></div>
+    <script src="sidebar-nav.js"></script>
 
     <div class="main-content">
         <header class="topbar">
             <button class="menu-toggle" id="menuToggle"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
             <div class="search-bar"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input type="text" placeholder="Search yoga, nutrition, breathing..."></div>
-            <div class="topbar-actions"><button class="icon-button"><svg viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2"/><path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2"/></svg><span class="notification-badge">2</span></button><div class="user-profile"><img src="https://ui-avatars.com/api/?name=John+Doe&background=E67E22&color=fff" alt="User"><div class="user-info"><span class="user-name">John Doe</span><span class="user-role">Wellness Seeker</span></div></div></div>
+            <div class="topbar-actions"><div class="user-profile"><img src="https://ui-avatars.com/api/?name=User&background=E67E22&color=fff" alt="User"><div class="user-info"><span class="user-name">User</span><span class="user-role">Wellness Seeker</span></div></div></div>
         </header>
 
         <main class="dashboard-content bm-page">
             <!-- Hero -->
             <div class="bm-hero">
                 <div class="bm-hero-left">
-                    <h1>Build a Stronger Mind & Healthier Body</h1>
-                    <p>Personalized nutrition, breathing exercises, movement routines, and mindfulness practices — all tailored to your wellness goals.</p>
-                    <div class="bm-hero-checks">
-                        <span>✓ 50+ Guided Sessions</span>
-                        <span>✓ 120 Nutrition Plans</span>
-                        <span>✓ 30 Breathing Programs</span>
-                        <span>✓ Personalized For You</span>
-                    </div>
-                    <a href="#programs" class="bm-hero-btn">Start Today's Wellness Plan</a>
+                    <h1 id="bmHeroTitle">Build a Stronger Mind & Healthier Body</h1>
+                    <p id="bmHeroSubtitle">Loading...</p>
+                    <div class="bm-hero-checks" id="bmHeroChecks"></div>
+                    <button class="bm-hero-btn" onclick="scrollToEl('programs')">Start Today's Wellness Plan</button>
                 </div>
                 <div class="bm-hero-right">
                     <div class="bm-progress-ring">
-                        <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="8"/><circle cx="50" cy="50" r="42" fill="none" stroke="#10B981" stroke-width="8" stroke-dasharray="264" stroke-dashoffset="132" stroke-linecap="round" transform="rotate(-90 50 50)"/></svg>
-                        <div class="bm-ring-text"><span>50%</span><small>Today</small></div>
+                        <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="8"/><circle id="progressCircle" cx="50" cy="50" r="42" fill="none" stroke="#10B981" stroke-width="8" stroke-dasharray="264" stroke-dashoffset="264" stroke-linecap="round" transform="rotate(-90 50 50)"/></svg>
+                        <div class="bm-ring-text"><span id="ringPct">0%</span><small>Today</small></div>
                     </div>
-                    <div class="bm-progress-items">
-                        <span class="bm-pi done">Nutrition ✔</span>
-                        <span class="bm-pi">Yoga ○</span>
-                        <span class="bm-pi done">Breathing ✔</span>
-                        <span class="bm-pi">Routine ○</span>
-                    </div>
+                    <div class="bm-progress-items" id="bmProgressItems"></div>
                 </div>
             </div>
 
             <!-- Today's Recommendation -->
-            <div class="bm-rec-card">
+            <div class="bm-rec-card" id="bmRecCard">
                 <div class="bm-rec-badge">Recommended For You</div>
-                <div class="bm-rec-body">
-                    <div class="bm-rec-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-                    <div class="bm-rec-info">
-                        <h3>Today's Focus: Reduce Anxiety Through Breathing</h3>
-                        <p>A 10-minute guided session combining 4-7-8 breathing with progressive muscle relaxation.</p>
-                        <div class="bm-rec-meta"><span>10 min</span><span>Beginner</span><span>Anxiety Relief</span></div>
-                    </div>
-                    <a href="#" class="bm-rec-btn">Start Session →</a>
-                </div>
+                <div class="bm-rec-body" id="bmRecBody"><p style="color:#9CA3AF">Loading recommendation...</p></div>
             </div>
 
             <!-- Active Programs -->
             <section id="programs" class="bm-section">
                 <h2 class="bm-sec-title">Your Active Programs</h2>
-                <div class="bm-programs-grid">
-                    <div class="bm-program">
-                        <div class="bm-prog-header" style="background:linear-gradient(135deg,#E67E22,#F59E0B)">
-                            <span class="bm-prog-day">Day 12/30</span>
-                        </div>
-                        <div class="bm-prog-body">
-                            <h4>30-Day Anxiety Reset</h4>
-                            <p>Breathing + Yoga + Nutrition combined</p>
-                            <div class="bm-prog-bar"><div class="bm-prog-fill" style="width:40%"></div></div>
-                            <span class="bm-prog-pct">40% Complete</span>
-                            <button class="bm-prog-btn">Continue →</button>
-                        </div>
-                    </div>
-                    <div class="bm-program">
-                        <div class="bm-prog-header" style="background:linear-gradient(135deg,#8B5CF6,#A78BFA)">
-                            <span class="bm-prog-day">Day 5/14</span>
-                        </div>
-                        <div class="bm-prog-body">
-                            <h4>Better Sleep Program</h4>
-                            <p>Evening routines + Breathing + Nutrition</p>
-                            <div class="bm-prog-bar"><div class="bm-prog-fill" style="width:35%"></div></div>
-                            <span class="bm-prog-pct">35% Complete</span>
-                            <button class="bm-prog-btn">Continue →</button>
-                        </div>
-                    </div>
-                    <div class="bm-program">
-                        <div class="bm-prog-header" style="background:linear-gradient(135deg,#10B981,#34D399)">
-                            <span class="bm-prog-day">Day 3/21</span>
-                        </div>
-                        <div class="bm-prog-body">
-                            <h4>Morning Energy Routine</h4>
-                            <p>Yoga flow + Hydration + Mindfulness</p>
-                            <div class="bm-prog-bar"><div class="bm-prog-fill" style="width:14%"></div></div>
-                            <span class="bm-prog-pct">14% Complete</span>
-                            <button class="bm-prog-btn">Continue →</button>
-                        </div>
-                    </div>
-                </div>
+                <div class="bm-programs-grid" id="bmPrograms"><div class="bm-skeleton" style="height:200px;border-radius:16px"></div></div>
             </section>
 
-            <!-- Category Pills -->
-            <div class="bm-pills">
-                <button class="bm-pill active" data-tab="nutrition"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="currentColor" stroke-width="2"/></svg> Nutrition</button>
-                <button class="bm-pill" data-tab="yoga"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Yoga</button>
-                <button class="bm-pill" data-tab="breathing"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2"/></svg> Breathing</button>
-                <button class="bm-pill" data-tab="routine"><svg viewBox="0 0 24 24" fill="none" width="16" height="16"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Routine</button>
-            </div>
+            <!-- Category Tabs -->
+            <div class="bm-pills" id="bmPills"></div>
 
-            <!-- Guided Sessions (replaces old card grid) -->
-            <section class="bm-section bm-tab-content active" id="tab-nutrition">
-                <h2 class="bm-sec-title">Nutrition for Mental Wellness</h2>
-                <div class="bm-sessions-grid">
-                    <div class="bm-session"><div class="bm-sess-img" style="background:linear-gradient(135deg,#4CAF50,#81C784)"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="white" stroke-width="2"/></svg></div><div class="bm-sess-body"><span class="bm-sess-tag">Brain Food</span><h4>Omega-3 Brain Boost</h4><div class="bm-sess-meta"><span>Beginner</span><span>5 min</span><span>✓ Anxiety ✓ Mood</span></div><button class="bm-sess-btn">Start Learning</button></div></div>
-                    <div class="bm-session"><div class="bm-sess-img" style="background:linear-gradient(135deg,#FF9800,#FFB74D)"><svg viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="white" stroke-width="2"/></svg></div><div class="bm-sess-body"><span class="bm-sess-tag">Antioxidants</span><h4>Berry Power Smoothies</h4><div class="bm-sess-meta"><span>Beginner</span><span>3 min</span><span>✓ Energy ✓ Focus</span></div><button class="bm-sess-btn">Start Learning</button></div></div>
-                    <div class="bm-session"><div class="bm-sess-img" style="background:linear-gradient(135deg,#9C27B0,#CE93D8)"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke="white" stroke-width="2"/><path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div><div class="bm-sess-body"><span class="bm-sess-tag">Calming</span><h4>Herbal Teas for Calm</h4><div class="bm-sess-meta"><span>All Levels</span><span>4 min</span><span>✓ Sleep ✓ Calm</span></div><button class="bm-sess-btn">Start Learning</button></div></div>
-                    <div class="bm-session"><div class="bm-sess-img" style="background:linear-gradient(135deg,#2196F3,#64B5F6)"><svg viewBox="0 0 24 24" fill="none"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="bm-sess-body"><span class="bm-sess-tag">Gut-Brain</span><h4>Gut Health & Mood</h4><div class="bm-sess-meta"><span>Intermediate</span><span>6 min</span><span>✓ Digestion ✓ Mood</span></div><button class="bm-sess-btn">Start Learning</button></div></div>
-                </div>
+            <!-- Sessions Grid -->
+            <section class="bm-section" id="bmSessionsSection">
+                <h2 class="bm-sec-title" id="bmSessionsTitle">All Sessions</h2>
+                <div class="bm-sessions-grid" id="bmSessions"><div class="bm-skeleton" style="height:150px;border-radius:12px"></div></div>
             </section>
 
-            <section class="bm-section bm-tab-content" id="tab-yoga">
-                <h2 class="bm-sec-title">Guided Yoga Sessions</h2>
-                <div class="bm-sessions-grid">
-                    <div class="bm-session"><div class="bm-sess-img" style="background:linear-gradient(135deg,#E67E22,#F59E52)"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="white" stroke-width="2"/></svg></div><div class="bm-sess-body"><span class="bm-sess-tag">Beginner</span><h4>Morning Sun Salutation</h4><div class="bm-sess-meta"><span>15 min</span><span>Video</span><span>✓ Energy ✓ Stretch</span></div><button class="bm-sess-btn">Start Session</button></div></div>
-                    <div class="bm-session"><div class="bm-sess-img" style="background:linear-gradient(135deg,#3F51B5,#7986CB)"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="white" stroke-width="2"/></svg></div><div class="bm-sess-body"><span class="bm-sess-tag">Relaxation</span><h4>Evening Wind-Down</h4><div class="bm-sess-meta"><span>20 min</span><span>Video</span><span>✓ Sleep ✓ Calm</span></div><button class="bm-sess-btn">Start Session</button></div></div>
-                    <div class="bm-session"><div class="bm-sess-img" style="background:linear-gradient(135deg,#E91E63,#F06292)"><svg viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="white" stroke-width="2"/></svg></div><div class="bm-sess-body"><span class="bm-sess-tag">Intermediate</span><h4>Anxiety Relief Flow</h4><div class="bm-sess-meta"><span>25 min</span><span>Video</span><span>✓ Anxiety ✓ Strength</span></div><button class="bm-sess-btn">Start Session</button></div></div>
-                    <div class="bm-session"><div class="bm-sess-img" style="background:linear-gradient(135deg,#009688,#4DB6AC)"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="white" stroke-width="2"/><path d="M12 6v6l4 2" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></div><div class="bm-sess-body"><span class="bm-sess-tag">Meditation</span><h4>Yoga Nidra (Body Scan)</h4><div class="bm-sess-meta"><span>30 min</span><span>Audio</span><span>✓ Deep Rest</span></div><button class="bm-sess-btn">Start Session</button></div></div>
-                </div>
+            <!-- Habit Tracker -->
+            <section class="bm-section">
+                <h2 class="bm-sec-title">Daily Habit Tracker</h2>
+                <div class="bm-routine-card" id="bmHabits"><p style="color:#9CA3AF">Loading habits...</p></div>
             </section>
 
-            <section class="bm-section bm-tab-content" id="tab-breathing">
-                <h2 class="bm-sec-title">Breathing Exercises</h2>
-                <div class="bm-sessions-grid">
-                    <div class="bm-session"><div class="bm-sess-img" style="background:linear-gradient(135deg,#E67E22,#F59E0B)"><span class="bm-breath-label">4-7-8</span></div><div class="bm-sess-body"><span class="bm-sess-tag">Anxiety Relief</span><h4>4-7-8 Relaxing Breath</h4><div class="bm-sess-meta"><span>5 min</span><span>Guided</span><span>✓ Instant Calm</span></div><button class="bm-sess-btn">Begin Exercise</button></div></div>
-                    <div class="bm-session"><div class="bm-sess-img" style="background:linear-gradient(135deg,#3B82F6,#60A5FA)"><span class="bm-breath-label">Box</span></div><div class="bm-sess-body"><span class="bm-sess-tag">Focus</span><h4>Box Breathing</h4><div class="bm-sess-meta"><span>4 min</span><span>Guided</span><span>✓ Concentration</span></div><button class="bm-sess-btn">Begin Exercise</button></div></div>
-                    <div class="bm-session"><div class="bm-sess-img" style="background:linear-gradient(135deg,#8B5CF6,#A78BFA)"><span class="bm-breath-label">Alt</span></div><div class="bm-sess-body"><span class="bm-sess-tag">Balance</span><h4>Alternate Nostril</h4><div class="bm-sess-meta"><span>7 min</span><span>Guided</span><span>✓ Brain Balance</span></div><button class="bm-sess-btn">Begin Exercise</button></div></div>
-                    <div class="bm-session"><div class="bm-sess-img" style="background:linear-gradient(135deg,#10B981,#34D399)"><span class="bm-breath-label">Deep</span></div><div class="bm-sess-body"><span class="bm-sess-tag">Calm</span><h4>Diaphragmatic Breathing</h4><div class="bm-sess-meta"><span>3 min</span><span>Guided</span><span>✓ Lower BP</span></div><button class="bm-sess-btn">Begin Exercise</button></div></div>
-                </div>
-            </section>
-
-            <section class="bm-section bm-tab-content" id="tab-routine">
-                <h2 class="bm-sec-title">Daily Wellness Routine</h2>
-                <div class="bm-routine-grid">
-                    <div class="bm-routine-card">
-                        <h3>Today's Routine</h3>
-                        <div class="bm-routine-tl">
-                            <div class="bm-rt-item done"><span class="bm-rt-time">6:30</span><span>Wake Up & Hydrate</span></div>
-                            <div class="bm-rt-item done"><span class="bm-rt-time">7:00</span><span>Morning Yoga Flow</span></div>
-                            <div class="bm-rt-item"><span class="bm-rt-time">7:30</span><span>Mindful Breakfast</span></div>
-                            <div class="bm-rt-item"><span class="bm-rt-time">12:00</span><span>Midday Breathing Reset</span></div>
-                            <div class="bm-rt-item"><span class="bm-rt-time">18:00</span><span>Gratitude Journal</span></div>
-                            <div class="bm-rt-item"><span class="bm-rt-time">21:30</span><span>Sleep Preparation</span></div>
-                        </div>
-                    </div>
-                    <div class="bm-routine-card">
-                        <h3>Habit Tracker</h3>
-                        <div class="bm-habits-list">
-                            <label><input type="checkbox"><span>Drank 8 glasses of water</span></label>
-                            <label><input type="checkbox"><span>Morning yoga or stretch</span></label>
-                            <label><input type="checkbox"><span>Ate a balanced meal</span></label>
-                            <label><input type="checkbox"><span>Breathing exercise</span></label>
-                            <label><input type="checkbox"><span>Journaling / Gratitude</span></label>
-                            <label><input type="checkbox"><span>Screen-free 30 min</span></label>
-                            <label><input type="checkbox"><span>Slept 7-8 hours</span></label>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- What You'll Achieve -->
-            <div class="bm-achieve">
-                <h2>What You'll Achieve</h2>
-                <div class="bm-achieve-grid">
-                    <span>✓ Better Sleep</span><span>✓ Lower Anxiety</span><span>✓ Increased Focus</span>
-                    <span>✓ Improved Mood</span><span>✓ Stronger Habits</span><span>✓ More Energy</span>
-                </div>
-            </div>
-
-            <!-- Continue CTA -->
-            <div class="bm-continue">
-                <p>You're <strong>2 sessions away</strong> from reaching your weekly wellness goal.</p>
-                <a href="#programs" class="bm-continue-btn">Continue Journey →</a>
+            <!-- Guest Prompt -->
+            <div id="bmGuestPrompt" style="display:none;text-align:center;padding:2rem;background:white;border-radius:16px;border:1px solid #E5E7EB;margin-top:1rem">
+                <p style="font-size:0.9rem;color:#6B7280;margin-bottom:1rem">Log in to save your progress, track habits, and continue programs.</p>
+                <a href="login.html" style="padding:0.7rem 1.5rem;background:#E67E22;color:white;border-radius:10px;text-decoration:none;font-weight:600;font-size:0.9rem">Log In</a>
             </div>
         </main>
     </div>
 
-    <!-- Chatbot -->
-    <div class="chatbot-button" id="chatbotButton"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="white" stroke-width="2"/><circle cx="9" cy="10" r="1" fill="white"/><circle cx="15" cy="10" r="1" fill="white"/><path d="M9 13s1 1 3 1 3-1 3-1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg><span class="chatbot-badge">AI</span></div>
-    <div class="chatbot-widget" id="chatbotWidget"><div class="chatbot-header"><div class="chatbot-header-content"><div class="chatbot-avatar"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" fill="white"/></svg></div><div class="chatbot-info"><h4>ABLE Wellness Assistant</h4><span class="chatbot-status">Online • Here to Help</span></div></div><button class="chatbot-close" id="chatbotClose"><svg viewBox="0 0 24 24" fill="none"><path d="M18 6L6 18M6 6l12 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><div class="chatbot-messages" id="chatbotMessages"></div><div class="chatbot-input"><input type="text" id="chatbotInput" placeholder="Type your message..." autocomplete="off"><button class="chatbot-send" id="chatbotSend"><svg viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9M22 2L2 8l9 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+    <!-- Session Modal (injected dynamically) -->
+    <div id="sessionModal"></div>
+
+    <!-- Toast -->
+    <div id="bmToast" style="position:fixed;bottom:2rem;right:2rem;background:#1a1a2e;color:white;padding:0.85rem 1.5rem;border-radius:10px;font-size:0.85rem;z-index:9999;opacity:0;transform:translateY(10px);transition:all 0.3s;pointer-events:none"></div>
 
     <script src="chatbot.js"></script>
     <script src="dashboard.js"></script>
+
     <script>
-    document.querySelectorAll('.bm-pill').forEach(p => p.addEventListener('click', () => {
-        document.querySelectorAll('.bm-pill').forEach(x => x.classList.remove('active'));
-        document.querySelectorAll('.bm-tab-content').forEach(c => c.classList.remove('active'));
-        p.classList.add('active');
-        document.getElementById('tab-' + p.dataset.tab).classList.add('active');
-    }));
+    const token = localStorage.getItem('token');
+    let pageData = null;
+    let userProgress = null;
+    let currentCategory = 'all';
+
+    function scrollToEl(id) { document.getElementById(id)?.scrollIntoView({ behavior:'smooth' }); }
+    function showToast(msg) { const t = document.getElementById('bmToast'); t.textContent = msg; t.style.opacity = '1'; t.style.transform = 'translateY(0)'; setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateY(10px)'; }, 3000); }
+
+    async function loadPage() {
+        try {
+            const res = await fetch('/api/body-mind');
+            pageData = await res.json();
+            if (token) {
+                const pRes = await fetch('/api/body-mind/progress', { headers: { 'Authorization': 'Bearer ' + token } });
+                if (pRes.ok) userProgress = await pRes.json();
+            } else {
+                document.getElementById('bmGuestPrompt').style.display = 'block';
+            }
+            render();
+        } catch(e) { console.error(e); }
+    }
+
+    function render() {
+        if (!pageData) return;
+        const h = pageData.hero || {};
+        document.getElementById('bmHeroTitle').textContent = h.title || 'Body-Mind Connection';
+        document.getElementById('bmHeroSubtitle').textContent = h.subtitle || '';
+        document.getElementById('bmHeroChecks').innerHTML = (h.checks || []).map(c => `<span>✓ ${c}</span>`).join('');
+
+        renderProgressRing();
+        renderRecommendation();
+        renderPrograms();
+        renderTabs();
+        renderSessions();
+        renderHabits();
+    }
+
+    function renderProgressRing() {
+        const todayCompleted = (userProgress?.completedSessions || []).filter(s => new Date(s.completedAt).toDateString() === new Date().toDateString()).length;
+        const todayHabits = (userProgress?.todayHabits || []).filter(h => h.completed && new Date(h.date).toDateString() === new Date().toDateString()).length;
+        const total = todayCompleted + todayHabits;
+        const goal = 5;
+        const pct = Math.min(Math.round((total / goal) * 100), 100);
+        const offset = 264 - (264 * pct / 100);
+        document.getElementById('progressCircle').style.strokeDashoffset = offset;
+        document.getElementById('ringPct').textContent = pct + '%';
+        // Progress items
+        const cats = ['nutrition','yoga','breathing','routine'];
+        const completed = cats.map(c => (userProgress?.completedSessions || []).some(s => s.category === c && new Date(s.completedAt).toDateString() === new Date().toDateString()));
+        document.getElementById('bmProgressItems').innerHTML = cats.map((c, i) => `<span class="bm-pi ${completed[i] ? 'done' : ''}">${c.charAt(0).toUpperCase()+c.slice(1)} ${completed[i] ? '✔' : '○'}</span>`).join('');
+    }
+
+    function renderRecommendation() {
+        const r = pageData.todayRecommendation || {};
+        document.getElementById('bmRecBody').innerHTML = `
+            <div class="bm-rec-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="bm-rec-info"><h3>${r.title || 'Daily Wellness Session'}</h3><p>${r.description || ''}</p><div class="bm-rec-meta"><span>${r.duration || '10 min'}</span><span>${r.level || 'Beginner'}</span>${(r.tags||[]).map(t=>'<span>'+t+'</span>').join('')}</div></div>
+            <button class="bm-rec-btn" onclick="startFirstSession()">Start Session →</button>
+        `;
+    }
+
+    function startFirstSession() {
+        const breathing = (pageData.sessions || []).find(s => s.category === 'breathing');
+        if (breathing) openSession(breathing);
+        else showToast('No sessions available');
+    }
+
+    function renderPrograms() {
+        const programs = pageData.programs || [];
+        if (!programs.length) { document.getElementById('bmPrograms').innerHTML = '<p style="color:#9CA3AF;text-align:center;padding:2rem">No programs available</p>'; return; }
+        document.getElementById('bmPrograms').innerHTML = programs.map((p, i) => {
+            const userProg = (userProgress?.activePrograms || []).find(ap => ap.programId === (p._id || String(i)));
+            const day = userProg ? userProg.currentDay : 0;
+            const pct = p.totalDays ? Math.round((day / p.totalDays) * 100) : 0;
+            return `<div class="bm-program"><div class="bm-prog-header" style="background:linear-gradient(135deg,${p.gradientStart},${p.gradientEnd})"><span class="bm-prog-day">${day > 0 ? 'Day '+day+'/'+p.totalDays : 'Not Started'}</span></div><div class="bm-prog-body"><h4>${p.title}</h4><p>${p.description}</p><div class="bm-prog-bar"><div class="bm-prog-fill" style="width:${pct}%"></div></div><span class="bm-prog-pct">${pct}% Complete</span><button class="bm-prog-btn" onclick="startProgram('${p._id||i}','${p.title.replace(/'/g,"\\'")}')">${day > 0 ? 'Continue →' : 'Start →'}</button></div></div>`;
+        }).join('');
+    }
+
+    function renderTabs() {
+        const categories = [...new Set((pageData.sessions || []).map(s => s.category))];
+        document.getElementById('bmPills').innerHTML = '<button class="bm-pill active" onclick="filterSessions(\'all\')">All</button>' + categories.map(c => `<button class="bm-pill" onclick="filterSessions('${c}')">${c.charAt(0).toUpperCase()+c.slice(1)}</button>`).join('');
+    }
+
+    function filterSessions(cat) {
+        currentCategory = cat;
+        document.querySelectorAll('.bm-pill').forEach(p => p.classList.remove('active'));
+        event.target.classList.add('active');
+        renderSessions();
+    }
+
+    function renderSessions() {
+        let sessions = (pageData.sessions || []).filter(s => s.isActive !== false);
+        if (currentCategory !== 'all') sessions = sessions.filter(s => s.category === currentCategory);
+        document.getElementById('bmSessionsTitle').textContent = currentCategory === 'all' ? 'All Sessions' : currentCategory.charAt(0).toUpperCase() + currentCategory.slice(1) + ' Sessions';
+        if (!sessions.length) { document.getElementById('bmSessions').innerHTML = '<p style="color:#9CA3AF;text-align:center;padding:2rem">No sessions in this category</p>'; return; }
+        document.getElementById('bmSessions').innerHTML = sessions.map(s => `
+            <div class="bm-session"><div class="bm-sess-img" style="background:linear-gradient(135deg,${s.gradientStart},${s.gradientEnd})"><span style="font-size:1.5rem">${s.icon || '🧘'}</span></div><div class="bm-sess-body"><span class="bm-sess-tag">${s.level}</span><h4>${s.title}</h4><div class="bm-sess-meta"><span>${s.duration} min</span><span>${s.category}</span>${(s.tags||[]).map(t=>'<span>✓ '+t+'</span>').join('')}</div><button class="bm-sess-btn" onclick='openSession(${JSON.stringify(s).replace(/'/g,"&#39;")})'>Start Session</button></div></div>
+        `).join('');
+    }
+
+    function renderHabits() {
+        const habits = pageData.habits || [];
+        if (!habits.length) return;
+        const todayStr = new Date().toDateString();
+        document.getElementById('bmHabits').innerHTML = '<div class="bm-habits-list">' + habits.map(h => {
+            const done = (userProgress?.todayHabits || []).some(th => th.habitTitle === h.title && th.completed && new Date(th.date).toDateString() === todayStr);
+            return `<label class="bm-habit-item ${done?'done':''}"><input type="checkbox" ${done?'checked':''} onchange="toggleHabit('${h.title.replace(/'/g,"\\'")}', this.checked)"><span>${h.icon || '✓'} ${h.title}</span></label>`;
+        }).join('') + '</div>';
+    }
+
+    // ===== ACTIONS =====
+    async function toggleHabit(title, completed) {
+        if (!token) { localStorage.setItem('bm_habit_' + title, completed); showToast(completed ? '✓ ' + title : 'Unchecked'); renderProgressRing(); return; }
+        try {
+            await fetch('/api/body-mind/habit', { method: 'PUT', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ habitTitle: title, completed }) });
+            // Update local progress
+            if (!userProgress) userProgress = { todayHabits: [], completedSessions: [] };
+            const today = new Date(); today.setHours(0,0,0,0);
+            const existing = userProgress.todayHabits.find(h => h.habitTitle === title && new Date(h.date).toDateString() === today.toDateString());
+            if (existing) existing.completed = completed;
+            else userProgress.todayHabits.push({ habitTitle: title, completed, date: today });
+            renderProgressRing();
+            showToast(completed ? '✓ ' + title + ' completed!' : 'Habit unchecked');
+        } catch(e) { showToast('Failed to save'); }
+    }
+
+    async function startProgram(programId, title) {
+        if (!token) { showToast('Log in to start programs'); return; }
+        try {
+            const res = await fetch('/api/body-mind/program/' + programId + '/start', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ programTitle: title }) });
+            const data = await res.json();
+            showToast('🏋️ ' + (data.message || 'Program started!'));
+            if (data.progress) userProgress = data.progress;
+            renderPrograms();
+        } catch(e) { showToast('Failed to start program'); }
+    }
+
+    function openSession(session) {
+        const steps = session.steps || [];
+        let content = '';
+
+        if (session.category === 'breathing') {
+            content = `
+                <div style="text-align:center;margin-bottom:1.5rem"><span style="font-size:3rem">${session.icon||'🫁'}</span></div>
+                <h3 style="text-align:center;font-size:1.3rem;font-weight:700;margin-bottom:0.5rem">${session.title}</h3>
+                <p style="text-align:center;color:#6B7280;font-size:0.85rem;margin-bottom:1.5rem">${session.description || ''}</p>
+                <div id="breathTimer" style="text-align:center;font-size:2.5rem;font-weight:800;color:#E67E22;margin:1.5rem 0">Ready</div>
+                <div style="margin:1rem 0">${steps.map((s,i) => '<div style="display:flex;gap:0.75rem;padding:0.6rem 0;border-bottom:1px solid #F3F4F6;font-size:0.85rem"><span style="background:rgba(222,116,37,0.1);color:#E67E22;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;flex-shrink:0">'+(i+1)+'</span><span>'+s+'</span></div>').join('')}</div>
+                <button onclick="startBreathingTimer()" style="width:100%;padding:0.8rem;background:#E67E22;color:white;border:none;border-radius:10px;font-weight:700;cursor:pointer;margin-bottom:0.5rem">Begin Breathing</button>
+            `;
+        } else {
+            content = `
+                <div style="text-align:center;margin-bottom:1.5rem"><span style="font-size:3rem">${session.icon||'🧘'}</span></div>
+                <h3 style="text-align:center;font-size:1.3rem;font-weight:700;margin-bottom:0.5rem">${session.title}</h3>
+                <p style="text-align:center;color:#6B7280;font-size:0.85rem;margin-bottom:0.5rem">${session.description || ''}</p>
+                <div style="text-align:center;font-size:0.75rem;color:#9CA3AF;margin-bottom:1.5rem">${session.duration} min • ${session.level} • ${session.category}</div>
+                <div style="margin:1rem 0">${steps.map((s,i) => '<div style="display:flex;gap:0.75rem;padding:0.6rem 0;border-bottom:1px solid #F3F4F6;font-size:0.85rem"><span style="background:rgba(222,116,37,0.1);color:#E67E22;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;flex-shrink:0">'+(i+1)+'</span><span>'+s+'</span></div>').join('')}</div>
+            `;
+        }
+        content += `<button onclick="completeSession('${session._id||''}','${(session.title||'').replace(/'/g,"\\'")}','${session.category}')" style="width:100%;padding:0.8rem;background:#10B981;color:white;border:none;border-radius:10px;font-weight:700;cursor:pointer;margin-top:0.5rem">✓ Mark Complete</button>`;
+
+        document.getElementById('sessionModal').innerHTML = `
+            <div style="position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem" onclick="if(event.target===this)closeSession()">
+                <div style="background:white;border-radius:20px;padding:2rem;max-width:500px;width:100%;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.2)">
+                    <button onclick="closeSession()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.3rem;cursor:pointer;color:#9CA3AF">✕</button>
+                    ${content}
+                </div>
+            </div>
+        `;
+    }
+
+    function closeSession() { document.getElementById('sessionModal').innerHTML = ''; }
+
+    function startBreathingTimer() {
+        const timer = document.getElementById('breathTimer');
+        const phases = ['Inhale...', 'Hold...', 'Exhale...', 'Hold...'];
+        const durations = [4, 7, 8, 4];
+        let cycle = 0, phase = 0, count = durations[0];
+        timer.textContent = phases[0] + ' ' + count;
+        const interval = setInterval(() => {
+            count--;
+            if (count <= 0) { phase++; if (phase >= phases.length) { cycle++; phase = 0; if (cycle >= 3) { clearInterval(interval); timer.textContent = '✓ Complete!'; timer.style.color = '#10B981'; return; } } count = durations[phase]; }
+            timer.textContent = phases[phase] + ' ' + count;
+        }, 1000);
+    }
+
+    async function completeSession(sessionId, title, category) {
+        closeSession();
+        if (!token) { showToast('✓ ' + title + ' completed! Log in to save.'); return; }
+        try {
+            await fetch('/api/body-mind/session/' + (sessionId || 'unknown') + '/complete', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ sessionTitle: title, category }) });
+            if (!userProgress) userProgress = { completedSessions: [], todayHabits: [] };
+            userProgress.completedSessions.push({ sessionId, sessionTitle: title, category, completedAt: new Date() });
+            renderProgressRing();
+            showToast('🎉 ' + title + ' completed!');
+        } catch(e) { showToast('Saved locally'); }
+    }
+
+    loadPage();
     </script>
 </body>
 </html>

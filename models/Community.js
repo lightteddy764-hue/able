@@ -22,7 +22,22 @@ const communitySchema = new mongoose.Schema({
     onlineCount: { type: Number, default: 0 },
 
     // Moderation
-    status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'approved' }
+    status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'approved' },
+
+    // Official Group Fields
+    groupType: { type: String, enum: ['peer_circle', 'official_group', 'professional_group'], default: 'peer_circle' },
+    createdByType: { type: String, enum: ['admin', 'professional', 'user'], default: 'user' },
+    createdByAdmin: { type: mongoose.Schema.Types.ObjectId, ref: 'Admin' },
+    createdByProfessional: { type: mongoose.Schema.Types.ObjectId, ref: 'Professional' },
+    postingPermission: { type: String, enum: ['admin_only', 'admin_and_professionals', 'members_can_request_post', 'all_members'], default: 'all_members' },
+    commentingEnabled: { type: Boolean, default: true },
+    reactionsEnabled: { type: Boolean, default: true },
+    joinPolicy: { type: String, enum: ['open', 'approval_required', 'invite_only'], default: 'open' },
+    isOfficial: { type: Boolean, default: false },
+    isFeatured: { type: Boolean, default: false },
+    coverImage: { type: String, default: '' },
+    category: { type: String, default: '' },
+    rules: { type: String, default: '' }
 }, { timestamps: true });
 
 // Community Events (raw)

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Sessions – Admin ABLE</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+    <style>
+        .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:1rem; margin-bottom:1.5rem; }
+        .stat-card { background:white; border:1px solid #E5E7EB; border-radius:12px; padding:1.1rem; text-align:center; }
+        .stat-num { display:block; font-size:1.6rem; font-weight:800; }
+        .stat-label { font-size:0.75rem; color:#6B7280; font-weight:500; }
+        .stat-card.total .stat-num { color:#111827; }
+        .stat-card.pending .stat-num { color:#D97706; }
+        .stat-card.confirmed .stat-num { color:#2563EB; }
+        .stat-card.completed .stat-num { color:#16A34A; }
+        .stat-card.cancelled .stat-num { color:#9CA3AF; }
+
+        .filter-row { display:flex; gap:0.75rem; flex-wrap:wrap; align-items:center; margin-bottom:1.25rem; }
+        .filter-row input, .filter-row select { padding:0.65rem 1rem; border:1.5px solid #E5E7EB; border-radius:10px; font-size:0.85rem; outline:none; }
+        .filter-row input { flex:1; min-width:200px; }
+        .filter-row input:focus, .filter-row select:focus { border-color:#E67E22; }
+
+        .sess-table { width:100%; border-collapse:collapse; }
+        .sess-table th { text-align:left; padding:0.75rem 1rem; font-size:0.78rem; font-weight:600; color:#6B7280; text-transform:uppercase; letter-spacing:0.04em; border-bottom:2px solid #F3F4F6; background:#FAFAFA; }
+        .sess-table td { padding:0.85rem 1rem; font-size:0.85rem; color:#374151; border-bottom:1px solid #F3F4F6; vertical-align:top; }
+        .sess-table tr:hover td { background:#FAFAFA; }
+        .sess-table tr:last-child td { border-bottom:none; }
+        .sess-table .no-data { text-align:center; padding:3rem; color:#9CA3AF; }
+
+        .status-badge { display:inline-block; padding:0.2rem 0.6rem; border-radius:6px; font-size:0.72rem; font-weight:700; text-transform:uppercase; }
+        .status-badge.requested { background:#FEF3C7; color:#92400E; }
+        .status-badge.accepted, .status-badge.confirmed { background:#DBEAFE; color:#1E40AF; }
+        .status-badge.completed { background:#DCFCE7; color:#166534; }
+        .status-badge.cancelled { background:#F3F4F6; color:#6B7280; }
+        .status-badge.rejected { background:#FEE2E2; color:#991B1B; }
+        .status-badge.reschedule_suggested { background:#F3E8FF; color:#7C3AED; }
+        .status-badge.no_show { background:#FFF7ED; color:#C2410C; }
+
+        .pro-link { color:#E67E22; font-weight:600; cursor:pointer; text-decoration:none; }
+        .pro-link:hover { text-decoration:underline; }
+
+        .table-wrapper { overflow-x:auto; }
+        .empty-state { text-align:center; padding:4rem 2rem; color:#9CA3AF; }
+        .empty-state .icon { font-size:3rem; margin-bottom:1rem; }
+        .empty-state h3 { font-size:1rem; font-weight:600; color:#374151; }
+
+        .tab-row { display:flex; gap:0.4rem; flex-wrap:wrap; margin-bottom:1.25rem; }
+        .tab-btn { padding:0.5rem 1.1rem; border-radius:100px; border:1.5px solid #E5E7EB; background:white; font-size:0.8rem; font-weight:600; color:#6B7280; cursor:pointer; transition:all 0.2s; }
+        .tab-btn:hover { border-color:#E67E22; color:#E67E22; }
+        .tab-btn.active { background:#E67E22; color:white; border-color:#E67E22; }
+
+        @media(max-width:768px) { .sess-table { display:none; } .sess-cards { display:block; } }
+        @media(min-width:769px) { .sess-cards { display:none; } }
+
+        /* Card view for mobile */
+        .sess-card { background:white; border:1px solid #E5E7EB; border-radius:14px; padding:1.25rem; margin-bottom:0.75rem; }
+        .sess-card .sess-parties { font-weight:600; font-size:0.9rem; margin-bottom:0.4rem; }
+        .sess-card .sess-meta { font-size:0.8rem; color:#6B7280; line-height:1.6; }
+    </style>
+</head>
+<body>
+    <div id="sidebar"></div>
+    <script src="/admin/admin-nav.js"></script>
+
+    <div class="main">
+        <div class="header">
+            <div style="display:flex;align-items:center;gap:0.75rem">
+                <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </button>
+                <h1>Professional Sessions</h1>
+            </div>
+            <span style="font-size:0.82rem;color:#6B7280" id="lastRefresh"></span>
+        </div>
+
+        <div class="container">
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card total"><span class="stat-num" id="stTotal">—</span><span class="stat-label">Total Sessions</span></div>
+                <div class="stat-card pending"><span class="stat-num" id="stPending">—</span><span class="stat-label">Pending</span></div>
+                <div class="stat-card confirmed"><span class="stat-num" id="stConfirmed">—</span><span class="stat-label">Confirmed</span></div>
+                <div class="stat-card completed"><span class="stat-num" id="stCompleted">—</span><span class="stat-label">Completed</span></div>
+                <div class="stat-card cancelled"><span class="stat-num" id="stCancelled">—</span><span class="stat-label">Cancelled</span></div>
+            </div>
+
+            <!-- Status Tabs -->
+            <div class="tab-row">
+                <button class="tab-btn active" data-status="" onclick="switchTab('')">All</button>
+                <button class="tab-btn" data-status="requested" onclick="switchTab('requested')">⏳ Pending</button>
+                <button class="tab-btn" data-status="confirmed" onclick="switchTab('confirmed')">📅 Confirmed</button>
+                <button class="tab-btn" data-status="completed" onclick="switchTab('completed')">✅ Completed</button>
+                <button class="tab-btn" data-status="cancelled" onclick="switchTab('cancelled')">❌ Cancelled</button>
+                <button class="tab-btn" data-status="rejected" onclick="switchTab('rejected')">🚫 Rejected</button>
+            </div>
+
+            <!-- Filters -->
+            <div class="filter-row">
+                <input type="text" id="searchInput" placeholder="Search user, professional, concern..." oninput="renderSessions()">
+                <select id="typeFilter" onchange="renderSessions()">
+                    <option value="">All Session Types</option>
+                    <option value="video">📹 Video</option>
+                    <option value="audio">📞 Audio</option>
+                    <option value="chat">💬 Chat</option>
+                    <option value="in-person">🏢 In-Person</option>
+                </select>
+            </div>
+
+            <!-- Table (desktop) -->
+            <div class="table-wrapper">
+                <table class="sess-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Professional</th>
+                            <th>Type</th>
+                            <th>Concern</th>
+                            <th>Requested For</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sessTableBody">
+                        <tr><td colspan="7" class="no-data">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Card view (mobile) -->
+            <div class="sess-cards" id="sessCards"></div>
+
+            <div id="emptyMsg" style="display:none" class="empty-state">
+                <div class="icon">📋</div>
+                <h3>No sessions found</h3>
+                <p>Try adjusting your filters</p>
+            </div>
+
+            <div style="margin-top:0.75rem;font-size:0.8rem;color:#9CA3AF" id="sessCount"></div>
+        </div>
+    </div>
+
+    <script>
+    const token = localStorage.getItem('adminToken');
+    if (!token) window.location.href = '/admin/index.html';
+    const headers = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+
+    let allSessions = [];
+    let currentTab = '';
+
+    async function loadSessions() {
+        try {
+            const res = await fetch('/admin/api/professional-sessions', { headers });
+            if (res.status === 401) { localStorage.removeItem('adminToken'); window.location.href = '/admin/index.html'; return; }
+            const data = await res.json();
+            allSessions = data.sessions || [];
+            // Update stats
+            const stats = data.stats || {};
+            document.getElementById('stTotal').textContent = stats.total ?? allSessions.length;
+            document.getElementById('stPending').textContent = stats.pending ?? 0;
+            document.getElementById('stConfirmed').textContent = stats.confirmed ?? 0;
+            document.getElementById('stCompleted').textContent = stats.completed ?? 0;
+            document.getElementById('stCancelled').textContent = stats.cancelled ?? 0;
+            document.getElementById('lastRefresh').textContent = 'Updated ' + new Date().toLocaleTimeString();
+            renderSessions();
+        } catch(e) {
+            document.getElementById('sessTableBody').innerHTML = '<tr><td colspan="7" style="text-align:center;color:#DC2626;padding:2rem">Failed to load sessions</td></tr>';
+        }
+    }
+
+    function switchTab(status) {
+        currentTab = status;
+        document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+        document.querySelector(`.tab-btn[data-status="${status}"]`).classList.add('active');
+        renderSessions();
+    }
+
+    function renderSessions() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const typeFilter = document.getElementById('typeFilter').value;
+        let list = allSessions.filter(s => {
+            if (currentTab && s.status !== currentTab) return false;
+            if (typeFilter && s.sessionType !== typeFilter) return false;
+            if (search) {
+                const userName = (s.userId?.name || '').toLowerCase();
+                const userEmail = (s.userId?.email || '').toLowerCase();
+                const proName = (s.professionalId?.fullName || '').toLowerCase();
+                const concern = (s.concern || '').toLowerCase();
+                if (![userName, userEmail, proName, concern].some(f => f.includes(search))) return false;
+            }
+            return true;
+        });
+
+        const tbody = document.getElementById('sessTableBody');
+        const cardsEl = document.getElementById('sessCards');
+        const emptyEl = document.getElementById('emptyMsg');
+
+        if (!list.length) {
+            tbody.innerHTML = `<tr><td colspan="7" class="no-data">No sessions match your filters</td></tr>`;
+            cardsEl.innerHTML = '';
+            emptyEl.style.display = 'block';
+            document.getElementById('sessCount').textContent = '';
+            return;
+        }
+        emptyEl.style.display = 'none';
+        document.getElementById('sessCount').textContent = `Showing ${list.length} session${list.length !== 1 ? 's' : ''}`;
+
+        tbody.innerHTML = list.map(s => {
+            const userName = s.userId?.name || 'Unknown User';
+            const userEmail = s.userId?.email || '';
+            const proName = s.professionalId?.fullName || 'Unknown Pro';
+            const proTitle = s.professionalId?.title || '';
+            const reqTime = s.requestedAt ? new Date(s.requestedAt).toLocaleString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) : '—';
+            const created = new Date(s.createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+            return `<tr>
+                <td><div style="font-weight:600">${userName}</div><div style="font-size:0.75rem;color:#9CA3AF">${userEmail}</div></td>
+                <td><div style="font-weight:600">${proName}</div><div style="font-size:0.75rem;color:#9CA3AF">${proTitle}</div></td>
+                <td><span style="font-size:0.8rem">${sessionTypeIcon(s.sessionType)} ${s.sessionType}</span></td>
+                <td>${s.concern || '—'}</td>
+                <td style="font-size:0.8rem;color:#374151">${reqTime}</td>
+                <td><span class="status-badge ${s.status}">${s.status.replace('_',' ')}</span></td>
+                <td style="color:#9CA3AF;font-size:0.78rem">${created}</td>
+            </tr>`;
+        }).join('');
+
+        cardsEl.innerHTML = list.map(s => {
+            const userName = s.userId?.name || 'Unknown User';
+            const proName = s.professionalId?.fullName || 'Unknown Pro';
+            const reqTime = s.requestedAt ? new Date(s.requestedAt).toLocaleString('en-IN') : '—';
+            return `<div class="sess-card">
+                <div class="sess-parties">👤 ${userName} → ${proName}</div>
+                <div style="margin:0.4rem 0"><span class="status-badge ${s.status}">${s.status.replace('_',' ')}</span></div>
+                <div class="sess-meta">
+                    <b>Type:</b> ${sessionTypeIcon(s.sessionType)} ${s.sessionType}<br>
+                    <b>Concern:</b> ${s.concern || '—'}<br>
+                    <b>Requested for:</b> ${reqTime}<br>
+                    <b>Created:</b> ${new Date(s.createdAt).toLocaleDateString('en-IN')}
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    function sessionTypeIcon(type) {
+        const icons = { video:'📹', audio:'📞', chat:'💬', 'in-person':'🏢' };
+        return icons[type] || '📋';
+    }
+
+    loadSessions();
+    setInterval(loadSessions, 60000);
+    </script>
+</body>
+</html>

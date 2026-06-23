@@ -6,22 +6,13 @@
     <title>Community Circle - ABLE</title>
     <link rel="stylesheet" href="dashboard-styles.css">
     <link rel="stylesheet" href="community.css">
+<link rel="stylesheet" href="/loader.css">
 </head>
 <body>
+    <script src="/loader.js"></script>
     <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header"><img src="images/logo.svg" alt="ABLE" class="sidebar-logo"></div>
-        <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2"/><path d="M9 22V12h6v10" stroke="currentColor" stroke-width="2"/></svg><span>Dashboard</span></a>
-            <a href="healing-zone.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2"/></svg><span>Healing Zone</span></a>
-            <a href="body-mind.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Body-Mind</span></a>
-            <a href="community.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg><span>Community</span></a>
-            <a href="youth-support.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke="currentColor" stroke-width="2"/></svg><span>Youth Support</span></a>
-            <a href="my-voice.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2"/></svg><span>My Voice</span></a>
-            <a href="settings.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09" stroke="currentColor" stroke-width="2"/></svg><span>Settings</span></a>
-        </nav>
-        <div class="sidebar-footer"><a href="login.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2"/><path d="M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Logout</span></a></div>
-    </aside>
+        <div id="sidebar"></div>
+    <script src="sidebar-nav.js"></script>
 
     <div class="main-content">
         <header class="topbar">
@@ -56,6 +47,15 @@
                 <h2 class="cm-sec-title">Recommended For You</h2>
                 <div class="cm-rec-grid" id="cmRecGrid">
                     <div class="cm-skeleton cm-skeleton-card"></div>
+                    <div class="cm-skeleton cm-skeleton-card"></div>
+                    <div class="cm-skeleton cm-skeleton-card"></div>
+                </div>
+            </section>
+
+            <!-- Official ABLE Groups -->
+            <section class="cm-section" id="cmOfficialSection">
+                <h2 class="cm-sec-title">🏛️ Official ABLE Groups</h2>
+                <div class="cm-rec-grid" id="cmOfficialGrid">
                     <div class="cm-skeleton cm-skeleton-card"></div>
                     <div class="cm-skeleton cm-skeleton-card"></div>
                 </div>
@@ -175,7 +175,10 @@
         });
     }
 
+    var cachedCircles = [];
+
     function renderCircles(circles) {
+        cachedCircles = circles || [];
         var grid = document.getElementById('cmRecGrid');
         var section = document.getElementById('cmRecommendedSection');
         if (!grid || !section) return;
@@ -191,7 +194,10 @@
                         '<span>' + escapeHtml(c.statusBadge || '') + '</span>' +
                         '<span>' + (c.memberCount || 0) + ' Members</span>' +
                     '</div>' +
-                    '<button class="cm-rec-btn">' + escapeHtml(c.buttonText || 'Join Circle') + '</button>' +
+                    '<div style="display:flex;gap:0.4rem;margin-top:0.5rem">' +
+                        '<button class="cm-rec-btn" onclick="joinCircle(\'' + c._id + '\', this)" style="flex:1">' + escapeHtml(c.buttonText || 'Join Circle') + '</button>' +
+                        '<button class="cm-rec-btn" style="background:white;color:#374151;border:1px solid #E5E7EB;flex:0 0 auto;padding:0.55rem 0.9rem" onclick="viewCircle(\'' + c._id + '\',\'' + escapeAttr(c.title) + '\')">View</button>' +
+                    '</div>' +
                 '</div>';
         }).join('');
     }
@@ -217,7 +223,7 @@
                             '<span>' + members + ' Members</span>' +
                             '<span>' + escapeHtml(s.activeStat || '') + '</span>' +
                         '</div>' +
-                        '<a href="' + escapeAttr(s.link || '#') + '" class="cm-space-btn" style="display:inline-block;text-align:center;text-decoration:none">' + escapeHtml(s.buttonText || 'Enter Community') + '</a>' +
+                        '<a href="' + escapeAttr(s.link || '#') + '" class="cm-space-btn" style="display:inline-block;text-align:center;text-decoration:none" onclick="event.preventDefault();openSpaceDetail(\'' + escapeAttr(s.title) + '\',\'' + escapeAttr(s.description) + '\',\'' + (s.memberCount||0) + '\',\'' + escapeAttr(s.activeStat||'') + '\')">' + escapeHtml(s.buttonText || 'Enter Community') + '</a>' +
                     '</div>' +
                 '</div>';
         }).join('');
@@ -236,7 +242,7 @@
             var meta = (d.replyCount || 0) + ' replies';
             if (d.groupName) meta += BULLET + d.groupName;
             return '' +
-                '<a href="' + escapeAttr(d.link || '#') + '" class="cm-disc-item">' +
+                '<a href="#" class="cm-disc-item" onclick="event.preventDefault();openDiscussion(\'' + (d._id || '') + '\',\'' + escapeAttr(d.title) + '\')">' +
                     '<div class="cm-disc-left">' +
                         '<span class="cm-disc-dot ' + (d.accentColor || 'green') + '"></span>' +
                         '<div>' +
@@ -274,7 +280,7 @@
                         '<h4>' + escapeHtml(ev.title) + '</h4>' +
                         '<p>' + escapeHtml(parts.join(BULLET)) + '</p>' +
                     '</div>' +
-                    '<button class="cm-ev-btn"' + disabled + '>' + escapeHtml(ev.buttonText || 'RSVP') + '</button>' +
+                    '<button class="cm-ev-btn" onclick="rsvpEvent(\'' + ev._id + '\', this)"' + disabled + '>' + escapeHtml(ev.buttonText || 'RSVP') + '</button>' +
                 '</div>';
         }).join('');
     }
@@ -309,6 +315,27 @@
             renderHero(data.settings);
             renderActivityBar(data.settings);
             renderCircles(data.circles);
+            // Personalize circle recommendations based on user goals
+            if (cmToken) {
+                fetch('/api/me', { headers: { 'Authorization': 'Bearer ' + cmToken } })
+                    .then(function(r) { return r.json(); })
+                    .then(function(user) {
+                        var goals = (user.wellnessGoals || []).map(function(g) { return g.toLowerCase(); });
+                        if (!goals.length) return;
+                        // Update match percentages based on goal overlap
+                        var cards = document.querySelectorAll('.cm-rec-card');
+                        cards.forEach(function(card) {
+                            var title = (card.querySelector('h4') || {}).textContent || '';
+                            var desc = (card.querySelector('p') || {}).textContent || '';
+                            var text = (title + ' ' + desc).toLowerCase();
+                            var matchCount = goals.filter(function(g) { return text.includes(g.split(' ')[0]); }).length;
+                            if (matchCount > 0) {
+                                var matchEl = card.querySelector('.cm-rec-match');
+                                if (matchEl) matchEl.textContent = Math.min(95, 80 + matchCount * 5) + '% Match';
+                            }
+                        });
+                    }).catch(function() {});
+            }
             renderSpaces(data.spaces);
             renderDiscussions(data.discussions);
             renderEvents(data.events);
@@ -318,6 +345,320 @@
             showFailure();
         }
     })();
+
+    // ===== OFFICIAL GROUPS =====
+    (async function loadOfficialGroups() {
+        try {
+            var res = await fetch('/api/community/official-groups');
+            var data = await res.json();
+            var groups = data.groups || [];
+            var grid = document.getElementById('cmOfficialGrid');
+            if (!groups.length) { grid.innerHTML = '<div class="cm-empty">No official groups yet</div>'; return; }
+            grid.innerHTML = groups.map(function(g) {
+                var permLabel = {'admin_only':'Admin Posts Only','admin_and_professionals':'Professionals Can Post','all_members':'Open Discussion'}[g.postingPermission] || '';
+                return '<div class="cm-rec-card cm-rec-orange" style="position:relative">' +
+                    '<div style="position:absolute;top:0.75rem;right:0.75rem;font-size:0.6rem;background:#FEF3C7;color:#92400E;padding:0.15rem 0.5rem;border-radius:4px;font-weight:700">Official</div>' +
+                    '<h4>' + escapeHtml(g.name) + '</h4>' +
+                    '<p>' + escapeHtml(g.description || '').substring(0, 100) + '</p>' +
+                    '<div class="cm-rec-meta"><span>' + (g.memberCount || 0) + ' Members</span><span>' + escapeHtml(g.category || '') + '</span></div>' +
+                    '<div style="font-size:0.68rem;color:#6B7280;margin-top:0.4rem">' + escapeHtml(permLabel) + (g.commentingEnabled ? ' • Comments On' : '') + '</div>' +
+                    '<div style="display:flex;gap:0.4rem;margin-top:0.75rem">' +
+                    '<button class="cm-rec-btn" onclick="joinOfficialGroup(\'' + g._id + '\', this)">Join Group</button>' +
+                    '<button class="cm-rec-btn" style="background:white;color:#374151;border:1px solid #E5E7EB" onclick="viewOfficialGroup(\'' + g._id + '\')">View</button>' +
+                    '</div></div>';
+            }).join('');
+        } catch(e) { document.getElementById('cmOfficialGrid').innerHTML = '<div class="cm-empty">Unable to load groups</div>'; }
+    })();
+
+    function openSpaceDetail(title, desc, members, activeStat) {
+        var existing = document.getElementById('spaceDetailModal');
+        if (existing) existing.remove();
+        var modal = document.createElement('div');
+        modal.id = 'spaceDetailModal';
+        modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem';
+        modal.addEventListener('click', function(e) { if (e.target === modal) modal.remove(); });
+        modal.innerHTML = '<div style="background:white;border-radius:20px;padding:2.5rem;max-width:450px;width:100%;text-align:center;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.2)">' +
+            '<button id="spaceCloseX" style="position:absolute;top:1rem;right:1.25rem;background:none;border:none;font-size:1.3rem;cursor:pointer;color:#9CA3AF">\u2715</button>' +
+            '<h3 style="font-size:1.2rem;font-weight:700;margin-bottom:0.5rem">' + title + '</h3>' +
+            '<p style="font-size:0.85rem;color:#6B7280;margin-bottom:1.25rem;line-height:1.6">' + desc + '</p>' +
+            '<div style="display:flex;justify-content:center;gap:1.5rem;margin-bottom:1.5rem;font-size:0.8rem;color:#6B7280"><span><strong style="color:#E67E22">' + members + '</strong> Members</span><span><strong style="color:#E67E22">' + activeStat + '</strong></span></div>' +
+            '<p style="font-size:0.8rem;color:#9CA3AF;margin-bottom:1rem">This space is part of ABLE\'s wellness community. Join related circles and events to participate.</p>' +
+            '<button id="spaceCloseBtn" style="padding:0.75rem 2rem;background:#E67E22;color:white;border:none;border-radius:10px;font-weight:700;cursor:pointer">Got it</button></div>';
+        document.body.appendChild(modal);
+        document.getElementById('spaceCloseX').addEventListener('click', function() { modal.remove(); });
+        document.getElementById('spaceCloseBtn').addEventListener('click', function() { modal.remove(); });
+    }
+
+    function joinOfficialGroup(groupId, btn) {
+        if (!cmToken) { alert('Please log in to join'); window.location.href = 'login.html'; return; }
+        btn.disabled = true; btn.textContent = 'Joining...';
+        fetch('/api/community/official-groups/' + groupId + '/join', { method: 'POST', headers: { 'Authorization': 'Bearer ' + cmToken } })
+            .then(function(r) { return r.json(); })
+            .then(function(data) { btn.textContent = '✓ Joined'; btn.style.background = '#10B981'; btn.style.color = 'white'; cmToast(data.alreadyJoined ? 'Already a member!' : '🎉 Joined group!'); })
+            .catch(function() { btn.disabled = false; btn.textContent = 'Join Group'; cmToast('Failed to join'); });
+    }
+
+    function viewOfficialGroup(groupId) {
+        var modal = document.createElement('div');
+        modal.id = 'officialGroupModal';
+        modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto';
+        modal.addEventListener('click', function(e) { if (e.target === modal) { modal.remove(); } });
+        modal.innerHTML = '<div style="background:white;border-radius:20px;padding:2.5rem;max-width:640px;width:100%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.2);margin:auto"><button id="ogCloseBtn" style="position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;font-size:1.4rem;cursor:pointer;color:#9CA3AF;line-height:1">\u2715</button><div id="ogDetail"><p style="color:#9CA3AF;text-align:center;padding:2rem">Loading...</p></div></div>';
+        document.body.appendChild(modal);
+        
+        // Close button handler
+        document.getElementById('ogCloseBtn').addEventListener('click', function() {
+            var m = document.getElementById('officialGroupModal');
+            if (m) m.remove();
+        });
+
+        Promise.all([
+            fetch('/api/community/official-groups/' + groupId).then(function(r){return r.json()}),
+            fetch('/api/community/official-groups/' + groupId + '/posts').then(function(r){return r.json()})
+        ]).then(function(results) {
+            var group = results[0];
+            var posts = results[1].posts || [];
+            var detail = document.getElementById('ogDetail');
+
+            var postsHtml = posts.length ? posts.map(function(p) {
+                var badge = p.authorType === 'admin'
+                    ? '<span style="display:inline-block;font-size:0.65rem;background:#EFF6FF;color:#2563EB;padding:0.2rem 0.5rem;border-radius:4px;font-weight:600">Admin</span>'
+                    : '<span style="display:inline-block;font-size:0.65rem;background:#F3E8FF;color:#7C3AED;padding:0.2rem 0.5rem;border-radius:4px;font-weight:600">Professional</span>';
+                var typeTag = '<span style="display:inline-block;font-size:0.65rem;background:#ECFDF5;color:#059669;padding:0.2rem 0.5rem;border-radius:4px;margin-left:0.3rem">' + (p.contentType||'post') + '</span>';
+                return '<div style="padding:1.25rem;background:#FAFAFA;border-radius:14px;margin-bottom:1rem;border:1px solid #F3F4F6">' +
+                    (p.isPinned ? '<div style="font-size:0.65rem;color:#E67E22;font-weight:700;margin-bottom:0.4rem">\uD83D\uDCCC Pinned</div>' : '') +
+                    '<div style="margin-bottom:0.5rem">' + badge + typeTag + '</div>' +
+                    '<h4 style="font-size:0.95rem;font-weight:700;color:#1a1a2e;margin-bottom:0.4rem">' + escapeHtml(p.title) + '</h4>' +
+                    '<p style="font-size:0.83rem;color:#374151;line-height:1.7;white-space:pre-wrap">' + escapeHtml(p.content) + '</p>' +
+                    (p.sourceRefs && p.sourceRefs.length ? '<div style="margin-top:0.75rem;padding:0.5rem 0.75rem;background:#EFF6FF;border-radius:6px;font-size:0.7rem;color:#2563EB">\uD83D\uDD17 Sources: ' + p.sourceRefs.map(function(s){return escapeHtml(s)}).join(' \u2022 ') + '</div>' : '') +
+                    '<div style="display:flex;gap:1rem;margin-top:0.75rem;font-size:0.75rem;color:#6B7280">' +
+                    '<span>\u2764\uFE0F ' + (p.reactions||[]).length + ' reactions</span>' +
+                    '<span>\uD83D\uDCAC ' + (p.comments||[]).filter(function(c){return c.status==="published"}).length + ' comments</span>' +
+                    '<span>\uD83D\uDD16 ' + (p.savedBy||[]).length + ' saved</span></div></div>';
+            }).join('') : '<div style="text-align:center;padding:2rem;color:#9CA3AF;font-size:0.85rem">No posts yet in this group.</div>';
+
+            detail.innerHTML =
+                '<div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem">' +
+                '<span style="font-size:0.65rem;background:#FEF3C7;color:#92400E;padding:0.2rem 0.6rem;border-radius:4px;font-weight:700">Official</span>' +
+                '<span style="font-size:0.65rem;background:#F3F4F6;color:#6B7280;padding:0.2rem 0.5rem;border-radius:4px">' + escapeHtml(group.category||'') + '</span></div>' +
+                '<h2 style="font-size:1.4rem;font-weight:800;color:#1a1a2e;margin-bottom:0.4rem">' + escapeHtml(group.name) + '</h2>' +
+                '<p style="font-size:0.88rem;color:#6B7280;line-height:1.6;margin-bottom:1rem">' + escapeHtml(group.description) + '</p>' +
+                '<div style="display:flex;gap:1rem;flex-wrap:wrap;font-size:0.78rem;color:#6B7280;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1px solid #F3F4F6">' +
+                '<span>\uD83D\uDC65 ' + (group.memberCount||0) + ' members</span>' +
+                '<span>' + (group.commentingEnabled ? '\uD83D\uDCAC Comments On' : '\uD83D\uDEAB Comments Off') + '</span>' +
+                '<span>' + (group.reactionsEnabled ? '\u2764\uFE0F Reactions On' : '') + '</span></div>' +
+                (group.rules ? '<div style="margin-bottom:1.5rem;padding:1rem;background:#FFF8F0;border-radius:10px;border:1px solid rgba(230,126,34,0.15)"><strong style="font-size:0.78rem;color:#92400E;display:block;margin-bottom:0.3rem">\uD83D\uDCCB Group Rules</strong><p style="font-size:0.8rem;color:#6B7280;line-height:1.5">' + escapeHtml(group.rules) + '</p></div>' : '') +
+                '<h3 style="font-size:1rem;font-weight:700;color:#1a1a2e;margin-bottom:1rem">\u270D\uFE0F Posts (' + posts.length + ')</h3>' +
+                postsHtml;
+        }).catch(function() { document.getElementById('ogDetail').innerHTML = '<p style="color:#EF4444;text-align:center">Error loading group</p>'; });
+    }
+
+    // ===== CIRCLE DETAIL MODAL =====
+    function viewCircle(circleId, title) {
+        var circle = cachedCircles.find(function(c){ return c._id === circleId; }) || { _id: circleId, title: title };
+
+        var modal = document.createElement('div');
+        modal.id = 'circleDetailModal';
+        modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto';
+        modal.addEventListener('click', function(e) { if (e.target === modal) { modal.remove(); } });
+
+        var accentColor = circle.accentColor || 'green';
+        var accentMap = { green:'#10B981', blue:'#3B82F6', purple:'#8B5CF6', orange:'#E67E22', pink:'#EC4899' };
+        var accent = accentMap[accentColor] || '#10B981';
+
+        modal.innerHTML = '<div style="background:white;border-radius:20px;padding:0;max-width:640px;width:100%;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.2);margin:auto;overflow:hidden">' +
+            '<div style="background:linear-gradient(135deg,' + accent + '20,' + accent + '08);padding:2rem 2.5rem 1.5rem;border-bottom:1px solid #F3F4F6">' +
+                '<button id="cdCloseBtn" style="position:absolute;top:1.25rem;right:1.25rem;background:white;border:none;width:32px;height:32px;border-radius:50%;font-size:1rem;cursor:pointer;color:#9CA3AF;box-shadow:0 2px 8px rgba(0,0,0,0.1)">\u2715</button>' +
+                '<div style="display:inline-block;font-size:0.65rem;background:white;color:' + accent + ';padding:0.3rem 0.7rem;border-radius:100px;font-weight:700;margin-bottom:0.6rem">' + (circle.matchPercent || 0) + '% Match · Circle</div>' +
+                '<h2 style="font-size:1.5rem;font-weight:800;color:#1a1a2e;margin-bottom:0.4rem">' + escapeHtml(circle.title || 'Circle') + '</h2>' +
+                '<p style="font-size:0.88rem;color:#6B7280;line-height:1.6">' + escapeHtml(circle.description || '') + '</p>' +
+                '<div style="display:flex;gap:1.5rem;margin-top:1rem;font-size:0.78rem;color:#6B7280">' +
+                    '<span>\uD83D\uDC65 ' + (circle.memberCount || 0) + ' Members</span>' +
+                    (circle.statusBadge ? '<span>\u23F1\uFE0F ' + escapeHtml(circle.statusBadge) + '</span>' : '') +
+                '</div>' +
+                '<button id="cdJoinBtn" style="margin-top:1.25rem;padding:0.6rem 1.25rem;background:' + accent + ';color:white;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.85rem">Loading...</button>' +
+            '</div>' +
+            '<div id="cdPostsContainer" style="padding:1.5rem 2.5rem 2.5rem;max-height:60vh;overflow-y:auto">' +
+                '<p style="color:#9CA3AF;text-align:center;padding:2rem;font-size:0.85rem">Loading posts...</p>' +
+            '</div>' +
+        '</div>';
+        document.body.appendChild(modal);
+
+        document.getElementById('cdCloseBtn').addEventListener('click', function() { modal.remove(); });
+
+        // Join button state
+        var joinBtn = document.getElementById('cdJoinBtn');
+        if (!cmToken) {
+            joinBtn.textContent = 'Log in to Join';
+            joinBtn.addEventListener('click', function() { window.location.href = 'login.html'; });
+        } else {
+            fetch('/api/community/my-circles', { headers: { 'Authorization': 'Bearer ' + cmToken } })
+                .then(function(r){ return r.json(); })
+                .then(function(data) {
+                    var joined = (data.joinedCircles || []).some(function(cId){ return cId.toString() === circleId; });
+                    if (joined) {
+                        joinBtn.textContent = '\u2713 Joined';
+                        joinBtn.style.background = '#F3F4F6';
+                        joinBtn.style.color = '#374151';
+                        joinBtn.disabled = true;
+                    } else {
+                        joinBtn.textContent = 'Join Circle';
+                        joinBtn.addEventListener('click', function() {
+                            joinBtn.disabled = true; joinBtn.textContent = 'Joining...';
+                            fetch('/api/community/circles/' + circleId + '/join', { method: 'POST', headers: { 'Authorization': 'Bearer ' + cmToken } })
+                                .then(function(r){ return r.json(); })
+                                .then(function() {
+                                    joinBtn.textContent = '\u2713 Joined';
+                                    joinBtn.style.background = '#F3F4F6';
+                                    joinBtn.style.color = '#374151';
+                                    cmToast('\uD83C\uDF89 Joined circle!');
+                                });
+                        });
+                    }
+                });
+        }
+
+        // Load posts
+        fetch('/api/community/circles/' + circleId + '/posts')
+            .then(function(r){ return r.json(); })
+            .then(function(data) {
+                var posts = data.posts || [];
+                var container = document.getElementById('cdPostsContainer');
+                if (!posts.length) {
+                    container.innerHTML = '<div style="text-align:center;padding:3rem 1rem;color:#9CA3AF;font-size:0.85rem"><div style="font-size:2.5rem;margin-bottom:0.5rem">\uD83D\uDCDD</div>No posts in this circle yet.<br><span style="font-size:0.75rem;color:#D1D5DB">Posts from admin and moderators will appear here.</span></div>';
+                    return;
+                }
+                container.innerHTML = '<h3 style="font-size:1rem;font-weight:700;color:#1a1a2e;margin-bottom:1rem">\u270D\uFE0F Posts (' + posts.length + ')</h3>' +
+                    posts.map(function(p) { return renderCirclePost(p); }).join('');
+
+                // Wire up react/save buttons
+                container.addEventListener('click', function(e) {
+                    var reactBtn = e.target.closest('.cp-react-btn');
+                    var saveBtn = e.target.closest('.cp-save-btn');
+                    if (reactBtn) {
+                        if (!cmToken) { cmToast('Log in to react'); return; }
+                        var postId = reactBtn.getAttribute('data-post');
+                        fetch('/api/community/official-posts/' + postId + '/react', {
+                            method: 'POST',
+                            headers: { 'Authorization': 'Bearer ' + cmToken, 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ type: 'like' })
+                        }).then(function(r){ return r.json(); }).then(function(data) {
+                            if (data.reactionCount !== undefined) reactBtn.innerHTML = '\u2764\uFE0F ' + data.reactionCount;
+                            if (data.error) cmToast(data.error);
+                        });
+                    } else if (saveBtn) {
+                        if (!cmToken) { cmToast('Log in to save'); return; }
+                        var postId = saveBtn.getAttribute('data-post');
+                        fetch('/api/community/official-posts/' + postId + '/save', {
+                            method: 'POST',
+                            headers: { 'Authorization': 'Bearer ' + cmToken }
+                        }).then(function(r){ return r.json(); }).then(function(data) {
+                            cmToast(data.saved ? '\uD83D\uDD16 Saved' : 'Removed from saved');
+                            saveBtn.innerHTML = data.saved ? '\u2713 Saved' : '\uD83D\uDD16 Save';
+                        });
+                    }
+                });
+            })
+            .catch(function() {
+                document.getElementById('cdPostsContainer').innerHTML = '<p style="color:#EF4444;text-align:center;padding:2rem">Error loading posts</p>';
+            });
+    }
+
+    function renderCirclePost(p) {
+        var authorBadge = p.authorType === 'admin'
+            ? '<span style="display:inline-block;font-size:0.65rem;background:#FEF3C7;color:#92400E;padding:0.2rem 0.5rem;border-radius:4px;font-weight:600">\uD83D\uDC51 Admin</span>'
+            : '<span style="display:inline-block;font-size:0.65rem;background:#F3E8FF;color:#7C3AED;padding:0.2rem 0.5rem;border-radius:4px;font-weight:600">\uD83E\uDE7A Professional</span>';
+        var typeIcons = { announcement:'\uD83D\uDCE2', guide:'\uD83D\uDCD8', learning:'\uD83C\uDF93', challenge:'\uD83C\uDFAF', resource:'\uD83D\uDCC2', safety:'\uD83D\uDEE1\uFE0F' };
+        var typeTag = '<span style="display:inline-block;font-size:0.65rem;background:#ECFDF5;color:#059669;padding:0.2rem 0.5rem;border-radius:4px;margin-left:0.3rem">' + (typeIcons[p.contentType] || '') + ' ' + (p.contentType||'post') + '</span>';
+        var dateStr = p.createdAt ? new Date(p.createdAt).toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' }) : '';
+        return '<div style="padding:1.25rem;background:#FAFAFA;border-radius:14px;margin-bottom:1rem;border:1px solid #F3F4F6">' +
+            (p.isPinned ? '<div style="font-size:0.65rem;color:#E67E22;font-weight:700;margin-bottom:0.4rem">\uD83D\uDCCC Pinned</div>' : '') +
+            '<div style="margin-bottom:0.6rem">' + authorBadge + typeTag + '<span style="font-size:0.7rem;color:#9CA3AF;margin-left:0.5rem">' + dateStr + '</span></div>' +
+            '<h4 style="font-size:0.95rem;font-weight:700;color:#1a1a2e;margin-bottom:0.4rem">' + escapeHtml(p.title) + '</h4>' +
+            '<p style="font-size:0.83rem;color:#374151;line-height:1.7;white-space:pre-wrap">' + escapeHtml(p.content) + '</p>' +
+            (p.sourceRefs && p.sourceRefs.length ? '<div style="margin-top:0.75rem;padding:0.5rem 0.75rem;background:#EFF6FF;border-radius:6px;font-size:0.7rem;color:#2563EB">\uD83D\uDD17 Sources: ' + p.sourceRefs.map(function(s){return escapeHtml(s)}).join(' \u2022 ') + '</div>' : '') +
+            '<div style="display:flex;gap:1rem;margin-top:0.85rem;padding-top:0.75rem;border-top:1px solid #F3F4F6;font-size:0.75rem">' +
+                '<button class="cp-react-btn" data-post="' + p._id + '" style="background:none;border:none;cursor:pointer;color:#6B7280;font-size:0.78rem">\u2764\uFE0F ' + (p.reactions||[]).length + '</button>' +
+                '<span style="color:#6B7280">\uD83D\uDCAC ' + (p.comments||[]).filter(function(c){return c.status==="published"}).length + '</span>' +
+                '<button class="cp-save-btn" data-post="' + p._id + '" style="background:none;border:none;cursor:pointer;color:#6B7280;font-size:0.78rem;margin-left:auto">\uD83D\uDD16 Save</button>' +
+            '</div>' +
+        '</div>';
+    }
+
+    // ===== USER INTERACTION FUNCTIONS =====
+    var cmToken = localStorage.getItem('token');
+
+    function cmToast(msg) {
+        var t = document.createElement('div');
+        t.style.cssText = 'position:fixed;bottom:2rem;right:2rem;background:#1a1a2e;color:white;padding:0.85rem 1.5rem;border-radius:10px;font-size:0.85rem;z-index:9999;box-shadow:0 10px 30px rgba(0,0,0,0.2);transition:opacity 0.3s';
+        t.textContent = msg;
+        document.body.appendChild(t);
+        setTimeout(function() { t.style.opacity = '0'; setTimeout(function() { t.remove(); }, 300); }, 3000);
+    }
+
+    function joinCircle(circleId, btn) {
+        if (!cmToken) { alert('Please log in to join circles'); window.location.href = 'login.html'; return; }
+        btn.disabled = true; btn.textContent = 'Joining...';
+        fetch('/api/community/circles/' + circleId + '/join', { method: 'POST', headers: { 'Authorization': 'Bearer ' + cmToken } })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.alreadyJoined) { btn.textContent = '✓ Joined'; btn.style.background = '#10B981'; btn.style.color = 'white'; cmToast('Already a member!'); }
+                else { btn.textContent = '✓ Joined'; btn.style.background = '#10B981'; btn.style.color = 'white'; cmToast('🎉 Joined circle!'); }
+            })
+            .catch(function() { btn.disabled = false; btn.textContent = 'Join Circle'; cmToast('Failed to join'); });
+    }
+
+    function rsvpEvent(eventId, btn) {
+        if (!cmToken) { alert('Please log in to RSVP'); window.location.href = 'login.html'; return; }
+        btn.disabled = true; btn.textContent = 'RSVPing...';
+        fetch('/api/community/events/' + eventId + '/rsvp', { method: 'POST', headers: { 'Authorization': 'Bearer ' + cmToken } })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                if (data.alreadyRsvp) { btn.textContent = '✓ Going'; btn.style.background = '#10B981'; btn.style.color = 'white'; cmToast('Already RSVPed!'); }
+                else { btn.textContent = '✓ Going'; btn.style.background = '#10B981'; btn.style.color = 'white'; cmToast('📅 RSVP confirmed!'); }
+            })
+            .catch(function() { btn.disabled = false; btn.textContent = 'RSVP'; cmToast('Failed to RSVP'); });
+    }
+
+    function openDiscussion(discId, title) {
+        if (!discId) { cmToast('Discussion not available'); return; }
+        var modal = document.createElement('div');
+        modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem';
+        modal.onclick = function(e) { if (e.target === modal) modal.remove(); };
+        modal.innerHTML = '<div style="background:white;border-radius:20px;padding:2rem;max-width:500px;width:100%;max-height:80vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.2)"><button onclick="this.closest(\'div[style*=position\\:fixed]\').remove()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.3rem;cursor:pointer;color:#9CA3AF">✕</button><h3 style="font-size:1.1rem;font-weight:700;margin-bottom:1rem">' + title + '</h3><div id="discReplies" style="margin-bottom:1rem"><p style="color:#9CA3AF;font-size:0.85rem">Loading replies...</p></div>' + (cmToken ? '<div style="display:flex;gap:0.5rem"><input type="text" id="discReplyInput" placeholder="Write a reply..." style="flex:1;padding:0.6rem 1rem;border:1.5px solid #E5E7EB;border-radius:8px;font-size:0.85rem;outline:none"><button onclick="submitReply(\''+discId+'\')" style="padding:0.6rem 1rem;background:#E67E22;color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer">Reply</button></div>' : '<p style="font-size:0.8rem;color:#6B7280">Log in to reply</p>') + '</div>';
+        document.body.appendChild(modal);
+        // Load replies
+        fetch('/api/community/discussions/' + discId)
+            .then(function(r) { return r.json(); })
+            .then(function(disc) {
+                var replies = disc.replies || [];
+                var el = document.getElementById('discReplies');
+                if (!replies.length) { el.innerHTML = '<p style="color:#9CA3AF;font-size:0.82rem">No replies yet. Be the first!</p>'; return; }
+                el.innerHTML = replies.map(function(r) { return '<div style="padding:0.6rem 0;border-bottom:1px solid #F3F4F6;font-size:0.83rem"><strong style="color:#1a1a2e">' + (r.user?.name || 'User') + '</strong><p style="color:#374151;margin-top:0.2rem">' + r.text + '</p></div>'; }).join('');
+            })
+            .catch(function() { document.getElementById('discReplies').innerHTML = '<p style="color:#EF4444;font-size:0.82rem">Failed to load</p>'; });
+    }
+
+    function submitReply(discId) {
+        var text = document.getElementById('discReplyInput').value.trim();
+        if (!text) return;
+        fetch('/api/community/discussions/' + discId + '/reply', { method: 'POST', headers: { 'Authorization': 'Bearer ' + cmToken, 'Content-Type': 'application/json' }, body: JSON.stringify({ text: text }) })
+            .then(function(r) { return r.json(); })
+            .then(function(data) { if (data.message) { document.getElementById('discReplyInput').value = ''; cmToast('💬 Reply added!'); openDiscussion(discId, ''); } else { cmToast(data.error || 'Failed'); } })
+            .catch(function() { cmToast('Failed to reply'); });
+    }
+
+    // Load user's joined circles/events to update button states
+    if (cmToken) {
+        fetch('/api/community/my-circles', { headers: { 'Authorization': 'Bearer ' + cmToken } })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                (data.joinedCircles || []).forEach(function(cId) {
+                    var btns = document.querySelectorAll('.cm-rec-btn');
+                    btns.forEach(function(btn) { if (btn.onclick && btn.onclick.toString().includes(cId)) { btn.textContent = '✓ Joined'; btn.style.background = '#10B981'; btn.style.color = 'white'; } });
+                });
+            }).catch(function() {});
+    }
     </script>
 </body>
 </html>

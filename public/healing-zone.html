@@ -6,22 +6,13 @@
     <title>Enable-Healing Zone - ABLE</title>
     <link rel="stylesheet" href="dashboard-styles.css">
     <link rel="stylesheet" href="healing-zone.css">
+<link rel="stylesheet" href="/loader.css">
 </head>
 <body>
+    <script src="/loader.js"></script>
     <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header"><img src="images/logo.svg" alt="ABLE" class="sidebar-logo"></div>
-        <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 22V12h6v10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Dashboard</span></a>
-            <a href="healing-zone.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2"/></svg><span>Healing Zone</span></a>
-            <a href="body-mind.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Body-Mind</span></a>
-            <a href="community.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg><span>Community</span></a>
-            <a href="youth-support.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke="currentColor" stroke-width="2"/></svg><span>Youth Support</span></a>
-            <a href="my-voice.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2"/></svg><span>My Voice</span></a>
-            <a href="settings.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="2"/></svg><span>Settings</span></a>
-        </nav>
-        <div class="sidebar-footer"><a href="login.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2"/><path d="M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Logout</span></a></div>
-    </aside>
+        <div id="sidebar"></div>
+    <script src="sidebar-nav.js"></script>
 
     <!-- Main -->
     <div class="main-content">
@@ -48,13 +39,26 @@
                     <a href="#recommended" class="hz-hero-btn">Book Free Consultation</a>
                 </div>
                 <div class="hz-hero-right">
-                    <div class="hz-avatar-stack">
-                        <img src="https://ui-avatars.com/api/?name=SW&background=E67E22&color=fff&size=48" alt=""><img src="https://ui-avatars.com/api/?name=JC&background=10B981&color=fff&size=48" alt=""><img src="https://ui-avatars.com/api/?name=PS&background=8B5CF6&color=fff&size=48" alt=""><img src="https://ui-avatars.com/api/?name=AJ&background=3B82F6&color=fff&size=48" alt="">
+                    <div class="hz-avatar-stack" id="hzAvatarStack">
                         <span class="hz-online-dot"></span>
                     </div>
                     <span class="hz-hero-online" id="hzOnlineCount">Loading...</span>
                 </div>
             </div>
+
+            <!-- My Sessions (logged-in users) -->
+            <section class="hz-section" id="mySessionsSection" style="display:none">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+                    <h2 class="hz-sec-title" style="margin:0">📅 My Sessions</h2>
+                    <button onclick="document.getElementById('mySessionsPanel').style.display=document.getElementById('mySessionsPanel').style.display==='none'?'block':'none'" style="background:none;border:1px solid #E5E7EB;padding:0.4rem 0.8rem;border-radius:6px;font-size:0.75rem;cursor:pointer;color:#6B7280">Toggle ▾</button>
+                </div>
+                <div id="mySessionsPanel">
+                    <div id="mySessionsList" style="display:flex;flex-direction:column;gap:0.5rem"></div>
+                </div>
+            </section>
+
+            <!-- Result Count -->
+            <div id="hzResultCount" style="font-size:0.8rem;color:#6B7280;margin-bottom:0.75rem;display:none"></div>
 
             <!-- Chip Filters -->
             <div class="hz-chips" id="hzChips">
@@ -125,20 +129,44 @@
     <script>
     let allTherapists = [];
     let currentCategory = 'All';
+    let availableForStack = [];
+    let stackIndex = 0;
+    const stackColors = ['E67E22','8B5CF6','10B981','3B82F6','F59E0B','06B6D4','EF4444','6366F1'];
+
+    function renderAvatarStack() {
+        if (!availableForStack.length) return;
+        const stack = document.getElementById('hzAvatarStack');
+        const show = Math.min(4, availableForStack.length);
+        let imgs = '';
+        for (let i = 0; i < show; i++) {
+            const idx = (stackIndex + i) % availableForStack.length;
+            const p = availableForStack[idx];
+            const color = stackColors[idx % stackColors.length];
+            const src = p.profilePhoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(p.fullName)}&background=${color}&color=fff&size=48&bold=true`;
+            imgs += `<img src="${src}" alt="${p.fullName}" title="${p.fullName}">`;
+        }
+        stack.innerHTML = imgs + '<span class="hz-online-dot"></span>';
+        stackIndex = (stackIndex + 1) % availableForStack.length;
+    }
+
+    // Rotate every 60 seconds
+    setInterval(renderAvatarStack, 60000);
 
     // Load therapists
     async function loadTherapists(category, sort) {
         try {
-            let url = '/api/therapists?';
-            if (category && category !== 'All') url += 'category=' + encodeURIComponent(category) + '&';
-            if (sort) url += 'sort=' + sort;
+            let url = '/api/professionals?';
+            if (category && category !== 'All') url += 'specialization=' + encodeURIComponent(category) + '&';
+            if (sort === 'rating') url += 'sort=highestRated';
+            else if (sort === 'available') url += 'availableToday=true';
+            else if (sort === 'experience') url += 'sort=experience';
             const res = await fetch(url);
             const data = await res.json();
-            allTherapists = data.therapists || [];
+            allTherapists = data.professionals || [];
             renderTherapists(allTherapists);
         } catch(e) {
             console.error('Load error:', e);
-            document.getElementById('hzRecGrid').innerHTML = '<div style="text-align:center;padding:2rem;color:#9ca3af;grid-column:1/-1">Unable to load therapists</div>';
+            document.getElementById('hzRecGrid').innerHTML = '<div style="text-align:center;padding:2rem;color:#9ca3af;grid-column:1/-1">Unable to load professionals</div>';
             document.getElementById('hzAllGrid').innerHTML = '';
         }
     }
@@ -146,40 +174,47 @@
     function renderTherapists(therapists) {
         const colors = ['E67E22','8B5CF6','10B981','3B82F6','F59E0B','06B6D4','EF4444','6366F1'];
         
-        // Top 3 = recommended
         const recommended = therapists.slice(0, 3);
         const rest = therapists.slice(3);
 
         if (!therapists.length) {
-            document.getElementById('hzRecGrid').innerHTML = '<div style="text-align:center;padding:2rem;color:#9ca3af;grid-column:1/-1">No therapists found for this category. Try "All".</div>';
+            document.getElementById('hzRecGrid').innerHTML = '<div style="text-align:center;padding:2rem;color:#9ca3af;grid-column:1/-1">No professionals found for this category. Try "All".</div>';
             document.getElementById('hzAllGrid').innerHTML = '';
-            document.getElementById('hzOnlineCount').textContent = '0 therapists available';
+            document.getElementById('hzOnlineCount').textContent = '0 professionals available';
             return;
         }
 
-        // Online count
         const onlineCount = therapists.filter(t => t.isAvailableToday).length;
-        document.getElementById('hzOnlineCount').textContent = onlineCount + ' therapists online now';
+        document.getElementById('hzOnlineCount').textContent = onlineCount + ' professionals online now';
+
+        // Show result count
+        document.getElementById('hzResultCount').style.display = 'block';
+        document.getElementById('hzResultCount').textContent = therapists.length + ' professional' + (therapists.length !== 1 ? 's' : '') + ' found' + (currentCategory !== 'All' ? ' for ' + currentCategory : '');
+
+        // Update avatar stack with current available professionals
+        availableForStack = therapists.filter(t => t.isAvailableToday);
+        renderAvatarStack();
 
         // Recommended cards
         document.getElementById('hzRecGrid').innerHTML = recommended.map((t, i) => {
             const color = colors[i % colors.length];
             const match = Math.max(75, 98 - (i * 4) - Math.floor(Math.random() * 5));
             const stars = '★'.repeat(Math.floor(t.rating)) + (t.rating % 1 >= 0.5 ? '★' : '☆');
-            const avatar = t.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=${color}&color=fff&size=72&bold=true`;
+            const avatar = t.profilePhoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(t.fullName)}&background=${color}&color=fff&size=72&bold=true`;
             return `<div class="hz-rec-card">
                 <div class="hz-match">${match}% Match</div>
-                <img src="${avatar}" alt="${t.name}" class="hz-rec-img">
-                <h4>${t.name}</h4>
+                <img src="${avatar}" alt="${t.fullName}" class="hz-rec-img">
+                <h4 style="cursor:pointer" onclick="openTherapistDetail('${t._id}')">${t.fullName}</h4>
                 <span class="hz-rec-role">${t.title} • ${(t.specializations || []).slice(0,2).join(', ')}</span>
                 <div class="hz-rec-stars">${stars} <span>${t.rating} (${t.reviewCount || 0})</span></div>
                 <div class="hz-rec-trust">
-                    <span>${t.isVerified ? '✓ Verified License' : '○ Pending'}</span>
+                    <span>✓ Verified License</span>
                     <span>✓ ${t.totalSessions || 0} Sessions</span>
-                    <span>✓ Responds in ${t.responseTime || '1hr'}</span>
+                    <span>✓ Responds in ${t.responseTime || '< 1 hour'}</span>
                 </div>
-                <div class="hz-rec-meta"><span>${t.experience} yrs exp.</span><span>${(t.sessionTypes || []).join(' • ')}</span><span class="hz-avail">${t.isAvailableToday ? 'Available Today' : (t.nextAvailable || 'Tomorrow')}</span></div>
-                <button class="hz-rec-btn">Book Session</button>
+                <div class="hz-rec-meta"><span>${t.experienceYears} yrs exp.</span><span>${(t.sessionTypes || []).join(' • ')}</span><span class="hz-avail">${t.isAvailableToday ? 'Available Today' : (t.nextAvailable || 'Tomorrow')}</span></div>
+                <button class="hz-rec-btn" onclick="openBooking('${t._id}','${t.fullName.replace(/'/g,"\\'")}')">Request Session</button>
+                <a href="professional-profile.html?id=${t._id}" style="display:block;text-align:center;font-size:0.8rem;color:#6B7280;margin-top:0.5rem;text-decoration:none">View Full Profile →</a>
             </div>`;
         }).join('');
 
@@ -188,9 +223,9 @@
             document.getElementById('hzAllGrid').innerHTML = rest.map((t, i) => {
                 const color = colors[(i + 3) % colors.length];
                 const match = Math.max(65, 85 - (i * 3));
-                const avatar = t.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(t.name)}&background=${color}&color=fff&size=56&bold=true`;
+                const avatar = t.profilePhoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(t.fullName)}&background=${color}&color=fff&size=56&bold=true`;
                 const ratingStars = '★'.repeat(Math.floor(t.rating)) + (t.rating % 1 >= 0.5 ? '★' : '☆');
-                return `<div class="hz-card"><div class="hz-card-top"><img src="${avatar}" alt="${t.name}"><div><h4>${t.name}</h4><span>${t.title} • ${(t.specializations||[]).slice(0,2).join(', ')}</span><div class="hz-card-stars">${ratingStars} ${t.rating}</div></div><span class="hz-card-match">${match}%</span></div><div class="hz-card-badges"><span>${t.isVerified ? '✓ Verified' : '○ Pending'}</span><span>${t.experience} yrs</span><span>${(t.sessionTypes||[]).join(' • ')}</span></div><button class="hz-card-btn">Book</button></div>`;
+                return `<div class="hz-card" onclick="openTherapistDetail('${t._id}')" style="cursor:pointer"><div class="hz-card-top"><img src="${avatar}" alt="${t.fullName}"><div><h4>${t.fullName}</h4><span>${t.title} • ${(t.specializations||[]).slice(0,2).join(', ')}</span><div class="hz-card-stars">${ratingStars} ${t.rating}</div></div><span class="hz-card-match">${match}%</span></div><div class="hz-card-badges"><span>✓ Verified</span><span>${t.experienceYears} yrs</span><span>${(t.sessionTypes||[]).join(' • ')}</span></div><button class="hz-card-btn" onclick="event.stopPropagation();openBooking('${t._id}','${t.fullName.replace(/'/g,"\\'")}')">Request</button></div>`;
             }).join('');
         } else {
             document.getElementById('hzAllGrid').innerHTML = '';
@@ -214,6 +249,164 @@
 
     // Init
     loadTherapists('All', 'match');
+    loadMySessions();
+
+    // ===== MY SESSIONS =====
+    async function loadMySessions() {
+        if (!token) return;
+        try {
+            const res = await fetch('/api/my-professional-sessions', { headers: { 'Authorization': 'Bearer ' + token } });
+            if (!res.ok) return;
+            const data = await res.json();
+            const sessions = data.sessions || [];
+            if (!sessions.length) return;
+            document.getElementById('mySessionsSection').style.display = 'block';
+            const statusColors = { requested:'#FEF3C7', confirmed:'#ECFDF5', completed:'#EFF6FF', cancelled:'#F3F4F6', rejected:'#FEF2F2', reschedule_suggested:'#F3E8FF' };
+            const statusTextColors = { requested:'#92400E', confirmed:'#059669', completed:'#2563EB', cancelled:'#6B7280', rejected:'#DC2626', reschedule_suggested:'#7C3AED' };
+            document.getElementById('mySessionsList').innerHTML = sessions.slice(0, 5).map(s => {
+                const prof = s.professionalId || {};
+                const avatar = prof.profilePhoto || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(prof.fullName || 'P') + '&background=E67E22&color=fff&size=40';
+                const canCancel = ['requested', 'reschedule_suggested'].includes(s.status);
+                return `<div style="display:flex;align-items:center;gap:0.75rem;padding:0.85rem;background:white;border:1px solid #E5E7EB;border-radius:12px">
+                    <img src="${avatar}" style="width:40px;height:40px;border-radius:50%;object-fit:cover" alt="">
+                    <div style="flex:1;min-width:0"><strong style="font-size:0.85rem;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${prof.fullName || 'Professional'}</strong><span style="font-size:0.72rem;color:#6B7280">${s.concern} • ${s.sessionType} • ${new Date(s.requestedAt).toLocaleDateString()}</span></div>
+                    <span style="font-size:0.7rem;padding:0.2rem 0.5rem;border-radius:4px;font-weight:600;background:${statusColors[s.status]||'#F3F4F6'};color:${statusTextColors[s.status]||'#6B7280'}">${s.status.replace('_',' ')}</span>
+                    ${canCancel ? '<button onclick="cancelMySession(\''+s._id+'\')" style="font-size:0.7rem;padding:0.25rem 0.5rem;border:1px solid #FECACA;border-radius:4px;background:#FEF2F2;color:#DC2626;cursor:pointer">Cancel</button>' : ''}
+                </div>`;
+            }).join('');
+        } catch(e) {}
+    }
+
+    async function cancelMySession(id) {
+        if (!confirm('Cancel this session request?')) return;
+        try {
+            await fetch('/api/my-professional-sessions/' + id + '/cancel', { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } });
+            loadMySessions();
+        } catch(e) {}
+    }
+
+    // ===== THERAPIST DETAIL MODAL =====
+    function openTherapistDetail(profId) {
+        const prof = allTherapists.find(t => t._id === profId);
+        if (!prof) return;
+        const avatar = prof.profilePhoto || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(prof.fullName) + '&background=E67E22&color=fff&size=100';
+        const stars = '★'.repeat(Math.floor(prof.rating)) + (prof.rating % 1 >= 0.5 ? '★' : '☆');
+        const modal = document.createElement('div');
+        modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem;overflow-y:auto';
+        modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+        modal.innerHTML = `<div style="background:white;border-radius:20px;padding:2rem;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.2)">
+            <button id="tdCloseX" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.3rem;cursor:pointer;color:#9CA3AF">✕</button>
+            <div style="text-align:center;margin-bottom:1.5rem"><img src="${avatar}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #E67E22"><h3 style="font-size:1.2rem;font-weight:700;margin-top:0.75rem">${prof.fullName}</h3><p style="color:#6B7280;font-size:0.85rem">${prof.title}</p><div style="margin-top:0.5rem;font-size:0.8rem;color:#92400E">${stars} ${prof.rating} (${prof.reviewCount} reviews)</div></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-bottom:1.25rem;text-align:center"><div style="padding:0.75rem;background:#F9FAFB;border-radius:8px"><strong style="display:block;font-size:1.1rem;color:#E67E22">${prof.experienceYears}</strong><span style="font-size:0.7rem;color:#6B7280">Years Exp.</span></div><div style="padding:0.75rem;background:#F9FAFB;border-radius:8px"><strong style="display:block;font-size:1.1rem;color:#E67E22">${prof.totalSessions}</strong><span style="font-size:0.7rem;color:#6B7280">Sessions</span></div><div style="padding:0.75rem;background:#F9FAFB;border-radius:8px"><strong style="display:block;font-size:1.1rem;color:#E67E22">${prof.responseTime||'< 1hr'}</strong><span style="font-size:0.7rem;color:#6B7280">Response</span></div></div>
+            ${prof.bio ? '<div style="margin-bottom:1.25rem"><h4 style="font-size:0.85rem;font-weight:700;margin-bottom:0.4rem">About</h4><p style="font-size:0.82rem;color:#374151;line-height:1.6">'+prof.bio+'</p></div>' : ''}
+            <div style="margin-bottom:1rem"><h4 style="font-size:0.85rem;font-weight:700;margin-bottom:0.5rem">Specializations</h4><div style="display:flex;flex-wrap:wrap;gap:0.3rem">${(prof.specializations||[]).map(s=>'<span style="padding:0.25rem 0.6rem;background:#F3F4F6;border-radius:100px;font-size:0.72rem;color:#374151">'+s+'</span>').join('')}</div></div>
+            <div style="margin-bottom:1rem"><h4 style="font-size:0.85rem;font-weight:700;margin-bottom:0.5rem">Session Types</h4><div style="display:flex;gap:0.3rem;flex-wrap:wrap">${(prof.sessionTypes||[]).map(s=>'<span style="padding:0.25rem 0.6rem;background:#EFF6FF;color:#2563EB;border-radius:100px;font-size:0.72rem">'+s+'</span>').join('')}</div></div>
+            ${(prof.languages||[]).length ? '<div style="margin-bottom:1.25rem"><h4 style="font-size:0.85rem;font-weight:700;margin-bottom:0.5rem">Languages</h4><p style="font-size:0.8rem;color:#6B7280">'+prof.languages.join(', ')+'</p></div>' : ''}
+            <div style="display:flex;gap:0.5rem"><button id="tdBookBtn" style="flex:1;padding:0.8rem;background:#E67E22;color:white;border:none;border-radius:10px;font-weight:700;cursor:pointer">Request Session</button><a href="professional-profile.html?id=${prof._id}" style="padding:0.8rem 1rem;border:1.5px solid #E5E7EB;border-radius:10px;font-size:0.85rem;color:#6B7280;text-decoration:none;font-weight:600">Full Profile</a></div>
+        </div>`;
+        document.body.appendChild(modal);
+        document.getElementById('tdCloseX').addEventListener('click', function() { modal.remove(); });
+        document.getElementById('tdBookBtn').addEventListener('click', function() {
+            modal.remove();
+            openBooking(prof._id, prof.fullName);
+        });
+    }
+
+    // ===== BOOKING MODAL =====
+    let bookingOverlay = null;
+
+    function openBooking(profId, profName) {
+        const token = localStorage.getItem('token');
+        if (!token) { alert('Please log in to request a session'); window.location.href = 'login.html'; return; }
+        
+        // Remove any existing overlay
+        if (bookingOverlay) bookingOverlay.remove();
+        
+        bookingOverlay = document.createElement('div');
+        bookingOverlay.id = 'bookingOverlay';
+        bookingOverlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem';
+        
+        const minTime = new Date(Date.now() + 3600000).toISOString().slice(0, 16);
+        
+        bookingOverlay.innerHTML = `<div style="background:white;border-radius:20px;padding:2rem;max-width:450px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.2);position:relative">
+            <button id="bkClose" style="position:absolute;top:1rem;right:1rem;background:none;border:none;font-size:1.3rem;cursor:pointer;color:#6B7280">✕</button>
+            <h3 style="font-size:1.2rem;font-weight:700;margin-bottom:0.3rem">Request Session</h3>
+            <p style="font-size:0.85rem;color:#6B7280;margin-bottom:1.5rem">with <strong>${profName}</strong></p>
+            <div style="margin-bottom:1rem"><label style="font-size:0.8rem;font-weight:600;color:#374151;display:block;margin-bottom:0.3rem">Session Type *</label><select id="bkType" style="width:100%;padding:0.7rem;border:1.5px solid #E5E7EB;border-radius:10px;font-size:0.9rem"><option value="video">📹 Video Call</option><option value="audio">📞 Audio Call</option><option value="chat">💬 Text Chat</option><option value="in-person">🏢 In-Person</option></select></div>
+            <div style="margin-bottom:1rem"><label style="font-size:0.8rem;font-weight:600;color:#374151;display:block;margin-bottom:0.3rem">What do you need help with? *</label><select id="bkConcern" style="width:100%;padding:0.7rem;border:1.5px solid #E5E7EB;border-radius:10px;font-size:0.9rem"><option>Anxiety</option><option>Depression</option><option>Stress</option><option>Relationships</option><option>Trauma</option><option>Self-Esteem</option><option>Grief</option><option>Family</option><option>Career</option><option>Other</option></select></div>
+            <div style="margin-bottom:1rem"><label style="font-size:0.8rem;font-weight:600;color:#374151;display:block;margin-bottom:0.3rem">Preferred Date & Time *</label><input type="datetime-local" id="bkTime" style="width:100%;padding:0.7rem;border:1.5px solid #E5E7EB;border-radius:10px;font-size:0.9rem" min="${minTime}"></div>
+            <div style="margin-bottom:1rem"><label style="font-size:0.8rem;font-weight:600;color:#374151;display:block;margin-bottom:0.3rem">Note (optional)</label><textarea id="bkNote" rows="3" style="width:100%;padding:0.7rem;border:1.5px solid #E5E7EB;border-radius:10px;font-size:0.9rem;font-family:inherit;resize:vertical" placeholder="Anything you'd like the professional to know..."></textarea></div>
+            <div id="bkError" style="color:#EF4444;font-size:0.8rem;text-align:center;display:none;margin-bottom:0.5rem;padding:0.5rem;background:#FEF2F2;border-radius:8px"></div>
+            <button id="bkSubmit" style="width:100%;padding:0.85rem;background:#E67E22;color:white;border:none;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer">Send Request</button>
+            <p style="font-size:0.7rem;color:#9CA3AF;text-align:center;margin-top:0.75rem">The professional will review and respond within 24 hours.</p>
+        </div>`;
+        
+        document.body.appendChild(bookingOverlay);
+        
+        // Close handlers
+        document.getElementById('bkClose').addEventListener('click', () => { bookingOverlay.remove(); bookingOverlay = null; });
+        bookingOverlay.addEventListener('click', (e) => { if (e.target === bookingOverlay) { bookingOverlay.remove(); bookingOverlay = null; } });
+        
+        // Submit handler
+        document.getElementById('bkSubmit').addEventListener('click', () => doSubmitBooking(profId));
+    }
+
+    async function doSubmitBooking(profId) {
+        const token = localStorage.getItem('token');
+        const err = document.getElementById('bkError');
+        const btn = document.getElementById('bkSubmit');
+        err.style.display = 'none';
+        
+        const time = document.getElementById('bkTime').value;
+        if (!time) { err.textContent = 'Please select a date and time'; err.style.display = 'block'; return; }
+        
+        // Disable button to prevent double-click
+        btn.disabled = true;
+        btn.textContent = 'Sending...';
+        btn.style.opacity = '0.6';
+        
+        const body = {
+            sessionType: document.getElementById('bkType').value,
+            concern: document.getElementById('bkConcern').value,
+            requestedAt: new Date(time).toISOString(),
+            userNote: document.getElementById('bkNote').value
+        };
+        
+        try {
+            const res = await fetch('/api/professionals/' + profId + '/request-session', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                body: JSON.stringify(body)
+            });
+            const data = await res.json();
+            
+            if (!res.ok) {
+                err.textContent = data.error || 'Failed to send request';
+                err.style.display = 'block';
+                btn.disabled = false;
+                btn.textContent = 'Send Request';
+                btn.style.opacity = '1';
+                return;
+            }
+            
+            // Success — replace modal content
+            if (bookingOverlay) {
+                bookingOverlay.innerHTML = `<div style="background:white;border-radius:20px;padding:3rem;max-width:400px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.2)">
+                    <div style="font-size:3rem;margin-bottom:1rem">✅</div>
+                    <h3 style="font-size:1.2rem;font-weight:700;color:#059669;margin-bottom:0.5rem">Session Requested!</h3>
+                    <p style="font-size:0.85rem;color:#6B7280;line-height:1.6">The professional will review and respond to your request. Check your dashboard for updates.</p>
+                    <button id="bkDone" style="margin-top:1.5rem;padding:0.75rem 2rem;background:#E67E22;color:white;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:0.9rem">Done</button>
+                </div>`;
+                document.getElementById('bkDone').addEventListener('click', () => { bookingOverlay.remove(); bookingOverlay = null; });
+            }
+        } catch(e) {
+            err.textContent = 'Connection error. Please try again.';
+            err.style.display = 'block';
+            btn.disabled = false;
+            btn.textContent = 'Send Request';
+            btn.style.opacity = '1';
+        }
+    }
     </script>
 </body>
 </html>

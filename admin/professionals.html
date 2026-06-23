@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professionals – Admin ABLE</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+    <style>
+        /* ===== STATUS TABS ===== */
+        .status-tabs { display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1.5rem; }
+        .status-tab { padding:0.55rem 1.25rem; border-radius:100px; border:1.5px solid #E5E7EB; background:white; font-size:0.82rem; font-weight:600; color:#6B7280; cursor:pointer; transition:all 0.2s; }
+        .status-tab:hover { border-color:#E67E22; color:#E67E22; }
+        .status-tab.active { background:#E67E22; color:white; border-color:#E67E22; }
+        .status-tab .tab-count { display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%; font-size:0.7rem; margin-left:0.35rem; background:rgba(255,255,255,0.3); }
+
+        /* ===== PROFESSIONAL CARD ===== */
+        .pro-card { background:white; border:1px solid #E5E7EB; border-radius:16px; padding:1.5rem; margin-bottom:1rem; display:flex; align-items:flex-start; gap:1.25rem; transition:box-shadow 0.2s; }
+        .pro-card:hover { box-shadow:0 4px 24px rgba(0,0,0,0.08); }
+        .pro-avatar { width:60px; height:60px; border-radius:50%; object-fit:cover; flex-shrink:0; border:2px solid #F3F4F6; }
+        .pro-info { flex:1; min-width:0; }
+        .pro-name { font-size:1rem; font-weight:700; color:#111827; margin-bottom:0.2rem; }
+        .pro-title { font-size:0.82rem; color:#6B7280; margin-bottom:0.5rem; }
+        .pro-meta { display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:0.75rem; }
+        .pro-badge { font-size:0.72rem; padding:0.2rem 0.6rem; border-radius:6px; font-weight:600; }
+        .pro-badge.license { background:#EFF6FF; color:#2563EB; }
+        .pro-badge.exp { background:#F0FDF4; color:#16A34A; }
+        .pro-badge.spec { background:#FEF3C7; color:#92400E; }
+        .pro-badge.sess { background:#F3E8FF; color:#7C3AED; }
+        .pro-submitted { font-size:0.75rem; color:#9CA3AF; }
+        .pro-status { padding:0.3rem 0.8rem; border-radius:100px; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.03em; flex-shrink:0; }
+        .pro-status.pending_verification { background:#FEF3C7; color:#92400E; }
+        .pro-status.approved { background:#DCFCE7; color:#166534; }
+        .pro-status.rejected { background:#FEE2E2; color:#991B1B; }
+        .pro-status.suspended { background:#F3F4F6; color:#374151; }
+        .pro-actions { display:flex; flex-direction:column; gap:0.4rem; flex-shrink:0; min-width:130px; }
+        .pro-btn { padding:0.45rem 0.9rem; border-radius:8px; font-size:0.78rem; font-weight:600; cursor:pointer; border:none; transition:opacity 0.15s; }
+        .pro-btn:hover { opacity:0.85; }
+        .pro-btn.view { background:#EFF6FF; color:#2563EB; }
+        .pro-btn.approve { background:#DCFCE7; color:#166534; }
+        .pro-btn.reject { background:#FEE2E2; color:#991B1B; }
+        .pro-btn.suspend { background:#FEF3C7; color:#92400E; }
+        .pro-btn.reactivate { background:#DCFCE7; color:#166534; }
+        .pro-btn.delete-btn { background:#F3F4F6; color:#6B7280; }
+
+        /* ===== STATS CARDS ===== */
+        .pro-stats { display:grid; grid-template-columns:repeat(auto-fit, minmax(140px,1fr)); gap:1rem; margin-bottom:1.5rem; }
+        .pro-stat { background:white; border:1px solid #E5E7EB; border-radius:12px; padding:1.1rem; text-align:center; }
+        .pro-stat-num { display:block; font-size:1.6rem; font-weight:800; color:#111827; }
+        .pro-stat-label { font-size:0.75rem; color:#6B7280; font-weight:500; }
+        .pro-stat.orange .pro-stat-num { color:#E67E22; }
+        .pro-stat.green .pro-stat-num { color:#16A34A; }
+        .pro-stat.red .pro-stat-num { color:#DC2626; }
+        .pro-stat.gray .pro-stat-num { color:#6B7280; }
+
+        /* ===== MODAL ===== */
+        .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); backdrop-filter:blur(4px); z-index:1000; display:none; align-items:center; justify-content:center; padding:1rem; overflow-y:auto; }
+        .modal-overlay.open { display:flex; }
+        .modal-box { background:white; border-radius:24px; padding:2rem; max-width:700px; width:100%; max-height:90vh; overflow-y:auto; position:relative; box-shadow:0 25px 50px -12px rgba(0,0,0,0.25); }
+        .modal-close { position:absolute; top:1.25rem; right:1.25rem; background:rgba(0,0,0,0.05); border:none; font-size:1.1rem; cursor:pointer; color:#4B5563; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+        .modal-close:hover { background:rgba(239,68,68,0.1); color:#EF4444; }
+        .modal-section { margin-bottom:1.5rem; padding-bottom:1.5rem; border-bottom:1px solid #F3F4F6; }
+        .modal-section:last-child { border-bottom:none; margin-bottom:0; padding-bottom:0; }
+        .modal-label { font-size:0.75rem; font-weight:700; color:#E67E22; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.4rem; }
+        .modal-value { font-size:0.92rem; color:#1F2937; font-weight:500; }
+        .modal-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; }
+        .modal-grid-box { display:grid; grid-template-columns:repeat(auto-fit, minmax(130px, 1fr)); gap:1.25rem; background:#F9FAFB; border:1px solid #E5E7EB; padding:1.25rem; border-radius:14px; margin-top:0.4rem; }
+        .modal-grid-item { display:flex; flex-direction:column; gap:0.2rem; }
+        .modal-actions { display:flex; flex-wrap:wrap; gap:0.6rem; margin-top:1.75rem; padding-top:1.25rem; border-top:1px solid #E5E7EB; justify-content:flex-end; }
+        .modal-stat-row { display:flex; gap:0.75rem; flex-wrap:wrap; margin-top:0.4rem; }
+        .modal-stat-chip { background:#FFF8F2; border:1px solid #FFE0C2; border-radius:12px; padding:0.65rem 1rem; text-align:center; min-width:90px; flex:1; transition:all 0.2s; cursor:default; }
+        .modal-stat-chip:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(230,126,34,0.08); }
+        .modal-stat-chip span { display:block; font-size:1.35rem; font-weight:800; color:#D35400; margin-bottom:0.1rem; }
+        .modal-stat-chip small { font-size:0.7rem; color:#6B7280; font-weight:600; text-transform:uppercase; letter-spacing:0.02em; }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state { text-align:center; padding:4rem 2rem; color:#9CA3AF; }
+        .empty-state .icon { font-size:3rem; margin-bottom:1rem; }
+        .empty-state h3 { font-size:1rem; font-weight:600; color:#374151; margin-bottom:0.4rem; }
+        .empty-state p { font-size:0.85rem; }
+
+        /* ===== SEARCH ===== */
+        .search-row { display:flex; gap:0.75rem; align-items:center; margin-bottom:1.25rem; flex-wrap:wrap; }
+        .search-row input { flex:1; min-width:200px; padding:0.65rem 1rem; border:1.5px solid #E5E7EB; border-radius:10px; font-size:0.88rem; outline:none; }
+        .search-row input:focus { border-color:#E67E22; }
+        .search-row select { padding:0.65rem 1rem; border:1.5px solid #E5E7EB; border-radius:10px; font-size:0.85rem; outline:none; }
+        .search-row select:focus { border-color:#E67E22; }
+
+        /* REJECT REASON INPUT */
+        .reason-input { width:100%; padding:0.7rem; border:1.5px solid #E5E7EB; border-radius:10px; font-size:0.88rem; outline:none; margin-top:0.5rem; resize:vertical; }
+        .reason-input:focus { border-color:#E67E22; }
+
+        @media(max-width:640px) {
+            .pro-card { flex-direction:column; }
+            .pro-actions { flex-direction:row; flex-wrap:wrap; min-width:auto; width:100%; }
+            .pro-actions .pro-btn { flex:1; text-align:center; }
+            .modal-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar"></div>
+    <script src="/admin/admin-nav.js"></script>
+
+    <div class="main">
+        <div class="header">
+            <div style="display:flex;align-items:center;gap:0.75rem">
+                <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">
+                    <svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </button>
+                <h1>Licensed Professionals</h1>
+            </div>
+            <div style="font-size:0.82rem;color:#6B7280" id="lastRefreshed"></div>
+        </div>
+
+        <div class="container">
+            <!-- Stats -->
+            <div class="pro-stats" id="statsRow">
+                <div class="pro-stat orange"><span class="pro-stat-num" id="statPending">—</span><span class="pro-stat-label">Pending Review</span></div>
+                <div class="pro-stat green"><span class="pro-stat-num" id="statApproved">—</span><span class="pro-stat-label">Approved</span></div>
+                <div class="pro-stat red"><span class="pro-stat-num" id="statRejected">—</span><span class="pro-stat-label">Rejected</span></div>
+                <div class="pro-stat gray"><span class="pro-stat-num" id="statSuspended">—</span><span class="pro-stat-label">Suspended</span></div>
+                <div class="pro-stat"><span class="pro-stat-num" id="statTotal">—</span><span class="pro-stat-label">Total</span></div>
+            </div>
+
+            <!-- Status Tabs -->
+            <div class="status-tabs">
+                <button class="status-tab active" data-status="pending_verification" onclick="switchTab('pending_verification')">
+                    ⏳ Pending Review <span class="tab-count" id="tabCountPending">0</span>
+                </button>
+                <button class="status-tab" data-status="approved" onclick="switchTab('approved')">
+                    ✅ Approved <span class="tab-count" id="tabCountApproved">0</span>
+                </button>
+                <button class="status-tab" data-status="rejected" onclick="switchTab('rejected')">
+                    ❌ Rejected <span class="tab-count" id="tabCountRejected">0</span>
+                </button>
+                <button class="status-tab" data-status="suspended" onclick="switchTab('suspended')">
+                    🚫 Suspended <span class="tab-count" id="tabCountSuspended">0</span>
+                </button>
+                <button class="status-tab" data-status="" onclick="switchTab('')">
+                    🗂 All
+                </button>
+            </div>
+
+            <!-- Search + Filter -->
+            <div class="search-row">
+                <input type="text" id="searchInput" placeholder="Search by name, email, title, license..." oninput="renderList()">
+                <select id="specFilter" onchange="renderList()">
+                    <option value="">All Specializations</option>
+                    <option>Anxiety</option><option>Depression</option><option>Trauma</option>
+                    <option>PTSD</option><option>Relationships</option><option>Stress</option>
+                    <option>Self-Esteem</option><option>Grief</option><option>Family</option>
+                    <option>Addiction</option><option>Youth</option><option>Career</option>
+                </select>
+            </div>
+
+            <!-- Professional List -->
+            <div id="proList">
+                <div class="empty-state"><div class="icon">⏳</div><h3>Loading...</h3></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- Reason Modal -->
+    <div class="modal-overlay" id="reasonModal">
+        <div class="modal-box" style="max-width:420px">
+            <button class="modal-close" onclick="closeReasonModal()">✕</button>
+            <h3 id="reasonTitle" style="margin-bottom:0.75rem;font-size:1.05rem">Reason</h3>
+            <p id="reasonDesc" style="font-size:0.85rem;color:#6B7280;margin-bottom:0.75rem"></p>
+            <textarea id="reasonText" class="reason-input" rows="4" placeholder="Enter reason (required)..."></textarea>
+            <div style="display:flex;gap:0.5rem;margin-top:1rem">
+                <button id="reasonConfirmBtn" class="pro-btn" style="flex:1;padding:0.75rem;font-size:0.88rem" onclick="confirmReason()">Confirm</button>
+                <button onclick="closeReasonModal()" style="flex:1;padding:0.75rem;background:#F3F4F6;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:0.88rem">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    const token = localStorage.getItem('adminToken');
+    if (!token) window.location.href = '/admin/index.html';
+    const headers = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+
+    let allProfessionals = [];
+    let currentTab = 'pending_verification';
+    let reasonAction = null;
+    let reasonTargetId = null;
+
+    // ===== LOAD ALL =====
+    async function loadAll() {
+        try {
+            const res = await fetch('/admin/api/professionals', { headers });
+            if (res.status === 401) { localStorage.removeItem('adminToken'); window.location.href = '/admin/index.html'; return; }
+            const data = await res.json();
+            allProfessionals = data.professionals || [];
+            updateStats();
+            renderList();
+            document.getElementById('lastRefreshed').textContent = 'Updated ' + new Date().toLocaleTimeString();
+        } catch(e) {
+            document.getElementById('proList').innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><h3>Failed to load</h3><p>Check your connection</p></div>';
+        }
+    }
+
+    function updateStats() {
+        const counts = { pending_verification: 0, approved: 0, rejected: 0, suspended: 0 };
+        allProfessionals.forEach(p => { if (counts[p.status] !== undefined) counts[p.status]++; });
+        document.getElementById('statPending').textContent = counts.pending_verification;
+        document.getElementById('statApproved').textContent = counts.approved;
+        document.getElementById('statRejected').textContent = counts.rejected;
+        document.getElementById('statSuspended').textContent = counts.suspended;
+        document.getElementById('statTotal').textContent = allProfessionals.length;
+        document.getElementById('tabCountPending').textContent = counts.pending_verification;
+        document.getElementById('tabCountApproved').textContent = counts.approved;
+        document.getElementById('tabCountRejected').textContent = counts.rejected;
+        document.getElementById('tabCountSuspended').textContent = counts.suspended;
+    }
+
+    function switchTab(status) {
+        currentTab = status;
+        document.querySelectorAll('.status-tab').forEach(t => t.classList.remove('active'));
+        document.querySelector(`.status-tab[data-status="${status}"]`).classList.add('active');
+        renderList();
+    }
+
+    function renderList() {
+        const search = document.getElementById('searchInput').value.toLowerCase();
+        const spec = document.getElementById('specFilter').value.toLowerCase();
+        let list = allProfessionals.filter(p => {
+            if (currentTab && p.status !== currentTab) return false;
+            if (search) {
+                const haystack = (p.fullName + p.email + p.title + p.licenseNumber + (p.licensingAuthority||'')).toLowerCase();
+                if (!haystack.includes(search)) return false;
+            }
+            if (spec && !(p.specializations||[]).some(s => s.toLowerCase().includes(spec))) return false;
+            return true;
+        });
+
+        if (!list.length) {
+            document.getElementById('proList').innerHTML = `<div class="empty-state"><div class="icon">🔍</div><h3>No professionals found</h3><p>Try adjusting your filters</p></div>`;
+            return;
+        }
+
+        document.getElementById('proList').innerHTML = list.map(p => {
+            const avatar = p.profilePhoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(p.fullName)}&background=E67E22&color=fff&size=60&bold=true`;
+            const submitted = new Date(p.createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+            const specsStr = (p.specializations||[]).slice(0,3).join(', ') + (p.specializations?.length > 3 ? '...' : '');
+            const sessStr = (p.sessionTypes||[]).join(', ');
+            const actions = buildActions(p);
+            return `
+            <div class="pro-card" id="card-${p._id}">
+                <img class="pro-avatar" src="${avatar}" alt="${p.fullName}" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.fullName)}&background=E67E22&color=fff&size=60'">
+                <div class="pro-info">
+                    <div class="pro-name">${p.fullName}</div>
+                    <div class="pro-title">${p.title} • ${p.email}</div>
+                    <div class="pro-meta">
+                        <span class="pro-badge license">🪪 ${p.licenseNumber}</span>
+                        <span class="pro-badge exp">📅 ${p.experienceYears || 0} yrs exp</span>
+                        ${specsStr ? `<span class="pro-badge spec">🎯 ${specsStr}</span>` : ''}
+                        ${sessStr ? `<span class="pro-badge sess">💬 ${sessStr}</span>` : ''}
+                    </div>
+                    <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap">
+                        <span class="pro-status ${p.status}">${p.status.replace('_',' ')}</span>
+                        <span class="pro-submitted">Submitted: ${submitted}</span>
+                        ${p.rejectionReason ? `<span style="font-size:0.75rem;color:#DC2626">Reason: ${p.rejectionReason}</span>` : ''}
+                        ${p.suspendedReason ? `<span style="font-size:0.75rem;color:#D97706">Reason: ${p.suspendedReason}</span>` : ''}
+                    </div>
+                </div>
+                <div class="pro-actions">${actions}</div>
+            </div>`;
+        }).join('');
+    }
+
+    function buildActions(p) {
+        let html = `<button class="pro-btn view" onclick="viewDetail('${p._id}')">🔍 View</button>`;
+        if (p.status === 'pending_verification') {
+            html += `<button class="pro-btn approve" onclick="approvePro('${p._id}')">✅ Approve</button>`;
+            html += `<button class="pro-btn reject" onclick="openReason('${p._id}','reject')">❌ Reject</button>`;
+        }
+        if (p.status === 'approved') {
+            html += `<button class="pro-btn suspend" onclick="openReason('${p._id}','suspend')">🚫 Suspend</button>`;
+        }
+        if (p.status === 'rejected' || p.status === 'suspended') {
+            html += `<button class="pro-btn reactivate" onclick="reactivatePro('${p._id}')">♻️ Reactivate</button>`;
+        }
+        html += `<button class="pro-btn delete-btn" onclick="deletePro('${p._id}')">🗑 Delete</button>`;
+        return html;
+    }
+
+    // ===== DETAIL MODAL =====
+    async function viewDetail(id) {
+        document.getElementById('modalContent').innerHTML = '<div style="text-align:center;padding:3rem;color:#9CA3AF">Loading...</div>';
+        document.getElementById('detailModal').classList.add('open');
+        try {
+            const res = await fetch(`/admin/api/professionals/${id}`, { headers });
+            const data = await res.json();
+            const p = data.professional;
+            const stats = data.sessionStats || [];
+            const statMap = {};
+            stats.forEach(s => statMap[s._id] = s.count);
+
+            const avatar = p.profilePhoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(p.fullName)}&background=E67E22&color=fff&size=80`;
+            const submitted = new Date(p.createdAt).toLocaleString('en-IN');
+
+            const headerBorder = p.status === 'approved' ? '#10B981' : (p.status === 'pending_verification' ? '#F59E0B' : (p.status === 'rejected' ? '#EF4444' : '#6B7280'));
+
+            document.getElementById('modalContent').innerHTML = `
+            <div style="display:flex;align-items:center;gap:1.5rem;padding:1.25rem;background:#F9FAFB;border-radius:16px;border-left:5px solid ${headerBorder};margin-bottom:1.5rem;box-shadow:inset 0 1px 3px rgba(0,0,0,0.02)">
+                <img src="${avatar}" style="width:70px;height:70px;border-radius:50%;object-fit:cover;border:3px solid #FFF;box-shadow:0 4px 10px rgba(0,0,0,0.08)" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(p.fullName)}&background=E67E22&color=fff&size=80'">
+                <div>
+                    <h2 style="font-size:1.25rem;font-weight:800;color:#111827;margin-bottom:0.15rem">${p.fullName}</h2>
+                    <div style="font-size:0.88rem;color:#4B5563;font-weight:500">${p.title} &bull; <span class="pro-status ${p.status}" style="font-size:0.7rem;padding:0.2rem 0.6rem;border-radius:100px;font-weight:700">${p.status.replace('_',' ')}</span></div>
+                    <div style="font-size:0.75rem;color:#9CA3AF;margin-top:0.3rem">Submitted: ${submitted}</div>
+                </div>
+            </div>
+
+            <!-- Session Stats -->
+            <div class="modal-section">
+                <div class="modal-label">Session Activity</div>
+                <div class="modal-stat-row">
+                    <div class="modal-stat-chip"><span>${statMap['requested']||0}</span><small>Pending</small></div>
+                    <div class="modal-stat-chip"><span>${(statMap['accepted']||0)+(statMap['confirmed']||0)}</span><small>Confirmed</small></div>
+                    <div class="modal-stat-chip"><span>${statMap['completed']||0}</span><small>Completed</small></div>
+                    <div class="modal-stat-chip"><span>${statMap['cancelled']||0}</span><small>Cancelled</small></div>
+                </div>
+            </div>
+
+            <!-- Contact & Experience -->
+            <div class="modal-section">
+                <div class="modal-label">Contact & Professional Info</div>
+                <div class="modal-grid-box">
+                    <div class="modal-grid-item"><div class="modal-label" style="color:#6B7280;font-size:0.7rem">Email</div><div class="modal-value" style="font-size:0.85rem">${p.email}</div></div>
+                    <div class="modal-grid-item"><div class="modal-label" style="color:#6B7280;font-size:0.7rem">Phone</div><div class="modal-value" style="font-size:0.85rem">${p.phone || '—'}</div></div>
+                    <div class="modal-grid-item"><div class="modal-label" style="color:#6B7280;font-size:0.7rem">Experience</div><div class="modal-value" style="font-size:0.85rem">${p.experienceYears || 0} years</div></div>
+                    <div class="modal-grid-item"><div class="modal-label" style="color:#6B7280;font-size:0.7rem">Rating</div><div class="modal-value" style="font-size:0.85rem">⭐ ${p.rating || 0} (${p.reviewCount || 0} reviews)</div></div>
+                </div>
+            </div>
+
+            <!-- License Details -->
+            <div class="modal-section">
+                <div class="modal-label">License & Authority</div>
+                <div class="modal-grid-box">
+                    <div class="modal-grid-item"><div class="modal-label" style="color:#6B7280;font-size:0.7rem">License Number</div><div class="modal-value" style="font-size:0.85rem">${p.licenseNumber || '—'}</div></div>
+                    <div class="modal-grid-item"><div class="modal-label" style="color:#6B7280;font-size:0.7rem">Licensing Authority</div><div class="modal-value" style="font-size:0.85rem">${p.licensingAuthority || '—'}</div></div>
+                    <div class="modal-grid-item"><div class="modal-label" style="color:#6B7280;font-size:0.7rem">Country</div><div class="modal-value" style="font-size:0.85rem">${p.licenseCountry || '—'}</div></div>
+                    <div class="modal-grid-item"><div class="modal-label" style="color:#6B7280;font-size:0.7rem">State</div><div class="modal-value" style="font-size:0.85rem">${p.licenseState || '—'}</div></div>
+                </div>
+            </div>
+
+            <!-- Bio -->
+            <div class="modal-section">
+                <div class="modal-label">Bio & Treatment Approach</div>
+                <div style="background:#F9FAFB;border:1px solid #E5E7EB;border-radius:14px;padding:1.25rem;margin-top:0.4rem">
+                    <div class="modal-value" style="line-height:1.6;color:#374151;font-size:0.88rem;font-weight:400">${p.bio || '—'}</div>
+                </div>
+            </div>
+
+            <!-- Specializations & Session Types -->
+            <div class="modal-section">
+                <div class="modal-label">Practice Scope</div>
+                <div class="modal-grid-box">
+                    <div class="modal-grid-item">
+                        <div class="modal-label" style="color:#6B7280;font-size:0.7rem">Specializations</div>
+                        <div style="display:flex;flex-wrap:wrap;gap:0.35rem;margin-top:0.25rem">
+                            ${(p.specializations||[]).map(s => `<span class="pro-badge spec">${s}</span>`).join('') || '—'}
+                        </div>
+                    </div>
+                    <div class="modal-grid-item">
+                        <div class="modal-label" style="color:#6B7280;font-size:0.7rem">Session Types</div>
+                        <div style="display:flex;flex-wrap:wrap;gap:0.35rem;margin-top:0.25rem">
+                            ${(p.sessionTypes||[]).map(s => `<span class="pro-badge sess">${s}</span>`).join('') || '—'}
+                        </div>
+                    </div>
+                    <div class="modal-grid-item">
+                        <div class="modal-label" style="color:#6B7280;font-size:0.7rem">Languages</div>
+                        <div class="modal-value" style="font-size:0.85rem;margin-top:0.25rem">${(p.languages||[]).join(', ') || '—'}</div>
+                    </div>
+                    <div class="modal-grid-item">
+                        <div class="modal-label" style="color:#6B7280;font-size:0.7rem">Profile Completeness</div>
+                        <div class="modal-value" style="font-size:0.85rem;margin-top:0.25rem;font-weight:700;color:#E67E22">${p.profileCompleteness || 0}%</div>
+                    </div>
+                </div>
+            </div>
+
+            ${p.rejectionReason ? `<div class="modal-section" style="background:#FEF2F2;border:1px solid #FCA5A5;border-radius:12px;padding:1rem;margin-top:1rem;"><div class="modal-label" style="color:#DC2626;margin-bottom:0.25rem">Rejection Reason</div><div class="modal-value" style="color:#991B1B">${p.rejectionReason}</div></div>` : ''}
+            ${p.suspendedReason ? `<div class="modal-section" style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:12px;padding:1rem;margin-top:1rem;"><div class="modal-label" style="color:#D97706;margin-bottom:0.25rem">Suspension Reason</div><div class="modal-value" style="color:#92400E">${p.suspendedReason}</div></div>` : ''}
+
+            <div class="modal-actions">
+                ${p.status === 'pending_verification' ? `<button class="pro-btn approve" style="padding:0.6rem 1.25rem" onclick="closeModal();approvePro('${p._id}')">✅ Approve</button><button class="pro-btn reject" style="padding:0.6rem 1.25rem" onclick="closeModal();openReason('${p._id}','reject')">❌ Reject</button>` : ''}
+                ${p.status === 'approved' ? `<button class="pro-btn suspend" style="padding:0.6rem 1.25rem" onclick="closeModal();openReason('${p._id}','suspend')">🚫 Suspend</button>` : ''}
+                ${(p.status === 'rejected' || p.status === 'suspended') ? `<button class="pro-btn reactivate" style="padding:0.6rem 1.25rem" onclick="closeModal();reactivatePro('${p._id}')">♻️ Reactivate</button>` : ''}
+                <button class="pro-btn delete-btn" style="padding:0.6rem 1.25rem" onclick="closeModal();deletePro('${p._id}')">🗑 Delete</button>
+                <button onclick="closeModal()" style="padding:0.6rem 1.25rem;background:#F3F4F6;border:none;border-radius:8px;font-weight:600;cursor:pointer;font-size:0.8rem">Close</button>
+            </div>`;
+        } catch(e) {
+            document.getElementById('modalContent').innerHTML = '<div style="text-align:center;padding:3rem;color:#DC2626">Failed to load professional details</div>';
+        }
+    }
+
+    function closeModal() { document.getElementById('detailModal').classList.remove('open'); }
+    document.getElementById('detailModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+
+    // ===== ACTIONS =====
+    async function approvePro(id) {
+        if (!confirm('Approve this professional? They will appear publicly on the platform.')) return;
+        try {
+            await fetch(`/admin/api/professionals/${id}/approve`, { method:'PUT', headers });
+            await loadAll();
+            showToast('✅ Professional approved!', 'green');
+        } catch(e) { showToast('Error approving', 'red'); }
+    }
+
+    async function reactivatePro(id) {
+        if (!confirm('Reactivate this professional?')) return;
+        try {
+            await fetch(`/admin/api/professionals/${id}/reactivate`, { method:'PUT', headers });
+            await loadAll();
+            showToast('♻️ Professional reactivated', 'green');
+        } catch(e) { showToast('Error', 'red'); }
+    }
+
+    async function deletePro(id) {
+        if (!confirm('⚠️ Permanently delete this professional and all their data? This cannot be undone.')) return;
+        try {
+            await fetch(`/admin/api/professionals/${id}`, { method:'DELETE', headers });
+            await loadAll();
+            showToast('🗑 Professional deleted', 'gray');
+        } catch(e) { showToast('Error deleting', 'red'); }
+    }
+
+    // ===== REASON MODAL =====
+    function openReason(id, action) {
+        reasonAction = action;
+        reasonTargetId = id;
+        const isReject = action === 'reject';
+        document.getElementById('reasonTitle').textContent = isReject ? '❌ Reject Professional' : '🚫 Suspend Professional';
+        document.getElementById('reasonDesc').textContent = isReject
+            ? 'Provide a reason for rejection. This will be stored in the professional\'s record.'
+            : 'Provide a reason for suspension. The professional will lose access immediately.';
+        document.getElementById('reasonText').value = '';
+        document.getElementById('reasonConfirmBtn').style.background = isReject ? '#FEE2E2' : '#FEF3C7';
+        document.getElementById('reasonConfirmBtn').style.color = isReject ? '#991B1B' : '#92400E';
+        document.getElementById('reasonModal').classList.add('open');
+        setTimeout(() => document.getElementById('reasonText').focus(), 100);
+    }
+
+    async function confirmReason() {
+        const reason = document.getElementById('reasonText').value.trim();
+        if (!reason) { document.getElementById('reasonText').style.borderColor = '#EF4444'; return; }
+        document.getElementById('reasonText').style.borderColor = '#E5E7EB';
+        try {
+            const endpoint = reasonAction === 'reject' ? 'reject' : 'suspend';
+            await fetch(`/admin/api/professionals/${reasonTargetId}/${endpoint}`, {
+                method:'PUT', headers,
+                body: JSON.stringify({ reason })
+            });
+            closeReasonModal();
+            await loadAll();
+            showToast(reasonAction === 'reject' ? '❌ Professional rejected' : '🚫 Professional suspended', 'orange');
+        } catch(e) { showToast('Error', 'red'); }
+    }
+
+    function closeReasonModal() { document.getElementById('reasonModal').classList.remove('open'); reasonAction = null; reasonTargetId = null; }
+    document.getElementById('reasonModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeReasonModal(); });
+
+    // ===== TOAST =====
+    function showToast(msg, color='green') {
+        const colors = { green:'#DCFCE7;color:#166534', red:'#FEE2E2;color:#991B1B', orange:'#FEF3C7;color:#92400E', gray:'#F3F4F6;color:#374151' };
+        const t = document.createElement('div');
+        t.style.cssText = `position:fixed;bottom:1.5rem;right:1.5rem;padding:0.85rem 1.5rem;background:${colors[color]||colors.green};border-radius:12px;font-weight:600;font-size:0.88rem;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.12);animation:slideIn 0.3s ease`;
+        t.textContent = msg;
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 3000);
+    }
+
+    // Close modals on Escape
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeReasonModal(); } });
+
+    loadAll();
+    // Auto-refresh every 30 seconds
+    setInterval(loadAll, 30000);
+    </script>
+    <style>@keyframes slideIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }</style>
+</body>
+</html>

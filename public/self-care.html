@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Care - ABLE</title>
+    <link rel="stylesheet" href="dashboard-styles.css">
+    <link rel="stylesheet" href="care-hub.css">
+<link rel="stylesheet" href="/loader.css">
+</head>
+<body>
+    <script src="/loader.js"></script>
+    <div id="sidebar"></div>
+    <script src="sidebar-nav.js"></script>
+
+    <div class="main-content">
+        <header class="topbar">
+            <button class="menu-toggle" id="menuToggle"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="search-bar"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input type="text" placeholder="Search self-care tools..."></div>
+            <div class="topbar-actions"><div class="user-profile"><img id="userAvatar" src="https://ui-avatars.com/api/?name=User&background=E67E22&color=fff" alt="User"><div class="user-info"><span class="user-name" id="userName">Welcome</span><span class="user-role">Wellness Seeker</span></div></div></div>
+        </header>
+
+        <main class="dashboard-content">
+            <!-- Hero -->
+            <div class="care-hero">
+                <div class="care-hero-content">
+                    <h1 id="heroTitle">Your Self-Care Space</h1>
+                    <p class="hero-subtitle" id="heroSubtitle">Small steps to feel calmer, clearer, and more supported.</p>
+                    <div class="care-hero-meta">
+                        <span>📅 <span id="todayDate"></span></span>
+                        <span id="streakBadge" style="display:none">🔥 <span id="streakCount">0</span>-Day Streak</span>
+                    </div>
+                    <div class="care-hero-actions">
+                        <button class="ch-btn-primary" onclick="openWizard()">✨ Start Today's Check-In</button>
+                        <button class="ch-btn-secondary" onclick="scrollToSection('toolsSection')">Explore Self-Care Tools</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Today's Plan (shows after check-in) -->
+            <div class="ch-section" id="planSection" style="display:none">
+                <div class="ch-plan">
+                    <div class="ch-plan-header">
+                        <div><h3 class="ch-section-title">Today's Self-Care Plan</h3><p class="ch-section-desc" id="planStatus">0 of 0 completed</p></div>
+                        <div class="ch-plan-progress"><div class="ch-plan-bar"><div class="ch-plan-bar-fill" id="planBarFill" style="width:0%"></div></div><span class="ch-plan-pct" id="planPct">0%</span></div>
+                    </div>
+                    <div class="ch-plan-tasks" id="planTasks"></div>
+                </div>
+            </div>
+
+            <!-- Recommendation Panel (shows after check-in) -->
+            <div class="ch-section" id="recSection" style="display:none">
+                <div class="ch-rec-panel">
+                    <div class="ch-rec-state" id="recState"></div>
+                    <h3 class="ch-section-title" style="margin-bottom:0.5rem">Recommended For You</h3>
+                    <p class="ch-section-desc" style="margin-bottom:1rem">Based on your current state, here's what may help right now:</p>
+                    <div class="ch-rec-list" id="recList"></div>
+                </div>
+            </div>
+
+            <!-- Tools Library -->
+            <div class="ch-section" id="toolsSection">
+                <div class="ch-section-header">
+                    <div><h3 class="ch-section-title">Self-Care Tools</h3><p class="ch-section-desc">Choose a category or browse all tools</p></div>
+                </div>
+                <div class="ch-tabs" id="toolTabs"></div>
+                <div class="ch-cards-grid" id="toolCards">
+                    <div class="ch-skeleton ch-skeleton-card"></div>
+                    <div class="ch-skeleton ch-skeleton-card"></div>
+                    <div class="ch-skeleton ch-skeleton-card"></div>
+                </div>
+            </div>
+
+            <!-- Mood History (logged in users) -->
+            <div class="ch-section" id="historySection" style="display:none">
+                <div class="ch-history">
+                    <h3 class="ch-section-title">Your Wellness Journey</h3>
+                    <p class="ch-section-desc">Last 7 days</p>
+                    <div class="ch-history-grid" id="historyGrid"></div>
+                    <div class="ch-history-stats" id="historyStats"></div>
+                </div>
+            </div>
+
+            <!-- Empty state for guests -->
+            <div class="ch-section" id="guestPrompt" style="display:none">
+                <div class="ch-empty">
+                    <div class="ch-empty-icon">🌱</div>
+                    <h4>Your self-care journey starts here</h4>
+                    <p>Create a free account to save your progress, track moods, and get personalized recommendations.</p>
+                    <a href="signup.html" class="ch-btn-primary" style="margin-top:1rem;display:inline-block;text-decoration:none">Create Free Account</a>
+                </div>
+            </div>
+
+            <!-- Emergency Card -->
+            <div class="ch-emergency" id="emergencyCard">
+                <div class="ch-emergency-icon">🆘</div>
+                <div class="ch-emergency-text">
+                    <h4>Need urgent support?</h4>
+                    <p>ABLE provides self-care guidance, not emergency services. If you feel unsafe or may hurt yourself or someone else, please reach out:</p>
+                    <p style="margin-top:0.4rem;font-size:0.75rem">📞 Emergency: 911 • 📞 Crisis Lifeline: 988 • 💬 Crisis Text: HOME to 741741 • Or contact a trusted person near you.</p>
+                </div>
+                <a href="tel:988" class="ch-emergency-btn">Call 988</a>
+            </div>
+        </main>
+    </div>
+
+    <!-- Wizard Overlay (hidden) -->
+    <div class="ch-wizard-overlay" id="wizardOverlay" style="display:none">
+        <div class="ch-wizard">
+            <button class="ch-wizard-close" onclick="closeWizard()">✕</button>
+            <div class="ch-wizard-progress" id="wizardProgress"></div>
+            
+            <div class="ch-wizard-step active" id="wStep1">
+                <h2>How are you feeling right now?</h2>
+                <p class="ch-wizard-subtitle">Be honest — there's no wrong answer here.</p>
+                <div class="ch-wizard-options" data-field="mood">
+                    <button class="ch-wizard-opt" data-value="calm"><span class="opt-emoji">😌</span> Calm</button>
+                    <button class="ch-wizard-opt" data-value="happy"><span class="opt-emoji">😊</span> Happy</button>
+                    <button class="ch-wizard-opt" data-value="stressed"><span class="opt-emoji">😰</span> Stressed</button>
+                    <button class="ch-wizard-opt" data-value="sad"><span class="opt-emoji">😢</span> Sad</button>
+                    <button class="ch-wizard-opt" data-value="angry"><span class="opt-emoji">😠</span> Angry</button>
+                    <button class="ch-wizard-opt" data-value="anxious"><span class="opt-emoji">😟</span> Anxious</button>
+                    <button class="ch-wizard-opt" data-value="tired"><span class="opt-emoji">😴</span> Tired</button>
+                    <button class="ch-wizard-opt" data-value="overwhelmed"><span class="opt-emoji">🤯</span> Overwhelmed</button>
+                </div>
+            </div>
+
+            <div class="ch-wizard-step" id="wStep2">
+                <h2>How is your energy level?</h2>
+                <p class="ch-wizard-subtitle">This helps us suggest actions that match your capacity.</p>
+                <div class="ch-wizard-options" data-field="energy">
+                    <button class="ch-wizard-opt" data-value="low"><span class="opt-emoji">🪫</span> Low — I barely have energy</button>
+                    <button class="ch-wizard-opt" data-value="medium"><span class="opt-emoji">⚡</span> Medium — I can do something small</button>
+                    <button class="ch-wizard-opt" data-value="high"><span class="opt-emoji">🚀</span> High — I'm ready to move</button>
+                </div>
+            </div>
+
+            <div class="ch-wizard-step" id="wStep3">
+                <h2>How stressed do you feel?</h2>
+                <p class="ch-wizard-subtitle">1 = completely relaxed, 10 = extremely stressed</p>
+                <div class="ch-slider-value" id="stressValue">5</div>
+                <div class="ch-slider-wrap"><input type="range" class="ch-slider" id="stressSlider" min="1" max="10" value="5"></div>
+                <div class="ch-slider-labels"><span>Relaxed</span><span>Stressed</span></div>
+                <button class="ch-btn-primary" style="margin-top:1.5rem;width:100%" onclick="wizardNext(3)">Continue</button>
+            </div>
+
+            <div class="ch-wizard-step" id="wStep4">
+                <h2>How much time do you have?</h2>
+                <p class="ch-wizard-subtitle">Even 2 minutes can make a difference.</p>
+                <div class="ch-wizard-options" data-field="timeAvailable">
+                    <button class="ch-wizard-opt" data-value="2"><span class="opt-emoji">⏱️</span> 2 minutes</button>
+                    <button class="ch-wizard-opt" data-value="5"><span class="opt-emoji">⏱️</span> 5 minutes</button>
+                    <button class="ch-wizard-opt" data-value="10"><span class="opt-emoji">⏱️</span> 10 minutes</button>
+                    <button class="ch-wizard-opt" data-value="20"><span class="opt-emoji">⏱️</span> 20 minutes</button>
+                </div>
+            </div>
+
+            <div class="ch-wizard-step" id="wStep5">
+                <h2>What do you need most right now?</h2>
+                <p class="ch-wizard-subtitle">This helps narrow down the best action for you.</p>
+                <div class="ch-wizard-options" data-field="need">
+                    <button class="ch-wizard-opt" data-value="calm"><span class="opt-emoji">🧘</span> Calm down</button>
+                    <button class="ch-wizard-opt" data-value="motivated"><span class="opt-emoji">💪</span> Feel motivated</button>
+                    <button class="ch-wizard-opt" data-value="sleep"><span class="opt-emoji">😴</span> Sleep better</button>
+                    <button class="ch-wizard-opt" data-value="express"><span class="opt-emoji">✍️</span> Express feelings</button>
+                    <button class="ch-wizard-opt" data-value="anger"><span class="opt-emoji">🌊</span> Reset anger</button>
+                    <button class="ch-wizard-opt" data-value="overthinking"><span class="opt-emoji">🧠</span> Reduce overthinking</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exercise Modal (dynamic) -->
+    <div id="exerciseContainer"></div>
+
+    <div class="ch-toast" id="toast"></div>
+
+    <script src="chatbot.js"></script>
+    <script src="dashboard.js"></script>
+    <script>
+    const token = localStorage.getItem('token');
+    let pageData = null;
+    let checkin = { mood:'', energy:'', stressLevel:5, timeAvailable:5, need:'' };
+    let todayPlan = [];
+    let currentStep = 1;
+    const totalSteps = 5;
+    const moodEmojis = { calm:'😌', happy:'😊', stressed:'😰', sad:'😢', angry:'😠', anxious:'😟', tired:'😴', overwhelmed:'🤯' };
+
+    // Set today's date
+    document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-US', { weekday:'long', month:'long', day:'numeric' });
+
+    // Toast
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg; t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 3000);
+    }
+    function scrollToSection(id) { document.getElementById(id)?.scrollIntoView({ behavior:'smooth', block:'start' }); }
+
+    // Load page
+    async function loadPage() {
+        try {
+            const res = await fetch('/api/self-care');
+            pageData = await res.json();
+            renderTools();
+            if (token) { loadUser(); loadHistory(); }
+            else { document.getElementById('guestPrompt').style.display = 'block'; }
+        } catch(e) { console.error(e); renderToolsFallback(); }
+    }
+
+    async function loadUser() {
+        try {
+            const res = await fetch('/api/me', { headers:{'Authorization':'Bearer '+token} });
+            if (res.status === 401) return;
+            const user = await res.json();
+            document.getElementById('userName').textContent = (user.name||'').split(' ')[0] || 'Welcome';
+            document.getElementById('userAvatar').src = user.avatar || 'https://ui-avatars.com/api/?name='+encodeURIComponent(user.name)+'&background=E67E22&color=fff';
+        } catch(e) {}
+    }
+
+    // Tools rendering
+    function renderTools() {
+        const cats = (pageData.categories || []).filter(c => c.isActive !== false);
+        const types = [...new Set(cats.map(c => c.contentType))];
+        // Tabs
+        document.getElementById('toolTabs').innerHTML = '<button class="ch-tab active" onclick="filterTools(\'all\')">All</button>' + types.map(t => `<button class="ch-tab" onclick="filterTools('${t}')">${t.charAt(0).toUpperCase()+t.slice(1)}</button>`).join('');
+        renderToolCards(cats);
+    }
+
+    function renderToolCards(cats) {
+        document.getElementById('toolCards').innerHTML = cats.map(c => `
+            <div class="ch-card" onclick="startExercise(${JSON.stringify(c).replace(/"/g,'&quot;')})">
+                <span class="ch-card-icon">${c.icon}</span>
+                <h4>${c.title}</h4>
+                <p>${c.description}</p>
+                <div class="ch-card-meta"><span>⏱ ${c.timeRequired} min</span><span>📊 ${c.contentType}</span></div>
+                <div class="ch-card-tags">${(c.moodTags||[]).map(t=>'<span class="ch-card-tag">'+t+'</span>').join('')}</div>
+                <div class="ch-card-actions"><button class="ch-btn-primary ch-btn-sm">Start</button></div>
+            </div>
+        `).join('');
+    }
+
+    function filterTools(type) {
+        document.querySelectorAll('.ch-tab').forEach(t => t.classList.remove('active'));
+        event.target.classList.add('active');
+        const cats = (pageData.categories||[]).filter(c => c.isActive !== false);
+        if (type === 'all') renderToolCards(cats);
+        else renderToolCards(cats.filter(c => c.contentType === type));
+    }
+
+    function renderToolsFallback() {
+        document.getElementById('toolCards').innerHTML = '<div class="ch-empty"><div class="ch-empty-icon">🧘</div><h4>Tools loading...</h4><p>Check your connection and refresh.</p></div>';
+    }
+
+    // ===== WIZARD =====
+    function openWizard() {
+        currentStep = 1; checkin = { mood:'', energy:'', stressLevel:5, timeAvailable:5, need:'' };
+        document.getElementById('wizardOverlay').style.display = 'flex';
+        showStep(1); updateProgress();
+    }
+    function closeWizard() { document.getElementById('wizardOverlay').style.display = 'none'; }
+
+    function showStep(n) {
+        document.querySelectorAll('.ch-wizard-step').forEach(s => s.classList.remove('active'));
+        document.getElementById('wStep'+n).classList.add('active');
+        updateProgress();
+    }
+    function updateProgress() {
+        document.getElementById('wizardProgress').innerHTML = Array.from({length:totalSteps}, (_,i) => `<div class="ch-wizard-dot ${i<currentStep-1?'done':''} ${i===currentStep-1?'active':''}"></div>`).join('');
+    }
+    function wizardNext(fromStep) { currentStep = fromStep + 1; showStep(currentStep); }
+
+    // Wizard option clicks
+    document.querySelectorAll('.ch-wizard-options').forEach(group => {
+        group.querySelectorAll('.ch-wizard-opt').forEach(btn => {
+            btn.addEventListener('click', () => {
+                group.querySelectorAll('.ch-wizard-opt').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                const field = group.dataset.field;
+                const value = btn.dataset.value;
+                checkin[field] = field === 'timeAvailable' ? parseInt(value) : value;
+                // Auto-advance after selection
+                setTimeout(() => {
+                    if (field === 'mood') wizardNext(1);
+                    else if (field === 'energy') wizardNext(2);
+                    else if (field === 'timeAvailable') wizardNext(4);
+                    else if (field === 'need') submitCheckin();
+                }, 300);
+            });
+        });
+    });
+
+    // Stress slider
+    const stressSlider = document.getElementById('stressSlider');
+    stressSlider.addEventListener('input', () => {
+        checkin.stressLevel = parseInt(stressSlider.value);
+        document.getElementById('stressValue').textContent = stressSlider.value;
+    });
+
+    // ===== SUBMIT CHECK-IN =====
+    async function submitCheckin() {
+        closeWizard();
+        let recommended = [];
+        if (token) {
+            try {
+                const res = await fetch('/api/self-care/checkin', { method:'POST', headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'}, body: JSON.stringify(checkin) });
+                const data = await res.json();
+                recommended = data.recommended || [];
+            } catch(e) { recommended = getLocalRecommendations(); }
+        } else { recommended = getLocalRecommendations(); }
+        showRecommendations(recommended);
+        showToast('✨ Check-in complete! Here are your recommendations.');
+    }
+
+    function getLocalRecommendations() {
+        if (checkin.stressLevel >= 8) return ['breathing','grounding'];
+        if (checkin.mood === 'sad' || checkin.mood === 'overwhelmed') return ['journaling','breathing','grounding'];
+        if (checkin.mood === 'angry') return ['grounding','movement','breathing'];
+        if (checkin.mood === 'tired') return ['sleep','routine'];
+        if (checkin.mood === 'anxious' || checkin.mood === 'stressed') return ['breathing','grounding','journaling'];
+        if (checkin.need === 'calm') return ['breathing','grounding'];
+        if (checkin.need === 'sleep') return ['sleep','routine'];
+        if (checkin.need === 'express') return ['journaling'];
+        if (checkin.need === 'motivated') return ['movement','routine'];
+        return ['breathing','journaling','movement'];
+    }
+
+    function showRecommendations(recommended) {
+        const cats = (pageData?.categories||[]).filter(c => c.isActive !== false);
+        const matched = cats.filter(c => recommended.includes(c.contentType)).slice(0, 3);
+        // State
+        document.getElementById('recState').innerHTML = `
+            <span class="ch-rec-state-emoji">${moodEmojis[checkin.mood]||'🙂'}</span>
+            <div class="ch-rec-state-text"><h4>Feeling ${checkin.mood} • ${checkin.energy} energy • stress ${checkin.stressLevel}/10</h4><p>${checkin.timeAvailable} minutes available • Need: ${checkin.need||'general'}</p></div>
+        `;
+        // List
+        document.getElementById('recList').innerHTML = matched.map(c => `
+            <div class="ch-rec-item" onclick="startExercise(${JSON.stringify(c).replace(/"/g,'&quot;')})">
+                <span class="ch-rec-item-icon">${c.icon}</span>
+                <div class="ch-rec-item-info"><h5>${c.title}</h5><p>${c.description}</p></div>
+                <span class="ch-rec-item-time">${c.timeRequired} min</span>
+            </div>
+        `).join('');
+        document.getElementById('recSection').style.display = 'block';
+        // Build plan
+        todayPlan = matched.map(c => ({ title: c.title, icon: c.icon, time: c.timeRequired, done: false, data: c }));
+        renderPlan();
+        document.getElementById('planSection').style.display = 'block';
+        scrollToSection('recSection');
+    }
+
+    function renderPlan() {
+        const done = todayPlan.filter(t => t.done).length;
+        const total = todayPlan.length;
+        const pct = total ? Math.round(done/total*100) : 0;
+        document.getElementById('planStatus').textContent = `${done} of ${total} completed`;
+        document.getElementById('planBarFill').style.width = pct + '%';
+        document.getElementById('planPct').textContent = pct + '%';
+        document.getElementById('planTasks').innerHTML = todayPlan.map((t,i) => `
+            <div class="ch-plan-task ${t.done?'done':''}" onclick="toggleTask(${i})">
+                <div class="ch-plan-check">${t.done?'✓':''}</div>
+                <span class="ch-plan-task-title">${t.icon} ${t.title}</span>
+                <span class="ch-plan-task-meta">${t.time} min</span>
+            </div>
+        `).join('');
+    }
+
+    function toggleTask(idx) {
+        todayPlan[idx].done = !todayPlan[idx].done;
+        if (todayPlan[idx].done && token) {
+            fetch('/api/self-care/complete-task', { method:'POST', headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'}, body: JSON.stringify({ task: todayPlan[idx].title }) });
+            showToast('✓ ' + todayPlan[idx].title + ' completed!');
+        }
+        renderPlan();
+    }
+
+    // ===== EXERCISE MODAL =====
+    function startExercise(cat) {
+        const steps = cat.steps || [];
+        let html = '';
+        if (cat.contentType === 'breathing') {
+            html = buildBreathingExercise(cat, steps);
+        } else if (cat.contentType === 'journaling') {
+            html = buildJournalingExercise(cat, steps);
+        } else if (cat.contentType === 'grounding') {
+            html = buildGroundingExercise(cat, steps);
+        } else {
+            html = buildGenericExercise(cat, steps);
+        }
+        document.getElementById('exerciseContainer').innerHTML = html;
+    }
+
+    function closeExercise() { document.getElementById('exerciseContainer').innerHTML = ''; }
+
+    function buildBreathingExercise(cat, steps) {
+        return `<div class="ch-exercise-overlay" onclick="if(event.target===this)closeExercise()"><div class="ch-exercise">
+            <button class="ch-exercise-close" onclick="closeExercise()">✕</button>
+            <div class="ch-exercise-icon">${cat.icon}</div>
+            <h3>${cat.title}</h3>
+            <p style="color:var(--ch-text-muted);font-size:0.85rem;margin-bottom:1rem">${cat.description}</p>
+            <div class="ch-exercise-timer" id="breathTimer">Ready</div>
+            <div class="ch-exercise-steps">${steps.map((s,i) => `<div class="ch-exercise-step"><span class="ch-exercise-step-num">${i+1}</span><span>${s}</span></div>`).join('')}</div>
+            <button class="ch-btn-primary" style="width:100%;margin-top:1rem" onclick="startBreathing()">Begin Breathing</button>
+            <button class="ch-btn-ghost" style="width:100%;margin-top:0.5rem" onclick="markDoneAndClose('${cat.title}')">✓ Mark Complete</button>
+        </div></div>`;
+    }
+
+    function buildJournalingExercise(cat, steps) {
+        return `<div class="ch-exercise-overlay" onclick="if(event.target===this)closeExercise()"><div class="ch-exercise">
+            <button class="ch-exercise-close" onclick="closeExercise()">✕</button>
+            <div class="ch-exercise-icon">${cat.icon}</div>
+            <h3>${cat.title}</h3>
+            <div class="ch-exercise-steps">${steps.map((s,i) => `<div class="ch-exercise-step"><span class="ch-exercise-step-num">${i+1}</span><span>${s}</span></div>`).join('')}</div>
+            <div class="ch-exercise-journal" style="margin-top:1rem"><textarea placeholder="Write freely here... This is private and only for you."></textarea></div>
+            <button class="ch-btn-primary" style="width:100%;margin-top:1rem" onclick="markDoneAndClose('${cat.title}')">✓ Save & Complete</button>
+        </div></div>`;
+    }
+
+    function buildGroundingExercise(cat, steps) {
+        return `<div class="ch-exercise-overlay" onclick="if(event.target===this)closeExercise()"><div class="ch-exercise">
+            <button class="ch-exercise-close" onclick="closeExercise()">✕</button>
+            <div class="ch-exercise-icon">${cat.icon}</div>
+            <h3>${cat.title}</h3>
+            <p style="color:var(--ch-text-muted);font-size:0.85rem;margin-bottom:1.5rem">Use your senses to ground yourself in this moment.</p>
+            <div class="ch-exercise-steps">${steps.map((s,i) => `<div class="ch-exercise-step"><span class="ch-exercise-step-num">${i+1}</span><span>${s}</span></div>`).join('')}</div>
+            <button class="ch-btn-primary" style="width:100%;margin-top:1.5rem" onclick="markDoneAndClose('${cat.title}')">✓ I'm Grounded</button>
+        </div></div>`;
+    }
+
+    function buildGenericExercise(cat, steps) {
+        return `<div class="ch-exercise-overlay" onclick="if(event.target===this)closeExercise()"><div class="ch-exercise">
+            <button class="ch-exercise-close" onclick="closeExercise()">✕</button>
+            <div class="ch-exercise-icon">${cat.icon}</div>
+            <h3>${cat.title}</h3>
+            <p style="color:var(--ch-text-muted);font-size:0.85rem;margin-bottom:1rem">${cat.description}</p>
+            <div class="ch-exercise-steps">${steps.map((s,i) => `<div class="ch-exercise-step"><span class="ch-exercise-step-num">${i+1}</span><span>${s}</span></div>`).join('')}</div>
+            <button class="ch-btn-primary" style="width:100%;margin-top:1.5rem" onclick="markDoneAndClose('${cat.title}')">✓ Mark Complete</button>
+        </div></div>`;
+    }
+
+    function startBreathing() {
+        const timer = document.getElementById('breathTimer');
+        const phases = ['Inhale...','Hold...','Exhale...','Hold...'];
+        const durations = [4,4,6,4];
+        let cycle = 0, phase = 0, count = durations[0];
+        timer.textContent = count;
+        const interval = setInterval(() => {
+            count--;
+            if (count <= 0) { phase++; if (phase >= phases.length) { cycle++; phase = 0; if (cycle >= 3) { clearInterval(interval); timer.textContent = '✓ Done'; return; } } count = durations[phase]; }
+            timer.textContent = phases[phase] + ' ' + count;
+        }, 1000);
+    }
+
+    function markDoneAndClose(title) {
+        const idx = todayPlan.findIndex(t => t.title === title);
+        if (idx >= 0) { todayPlan[idx].done = true; renderPlan(); }
+        if (token) fetch('/api/self-care/complete-task', { method:'POST', headers:{'Authorization':'Bearer '+token,'Content-Type':'application/json'}, body: JSON.stringify({ task: title }) });
+        closeExercise();
+        showToast('✓ ' + title + ' completed!');
+    }
+
+    // ===== HISTORY =====
+    async function loadHistory() {
+        try {
+            const res = await fetch('/api/self-care/history', { headers:{'Authorization':'Bearer '+token} });
+            const data = await res.json();
+            const history = data.history || [];
+            if (!history.length) return;
+            document.getElementById('historySection').style.display = 'block';
+            // Last 7 days
+            const days = history.slice(0, 7).reverse();
+            document.getElementById('historyGrid').innerHTML = days.map(d => {
+                const day = new Date(d.date).toLocaleDateString('en-US',{weekday:'short'});
+                return `<div class="ch-history-day"><span class="ch-history-day-label">${day}</span><span class="ch-history-day-mood">${moodEmojis[d.mood]||'•'}</span></div>`;
+            }).join('');
+            // Stats
+            const streak = history.length;
+            const completed = history.reduce((s,d) => s + (d.completedTasks?.length||0), 0);
+            const moods = history.map(h => h.mood);
+            const common = moods.sort((a,b) => moods.filter(v=>v===a).length - moods.filter(v=>v===b).length).pop();
+            document.getElementById('streakBadge').style.display = 'flex';
+            document.getElementById('streakCount').textContent = streak;
+            document.getElementById('historyStats').innerHTML = `
+                <div class="ch-stat-card"><span class="ch-stat-num">${streak}</span><span class="ch-stat-label">Check-ins</span></div>
+                <div class="ch-stat-card"><span class="ch-stat-num">${completed}</span><span class="ch-stat-label">Tasks Done</span></div>
+                <div class="ch-stat-card"><span class="ch-stat-num">${moodEmojis[common]||'—'}</span><span class="ch-stat-label">Most Common</span></div>
+            `;
+        } catch(e) {}
+    }
+
+    loadPage();
+    </script>
+</body>
+</html>

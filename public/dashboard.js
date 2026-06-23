@@ -431,3 +431,23 @@ serviceCards.forEach(card => {
 console.log('%cABLE Wellness Dashboard', 'color: #DE7425; font-size: 24px; font-weight: bold;');
 console.log('%cA Better Life Enabled', 'color: #666; font-size: 14px;');
 console.log('%c🌟 Your wellness journey starts here!', 'color: #4CAF50; font-size: 12px;');
+
+
+// ===== Topbar User Profile — Load real user data across all pages =====
+(function() {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    fetch('/api/me', { headers: { 'Authorization': 'Bearer ' + token } })
+        .then(res => { if (!res.ok) throw new Error(); return res.json(); })
+        .then(user => {
+            // Update all user-profile images in topbar
+            const avatar = user.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.name || 'U') + '&background=E67E22&color=fff';
+            document.querySelectorAll('.user-profile img').forEach(img => { img.src = avatar; });
+            // Update name
+            document.querySelectorAll('.user-name').forEach(el => { el.textContent = user.name || 'User'; });
+            // Store for other scripts
+            localStorage.setItem('userName', user.name || 'User');
+        })
+        .catch(() => {});
+})();

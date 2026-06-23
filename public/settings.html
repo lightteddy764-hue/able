@@ -6,21 +6,12 @@
     <title>Settings - ABLE</title>
     <link rel="stylesheet" href="dashboard-styles.css">
     <link rel="stylesheet" href="settings.css">
+<link rel="stylesheet" href="/loader.css">
 </head>
 <body>
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header"><img src="images/logo.svg" alt="ABLE" class="sidebar-logo"></div>
-        <nav class="sidebar-nav">
-            <a href="dashboard.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2"/><path d="M9 22V12h6v10" stroke="currentColor" stroke-width="2"/></svg><span>Dashboard</span></a>
-            <a href="healing-zone.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2"/></svg><span>Healing Zone</span></a>
-            <a href="body-mind.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Body-Mind</span></a>
-            <a href="community.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/></svg><span>Community</span></a>
-            <a href="youth-support.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" stroke="currentColor" stroke-width="2"/></svg><span>Youth Support</span></a>
-            <a href="my-voice.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="2"/></svg><span>My Voice</span></a>
-            <a href="settings.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09" stroke="currentColor" stroke-width="2"/></svg><span>Settings</span></a>
-        </nav>
-        <div class="sidebar-footer"><a href="login.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2"/><path d="M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Logout</span></a></div>
-    </aside>
+    <script src="/loader.js"></script>
+        <div id="sidebar"></div>
+    <script src="sidebar-nav.js"></script>
 
     <div class="main-content">
         <header class="topbar">
@@ -35,8 +26,8 @@
                 <div><h1>Account Settings</h1><p>Control your profile, privacy, notifications, and wellness preferences.</p></div>
                 <div class="st-status-cards">
                     <div class="st-sc"><span class="st-sc-val" id="profilePct">80%</span><span class="st-sc-lbl">Profile</span></div>
-                    <div class="st-sc"><span class="st-sc-val st-off" id="tfaBadge">Off</span><span class="st-sc-lbl">2FA</span></div>
                     <div class="st-sc"><span class="st-sc-val" id="planBadge">Free</span><span class="st-sc-lbl">Plan</span></div>
+                    <div class="st-sc"><span class="st-sc-val" id="statusBadge">Active</span><span class="st-sc-lbl">Status</span></div>
                 </div>
             </div>
 
@@ -58,7 +49,7 @@
                     <section class="st-section active" id="section-profile">
                         <div class="st-completion"><div class="st-comp-bar"><div class="st-comp-fill" id="profileFill" style="width:80%"></div></div><span>Profile completion — Add your photo and wellness goals to improve recommendations.</span></div>
                         <h2>Personal Information</h2>
-                        <div class="st-profile-top"><img id="avatarImg" src="https://ui-avatars.com/api/?name=User&background=E67E22&color=fff&size=72" alt="" class="st-avatar"><div><button class="st-btn-outline" onclick="showToast('Photo upload coming soon')">Change Photo</button><p class="st-hint">JPG, PNG or GIF. Max 2MB.</p></div></div>
+                        <div class="st-profile-top"><img id="avatarImg" src="https://ui-avatars.com/api/?name=User&background=E67E22&color=fff&size=72" alt="" class="st-avatar"><div><input type="file" id="avatarFile" accept="image/jpeg,image/png,image/webp,image/gif" style="display:none" onchange="uploadAvatar()"><button class="st-btn-outline" onclick="document.getElementById('avatarFile').click()">Change Photo</button><p class="st-hint">JPG, PNG or GIF. Max 2MB.</p></div></div>
                         <form class="st-form" onsubmit="event.preventDefault();saveProfile()">
                             <div class="st-row"><div class="st-field"><label>First Name</label><input type="text" id="firstName" value=""></div><div class="st-field"><label>Last Name</label><input type="text" id="lastName" value=""></div></div>
                             <div class="st-row"><div class="st-field"><label>Email</label><input type="email" id="emailField" value="" disabled></div><div class="st-field"><label>Phone</label><input type="tel" id="phoneField" value=""></div></div>
@@ -82,6 +73,7 @@
                     <!-- Notifications -->
                     <section class="st-section" id="section-notifications">
                         <h2>Notification Preferences</h2>
+                        <p style="font-size:0.78rem;color:#6B7280;margin-bottom:1rem">These preferences are saved for when email/push notifications are enabled. Currently, they control in-app behavior only.</p>
                         <div class="st-toggles">
                             <div class="st-toggle"><div><h4>Session Reminders</h4><p>Before scheduled therapy sessions</p></div><label class="st-sw"><input type="checkbox" id="notifSessions"><span></span></label></div>
                             <div class="st-toggle"><div><h4>Community Updates</h4><p>New events and discussions</p></div><label class="st-sw"><input type="checkbox" id="notifCommunity"><span></span></label></div>
@@ -96,18 +88,13 @@
                     <!-- Privacy -->
                     <section class="st-section" id="section-privacy">
                         <h2>Privacy & Security</h2>
-                        <div class="st-privacy-score"><span>Privacy Health: </span><span class="st-priv-good">Good</span></div>
                         <div class="st-toggles">
-                            <div class="st-toggle"><div><h4>Profile Visibility</h4><p>Others can see your profile</p></div><label class="st-sw"><input type="checkbox" id="privProfile"><span></span></label></div>
-                            <div class="st-toggle"><div><h4>Anonymous Mode</h4><p>Hide name in forums and stories</p></div><label class="st-sw"><input type="checkbox" id="privAnonymous"><span></span></label></div>
-                            <div class="st-toggle"><div><h4>Two-Factor Authentication</h4><p>Extra security layer</p></div><label class="st-sw"><input type="checkbox" id="privTwoFactor"><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Profile Visibility</h4><p>Others can see your name in community</p></div><label class="st-sw"><input type="checkbox" id="privProfile"><span></span></label></div>
+                            <div class="st-toggle"><div><h4>Anonymous Mode</h4><p>Hide name in forums, stories, and comments</p></div><label class="st-sw"><input type="checkbox" id="privAnonymous"><span></span></label></div>
                         </div>
                         <button class="st-btn-primary" style="margin-top:1rem" onclick="savePrivacy()">Save Privacy Settings</button>
-                        <h3 class="st-sub">Active Sessions</h3>
-                        <div class="st-devices">
-                            <div class="st-device"><div><h4>Current Browser</h4><p>Last active: Now (current)</p></div><span class="st-dev-badge active">Active</span></div>
-                        </div>
                         <h3 class="st-sub">Change Password</h3>
+                        <p style="font-size:0.75rem;color:#6B7280;margin-bottom:0.75rem">Password must be 8+ characters with uppercase, lowercase, number, and special character.</p>
                         <form class="st-form" onsubmit="event.preventDefault();changePassword()"><div class="st-field"><label>Current Password</label><input type="password" id="curPass" placeholder="••••••••"></div><div class="st-field"><label>New Password</label><input type="password" id="newPass" placeholder="••••••••"></div><button type="submit" class="st-btn-primary">Update Password</button></form>
                     </section>
 
@@ -140,12 +127,13 @@
                     <!-- Account -->
                     <section class="st-section" id="section-account">
                         <h2>Account Management</h2>
-                        <div class="st-info-grid"><div class="st-info-item"><span>Member Since</span><strong id="acctSince">-</strong></div><div class="st-info-item"><span>Plan</span><strong id="acctPlan">Free</strong></div><div class="st-info-item"><span>Assessment</span><strong id="acctAssessment" class="st-green">-</strong></div><div class="st-info-item"><span>Stories</span><strong>-</strong></div></div>
+                        <div class="st-info-grid"><div class="st-info-item"><span>Member Since</span><strong id="acctSince">-</strong></div><div class="st-info-item"><span>Plan</span><strong id="acctPlan">Free</strong></div><div class="st-info-item"><span>Assessment</span><strong id="acctAssessment" class="st-green">-</strong></div><div class="st-info-item"><span>Status</span><strong id="acctStatus">Active</strong></div></div>
                         <div class="st-danger">
                             <h3>Danger Zone</h3>
-                            <div class="st-danger-row"><div><h4>Export Data</h4><p>Download all your data</p></div><button class="st-btn-outline" onclick="exportData()">Export</button></div>
-                            <div class="st-danger-row"><div><h4>Deactivate Account</h4><p>Temporarily disable</p></div><button class="st-btn-warn" onclick="if(confirm('Deactivate your account? You can reactivate later.'))showToast('Account deactivated (demo)')">Deactivate</button></div>
-                            <div class="st-danger-row"><div><h4>Delete Account</h4><p>Permanently remove everything</p></div><button class="st-btn-danger" onclick="if(confirm('Are you sure? This cannot be undone!'))if(confirm('FINAL WARNING: All data will be permanently deleted.'))deleteAccount()">Delete</button></div>
+                            <p style="font-size:0.75rem;color:#6B7280;margin-bottom:1rem">These actions require password confirmation.</p>
+                            <div class="st-danger-row"><div><h4>Export Data</h4><p>Download all your data as JSON</p></div><button class="st-btn-outline" onclick="exportData()">Export</button></div>
+                            <div class="st-danger-row"><div><h4>Deactivate Account</h4><p>Temporarily disable — log in again to reactivate</p></div><button class="st-btn-warn" onclick="deactivateAccount()">Deactivate</button></div>
+                            <div class="st-danger-row"><div><h4>Delete Account</h4><p>Permanently remove account, stories, mood data, sessions, and all activity</p></div><button class="st-btn-danger" onclick="if(confirm('This will permanently delete everything. Are you sure?'))deleteAccount()">Delete Forever</button></div>
                         </div>
                     </section>
                 </div>
@@ -249,10 +237,6 @@
         const p = currentUser.privacy || {};
         document.getElementById('privProfile').checked = p.profileVisible !== false;
         document.getElementById('privAnonymous').checked = p.anonymousMode === true;
-        document.getElementById('privTwoFactor').checked = p.twoFactor === true;
-        // 2FA status card
-        document.getElementById('tfaBadge').textContent = p.twoFactor ? 'On' : 'Off';
-        document.getElementById('tfaBadge').className = 'st-sc-val' + (p.twoFactor ? '' : ' st-off');
     }
 
     function populateAppearance() {
@@ -270,6 +254,8 @@
         document.getElementById('acctSince').textContent = new Date(u.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
         document.getElementById('acctPlan').textContent = u.plan === 'premium' ? 'Premium' : 'Free';
         document.getElementById('acctAssessment').textContent = u.assessment?.completed ? 'Completed' : 'Not done';
+        document.getElementById('acctStatus').textContent = u.status === 'active' ? 'Active' : (u.status || 'Active');
+        document.getElementById('statusBadge').textContent = u.status === 'active' ? 'Active' : (u.status || 'Active');
     }
 
     // Save profile
@@ -313,11 +299,11 @@
 
     // Save privacy
     async function savePrivacy() {
-        const privacy = { profileVisible: document.getElementById('privProfile').checked, anonymousMode: document.getElementById('privAnonymous').checked, twoFactor: document.getElementById('privTwoFactor').checked };
+        const privacy = { profileVisible: document.getElementById('privProfile').checked, anonymousMode: document.getElementById('privAnonymous').checked };
         try {
             const res = await fetch('/api/me/settings', { method: 'PUT', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ privacy }) });
-            if (res.ok) { currentUser = await res.json(); populatePrivacy(); showToast('✓ Privacy settings saved'); }
-            else showToast('Failed to save', true);
+            if (res.ok) { currentUser = await res.json(); showToast('✓ Privacy settings saved'); }
+            else { const d = await res.json(); showToast(d.error || 'Failed to save', true); }
         } catch(e) { showToast('Network error', true); }
     }
 
@@ -353,11 +339,14 @@
         });
     });
 
-    // Export data
+    // Export data — requires password
     async function exportData() {
+        const pass = prompt('Enter your password to confirm export:');
+        if (!pass) return;
         try {
-            const res = await fetch('/api/me', { headers: { 'Authorization': 'Bearer ' + token } });
+            const res = await fetch('/api/me/export?password=' + encodeURIComponent(pass), { headers: { 'Authorization': 'Bearer ' + token } });
             const data = await res.json();
+            if (!res.ok) { showToast(data.error, true); return; }
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -367,13 +356,48 @@
         } catch(e) { showToast('Export failed', true); }
     }
 
-    // Delete account
+    // Delete account — requires password, removes ALL data
     async function deleteAccount() {
+        const pass = prompt('Enter your password to permanently delete your account:');
+        if (!pass) return;
         try {
-            const res = await fetch('/api/me', { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token } });
-            if (res.ok) { localStorage.removeItem('token'); showToast('Account deleted'); setTimeout(() => window.location.href = 'login.html', 1500); }
-            else showToast('Failed to delete account', true);
-        } catch(e) { showToast('Network error', true); }
+            const res = await fetch('/api/me', { method: 'DELETE', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pass }) });
+            const data = await res.json();
+            if (!res.ok) { showToast(data.error, true); return; }
+            localStorage.removeItem('token');
+            showToast('Account deleted');
+            setTimeout(() => window.location.href = 'login.html', 1500);
+        } catch(e) { showToast('Failed to delete', true); }
+    }
+
+    // Deactivate account — requires password
+    async function deactivateAccount() {
+        const pass = prompt('Enter your password to deactivate:');
+        if (!pass) return;
+        try {
+            const res = await fetch('/api/me/deactivate', { method: 'PUT', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ password: pass }) });
+            const data = await res.json();
+            if (!res.ok) { showToast(data.error, true); return; }
+            showToast('✓ Account deactivated. Log in again to reactivate.');
+            setTimeout(() => { localStorage.removeItem('token'); window.location.href = 'login.html'; }, 2000);
+        } catch(e) { showToast('Failed', true); }
+    }
+
+    // Upload avatar
+    async function uploadAvatar() {
+        const file = document.getElementById('avatarFile').files[0];
+        if (!file) return;
+        const formData = new FormData();
+        formData.append('avatar', file);
+        try {
+            const res = await fetch('/api/me/avatar', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token }, body: formData });
+            const data = await res.json();
+            if (res.ok) {
+                document.getElementById('avatarImg').src = data.avatarUrl;
+                document.querySelector('.user-profile img').src = data.avatarUrl;
+                showToast('✓ Photo updated');
+            } else { showToast(data.error || 'Upload failed', true); }
+        } catch(e) { showToast('Upload failed', true); }
     }
 
     loadSettings();

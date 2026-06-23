@@ -1,0 +1,72 @@
+/* ===== Full Page Loader ===== */
+.page-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: #FDF8F0;
+    background-image: url('/images/loader-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 15vh;
+    transition: opacity 0.7s ease, visibility 0.7s ease;
+}
+.page-loader.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Three Dots Animation */
+.loader-dots {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.loader-dots span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #E67E22;
+    animation: dotBounce 1.4s ease-in-out infinite;
+}
+.loader-dots span:nth-child(1) { animation-delay: 0s; }
+.loader-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loader-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dotBounce {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+    40% { transform: scale(1.2); opacity: 1; }
+}
+
+/* Hide unused elements */
+.page-loader-logo,
+.page-loader-spinner,
+.page-loader-text {
+    display: none;
+}
+
+/* Page content transitions */
+body.loading .main-content,
+body.loading .auth-page,
+body.loading .portal-layout,
+body.loading > .container,
+body.loading > section,
+body.loading > nav.navbar {
+    opacity: 0;
+    transform: translateY(10px);
+}
+body.loaded .main-content,
+body.loaded .auth-page,
+body.loaded .portal-layout,
+body.loaded > .container,
+body.loaded > section,
+body.loaded > nav.navbar {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.5s ease 0.2s, transform 0.5s ease 0.2s;
+}

@@ -48,6 +48,14 @@ const youthProgramSchema = new mongoose.Schema({
     progressText: { type: String, default: '' },
     buttonText: { type: String, default: 'Continue' },
     buttonLink: { type: String, default: '#' },
+    // Real, completable content inside each module
+    moduleType: { type: String, enum: ['lessons', 'wellness', 'counselor'], default: 'lessons' },
+    lessons: [{
+        title: { type: String, required: true },
+        type: { type: String, enum: ['article', 'activity', 'tip', 'reflection'], default: 'article' },
+        duration: { type: String, default: '5 min' },
+        content: { type: String, default: '' }
+    }],
     isVisible: { type: Boolean, default: true },
     displayOrder: { type: Number, default: 0 }
 }, { timestamps: true });

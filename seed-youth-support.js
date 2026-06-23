@@ -52,12 +52,39 @@ async function seed() {
 
     // Programs
     await YouthProgram.insertMany([
-        { title: 'Career Discovery', description: '95 career paths • Personality matching', image: '/images/youth-career-discovery.png', gradientStart: '#3B82F6', gradientEnd: '#60A5FA', progressText: '40% Explored', buttonText: 'Continue', displayOrder: 1 },
-        { title: 'Confidence Building', description: 'Self-esteem exercises • Daily challenges', image: '/images/youth-confidence-building.png', gradientStart: '#8B5CF6', gradientEnd: '#A78BFA', progressText: '70% Complete', buttonText: 'Continue', displayOrder: 2 },
-        { title: 'Wellness Check-In', description: 'Weekly mood tracking • Guided support', image: '/images/youth-wellness-checkin.png', gradientStart: '#10B981', gradientEnd: '#34D399', progressText: 'This Week Available', buttonText: 'Check In', displayOrder: 3 },
-        { title: 'Personal Coach', description: 'Book a counselor • Available tomorrow', image: '/images/youth-personal-coach.png', gradientStart: '#E67E22', gradientEnd: '#F59E0B', progressText: '50+ Counselors', buttonText: 'Book Session', displayOrder: 4 }
+        {
+            title: 'Career Discovery', description: 'Explore career paths & find your fit', image: '/images/youth-career-discovery.png',
+            gradientStart: '#3B82F6', gradientEnd: '#60A5FA', buttonText: 'Start Learning', displayOrder: 1, moduleType: 'lessons',
+            lessons: [
+                { title: 'How to Discover Your Strengths', type: 'article', duration: '5 min', content: 'Your strengths are the things you do well and enjoy. Start by asking yourself three questions:\n\n1. What activities make me lose track of time?\n2. What do friends and teachers say I am good at?\n3. What problems do I enjoy solving?\n\nWrite down your answers. Patterns will appear — maybe you love organizing, helping people, building things, or explaining ideas. These patterns point toward careers where you will naturally thrive.\n\nTip: Strengths are not fixed. Every skill you practice becomes a future strength.' },
+                { title: 'Understanding Career Clusters', type: 'article', duration: '6 min', content: 'Careers group into clusters that share similar skills:\n\n• Technology — building software, data, security\n• Health & Care — nursing, therapy, medicine\n• Creative — design, writing, media, music\n• Business — marketing, finance, management\n• Trades — electrician, mechanic, construction\n• Education & Social — teaching, counseling, social work\n\nYou do not need to pick one forever. Knowing the cluster that excites you helps you choose subjects, internships, and first jobs that move you in the right direction.' },
+                { title: 'Activity: Map Your Interests', type: 'activity', duration: '10 min', content: 'Grab a paper or notes app and make three columns:\n\nLIKE | NEUTRAL | DISLIKE\n\nNow sort these activities into the columns:\n- Working with numbers\n- Helping people one-on-one\n- Designing or drawing\n- Leading a group\n- Fixing or building things\n- Writing and explaining\n- Researching and analyzing\n\nLook at your LIKE column. The careers that use those activities most are worth exploring first. Save this list — you will use it when picking your next steps.' },
+                { title: 'Reflection: Where Do You See Yourself?', type: 'reflection', duration: '5 min', content: 'Close your eyes and imagine a normal workday five years from now.\n\n- Are you indoors or outdoors?\n- Working alone or with a team?\n- Using your hands, your words, or your ideas?\n- What does a good day feel like?\n\nThere are no wrong answers. This is your vision, not anyone else\u2019s. Note one career that fits the picture and one small step you could take this month to learn more about it.' }
+            ]
+        },
+        {
+            title: 'Confidence Building', description: 'Practical exercises to grow self-belief', image: '/images/youth-confidence-building.png',
+            gradientStart: '#8B5CF6', gradientEnd: '#A78BFA', buttonText: 'Start Learning', displayOrder: 2, moduleType: 'lessons',
+            lessons: [
+                { title: 'What Confidence Really Is', type: 'article', duration: '4 min', content: 'Confidence is not about never feeling afraid. It is about trusting that you can handle what comes, even when you are nervous.\n\nConfident people still feel doubt. The difference is they act anyway, and each action builds proof that they can cope. Confidence is a skill you grow through small repeated wins, not a personality trait you are born with.' },
+                { title: 'The Power of Self-Talk', type: 'article', duration: '5 min', content: 'The way you talk to yourself shapes how you feel. Harsh self-talk ("I always mess up") drains confidence. Kinder, realistic self-talk builds it.\n\nTry this swap:\n- "I can\u2019t do this" becomes "I can\u2019t do this yet"\n- "I\u2019m so stupid" becomes "I made a mistake and I can learn from it"\n- "Everyone is judging me" becomes "Most people are focused on themselves"\n\nYou are not lying to yourself. You are choosing the most useful true thought.' },
+                { title: 'Activity: The Confidence Journal', type: 'activity', duration: '7 min', content: 'Each night for one week, write down:\n\n1. One thing you did today that took a little courage\n2. One thing you are good at\n3. One kind thing someone said or that you did for someone\n\nThis trains your brain to notice evidence of your worth. After a week, read back through your entries. The proof of your growth will be right there in your own handwriting.' },
+                { title: 'Power Posture & Breathing', type: 'tip', duration: '3 min', content: 'Your body affects your mind. Before a stressful moment — a presentation, a tough talk, an exam:\n\n1. Stand tall, shoulders back, chin level.\n2. Breathe in slowly for 4 counts.\n3. Hold for 4 counts.\n4. Breathe out for 6 counts.\n5. Repeat 3 times.\n\nThis calms your nervous system and signals to your brain that you are safe and capable. Athletes and speakers use this exact trick before they perform.' },
+                { title: 'Reflection: Your Wins', type: 'reflection', duration: '4 min', content: 'Think back to a time you were scared to do something but did it anyway. Maybe a first day, a performance, standing up for a friend.\n\n- How did you feel before?\n- What did you actually do?\n- How did you feel afterward?\n\nThat courage is already inside you. You have done hard things before, which means you can do them again.' }
+            ]
+        },
+        {
+            title: 'Wellness Check-In', description: 'Track your mood & build healthy habits', image: '/images/youth-wellness-checkin.png',
+            gradientStart: '#10B981', gradientEnd: '#34D399', buttonText: 'Check In Now', displayOrder: 3, moduleType: 'wellness',
+            lessons: []
+        },
+        {
+            title: 'Personal Coach', description: 'Connect with a youth counselor', image: '/images/youth-personal-coach.png',
+            gradientStart: '#E67E22', gradientEnd: '#F59E0B', buttonText: 'Book Session', displayOrder: 4, moduleType: 'counselor',
+            lessons: []
+        }
     ]);
-    console.log('✅ Programs seeded');
+    console.log('✅ Programs seeded (with lessons)');
 
     // Careers
     await YouthCareer.insertMany([

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Requests – ABLE Professional Portal</title>
+    <link rel="stylesheet" href="/professional/portal.css">
+    <link rel="stylesheet" href="/loader.css">
+    <style>
+        /* ===== REQUEST CARD ===== */
+        .req-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.35rem 1.5rem;
+            margin-bottom: 0.875rem;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+        .req-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 4px;
+            background: var(--yellow-bg);
+            transition: background 0.2s;
+        }
+        .req-card:hover { box-shadow: var(--shadow-md); }
+        .req-card:hover::before { background: var(--brand); }
+
+        .req-top {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            margin-bottom: 0.75rem;
+        }
+        .req-avatar-circle {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+        .req-user-info { flex: 1; min-width: 0; }
+        .req-user-name { font-size: 1rem; font-weight: 700; color: var(--text-1); }
+        .req-user-sub { font-size: 0.78rem; color: var(--text-3); margin-top: 0.1rem; }
+
+        .req-status-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.25rem 0.65rem;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            flex-shrink: 0;
+        }
+        .req-status-badge.requested { background: var(--yellow-bg); color: var(--yellow-text); }
+        .req-status-badge.reschedule_suggested { background: var(--purple-bg); color: var(--purple-text); }
+
+        .req-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 0.6rem;
+            margin-bottom: 0.875rem;
+        }
+        .req-detail-item { display: flex; flex-direction: column; gap: 0.1rem; }
+        .req-detail-label { font-size: 0.7rem; font-weight: 600; color: var(--text-4); text-transform: uppercase; letter-spacing: 0.05em; }
+        .req-detail-value { font-size: 0.85rem; color: var(--text-2); font-weight: 500; }
+
+        .req-note {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 0.82rem;
+            color: var(--text-2);
+            font-style: italic;
+            margin-bottom: 0.875rem;
+            line-height: 1.6;
+        }
+        .req-note span { font-style: normal; font-weight: 600; color: var(--text-3); }
+
+        .req-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .req-btn {
+            padding: 0.55rem 1.1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .req-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+        .req-btn.accept { background: var(--green-bg); color: var(--green-text); }
+        .req-btn.reject { background: var(--red-bg); color: var(--red-text); }
+        .req-btn.reschedule { background: var(--blue-bg); color: var(--blue-text); }
+
+        /* Reschedule_suggested state */
+        .reschedule-info {
+            background: var(--purple-bg);
+            border: 1px solid #DDD6FE;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 0.82rem;
+            color: var(--purple-text);
+            margin-bottom: 0.875rem;
+        }
+
+        /* ===== FILTER TABS ===== */
+        .filter-tabs {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+        .filter-tab {
+            padding: 0.5rem 1.1rem;
+            border: 1.5px solid var(--border);
+            border-radius: 100px;
+            background: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-3);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-tab:hover { border-color: var(--brand); color: var(--brand); }
+        .filter-tab.active { background: var(--brand); color: white; border-color: var(--brand); }
+
+        /* ===== EMPTY / LOADING ===== */
+        .all-clear {
+            text-align: center;
+            padding: 4rem 1.5rem;
+            color: var(--text-4);
+        }
+        .all-clear .icon { font-size: 3.5rem; display: block; margin-bottom: 1rem; }
+        .all-clear h3 { font-size: 1rem; font-weight: 600; color: var(--text-2); margin-bottom: 0.4rem; }
+        .all-clear p { font-size: 0.85rem; }
+
+        @media(max-width:600px) {
+            .req-details { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <script src="/loader.js"></script>
+    <div class="portal-layout">
+        <div id="portalSidebar"></div>
+        <script src="/professional/nav.js"></script>
+
+        <main class="portal-main">
+            <header class="portal-header">
+                <button class="portal-menu-toggle" onclick="document.getElementById('portalSidebar').classList.toggle('open')">☰</button>
+                <h1>Session Requests</h1>
+                <div class="portal-user">
+                    <span id="reqCount" style="font-size:0.82rem;color:var(--text-3)"></span>
+                </div>
+            </header>
+
+            <div class="portal-content">
+                <!-- Filter tabs -->
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="requested" onclick="setFilter('requested')">⏳ Pending</button>
+                    <button class="filter-tab" data-filter="reschedule_suggested" onclick="setFilter('reschedule_suggested')">↻ Reschedule Suggested</button>
+                </div>
+
+                <div id="requestsList">
+                    <div class="all-clear"><span class="icon">⏳</span><h3>Loading requests...</h3></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+    const token = localStorage.getItem('professionalToken');
+    if (!token) window.location.href = '/professional/login.html';
+    const headers = { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' };
+    let allRequests = [];
+    let currentFilter = 'requested';
+
+    function setFilter(f) {
+        currentFilter = f;
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        document.querySelector(`.filter-tab[data-filter="${f}"]`).classList.add('active');
+        renderRequests();
+    }
+
+    async function loadRequests() {
+        try {
+            const res = await fetch('/professional/api/requests', { headers });
+            if (res.status === 401 || res.status === 403) { localStorage.removeItem('professionalToken'); window.location.href = '/professional/login.html'; return; }
+            const data = await res.json();
+            allRequests = data.requests || [];
+            renderRequests();
+        } catch(e) {
+            document.getElementById('requestsList').innerHTML = '<div class="all-clear"><span class="icon">⚠️</span><h3>Failed to load requests</h3><p>Check your connection and try again</p></div>';
+        }
+    }
+
+    function renderRequests() {
+        const list = allRequests.filter(r => r.status === currentFilter || (currentFilter === 'requested' && r.status === 'requested'));
+        const pendingCount = allRequests.filter(r => r.status === 'requested').length;
+        document.getElementById('reqCount').textContent = pendingCount + ' pending';
+
+        if (!list.length) {
+            const msgs = {
+                requested: { icon:'🎉', title:'All caught up!', desc:'No pending session requests right now.' },
+                reschedule_suggested: { icon:'✅', title:'No reschedules pending', desc:'No reschedule suggestions awaiting user confirmation.' }
+            };
+            const m = msgs[currentFilter] || { icon:'📋', title:'Nothing here', desc:'' };
+            document.getElementById('requestsList').innerHTML = `<div class="all-clear"><span class="icon">${m.icon}</span><h3>${m.title}</h3><p>${m.desc}</p></div>`;
+            return;
+        }
+
+        document.getElementById('requestsList').innerHTML = list.map(r => {
+            const initial = (r.userId?.name || 'A')[0].toUpperCase();
+            const reqTime = r.requestedAt ? new Date(r.requestedAt).toLocaleString('en-IN', { weekday:'short', day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : '—';
+            const created = timeAgo(r.createdAt);
+            const isReschedule = r.status === 'reschedule_suggested';
+
+            return `
+            <div class="req-card" id="req-${r._id}">
+                <div class="req-top">
+                    <div class="req-avatar-circle">${initial}</div>
+                    <div class="req-user-info">
+                        <div class="req-user-name">${r.userId?.name || 'Anonymous User'}</div>
+                        <div class="req-user-sub">Requested ${created}</div>
+                    </div>
+                    <span class="req-status-badge ${r.status}">${r.status === 'reschedule_suggested' ? '↻ Reschedule Suggested' : '⏳ Pending'}</span>
+                </div>
+
+                <div class="req-details">
+                    <div class="req-detail-item">
+                        <span class="req-detail-label">Session Type</span>
+                        <span class="req-detail-value">${sessionIcon(r.sessionType)} ${r.sessionType}</span>
+                    </div>
+                    <div class="req-detail-item">
+                        <span class="req-detail-label">Concern</span>
+                        <span class="req-detail-value">${r.concern || '—'}</span>
+                    </div>
+                    <div class="req-detail-item">
+                        <span class="req-detail-label">Requested Time</span>
+                        <span class="req-detail-value">${reqTime}</span>
+                    </div>
+                    <div class="req-detail-item">
+                        <span class="req-detail-label">Created</span>
+                        <span class="req-detail-value">${created}</span>
+                    </div>
+                </div>
+
+                ${r.userNote ? `<div class="req-note"><span>Client Note:</span> "${r.userNote}"</div>` : ''}
+
+                ${isReschedule && r.suggestedNewTime ? `<div class="reschedule-info">↻ New time suggested: <strong>${new Date(r.suggestedNewTime).toLocaleString('en-IN')}</strong> — awaiting client confirmation</div>` : ''}
+
+                <div class="req-actions">
+                    <button class="req-btn accept" onclick="acceptRequest('${r._id}')">✓ Accept</button>
+                    <button class="req-btn reject" onclick="rejectRequest('${r._id}')">✗ Reject</button>
+                    <button class="req-btn reschedule" onclick="rescheduleRequest('${r._id}')">↻ Suggest New Time</button>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    async function acceptRequest(id) {
+        const btn = event.target;
+        btn.disabled = true; btn.textContent = 'Accepting...';
+        try {
+            const res = await fetch('/professional/api/sessions/' + id + '/accept', { method:'PUT', headers });
+            if (res.ok) {
+                document.getElementById('req-' + id).style.opacity = '0.4';
+                setTimeout(() => loadRequests(), 300);
+                showToast('✅ Session accepted!');
+            } else {
+                btn.disabled = false; btn.textContent = '✓ Accept';
+                showToast('Failed to accept', 'red');
+            }
+        } catch(e) { btn.disabled = false; btn.textContent = '✓ Accept'; }
+    }
+
+    async function rejectRequest(id) {
+        const reason = prompt('Reason for rejection (required):');
+        if (!reason?.trim()) return;
+        await fetch('/professional/api/sessions/' + id + '/reject', { method:'PUT', headers, body: JSON.stringify({ reason }) });
+        loadRequests();
+        showToast('Session rejected');
+    }
+
+    async function rescheduleRequest(id) {
+        const time = prompt('Enter new date/time (e.g. 2026-06-25 14:00):');
+        if (!time) return;
+        const dt = new Date(time);
+        if (isNaN(dt.getTime())) { alert('Invalid date format. Try: 2026-06-25 14:00'); return; }
+        await fetch('/professional/api/sessions/' + id + '/reschedule', { method:'PUT', headers, body: JSON.stringify({ suggestedNewTime: dt.toISOString() }) });
+        loadRequests();
+        showToast('↻ Reschedule suggested');
+    }
+
+    function sessionIcon(type) {
+        const icons = { video:'📹', audio:'📞', chat:'💬', 'in-person':'🏢' };
+        return icons[type] || '📋';
+    }
+
+    function timeAgo(d) {
+        const s = Math.floor((Date.now() - new Date(d)) / 1000);
+        if (s < 60) return 'just now';
+        if (s < 3600) return Math.floor(s / 60) + 'm ago';
+        if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+        return Math.floor(s / 86400) + 'd ago';
+    }
+
+    function showToast(msg, type='green') {
+        const colors = { green:'background:#ECFDF5;color:#065F46', red:'background:#FEF2F2;color:#991B1B' };
+        const t = document.createElement('div');
+        t.style.cssText = `position:fixed;bottom:1.5rem;right:1.5rem;padding:0.85rem 1.5rem;${colors[type]||colors.green};border-radius:12px;font-size:0.88rem;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.12);animation:fadeIn 0.3s ease;border:1px solid rgba(0,0,0,0.06)`;
+        t.textContent = msg;
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 3000);
+    }
+
+    loadRequests();
+    </script>
+    <style>@keyframes fadeIn { from { opacity:0;transform:translateY(8px); } to { opacity:1;transform:translateY(0); } }</style>
+</body>
+</html>
