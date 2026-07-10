@@ -5,7 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ABLE - A Better Life Enabled | Your Mental Wellness Companion</title>
     <link rel="stylesheet" href="landing.css">
-<link rel="stylesheet" href="/loader.css">
+    <link rel="stylesheet" href="/loader.css">
+    <style>
+        /* Initial state for motion-animated elements */
+        .hero-left .hero-badge,
+        .hero-left h1,
+        .hero-left .hero-subtitle,
+        .hero-left .hero-ctas,
+        .hero-left .hero-trust-row { opacity: 0; }
+        .hero-right { opacity: 0; }
+        .glass-card { opacity: 0; }
+
+        /* HiLife-style rotating words */
+        .hero-rotate-wrap {
+            display: block;
+            height: 1.3em;
+            overflow: hidden;
+            position: relative;
+        }
+        .hero-rotate-words {
+            display: block;
+            position: relative;
+        }
+        .hero-word {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transform: translateY(100%);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            background: linear-gradient(135deg, #E67E22, #F59E0B);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-word.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scrolling Marquee */
+        .marquee-section {
+            overflow: hidden;
+            padding: 1.25rem 0;
+            background: linear-gradient(90deg, #1a1a2e, #16213e, #1a1a2e);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .marquee-track {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+            white-space: nowrap;
+            animation: marqueeScroll 25s linear infinite;
+            width: max-content;
+        }
+        .marquee-track span {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 0.03em;
+        }
+        @keyframes marqueeScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+    </style>
 </head>
 <body>
     <script src="/loader.js"></script>
@@ -59,13 +125,25 @@
             <div class="hero-grid">
                 <div class="hero-left">
                     <div class="hero-badge" id="lp-hero-badge">✨ Trusted by 50,000+ users worldwide</div>
-                    <h1 id="lp-hero-headline">Transform Your Mental Wellness Journey With <span class="gradient-text">Expert Support</span> & AI Guidance</h1>
-                    <p class="hero-subtitle" id="lp-hero-subtitle">Connect with licensed therapists, wellness coaches, and a supportive community designed to help you build a healthier and happier life.</p>
+                    <h1 id="lp-hero-headline">
+                        Sometimes you are…
+                        <span class="hero-rotate-wrap">
+                            <span class="hero-rotate-words" id="heroRotateWords">
+                                <span class="hero-word active">stressed out</span>
+                                <span class="hero-word">burned out</span>
+                                <span class="hero-word">a new parent</span>
+                                <span class="hero-word">healing</span>
+                                <span class="hero-word">starting over</span>
+                                <span class="hero-word">finding yourself</span>
+                            </span>
+                        </span>
+                    </h1>
+                    <p class="hero-subtitle" id="lp-hero-subtitle">A wellness companion that adapts to your life. Connect with therapists, build habits, and find your community — all in one place.</p>
                     <div class="hero-ctas" id="lp-hero-ctas">
-                        <a href="signup.html" class="btn-primary-lg">Start Free Assessment</a>
+                        <a href="signup.html" class="btn-primary-lg">Start Your Journey</a>
                         <a href="#how-it-works" class="btn-ghost">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><polygon points="5,3 19,12 5,21" fill="currentColor"/></svg>
-                            Watch Demo
+                            See How It Works
                         </a>
                     </div>
                     <div class="hero-trust-row" id="lp-hero-trust">
@@ -92,6 +170,26 @@
             </div>
         </div>
     </section>
+
+    <!-- Scrolling Marquee (HiLife-style) -->
+    <div class="marquee-section">
+        <div class="marquee-track">
+            <span>Mental Wellness</span><span>·</span>
+            <span>Licensed Therapists</span><span>·</span>
+            <span>AI-Powered</span><span>·</span>
+            <span>Community Support</span><span>·</span>
+            <span>Body & Mind</span><span>·</span>
+            <span>Youth Programs</span><span>·</span>
+            <span>Self-Care Tools</span><span>·</span>
+            <span>Mental Wellness</span><span>·</span>
+            <span>Licensed Therapists</span><span>·</span>
+            <span>AI-Powered</span><span>·</span>
+            <span>Community Support</span><span>·</span>
+            <span>Body & Mind</span><span>·</span>
+            <span>Youth Programs</span><span>·</span>
+            <span>Self-Care Tools</span><span>·</span>
+        </div>
+    </div>
 
     <!-- Social Proof -->
     <section class="social-proof">
@@ -639,7 +737,7 @@
 
             // Hero
             if (d.heroBadge) document.getElementById('lp-hero-badge').textContent = d.heroBadge;
-            if (d.heroHeadline) document.getElementById('lp-hero-headline').innerHTML = d.heroHeadline.replace(/Expert Support|AI Guidance/g, '<span class="gradient-text">$&</span>');
+            // Don't overwrite headline — it has the rotating words animation
             if (d.heroSubtitle) document.getElementById('lp-hero-subtitle').textContent = d.heroSubtitle;
 
             // Hero CTAs
@@ -781,6 +879,123 @@
             // Graceful degradation — hardcoded content remains
             console.log('Landing page API unavailable, using static content');
         }
+    })();
+    </script>
+
+    <!-- Framer Motion (standalone) for scroll animations -->
+    <script src="https://cdn.jsdelivr.net/npm/motion@11.18.2/dist/motion.min.js"></script>
+    <script>
+    (function() {
+        const { animate, scroll, inView } = Motion;
+
+        // ===== ROTATING HERO WORDS (HiLife-style) =====
+        const words = document.querySelectorAll('.hero-word');
+        let wordIdx = 0;
+        setInterval(() => {
+            words[wordIdx].classList.remove('active');
+            wordIdx = (wordIdx + 1) % words.length;
+            words[wordIdx].classList.add('active');
+        }, 2500);
+
+        // ===== HERO: Cinematic entrance =====
+        animate('.hero-badge', { opacity: [0, 1], y: [-20, 0] }, { duration: 0.6, delay: 0.2 });
+        animate('#lp-hero-headline', { opacity: [0, 1], y: [60, 0] }, { duration: 1, delay: 0.4, easing: [0.16, 1, 0.3, 1] });
+        animate('.hero-subtitle', { opacity: [0, 1], y: [40, 0] }, { duration: 0.8, delay: 0.8, easing: [0.16, 1, 0.3, 1] });
+        animate('.hero-ctas', { opacity: [0, 1], y: [30, 0] }, { duration: 0.7, delay: 1.1 });
+        animate('.hero-trust-row', { opacity: [0, 1] }, { duration: 0.6, delay: 1.4 });
+        animate('.hero-right', { opacity: [0, 1], x: [80, 0], scale: [0.9, 1] }, { duration: 1.2, delay: 0.5, easing: [0.16, 1, 0.3, 1] });
+
+        // Glass cards float in sequentially
+        document.querySelectorAll('.glass-card').forEach((el, i) => {
+            animate(el, { opacity: [0, 1], y: [40, 0], scale: [0.8, 1] }, { duration: 0.7, delay: 1.2 + i * 0.25, easing: [0.34, 1.56, 0.64, 1] });
+        });
+
+        // ===== SCROLL REVEAL: Sections rise up dramatically =====
+        document.querySelectorAll('.section-label, .section-title, .section-subtitle').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(40px)';
+        });
+
+        const revealSections = document.querySelectorAll('#features, #platform, #how-it-works, #therapists, #testimonials, #pricing, .stats-section');
+        revealSections.forEach(section => {
+            inView(section, () => {
+                const label = section.querySelector('.section-label');
+                const title = section.querySelector('.section-title, h2');
+                const subtitle = section.querySelector('.section-subtitle');
+                if (label) animate(label, { opacity: [0, 1], y: [30, 0] }, { duration: 0.6, easing: [0.16, 1, 0.3, 1] });
+                if (title) animate(title, { opacity: [0, 1], y: [40, 0] }, { duration: 0.8, delay: 0.1, easing: [0.16, 1, 0.3, 1] });
+                if (subtitle) animate(subtitle, { opacity: [0, 1], y: [30, 0] }, { duration: 0.7, delay: 0.2, easing: [0.16, 1, 0.3, 1] });
+            }, { amount: 0.15 });
+        });
+
+        // ===== FEATURE CARDS: Stagger rise with spring =====
+        document.querySelectorAll('.feature-card').forEach(el => { el.style.opacity = '0'; });
+        inView('#features', () => {
+            document.querySelectorAll('.feature-card').forEach((card, i) => {
+                animate(card, { opacity: [0, 1], y: [80, 0], scale: [0.92, 1] }, { duration: 0.7, delay: i * 0.12, easing: [0.34, 1.56, 0.64, 1] });
+            });
+        }, { amount: 0.1 });
+
+        // ===== STEPS: Slide from left with spring bounce =====
+        document.querySelectorAll('.step-card').forEach(el => { el.style.opacity = '0'; });
+        inView('#how-it-works', () => {
+            document.querySelectorAll('.step-card').forEach((step, i) => {
+                animate(step, { opacity: [0, 1], x: [-100, 0] }, { duration: 0.8, delay: i * 0.18, easing: [0.34, 1.56, 0.64, 1] });
+            });
+        }, { amount: 0.1 });
+
+        // ===== STATS: Dramatic scale + count =====
+        document.querySelectorAll('.stat-block').forEach(el => { el.style.opacity = '0'; });
+        inView('.stats-section', () => {
+            document.querySelectorAll('.stat-block').forEach((block, i) => {
+                animate(block, { opacity: [0, 1], scale: [0.7, 1], y: [40, 0] }, { duration: 0.6, delay: i * 0.1, easing: [0.34, 1.56, 0.64, 1] });
+            });
+            // Count up
+            document.querySelectorAll('.stat-num').forEach(el => {
+                const text = el.textContent;
+                const num = parseInt(text.replace(/[^\d]/g, ''));
+                if (!num) return;
+                const suffix = text.replace(/[\d,]/g, '');
+                let current = 0;
+                const step = Math.max(1, Math.floor(num / 30));
+                const iv = setInterval(() => { current = Math.min(current + step, num); el.textContent = current.toLocaleString() + suffix; if (current >= num) clearInterval(iv); }, 40);
+            });
+        }, { amount: 0.2 });
+
+        // ===== THERAPIST + TESTIMONIAL + PRICING: Rise with stagger =====
+        ['#therapists .therapist-showcase', '#testimonials .testimonial-card', '#pricing .price-card'].forEach(selector => {
+            document.querySelectorAll(selector).forEach(el => { el.style.opacity = '0'; });
+        });
+        inView('#therapists', () => {
+            document.querySelectorAll('.therapist-showcase').forEach((el, i) => {
+                animate(el, { opacity: [0, 1], y: [60, 0], rotateY: ['-10deg', '0deg'] }, { duration: 0.7, delay: i * 0.15, easing: [0.16, 1, 0.3, 1] });
+            });
+        }, { amount: 0.1 });
+        inView('#testimonials', () => {
+            document.querySelectorAll('.testimonial-card').forEach((el, i) => {
+                animate(el, { opacity: [0, 1], y: [50, 0], scale: [0.9, 1] }, { duration: 0.6, delay: i * 0.12, easing: [0.34, 1.56, 0.64, 1] });
+            });
+        }, { amount: 0.1 });
+        inView('#pricing', () => {
+            document.querySelectorAll('.price-card').forEach((el, i) => {
+                animate(el, { opacity: [0, 1], y: [60, 0], scale: [0.88, 1] }, { duration: 0.7, delay: i * 0.15, easing: [0.34, 1.56, 0.64, 1] });
+            });
+        }, { amount: 0.1 });
+
+        // ===== PLATFORM SHOWCASE =====
+        inView('#platform', () => {
+            animate('.showcase-tabs', { opacity: [0, 1], y: [30, 0] }, { duration: 0.6 });
+            animate('.showcase-content', { opacity: [0, 1], y: [50, 0] }, { duration: 0.8, delay: 0.2, easing: [0.16, 1, 0.3, 1] });
+        }, { amount: 0.1 });
+
+        // ===== SOCIAL PROOF =====
+        inView('.social-proof', () => {
+            animate('.sp-inner', { opacity: [0, 1], y: [30, 0] }, { duration: 0.7 });
+        }, { amount: 0.2 });
+
+        // ===== NAVBAR shadow on scroll =====
+        scroll(animate('#navbar', { boxShadow: ['0 0 0 transparent', '0 4px 30px rgba(0,0,0,0.06)'] }), { offset: ['0px', '80px'] });
+
     })();
     </script>
 </body>

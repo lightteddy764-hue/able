@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wellness Playground - ABLE</title>
+    <link rel="stylesheet" href="dashboard-styles.css">
+    <link rel="stylesheet" href="dash-premium.css">
+    <style>
+        .pg-page { max-width: 900px; margin: 0 auto; padding: 1.5rem 2rem 4rem; }
+        .pg-hero { text-align: center; margin-bottom: 2.5rem; padding: 3rem 2rem; background: linear-gradient(135deg, #7C3AED, #A78BFA); background-size: cover; background-position: center; border-radius: 20px; color: white; }
+        .pg-quickstart { margin-bottom: 2.5rem; }
+        .pg-section-title { font-size: 1.1rem; font-weight: 800; color: #111827; margin-bottom: 0.3rem; }
+        .pg-section-sub { font-size: 0.85rem; color: #6B7280; margin-bottom: 1rem; }
+        .pg-qs-list { display: flex; flex-direction: column; gap: 0.6rem; }
+        .pg-qs-item { display: flex; align-items: center; gap: 0.6rem; padding: 0.85rem 1.1rem; background: #F9FAFB; border: 1.5px solid #E5E7EB; border-radius: 14px; font-size: 0.88rem; color: #374151; text-align: left; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+        .pg-qs-item:hover { background: #FEF3E2; border-color: #E67E22; color: #92400E; transform: translateX(4px); }
+        .pg-qs-icon { font-size: 0.9rem; flex-shrink: 0; opacity: 0.6; }
+        .pg-hero h1 { font-size: 1.8rem; font-weight: 800; color: white; margin-bottom: 0.5rem; }
+        .pg-hero p { font-size: 0.92rem; color: rgba(255,255,255,0.9); max-width: 500px; margin: 0 auto; }
+        .pg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
+        .pg-card { background: white; border-radius: 20px; border: 1.5px solid #E5E7EB; padding: 1.75rem; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; }
+        .pg-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,0.08); border-color: #E67E22; }
+        .pg-card-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+        .pg-card h3 { font-size: 1.05rem; font-weight: 700; color: #111827; margin-bottom: 0.4rem; }
+        .pg-card p { font-size: 0.82rem; color: #6B7280; line-height: 1.5; margin-bottom: 1rem; }
+        .pg-card-tag { font-size: 0.68rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 100px; display: inline-block; }
+        .pg-tag-creative { background: #F3E8FF; color: #7C3AED; }
+        .pg-tag-insight { background: #EFF6FF; color: #2563EB; }
+        .pg-tag-analysis { background: #FEF3E2; color: #E67E22; }
+        .pg-tag-dream { background: #ECFDF5; color: #059669; }
+
+        /* Activity Panel */
+        .pg-panel { display: none; background: white; border-radius: 20px; border: 1.5px solid #E5E7EB; padding: 2rem; margin-bottom: 2rem; }
+        .pg-panel.active { display: block; }
+        .pg-panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+        .pg-panel-header h2 { font-size: 1.2rem; font-weight: 800; color: #111827; }
+        .pg-panel-close { background: #F3F4F6; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 1rem; cursor: pointer; color: #6B7280; }
+        .pg-textarea { width: 100%; padding: 1rem; border: 1.5px solid #E5E7EB; border-radius: 12px; font-size: 0.9rem; font-family: inherit; resize: vertical; min-height: 120px; outline: none; line-height: 1.6; }
+        .pg-textarea:focus { border-color: #8B5CF6; box-shadow: 0 0 0 3px rgba(139,92,246,0.08); }
+        .pg-submit { margin-top: 1rem; padding: 0.85rem 2rem; background: linear-gradient(135deg, #8B5CF6, #A78BFA); color: white; border: none; border-radius: 12px; font-size: 0.92rem; font-weight: 700; cursor: pointer; }
+        .pg-submit:hover { transform: translateY(-1px); }
+        .pg-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+        .pg-result { margin-top: 1.5rem; padding: 1.5rem; background: linear-gradient(135deg, #F9FAFB, #F3F0FF); border-radius: 16px; border: 1px solid #E5E7EB; display: none; }
+        .pg-result h4 { font-size: 0.9rem; font-weight: 700; color: #7C3AED; margin-bottom: 0.75rem; }
+        .pg-result p { font-size: 0.88rem; color: #374151; line-height: 1.8; white-space: pre-wrap; }
+        .pg-result-score { margin-top: 1rem; padding: 0.6rem 1rem; background: #ECFDF5; border-radius: 10px; font-size: 0.8rem; color: #065F46; font-weight: 600; display: inline-block; }
+        .pg-hint { font-size: 0.78rem; color: #9CA3AF; margin-top: 0.5rem; }
+        .pg-keywords { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.75rem 0; }
+        .pg-kw { padding: 0.4rem 0.8rem; border: 1.5px solid #E5E7EB; border-radius: 100px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; }
+        .pg-kw.on { border-color: #8B5CF6; background: #F3E8FF; color: #7C3AED; font-weight: 600; }
+        @media(max-width:600px) { .pg-page { padding: 1rem 1rem 3rem; } .pg-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div id="sidebar"></div>
+    <script src="sidebar-nav.js"></script>
+    <div class="main-content">
+        <header class="topbar">
+            <button class="menu-toggle" id="menuToggle"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="search-bar"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input type="text" placeholder="Search therapists, resources, articles... (⌘K)"></div>
+            <div class="topbar-actions">
+                <button class="icon-button"><svg viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="notification-badge">3</span></button>
+                <div class="user-profile"><img src="https://ui-avatars.com/api/?name=User&background=E67E22&color=fff" alt="User"><div class="user-info"><span class="user-name" id="dashUserName">User</span><span class="user-role">Wellness Seeker</span></div></div>
+            </div>
+        </header>
+        <main class="pg-page">
+            <div class="pg-hero">
+                <h1>🎨 Wellness Playground</h1>
+                <p>Express yourself, explore your mind, and grow through creative AI-powered activities.</p>
+            </div>
+
+            <!-- Quick Start Prompts -->
+            <div class="pg-quickstart" id="pgQuickstart">
+                <h2 class="pg-section-title">🚀 Quick Start</h2>
+                <p class="pg-section-sub">Not sure where to begin? Tap a prompt and let AI help.</p>
+                <div class="pg-qs-list">
+                    <button class="pg-qs-item" onclick="openQuickStart('I want to understand a new concept')"><span class="pg-qs-icon">📋</span> I want to understand a new concept</button>
+                    <button class="pg-qs-item" onclick="openQuickStart('I want something new to read')"><span class="pg-qs-icon">📋</span> I want something new to read</button>
+                    <button class="pg-qs-item" onclick="openQuickStart('I want to write something')"><span class="pg-qs-icon">📋</span> I want to write something</button>
+                    <button class="pg-qs-item" onclick="openQuickStart('I want to plan a trip')"><span class="pg-qs-icon">📋</span> I want to plan a trip</button>
+                    <button class="pg-qs-item" onclick="openQuickStart('I need help with my homework')"><span class="pg-qs-icon">📋</span> I need help with my homework</button>
+                    <button class="pg-qs-item" onclick="openQuickStart('I want to write a poem')"><span class="pg-qs-icon">📋</span> I want to write a poem</button>
+                    <button class="pg-qs-item" onclick="openQuickStart('I want to understand a new word')"><span class="pg-qs-icon">📋</span> I want to understand a new word</button>
+                </div>
+            </div>
+
+            <div class="pg-grid" id="pgGrid">
+                <div class="pg-card" onclick="openActivity('poem')" data-bg="/images/pg-card-poem.png">
+                    <div class="pg-card-icon">✍️</div>
+                    <h3>Write a Poem</h3>
+                    <p>Give keywords about how you feel — AI helps you craft a wellness poem.</p>
+                    <span class="pg-card-tag pg-tag-creative">Creative Expression</span>
+                </div>
+                <div class="pg-card" onclick="openActivity('dream')" data-bg="/images/pg-card-dream.png">
+                    <div class="pg-card-icon">🌙</div>
+                    <h3>Dream Analysis</h3>
+                    <p>Tell us your last dream — receive a psychological interpretation report.</p>
+                    <span class="pg-card-tag pg-tag-dream">Self-Discovery</span>
+                </div>
+                <div class="pg-card" onclick="openActivity('imagination')" data-bg="/images/pg-card-imagination.png">
+                    <div class="pg-card-icon">🧠</div>
+                    <h3>Imagination Explorer</h3>
+                    <p>Describe what you imagine or fantasize about — get a reflective insight report.</p>
+                    <span class="pg-card-tag pg-tag-insight">Deep Insight</span>
+                </div>
+                <div class="pg-card" onclick="openActivity('psych')" data-bg="/images/pg-card-psych.png">
+                    <div class="pg-card-icon">🔮</div>
+                    <h3>Psychological Analysis</h3>
+                    <p>Answer reflective questions — receive a personality & wellness analysis.</p>
+                    <span class="pg-card-tag pg-tag-analysis">Self-Awareness</span>
+                </div>
+                <div class="pg-card" onclick="openActivity('architect')" data-bg="/images/pg-card-architect.png">
+                    <div class="pg-card-icon">🏛️</div>
+                    <h3>Dream Architect</h3>
+                    <p>Design your dream building, home, or space — AI brings your vision to life in words.</p>
+                    <span class="pg-card-tag pg-tag-creative">Creative Design</span>
+                </div>
+                <div class="pg-card" onclick="openActivity('story')" data-bg="/images/pg-card-story.png">
+                    <div class="pg-card-icon">📖</div>
+                    <h3>Write a Story</h3>
+                    <p>Give a theme and characters — AI co-creates a short story with you.</p>
+                    <span class="pg-card-tag pg-tag-creative">Creative Writing</span>
+                </div>
+                <div class="pg-card" onclick="openActivity('film')" data-bg="/images/pg-card-film.png">
+                    <div class="pg-card-icon">🎬</div>
+                    <h3>Make a Film</h3>
+                    <p>Pitch your movie idea — get a scene-by-scene outline and emotional arc.</p>
+                    <span class="pg-card-tag pg-tag-insight">Visual Thinking</span>
+                </div>
+                <div class="pg-card" onclick="openActivity('world')" data-bg="/images/pg-card-world.png">
+                    <div class="pg-card-icon">🌍</div>
+                    <h3>Create a World</h3>
+                    <p>Imagine a new world — describe its rules, people, and purpose.</p>
+                    <span class="pg-card-tag pg-tag-dream">World Building</span>
+                </div>
+                <div class="pg-card" onclick="openActivity('medicine')" data-bg="/images/pg-card-medicine.png">
+                    <div class="pg-card-icon">💊</div>
+                    <h3>Invent a Medicine</h3>
+                    <p>You're a doctor — invent a cure for an emotional or mental challenge.</p>
+                    <span class="pg-card-tag pg-tag-analysis">Innovation</span>
+                </div>
+                <div class="pg-card" onclick="openActivity('song')" data-bg="/images/pg-card-song.png">
+                    <div class="pg-card-icon">🎵</div>
+                    <h3>Create a Song</h3>
+                    <p>Share your mood and theme — AI writes lyrics that express your feelings.</p>
+                    <span class="pg-card-tag pg-tag-creative">Musical Expression</span>
+                </div>
+                <div class="pg-card" onclick="openActivity('changeworld')" data-bg="/images/pg-card-changeworld.png">
+                    <div class="pg-card-icon">💡</div>
+                    <h3>Change the World</h3>
+                    <p>Design an idea that could make the world better — AI expands your vision.</p>
+                    <span class="pg-card-tag pg-tag-insight">Visionary Thinking</span>
+                </div>
+                <div class="pg-card" onclick="openActivity('futureletter')" data-bg="/images/pg-card-futureletter.png">
+                    <div class="pg-card-icon">🪞</div>
+                    <h3>Letter to Future Self</h3>
+                    <p>Write to yourself 1 year from now — AI reflects what it reveals about your growth.</p>
+                    <span class="pg-card-tag pg-tag-dream">Self-Reflection</span>
+                </div>
+            </div>
+
+            <!-- Activity Panels -->
+            <div class="pg-panel" id="pgPanelPoem">
+                <div class="pg-panel-header"><h2>✍️ Write a Poem</h2><button class="pg-panel-close" onclick="closePanel()">✕</button></div>
+                <p style="font-size:0.88rem;color:#6B7280;margin-bottom:1rem">Pick some keywords that describe how you feel, then AI will help you turn them into a poem.</p>
+                <div class="pg-keywords" id="poemKeywords"></div>
+                <textarea class="pg-textarea" id="poemCustom" placeholder="Add your own words or feelings here (optional)..." rows="3"></textarea>
+                <button class="pg-submit" id="poemSubmit" onclick="submitPoem()">Generate My Poem ✨</button>
+                <div class="pg-result" id="poemResult"><h4>Your Poem</h4><p id="poemText"></p><div class="pg-result-score" id="poemScore"></div></div>
+            </div>
+
+            <div class="pg-panel" id="pgPanelDream">
+                <div class="pg-panel-header"><h2>🌙 Dream Analysis</h2><button class="pg-panel-close" onclick="closePanel()">✕</button></div>
+                <p style="font-size:0.88rem;color:#6B7280;margin-bottom:1rem">Describe your last dream in as much detail as you remember. AI will interpret the symbolism and emotions.</p>
+                <textarea class="pg-textarea" id="dreamInput" placeholder="Last night I dreamt that..." rows="5"></textarea>
+                <button class="pg-submit" id="dreamSubmit" onclick="submitDream()">Analyze My Dream 🌙</button>
+                <div class="pg-result" id="dreamResult"><h4>Dream Interpretation</h4><p id="dreamText"></p><div class="pg-result-score" id="dreamScore"></div></div>
+            </div>
+
+            <div class="pg-panel" id="pgPanelImagination">
+                <div class="pg-panel-header"><h2>🧠 Imagination Explorer</h2><button class="pg-panel-close" onclick="closePanel()">✕</button></div>
+                <p style="font-size:0.88rem;color:#6B7280;margin-bottom:1rem">Describe something you often imagine, daydream about, or a vision you have for your future.</p>
+                <textarea class="pg-textarea" id="imagInput" placeholder="I often imagine..." rows="5"></textarea>
+                <button class="pg-submit" id="imagSubmit" onclick="submitImagination()">Generate Insight Report 🧠</button>
+                <div class="pg-result" id="imagResult"><h4>Imagination Insight</h4><p id="imagText"></p><div class="pg-result-score" id="imagScore"></div></div>
+            </div>
+
+            <div class="pg-panel" id="pgPanelPsych">
+                <div class="pg-panel-header"><h2>🔮 Psychological Analysis</h2><button class="pg-panel-close" onclick="closePanel()">✕</button></div>
+                <p style="font-size:0.88rem;color:#6B7280;margin-bottom:1rem">Answer these reflective questions honestly. Your answers will generate a personalized psychological profile.</p>
+                <div id="psychQuestions"></div>
+                <button class="pg-submit" id="psychSubmit" onclick="submitPsych()">Generate My Analysis 🔮</button>
+                <div class="pg-result" id="psychResult"><h4>Your Psychological Profile</h4><p id="psychText"></p><div class="pg-result-score" id="psychScore"></div></div>
+            </div>
+
+            <div class="pg-panel" id="pgPanelArchitect">
+                <div class="pg-panel-header"><h2>🏛️ Dream Architect</h2><button class="pg-panel-close" onclick="closePanel()">✕</button></div>
+                <p style="font-size:0.88rem;color:#6B7280;margin-bottom:1rem">Describe your dream building, home, or space. What does it look like? What's its purpose? How does it feel inside?</p>
+                <textarea class="pg-textarea" id="architectInput" placeholder="My dream space is... (describe the look, feel, purpose, surroundings)" rows="5"></textarea>
+                <button class="pg-submit" onclick="submitGeneric('architect','architectInput','Design your dream architecture based on this description. Create a vivid, detailed description of the space including materials, atmosphere, lighting, and how it makes someone feel. 200 words.')">Design My Space 🏛️</button>
+                <div class="pg-result" id="architectResult"><h4>Your Dream Design</h4><p id="architectText"></p><div class="pg-result-score" id="architectScore"></div></div>
+            </div>
+
+            <div class="pg-panel" id="pgPanelStory">
+                <div class="pg-panel-header"><h2>📖 Write a Story</h2><button class="pg-panel-close" onclick="closePanel()">✕</button></div>
+                <p style="font-size:0.88rem;color:#6B7280;margin-bottom:1rem">Give a theme, a main character, and a setting. AI will co-create a short story with you.</p>
+                <textarea class="pg-textarea" id="storyInput" placeholder="Theme: redemption&#10;Character: a lonely astronaut&#10;Setting: a forgotten planet&#10;&#10;Or just describe your story idea..." rows="5"></textarea>
+                <button class="pg-submit" onclick="submitGeneric('story','storyInput','Write a short, emotionally engaging story (250 words) based on the user input. Make it meaningful with a subtle life lesson. Use vivid imagery.')">Write My Story 📖</button>
+                <div class="pg-result" id="storyResult"><h4>Your Story</h4><p id="storyText"></p><div class="pg-result-score" id="storyScore"></div></div>
+            </div>
+
+            <div class="pg-panel" id="pgPanelFilm">
+                <div class="pg-panel-header"><h2>🎬 Make a Film</h2><button class="pg-panel-close" onclick="closePanel()">✕</button></div>
+                <p style="font-size:0.88rem;color:#6B7280;margin-bottom:1rem">Pitch your film idea — genre, characters, conflict. Get a scene outline and emotional arc back.</p>
+                <textarea class="pg-textarea" id="filmInput" placeholder="Genre: psychological drama&#10;Main character: a teacher who lost their memory&#10;Conflict: discovering who they really were&#10;&#10;Or just describe your film..." rows="5"></textarea>
+                <button class="pg-submit" onclick="submitGeneric('film','filmInput','Create a 5-scene film outline with emotional arc based on the user pitch. Include: opening scene, rising tension, climax, resolution, and final image. Make it cinematic and emotionally powerful. 250 words.')">Create Film Outline 🎬</button>
+                <div class="pg-result" id="filmResult"><h4>Your Film Outline</h4><p id="filmText"></p><div class="pg-result-score" id="filmScore"></div></div>
+            </div>
+
+            <div class="pg-panel" id="pgPanelWorld">
+                <div class="pg-panel-header"><h2>🌍 Create a World</h2><button class="pg-panel-close" onclick="closePanel()">✕</button></div>
+                <p style="font-size:0.88rem;color:#6B7280;margin-bottom:1rem">Imagine a completely new world. What are its rules? Who lives there? What problems have they solved?</p>
+                <textarea class="pg-textarea" id="worldInput" placeholder="In my world...&#10;&#10;Rules:&#10;People:&#10;What's different:&#10;What they've solved:" rows="5"></textarea>
+                <button class="pg-submit" onclick="submitGeneric('world','worldInput','Expand and enrich this world-building concept. Describe its society, values, technology, nature, and one unique tradition. Reflect on what this world reveals about the creator\\'s values. 250 words.')">Build My World 🌍</button>
+                <div class="pg-result" id="worldResult"><h4>Your World</h4><p id="worldText"></p><div class="pg-result-score" id="worldScore"></div></div>
+            </div>
+
+            <div class="pg-panel" id="pgPanelMedicine">
+                <div class="pg-panel-header"><h2>💊 Invent a Medicine</h2><button class="pg-panel-close" onclick="closePanel()">✕</button></div>
+                <p style="font-size:0.88rem;color:#6B7280;margin-bottom:1rem">You're a doctor inventing a new cure — not for the body, but for the mind and soul. What emotional/mental challenge does it treat?</p>
+                <textarea class="pg-textarea" id="medicineInput" placeholder="My medicine treats: (loneliness / fear of failure / overthinking / heartbreak / etc.)&#10;&#10;How it works:&#10;Side effects (positive ones):" rows="5"></textarea>
+                <button class="pg-submit" onclick="submitGeneric('medicine','medicineInput','The user is inventing an imaginary medicine for emotional wellness. Expand their idea into a creative, poetic prescription: what it treats, ingredients (metaphorical), dosage, positive side effects, and a disclaimer that is warm and funny. 200 words.')">Create My Cure 💊</button>
+                <div class="pg-result" id="medicineResult"><h4>Your Invention</h4><p id="medicineText"></p><div class="pg-result-score" id="medicineScore"></div></div>
+            </div>
+
+            <div class="pg-panel" id="pgPanelSong">
+                <div class="pg-panel-header"><h2>🎵 Create a Song</h2><button class="pg-panel-close" onclick="closePanel()">✕</button></div>
+                <p style="font-size:0.88rem;color:#6B7280;margin-bottom:1rem">Share your mood, a theme, or a feeling — AI writes song lyrics that express what's inside you.</p>
+                <textarea class="pg-textarea" id="songInput" placeholder="Mood: bittersweet nostalgia&#10;Theme: letting go of someone you love&#10;Style: acoustic / indie / rap / bollywood&#10;&#10;Or just describe the feeling..." rows="5"></textarea>
+                <button class="pg-submit" onclick="submitGeneric('song','songInput','Write original song lyrics (verse, chorus, verse, chorus, bridge) based on the user mood/theme. Make it emotionally authentic, poetic, and suitable for singing. Include line breaks. 200 words.')">Write My Lyrics 🎵</button>
+                <div class="pg-result" id="songResult"><h4>Your Song</h4><p id="songText"></p><div class="pg-result-score" id="songScore"></div></div>
+            </div>
+
+            <div class="pg-panel" id="pgPanelChangeworld">
+                <div class="pg-panel-header"><h2>💡 Change the World</h2><button class="pg-panel-close" onclick="closePanel()">✕</button></div>
+                <p style="font-size:0.88rem;color:#6B7280;margin-bottom:1rem">If you could change one thing about the world, what would it be? Describe your idea — AI will expand it into a vision.</p>
+                <textarea class="pg-textarea" id="changeworldInput" placeholder="I would change...&#10;&#10;My idea:&#10;How it helps people:&#10;First step to make it real:" rows="5"></textarea>
+                <button class="pg-submit" onclick="submitGeneric('changeworld','changeworldInput','The user wants to change the world with this idea. Expand it into a compelling vision: explain why it matters, how it could work, what impact it would have, and encourage the user that their thinking reveals leadership and compassion. 200 words.')">Expand My Vision 💡</button>
+                <div class="pg-result" id="changeworldResult"><h4>Your Vision</h4><p id="changeworldText"></p><div class="pg-result-score" id="changeworldScore"></div></div>
+            </div>
+
+            <div class="pg-panel" id="pgPanelQuickstart">
+                <div class="pg-panel-header"><h2 id="qsTitle">🚀 Quick Start</h2><button class="pg-panel-close" onclick="closePanel()">✕</button></div>
+                <p style="font-size:0.88rem;color:#6B7280;margin-bottom:1rem">Add any details to personalize your request, then let AI help you.</p>
+                <textarea class="pg-textarea" id="qsInput" placeholder="Add more details here (optional)..." rows="4"></textarea>
+                <button class="pg-submit" id="qsSubmit" onclick="submitQuickStart()">Ask AI ✨</button>
+                <div class="pg-result" id="qsResult"><h4>Response</h4><p id="qsText"></p><div class="pg-result-score" id="qsScore"></div></div>
+            </div>
+
+            <div class="pg-panel" id="pgPanelFutureletter">
+                <div class="pg-panel-header"><h2>🪞 Letter to Your Future Self</h2><button class="pg-panel-close" onclick="closePanel()">✕</button></div>
+                <p style="font-size:0.88rem;color:#6B7280;margin-bottom:1rem">Write a letter to yourself one year from now. Be honest — share your hopes, fears, goals, and what you wish for future-you.</p>
+                <textarea class="pg-textarea" id="futureletterInput" placeholder="Dear future me,&#10;&#10;Right now I feel...&#10;I hope that by next year...&#10;What scares me is...&#10;I want you to know..." rows="6"></textarea>
+                <button class="pg-submit" onclick="submitGeneric('futureletter','futureletterInput','The user wrote a letter to their future self. Provide a warm, insightful reflection on what this letter reveals about: their current emotional state, their deepest hopes, their courage in facing fears, and their growth direction. End with one encouraging affirmation. Be poetic and kind. 200 words.')">Reflect on My Letter 🪞</button>
+                <div class="pg-result" id="futureletterResult"><h4>What Your Letter Reveals</h4><p id="futureletterText"></p><div class="pg-result-score" id="futureletterScore"></div></div>
+            </div>
+        </main>
+    </div>
+
+<script>
+const token = localStorage.getItem('token');
+if (!token) window.location.href = 'login.html?redirect=playground.html&msg=login_required';
+
+// Lazy-load card background images (they're large files)
+document.querySelectorAll('.pg-card[data-bg]').forEach(card => {
+    const url = card.dataset.bg;
+    const img = new Image();
+    img.onload = () => {
+        card.style.backgroundImage = `linear-gradient(180deg,rgba(255,255,255,0.5) 0%,rgba(255,255,255,0.78) 100%),url('${url}')`;
+        card.style.backgroundSize = 'cover';
+        card.style.backgroundPosition = 'center';
+    };
+    img.src = url;
+});
+
+// Also lazy-load hero bg
+(function() {
+    const hero = document.querySelector('.pg-hero');
+    if (!hero) return;
+    const img = new Image();
+    img.onload = () => {
+        hero.style.backgroundImage = `linear-gradient(135deg, rgba(124,58,237,0.65), rgba(167,139,250,0.6)), url('/images/playground-hero-bg.png')`;
+        hero.style.backgroundSize = 'cover';
+        hero.style.backgroundPosition = 'center';
+    };
+    img.src = '/images/playground-hero-bg.png';
+})();
+
+const POEM_KEYWORDS = ['calm','hope','healing','strength','peace','love','nature','growth','light','storm','letting go','courage','breath','silence','gratitude','freedom','tears','joy','solitude','rebirth'];
+const PSYCH_QUESTIONS = [
+    'What emotion do you feel most often these days?',
+    'Describe a moment recently where you felt truly yourself.',
+    'What do you avoid thinking about?',
+    'If your life had a theme right now, what would it be?',
+    'What does "safety" look like to you?'
+];
+
+// Init poem keywords
+document.getElementById('poemKeywords').innerHTML = POEM_KEYWORDS.map(k => `<span class="pg-kw" data-v="${k}">${k}</span>`).join('');
+document.querySelectorAll('#poemKeywords .pg-kw').forEach(el => el.addEventListener('click', () => el.classList.toggle('on')));
+
+// Init psych questions
+document.getElementById('psychQuestions').innerHTML = PSYCH_QUESTIONS.map((q, i) => `<div style="margin-bottom:1rem"><label style="font-size:0.85rem;font-weight:600;color:#374151;display:block;margin-bottom:0.4rem">${i+1}. ${q}</label><textarea class="pg-textarea psych-answer" rows="2" style="min-height:60px" placeholder="Your honest answer..."></textarea></div>`).join('');
+
+function openActivity(type) {
+    document.getElementById('pgGrid').style.display = 'none';
+    document.getElementById('pgQuickstart').style.display = 'none';
+    document.querySelectorAll('.pg-panel').forEach(p => p.classList.remove('active'));
+    const map = { poem:'pgPanelPoem', dream:'pgPanelDream', imagination:'pgPanelImagination', psych:'pgPanelPsych', architect:'pgPanelArchitect', story:'pgPanelStory', film:'pgPanelFilm', world:'pgPanelWorld', medicine:'pgPanelMedicine', song:'pgPanelSong', changeworld:'pgPanelChangeworld', futureletter:'pgPanelFutureletter' };
+    document.getElementById(map[type]).classList.add('active');
+}
+
+function closePanel() {
+    document.querySelectorAll('.pg-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('pgGrid').style.display = 'grid';
+    document.getElementById('pgQuickstart').style.display = 'block';
+}
+
+// ===== QUICK START =====
+let currentQuickStartPrompt = '';
+function openQuickStart(promptText) {
+    currentQuickStartPrompt = promptText;
+    document.getElementById('pgGrid').style.display = 'none';
+    document.getElementById('pgQuickstart').style.display = 'none';
+    document.querySelectorAll('.pg-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('qsTitle').textContent = '🚀 ' + promptText;
+    document.getElementById('qsInput').value = '';
+    document.getElementById('qsResult').style.display = 'none';
+    document.getElementById('pgPanelQuickstart').classList.add('active');
+}
+
+function submitQuickStart() {
+    const extra = document.getElementById('qsInput').value.trim();
+    const fullPrompt = currentQuickStartPrompt + (extra ? '. Additional details: ' + extra : '') + '. Respond helpfully, warmly, and in a wellness-conscious way (encourage the user, keep it practical). 150-200 words.';
+    callPlaygroundAI(fullPrompt, document.getElementById('qsResult'), document.getElementById('qsText'), document.getElementById('qsScore'), 'quickstart');
+}
+
+async function callPlaygroundAI(prompt, resultEl, textEl, scoreEl, activity) {
+    const btn = document.querySelector('.pg-panel.active .pg-submit');
+    btn.disabled = true; btn.textContent = 'Thinking...';
+    try {
+        const res = await fetch('/api/playground/generate', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt, activity })
+        });
+        const data = await res.json();
+        textEl.textContent = data.response || 'Could not generate. Try again.';
+        scoreEl.textContent = data.scoreGained ? '✓ +' + data.scoreGained + ' wellness points earned!' : '';
+        resultEl.style.display = 'block';
+        btn.textContent = 'Done ✓';
+    } catch(e) {
+        textEl.textContent = 'Network error. Please try again.';
+        resultEl.style.display = 'block';
+        btn.disabled = false; btn.textContent = 'Try Again';
+    }
+}
+
+function submitPoem() {
+    const keywords = [...document.querySelectorAll('#poemKeywords .pg-kw.on')].map(e => e.dataset.v);
+    const custom = document.getElementById('poemCustom').value.trim();
+    if (!keywords.length && !custom) { alert('Pick at least one keyword or write something'); return; }
+    const prompt = `Write a short, beautiful wellness poem (8-12 lines) using these themes: ${keywords.join(', ')}. ${custom ? 'User also shared: ' + custom : ''} Make it personal, warm, and emotionally grounding.`;
+    callPlaygroundAI(prompt, document.getElementById('poemResult'), document.getElementById('poemText'), document.getElementById('poemScore'), 'poem');
+}
+
+function submitDream() {
+    const input = document.getElementById('dreamInput').value.trim();
+    if (!input || input.length < 20) { alert('Please describe your dream in more detail (at least a few sentences)'); return; }
+    const prompt = `The user describes their dream: "${input}"\n\nProvide a thoughtful psychological dream interpretation. Discuss possible symbolism, emotions, and what it might reflect about their current life. Keep it insightful, warm, non-judgmental. 150-200 words.`;
+    callPlaygroundAI(prompt, document.getElementById('dreamResult'), document.getElementById('dreamText'), document.getElementById('dreamScore'), 'dream');
+}
+
+function submitImagination() {
+    const input = document.getElementById('imagInput').value.trim();
+    if (!input || input.length < 20) { alert('Tell us more about what you imagine (at least a few sentences)'); return; }
+    const prompt = `The user shares their imagination/daydream: "${input}"\n\nGenerate a reflective insight report about what this reveals about their personality, desires, and inner world. Be warm, encouraging, and psychologically insightful. Mention potential strengths this reveals. 150-200 words.`;
+    callPlaygroundAI(prompt, document.getElementById('imagResult'), document.getElementById('imagText'), document.getElementById('imagScore'), 'imagination');
+}
+
+function submitPsych() {
+    const answers = [...document.querySelectorAll('.psych-answer')].map(el => el.value.trim());
+    if (answers.filter(a => a.length > 5).length < 3) { alert('Please answer at least 3 questions'); return; }
+    const qa = PSYCH_QUESTIONS.map((q, i) => `Q: ${q}\nA: ${answers[i] || '(not answered)'}`).join('\n\n');
+    const prompt = `Based on these reflective answers from a user, generate a brief psychological personality and wellness profile:\n\n${qa}\n\nProvide insights about their emotional state, personality tendencies, coping style, and one growth suggestion. Be warm, non-clinical, encouraging. 200 words max.`;
+    callPlaygroundAI(prompt, document.getElementById('psychResult'), document.getElementById('psychText'), document.getElementById('psychScore'), 'psych');
+}
+
+// Generic submit for all new activities
+function submitGeneric(activity, inputId, promptTemplate) {
+    const input = document.getElementById(inputId).value.trim();
+    if (!input || input.length < 15) { alert('Please write at least a few sentences to get a meaningful response'); return; }
+    const prompt = `User input: "${input}"\n\nTask: ${promptTemplate}`;
+    const resultEl = document.getElementById(activity + 'Result');
+    const textEl = document.getElementById(activity + 'Text');
+    const scoreEl = document.getElementById(activity + 'Score');
+    callPlaygroundAI(prompt, resultEl, textEl, scoreEl, activity);
+}
+
+// Load user profile into header
+if (token) {
+    fetch('/api/me', { headers: { 'Authorization': 'Bearer ' + token } })
+        .then(r => r.json()).then(d => {
+            if (d.name) {
+                var nameEl = document.querySelector('.user-name') || document.getElementById('dashUserName');
+                if (nameEl) nameEl.textContent = d.name;
+                var imgEl = document.querySelector('.user-profile img');
+                if (imgEl) {
+                    imgEl.src = d.avatar || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(d.name) + '&background=E67E22&color=fff');
+                }
+            }
+        }).catch(() => {});
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Marketplace Listing - ABLE Professional</title>
+    <link rel="stylesheet" href="/professional/portal.css">
+    <link rel="stylesheet" href="/loader.css">
+    <style>
+        .vs-page { max-width: 700px; margin: 0 auto; padding: 2rem; }
+        .vs-hero { text-align: center; margin-bottom: 2rem; }
+        .vs-hero h1 { font-size: 1.6rem; font-weight: 800; color: #111827; margin-bottom: 0.4rem; }
+        .vs-hero p { font-size: 0.88rem; color: #6B7280; }
+        .vs-form { background: white; border-radius: 20px; padding: 2rem; border: 1px solid #E5E7EB; box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
+        .vs-group { margin-bottom: 1.25rem; }
+        .vs-group label { display: block; font-size: 0.82rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem; }
+        .vs-group input, .vs-group textarea, .vs-group select { width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #E5E7EB; border-radius: 10px; font-size: 0.88rem; outline: none; font-family: inherit; }
+        .vs-group input:focus, .vs-group textarea:focus, .vs-group select:focus { border-color: #E67E22; box-shadow: 0 0 0 3px rgba(230,126,34,0.08); }
+        .vs-group textarea { resize: vertical; min-height: 100px; }
+        .vs-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .vs-hint { font-size: 0.72rem; color: #9CA3AF; margin-top: 0.3rem; }
+        .vs-submit { width: 100%; padding: 0.9rem; background: #E67E22; color: white; border: none; border-radius: 12px; font-size: 0.95rem; font-weight: 700; cursor: pointer; margin-top: 0.5rem; }
+        .vs-submit:hover { background: #D35400; }
+        .vs-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+        .vs-msg { text-align: center; padding: 0.75rem; border-radius: 10px; margin-bottom: 1rem; font-size: 0.85rem; display: none; }
+        .vs-msg.error { display: block; background: #FEF2F2; color: #EF4444; }
+        .vs-msg.success { display: block; background: #F0FDF4; color: #10B981; }
+        .vs-section-title { font-size: 0.88rem; font-weight: 700; color: #111827; margin: 1.5rem 0 0.75rem; padding-top: 1rem; border-top: 1px solid #F3F4F6; }
+        @media(max-width:600px) { .vs-row { grid-template-columns: 1fr; } .vs-page { padding: 1rem; } }
+    </style>
+</head>
+<body>
+    <script src="/loader.js"></script>
+    <div class="portal-layout">
+        <div id="portalSidebar"></div>
+        <script src="/professional/nav.js"></script>
+        <main class="portal-main">
+            <header class="portal-header">
+                <button class="portal-menu-toggle" onclick="document.getElementById('portalSidebar').classList.toggle('open')">☰</button>
+                <h1>🏪 Marketplace Listing</h1>
+            </header>
+            <div class="vs-page">
+                <p style="font-size:0.88rem;color:#6B7280;margin-bottom:1.5rem">List your clinic or service on ABLE's Marketplace. All submissions are reviewed by our team before going live.</p>
+                <div id="vsMsg" class="vs-msg"></div>
+                <form class="vs-form" id="vsForm">
+                <div class="vs-group"><label>Business Name *</label><input name="businessName" required placeholder="e.g. Peace Mind Wellness Spa"></div>
+                <div class="vs-group"><label>Listing Type *</label><select name="listingType" required>
+                    <option value="">Select category...</option>
+                    <option value="spa">Spa</option><option value="mental_health_center">Mental Health Center</option>
+                    <option value="therapy_clinic">Therapy Clinic</option><option value="yoga_studio">Yoga Studio</option>
+                    <option value="meditation_center">Meditation Center</option><option value="fitness_wellness">Fitness & Wellness</option>
+                    <option value="nutrition_store">Nutrition Store</option><option value="wellness_product_store">Wellness Product Store</option>
+                    <option value="professional_service">Professional Service</option><option value="other">Other</option>
+                </select></div>
+                <div class="vs-group"><label>Description *</label><textarea name="description" required placeholder="Describe your business, what you offer, and who you serve..."></textarea></div>
+                <div class="vs-group"><label>Services (comma-separated)</label><input name="services" placeholder="e.g. massage, meditation, yoga classes, counseling"></div>
+
+                <div class="vs-section-title">📍 Location</div>
+                <div class="vs-row">
+                    <div class="vs-group"><label>City *</label><input name="city" required placeholder="e.g. Delhi"></div>
+                    <div class="vs-group"><label>State</label><input name="state" placeholder="e.g. Delhi"></div>
+                </div>
+                <div class="vs-row">
+                    <div class="vs-group"><label>Country</label><input name="country" placeholder="e.g. India" value="India"></div>
+                    <div class="vs-group"><label>Pincode</label><input name="pincode" placeholder="e.g. 110001"></div>
+                </div>
+                <div class="vs-group"><label>Full Address</label><input name="address" placeholder="Street address (optional)"></div>
+
+                <div class="vs-section-title">📞 Contact</div>
+                <div class="vs-row">
+                    <div class="vs-group"><label>Phone *</label><input name="phone" required placeholder="+91 98765 43210"></div>
+                    <div class="vs-group"><label>Email</label><input name="email" type="email" placeholder="info@yourbusiness.com"></div>
+                </div>
+                <div class="vs-row">
+                    <div class="vs-group"><label>Website</label><input name="website" placeholder="https://"></div>
+                    <div class="vs-group"><label>WhatsApp</label><input name="whatsapp" placeholder="+919876543210"><p class="vs-hint">Include country code</p></div>
+                </div>
+
+                <div class="vs-section-title">💰 Details</div>
+                <div class="vs-group">
+                    <label>Business Images (up to 5)</label>
+                    <input type="file" id="vsImages" accept="image/jpeg,image/png,image/webp,image/gif" multiple style="padding:0.5rem;border:1.5px dashed #E5E7EB;border-radius:10px;width:100%;cursor:pointer">
+                    <p class="vs-hint">JPG, PNG, WebP or GIF. Max 3MB each, up to 5 images.</p>
+                    <div id="vsImagePreview" style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem"></div>
+                </div>
+                <div class="vs-row">
+                    <div class="vs-group"><label>Price Range</label><select name="priceRange"><option value="unknown">Not specified</option><option value="free">Free</option><option value="low">Low (Budget)</option><option value="medium">Medium</option><option value="premium">Premium</option></select></div>
+                    <div class="vs-group"><label>Tags (comma-separated)</label><input name="tags" placeholder="e.g. women-only, organic, holistic"></div>
+                </div>
+
+                <div class="vs-section-title">🔐 Credentials (optional, not shown publicly)</div>
+                <div class="vs-group"><label>License / Registration Number</label><input name="licenseNumber" placeholder="If applicable"></div>
+                <div class="vs-row">
+                    <div class="vs-group"><label>Qualification</label><input name="qualification" placeholder="e.g. RYT-200, MBBS"></div>
+                    <div class="vs-group"><label>Professional Association</label><input name="professionalAssociation" placeholder="e.g. IMA, Yoga Alliance"></div>
+                </div>
+
+                <button type="submit" class="vs-submit" id="vsSubmitBtn">Submit for Review</button>
+                <p class="vs-hint" style="text-align:center;margin-top:0.75rem">Your listing will be reviewed by our team within 24-48 hours.</p>
+                </form>
+            </div>
+        </main>
+    </div>
+    <script>
+    const token = localStorage.getItem('professionalToken');
+    if (!token) { alert('Please log in to the Professional Portal to submit a listing'); window.location.href = '/professional/login.html'; }
+
+    // Image preview
+    document.getElementById('vsImages').addEventListener('change', function() {
+        var preview = document.getElementById('vsImagePreview');
+        preview.innerHTML = '';
+        var files = this.files;
+        if (files.length > 5) { alert('Maximum 5 images allowed'); this.value = ''; return; }
+        for (var i = 0; i < Math.min(files.length, 5); i++) {
+            var reader = new FileReader();
+            reader.onload = function(e) { preview.innerHTML += '<img src="' + e.target.result + '" style="width:80px;height:60px;object-fit:cover;border-radius:8px;border:1px solid #E5E7EB">'; };
+            reader.readAsDataURL(files[i]);
+        }
+    });
+
+    document.getElementById('vsForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const msg = document.getElementById('vsMsg');
+        const btn = document.getElementById('vsSubmitBtn');
+        msg.className = 'vs-msg'; msg.style.display = 'none';
+        const f = e.target;
+
+        btn.disabled = true; btn.textContent = 'Uploading images...';
+
+        // Step 1: Upload images if any
+        let imageUrls = [];
+        const imageInput = document.getElementById('vsImages');
+        if (imageInput.files.length > 0) {
+            const formData = new FormData();
+            for (let i = 0; i < Math.min(imageInput.files.length, 5); i++) {
+                formData.append('images', imageInput.files[i]);
+            }
+            try {
+                const uploadRes = await fetch('/professional/api/marketplace/upload-images', {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Bearer ' + token },
+                    body: formData
+                });
+                const uploadData = await uploadRes.json();
+                if (!uploadRes.ok) { msg.className = 'vs-msg error'; msg.textContent = uploadData.error || 'Image upload failed'; msg.style.display = 'block'; btn.disabled = false; btn.textContent = 'Submit for Review'; return; }
+                imageUrls = uploadData.images || [];
+            } catch (err) { msg.className = 'vs-msg error'; msg.textContent = 'Image upload failed'; msg.style.display = 'block'; btn.disabled = false; btn.textContent = 'Submit for Review'; return; }
+        }
+
+        btn.textContent = 'Submitting...';
+
+        // Step 2: Submit listing with image URLs
+        const body = {
+            businessName: f.businessName.value.trim(),
+            listingType: f.listingType.value,
+            description: f.description.value.trim(),
+            services: f.services.value.split(',').map(s => s.trim()).filter(Boolean),
+            location: { address: f.address.value.trim(), city: f.city.value.trim(), state: f.state.value.trim(), country: f.country.value.trim(), pincode: f.pincode.value.trim() },
+            contact: { phone: f.phone.value.trim(), email: f.email.value.trim(), website: f.website.value.trim(), whatsapp: f.whatsapp.value.trim() },
+            priceRange: f.priceRange.value,
+            tags: f.tags.value.split(',').map(s => s.trim()).filter(Boolean),
+            images: imageUrls,
+            licenseNumber: f.licenseNumber.value.trim(),
+            qualification: f.qualification.value.trim(),
+            professionalAssociation: f.professionalAssociation.value.trim()
+        };
+        try {
+            const res = await fetch('/professional/api/marketplace/submit', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+            const data = await res.json();
+            if (res.ok) { msg.className = 'vs-msg success'; msg.textContent = '✓ ' + data.message; msg.style.display = 'block'; f.reset(); document.getElementById('vsImagePreview').innerHTML = ''; }
+            else { msg.className = 'vs-msg error'; msg.textContent = data.error || 'Submission failed'; msg.style.display = 'block'; }
+        } catch (err) { msg.className = 'vs-msg error'; msg.textContent = 'Network error'; msg.style.display = 'block'; }
+        btn.disabled = false; btn.textContent = 'Submit for Review';
+    });
+    </script>
+</body>
+</html>

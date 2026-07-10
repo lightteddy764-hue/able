@@ -96,8 +96,76 @@
                         <button type="button" class="btn-primary btn-large btn-next">Continue</button>
                     </div>
 
-                    <!-- Step 2: WHODAS 2.0 Wellness Assessment -->
+                    <!-- Step 2: About You (Gender, DOB, Hobbies) -->
                     <div class="form-step" data-step="2">
+                        <div class="assessment-intro" style="margin-bottom:1.25rem">
+                            <p><strong>Tell Us About You</strong></p>
+                            <small>This helps us personalize your wellness experience. All fields are optional.</small>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="gender">Gender</label>
+                                <select id="gender" name="gender">
+                                    <option value="">Prefer not to say</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="non-binary">Non-binary</option>
+                                    <option value="prefer-not-to-say">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dateOfBirth">Date of Birth</label>
+                                <input type="date" id="dateOfBirth" name="dateOfBirth" max="2014-01-01">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Hobbies & Interests <small style="color:#9CA3AF">(select all that apply)</small></label>
+                            <div class="hobby-chips" id="hobbyChips" style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.4rem">
+                                <span class="hobby-chip" data-v="Reading">📚 Reading</span>
+                                <span class="hobby-chip" data-v="Fitness">💪 Fitness</span>
+                                <span class="hobby-chip" data-v="Yoga">🧘 Yoga</span>
+                                <span class="hobby-chip" data-v="Music">🎵 Music</span>
+                                <span class="hobby-chip" data-v="Art">🎨 Art & Craft</span>
+                                <span class="hobby-chip" data-v="Cooking">🍳 Cooking</span>
+                                <span class="hobby-chip" data-v="Travel">✈️ Travel</span>
+                                <span class="hobby-chip" data-v="Gaming">🎮 Gaming</span>
+                                <span class="hobby-chip" data-v="Meditation">🕯️ Meditation</span>
+                                <span class="hobby-chip" data-v="Nature">🌿 Nature</span>
+                                <span class="hobby-chip" data-v="Writing">✍️ Writing</span>
+                                <span class="hobby-chip" data-v="Dancing">💃 Dancing</span>
+                                <span class="hobby-chip" data-v="Photography">📷 Photography</span>
+                                <span class="hobby-chip" data-v="Fashion">👗 Fashion</span>
+                                <span class="hobby-chip" data-v="Sports">⚽ Sports</span>
+                                <span class="hobby-chip" data-v="Movies">🎬 Movies</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>What are you looking for? <small style="color:#9CA3AF">(select all)</small></label>
+                            <div class="hobby-chips" id="interestChips" style="display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:0.4rem">
+                                <span class="hobby-chip" data-v="Mental wellness">🧠 Mental wellness</span>
+                                <span class="hobby-chip" data-v="Therapy">💚 Therapy</span>
+                                <span class="hobby-chip" data-v="Body fitness">💪 Body fitness</span>
+                                <span class="hobby-chip" data-v="Career guidance">💼 Career guidance</span>
+                                <span class="hobby-chip" data-v="Relationships">❤️ Relationships</span>
+                                <span class="hobby-chip" data-v="Self-confidence">⭐ Self-confidence</span>
+                                <span class="hobby-chip" data-v="Parenting help">👶 Parenting help</span>
+                                <span class="hobby-chip" data-v="Community">👥 Community</span>
+                                <span class="hobby-chip" data-v="New hobbies">🌱 New hobbies</span>
+                                <span class="hobby-chip" data-v="Stress relief">🧊 Stress relief</span>
+                            </div>
+                        </div>
+
+                        <div class="form-row" style="margin-top:1rem">
+                            <button type="button" class="btn-secondary btn-large btn-prev">← Back</button>
+                            <button type="button" class="btn-primary btn-large btn-next">Continue</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: WHODAS 2.0 Wellness Assessment -->
+                    <div class="form-step" data-step="3">
                         <div class="assessment-intro">
                             <p><strong>WHODAS 2.0 Wellness Assessment</strong></p>
                             <p class="assessment-desc">Please answer the following questions about how much difficulty you've had in the last 30 days. This helps us personalize your wellness journey.</p>
@@ -251,8 +319,8 @@
                         </div>
                     </div>
 
-                    <!-- Step 3: Security -->
-                    <div class="form-step" data-step="3">
+                    <!-- Step 4: Security -->
+                    <div class="form-step" data-step="4">
                         <div class="form-group">
                             <label for="password">Password</label>
                             <input type="password" id="password" name="password" placeholder="Create a strong password" required>

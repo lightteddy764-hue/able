@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace Manager - ABLE Admin</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+    <style>
+        .mp-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 1.5rem; }
+        .mp-stat { padding: 1rem; background: white; border-radius: 12px; border: 1px solid #E5E7EB; text-align: center; }
+        .mp-stat-num { font-size: 1.5rem; font-weight: 800; display: block; }
+        .mp-stat-num.orange { color: #E67E22; }
+        .mp-stat-num.green { color: #10B981; }
+        .mp-stat-num.red { color: #EF4444; }
+        .mp-stat-num.gray { color: #6B7280; }
+        .mp-stat-lbl { font-size: 0.72rem; color: #6B7280; }
+        .mp-tabs { display: flex; gap: 0.3rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+        .mp-tab { padding: 0.55rem 1rem; border: none; background: #F3F4F6; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; color: #6B7280; }
+        .mp-tab.active { background: #E67E22; color: white; }
+        .mp-table { width: 100%; border-collapse: collapse; }
+        .mp-table th { font-size: 0.72rem; font-weight: 700; color: #6B7280; text-align: left; padding: 0.6rem 0.75rem; border-bottom: 1px solid #E5E7EB; text-transform: uppercase; }
+        .mp-table td { padding: 0.75rem; border-bottom: 1px solid #F3F4F6; font-size: 0.82rem; color: #374151; vertical-align: middle; }
+        .mp-table tr:hover { background: #FAFAFA; }
+        .mp-badge { font-size: 0.65rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 6px; text-transform: capitalize; }
+        .mp-badge.pending { background: #FEF3C7; color: #92400E; }
+        .mp-badge.approved { background: #D1FAE5; color: #065F46; }
+        .mp-badge.rejected { background: #FEE2E2; color: #991B1B; }
+        .mp-badge.suspended { background: #E5E7EB; color: #374151; }
+        .mp-actions { display: flex; gap: 0.3rem; flex-wrap: wrap; }
+        .mp-actions button { padding: 0.35rem 0.6rem; font-size: 0.72rem; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; }
+        .mp-btn-approve { background: #D1FAE5; color: #065F46; }
+        .mp-btn-reject { background: #FEE2E2; color: #991B1B; }
+        .mp-btn-view { background: #EFF6FF; color: #2563EB; }
+        .mp-btn-feat { background: #FEF3C7; color: #92400E; }
+        .mp-btn-del { background: #FEE2E2; color: #991B1B; }
+        .mp-empty { text-align: center; padding: 2rem; color: #9CA3AF; font-size: 0.85rem; }
+        .toast { position:fixed; bottom:24px; right:24px; padding:0.75rem 1.25rem; background:#111827; color:white; border-radius:8px; font-size:0.85rem; z-index:2000; opacity:0; transform:translateY(10px); transition:all 0.25s; pointer-events:none; }
+        .toast.show { opacity:1; transform:translateY(0); }
+        @media(max-width:768px) { .mp-stats { grid-template-columns: repeat(2,1fr); } }
+    </style>
+</head>
+<body>
+    <div id="sidebar"></div>
+    <script src="/admin/admin-nav.js"></script>
+    <div class="main">
+        <div class="header">
+            <div style="display:flex;align-items:center;gap:0.75rem">
+                <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+                <h1>🏪 Marketplace Manager</h1>
+            </div>
+            <div class="header-right"><a href="/marketplace.html" target="_blank" style="font-size:0.8rem;color:#E67E22;text-decoration:none;font-weight:600">↗ View public page</a></div>
+        </div>
+        <div class="container">
+            <div class="mp-stats" id="mpStats"></div>
+            <div class="mp-tabs" id="mpTabs">
+                <button class="mp-tab active" data-status="">All</button>
+                <button class="mp-tab" data-status="pending">Pending</button>
+                <button class="mp-tab" data-status="approved">Approved</button>
+                <button class="mp-tab" data-status="rejected">Rejected</button>
+                <button class="mp-tab" data-status="suspended">Suspended</button>
+            </div>
+            <table class="mp-table">
+                <thead><tr><th>Business</th><th>Type</th><th>City</th><th>Submitted By</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+                <tbody id="mpTableBody"><tr><td colspan="7" class="mp-empty">Loading...</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+    <div class="toast" id="toast"></div>
+</body>
+</html>
+
+<script>
+const token = localStorage.getItem('adminToken');
+if (!token) window.location.href = '/admin/';
+
+async function api(url, opts = {}) {
+    const res = await fetch(url, { ...opts, headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json', ...(opts.headers||{}) } });
+    if (res.status === 401) { localStorage.removeItem('adminToken'); window.location.href = '/admin/'; }
+    return res.json();
+}
+function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
+function esc(s) { return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+let currentStatus = '';
+
+// Stats
+async function loadStats() {
+    const d = await api('/admin/api/marketplace?limit=1');
+    const s = d.stats || {};
+    document.getElementById('mpStats').innerHTML = `
+        <div class="mp-stat"><span class="mp-stat-num orange">${s.pending||0}</span><span class="mp-stat-lbl">Pending</span></div>
+        <div class="mp-stat"><span class="mp-stat-num green">${s.approved||0}</span><span class="mp-stat-lbl">Approved</span></div>
+        <div class="mp-stat"><span class="mp-stat-num red">${s.rejected||0}</span><span class="mp-stat-lbl">Rejected</span></div>
+        <div class="mp-stat"><span class="mp-stat-num gray">${s.suspended||0}</span><span class="mp-stat-lbl">Suspended</span></div>`;
+}
+
+// Tabs
+document.getElementById('mpTabs').addEventListener('click', e => {
+    const btn = e.target.closest('.mp-tab');
+    if (!btn) return;
+    document.querySelectorAll('.mp-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    currentStatus = btn.dataset.status;
+    loadListings();
+});
+
+// Load listings
+async function loadListings() {
+    let url = '/admin/api/marketplace?limit=50';
+    if (currentStatus) url += '&status=' + currentStatus;
+    const d = await api(url);
+    const tb = document.getElementById('mpTableBody');
+    const listings = d.listings || [];
+    if (!listings.length) { tb.innerHTML = '<tr><td colspan="7" class="mp-empty">No listings</td></tr>'; return; }
+    tb.innerHTML = listings.map(l => {
+        const submitter = l.submittedByProfessional ? ('🩺 ' + esc(l.submittedByProfessional.fullName)) : (l.submittedByUser ? esc(l.submittedByUser.name) : 'Admin');
+        const date = l.createdAt ? new Date(l.createdAt).toLocaleDateString() : '—';
+        return `<tr>
+            <td><strong>${esc(l.businessName)}</strong></td>
+            <td style="font-size:0.72rem">${esc(l.listingType)}</td>
+            <td>${esc(l.location?.city||'—')}</td>
+            <td style="font-size:0.75rem">${submitter}</td>
+            <td><span class="mp-badge ${l.status}">${l.status}</span></td>
+            <td style="font-size:0.72rem">${date}</td>
+            <td class="mp-actions">
+                ${l.status==='pending'?`<button class="mp-btn-approve" onclick="approve('${l._id}')">Approve</button><button class="mp-btn-reject" onclick="reject('${l._id}')">Reject</button>`:''}
+                ${l.status==='approved'?`<button class="mp-btn-feat" onclick="feature('${l._id}')">${l.isFeatured?'Unfeat':'Feature'}</button>`:''}
+                <button class="mp-btn-view" onclick="viewDetail('${l._id}')">View</button>
+                <button class="mp-btn-del" onclick="del('${l._id}')">Del</button>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+async function approve(id) { await api('/admin/api/marketplace/'+id+'/approve', { method:'PUT' }); toast('Approved'); loadListings(); loadStats(); }
+async function reject(id) { const r = prompt('Rejection reason:'); if (!r) return; await api('/admin/api/marketplace/'+id+'/reject', { method:'PUT', body: JSON.stringify({reason:r}) }); toast('Rejected'); loadListings(); loadStats(); }
+async function feature(id) { await api('/admin/api/marketplace/'+id+'/feature', { method:'PUT' }); toast('Featured toggled'); loadListings(); }
+async function del(id) { if (!confirm('Delete this listing permanently?')) return; await api('/admin/api/marketplace/'+id, { method:'DELETE' }); toast('Deleted'); loadListings(); loadStats(); }
+
+async function viewDetail(id) {
+    const l = await api('/admin/api/marketplace/' + id);
+    const existing = document.getElementById('mpAdminDetail');
+    if (existing) existing.remove();
+    const m = document.createElement('div');
+    m.id = 'mpAdminDetail';
+    m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem;overflow-y:auto';
+    m.addEventListener('click', e => { if (e.target === m) m.remove(); });
+    const services = (l.services||[]).join(', ');
+    const hours = (l.openingHours||[]).map(h => `${h.day}: ${h.isClosed?'Closed':h.open+'-'+h.close}`).join('<br>');
+    const submitter = l.submittedByProfessional ? ('Professional: '+esc(l.submittedByProfessional.fullName)+' ('+esc(l.submittedByProfessional.email)+')') : (l.submittedByUser ? 'User: '+esc(l.submittedByUser.name)+' ('+esc(l.submittedByUser.email)+')' : 'Admin');
+    m.innerHTML = `<div style="background:white;border-radius:16px;max-width:600px;width:100%;padding:2rem;position:relative;max-height:90vh;overflow-y:auto">
+        <button onclick="this.closest('#mpAdminDetail').remove()" style="position:absolute;top:1rem;right:1rem;background:#F3F4F6;border:none;border-radius:50%;width:28px;height:28px;cursor:pointer;font-size:0.9rem">✕</button>
+        <h2 style="font-size:1.2rem;font-weight:800;margin-bottom:0.5rem">${esc(l.businessName)}</h2>
+        <p style="font-size:0.78rem;color:#6B7280;margin-bottom:1rem"><span class="mp-badge ${l.status}">${l.status}</span> · ${esc(l.listingType)} · ${esc(l.location?.city||'')}</p>
+        <p style="font-size:0.85rem;color:#374151;line-height:1.6;margin-bottom:1rem;white-space:pre-wrap">${esc(l.description)}</p>
+        ${services?'<p style="font-size:0.8rem;margin-bottom:0.5rem"><strong>Services:</strong> '+esc(services)+'</p>':''}
+        <p style="font-size:0.8rem;margin-bottom:0.5rem"><strong>Contact:</strong> ${esc(l.contact?.phone||'')} | ${esc(l.contact?.email||'')} | ${esc(l.contact?.website||'')}</p>
+        ${hours?'<p style="font-size:0.78rem;margin-bottom:0.5rem"><strong>Hours:</strong><br>'+hours+'</p>':''}
+        <p style="font-size:0.78rem;margin-bottom:0.5rem"><strong>Price:</strong> ${l.priceRange||'unknown'} | <strong>Views:</strong> ${l.views||0} | <strong>Reports:</strong> ${(l.reports||[]).length}</p>
+        <p style="font-size:0.78rem;margin-bottom:0.5rem"><strong>Submitted by:</strong> ${submitter}</p>
+        ${l.licenseNumber?'<p style="font-size:0.78rem;color:#6B7280"><strong>License:</strong> '+esc(l.licenseNumber)+' | <strong>Qualification:</strong> '+esc(l.qualification||'')+'</p>':''}
+        ${l.rejectionReason?'<p style="font-size:0.78rem;color:#EF4444;margin-top:0.5rem"><strong>Rejection:</strong> '+esc(l.rejectionReason)+'</p>':''}
+        <div style="display:flex;gap:0.5rem;margin-top:1.5rem;flex-wrap:wrap">
+            ${l.status!=='approved'?`<button class="mp-btn-approve" onclick="approve('${l._id}');this.closest('#mpAdminDetail').remove()">Approve</button>`:''}
+            ${l.status!=='rejected'?`<button class="mp-btn-reject" onclick="reject('${l._id}');this.closest('#mpAdminDetail').remove()">Reject</button>`:''}
+            <button class="mp-btn-del" onclick="del('${l._id}');this.closest('#mpAdminDetail').remove()">Delete</button>
+        </div>
+    </div>`;
+    document.body.appendChild(m);
+}
+
+loadStats();
+loadListings();
+</script>

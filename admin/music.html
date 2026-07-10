@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Manager - ABLE Admin</title>
+    <link rel="stylesheet" href="/admin/admin.css">
+    <style>
+        .section-title-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; }
+        .btn-add { padding:0.55rem 1rem; background:#E67E22; color:white; border:none; border-radius:8px; font-size:0.8rem; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:0.4rem; transition: background 0.2s; }
+        .btn-add:hover { background:#d35400; }
+        .row-actions { display:flex; gap:0.3rem; align-items:center; flex-wrap:wrap; }
+
+        .mu-cats-row { display: flex; gap: 0.3rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+        .mu-cat-tab { padding: 0.5rem 0.9rem; border: none; background: #F3F4F6; border-radius: 8px; font-size: 0.78rem; font-weight: 600; cursor: pointer; color: #6B7280; transition: all 0.2s; }
+        .mu-cat-tab:hover { background: #FEF3E2; color: #E67E22; }
+        .mu-cat-tab.active { background: #E67E22; color: white; }
+        .mu-table img { width: 60px; height: 34px; object-fit: cover; border-radius: 4px; }
+        .mu-badge { font-size: 0.65rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 6px; }
+        .mu-badge.active { background: #D1FAE5; color: #065F46; }
+        .mu-badge.inactive { background: #FEE2E2; color: #991B1B; }
+        .toast { position:fixed; bottom:24px; right:24px; padding:0.75rem 1.25rem; background:#111827; color:white; border-radius:8px; font-size:0.85rem; z-index:2000; opacity:0; transform:translateY(10px); transition:all 0.25s; pointer-events:none; }
+        .toast.show { opacity:1; transform:translateY(0); }
+    </style>
+</head>
+<body>
+    <div id="sidebar"></div>
+    <script src="/admin/admin-nav.js"></script>
+    <div class="main">
+        <div class="header">
+            <div style="display:flex;align-items:center;gap:0.75rem">
+                <button class="menu-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+                <h1>🎵 Music Manager</h1>
+            </div>
+            <div class="header-right"><a href="/music.html" target="_blank" style="font-size:0.8rem;color:#E67E22;text-decoration:none;font-weight:600">↗ View public page</a></div>
+        </div>
+        <div class="container">
+            <div class="section-title-row" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+                <h2 style="font-size:1rem;font-weight:700">Music Videos</h2>
+                <button class="btn-add" onclick="openMusicModal()">+ Add Music Video</button>
+            </div>
+            <div class="mu-cats-row" id="muCatsRow">
+                <button class="mu-cat-tab active" data-c="">All</button>
+                <button class="mu-cat-tab" data-c="Meditation Music">Meditation</button>
+                <button class="mu-cat-tab" data-c="Sleep Music">Sleep</button>
+                <button class="mu-cat-tab" data-c="Focus Music">Focus</button>
+                <button class="mu-cat-tab" data-c="Stress Relief Music">Stress Relief</button>
+                <button class="mu-cat-tab" data-c="Breathing Music">Breathing</button>
+                <button class="mu-cat-tab" data-c="Healing Sounds">Healing Sounds</button>
+            </div>
+            <table class="mu-table">
+                <thead><tr><th>Thumbnail</th><th>Title</th><th>Category</th><th>Duration</th><th>Status</th><th>Order</th><th>Actions</th></tr></thead>
+                <tbody id="muTableBody"><tr><td colspan="7" style="text-align:center;padding:2rem;color:#9CA3AF">Loading...</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal" style="display:none">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Music Video</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="modalForm"></form>
+            </div>
+        </div>
+    </div>
+    <div class="toast" id="toast"></div>
+
+<script>
+const token = localStorage.getItem('adminToken');
+if (!token) window.location.href = '/admin/';
+
+const CATEGORIES = ['Meditation Music', 'Sleep Music', 'Focus Music', 'Stress Relief Music', 'Breathing Music', 'Healing Sounds'];
+let allVideos = [];
+let currentFilter = '';
+let editingId = null;
+
+async function api(url, opts = {}) {
+    const res = await fetch(url, { ...opts, headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json', ...(opts.headers||{}) } });
+    if (res.status === 401) { localStorage.removeItem('adminToken'); window.location.href = '/admin/'; }
+    return res.json();
+}
+function toast(msg, type) { const t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast show' + (type?' '+type:''); setTimeout(() => t.classList.remove('show'), 2500); }
+function esc(s) { return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+document.getElementById('muCatsRow').addEventListener('click', e => {
+    const btn = e.target.closest('.mu-cat-tab');
+    if (!btn) return;
+    document.querySelectorAll('.mu-cat-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.c;
+    renderTable();
+});
+
+async function loadVideos() {
+    const data = await api('/admin/api/music');
+    allVideos = data.videos || [];
+    renderTable();
+}
+
+function renderTable() {
+    const tb = document.getElementById('muTableBody');
+    const list = currentFilter ? allVideos.filter(v => v.category === currentFilter) : allVideos;
+    if (!list.length) { tb.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:#9ca3af">No music videos</td></tr>'; return; }
+    tb.innerHTML = list.map(v => `
+        <tr>
+            <td><img src="${v.thumbnailUrl}" alt=""></td>
+            <td><strong>${esc(v.title)}</strong></td>
+            <td style="font-size:0.75rem">${esc(v.category)}</td>
+            <td style="font-size:0.75rem">${esc(v.duration||'—')}</td>
+            <td><span class="mu-badge ${v.isActive?'active':'inactive'}">${v.isActive?'Active':'Inactive'}</span></td>
+            <td>${v.displayOrder}</td>
+            <td class="row-actions">
+                <button class="btn-sm" onclick='editVideo(${JSON.stringify(v).replace(/'/g,"&#39;")})'>Edit</button>
+                <button class="btn-sm" onclick="toggleActive('${v._id}', ${!v.isActive})">${v.isActive?'Deactivate':'Activate'}</button>
+                <button class="btn-sm btn-del" onclick="deleteVideo('${v._id}')">Delete</button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function openMusicModal(video = null) {
+    editingId = video?._id || null;
+    document.getElementById('modalTitle').textContent = editingId ? 'Edit Music Video' : 'Add Music Video';
+    document.getElementById('modalForm').innerHTML = `
+        <div class="form-group"><label>YouTube URL or Video ID *</label><input name="youtubeUrl" required placeholder="https://www.youtube.com/watch?v=..." value="${esc(video?.youtubeUrl)}"></div>
+        <div class="form-group"><label>Title *</label><input name="title" required value="${esc(video?.title)}" placeholder="10-Minute Deep Sleep Meditation"></div>
+        <div class="form-group"><label>Description</label><textarea name="description" rows="2">${esc(video?.description)}</textarea></div>
+        <div class="form-row">
+            <div class="form-group"><label>Category *</label><select name="category" required>${CATEGORIES.map(c => `<option ${c===video?.category?'selected':''}>${c}</option>`).join('')}</select></div>
+            <div class="form-group"><label>Duration</label><input name="duration" placeholder="10 min" value="${esc(video?.duration)}"></div>
+        </div>
+        <div class="form-group"><label>Purpose</label><input name="purpose" placeholder="Helps you fall asleep faster" value="${esc(video?.purpose)}"></div>
+        <div class="form-group"><label>Display Order</label><input name="displayOrder" type="number" value="${video?.displayOrder ?? 0}"></div>
+        <div class="check-row"><label class="check-label"><input type="checkbox" name="isActive" ${video?.isActive !== false ? 'checked' : ''}> Active (visible to users)</label></div>
+        <div class="modal-actions"><button type="submit" class="btn-primary">${editingId ? 'Save changes' : 'Add Video'}</button><button type="button" class="btn-action" onclick="closeModal()">Cancel</button></div>
+    `;
+    document.getElementById('modal').style.display = 'flex';
+}
+function editVideo(v) { openMusicModal(v); }
+function closeModal() { document.getElementById('modal').style.display = 'none'; editingId = null; }
+document.getElementById('modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
+
+document.getElementById('modalForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const form = e.target;
+    const data = {};
+    for (const el of form.elements) {
+        if (!el.name) continue;
+        if (el.type === 'checkbox') data[el.name] = el.checked;
+        else if (el.type === 'number') data[el.name] = Number(el.value) || 0;
+        else data[el.name] = el.value;
+    }
+    const url = editingId ? '/admin/api/music/' + editingId : '/admin/api/music';
+    const r = await api(url, { method: editingId ? 'PUT' : 'POST', body: JSON.stringify(data) });
+    if (r._id) { toast(editingId ? 'Updated' : 'Video added', 'success'); closeModal(); loadVideos(); }
+    else { toast(r.error || 'Save failed', 'error'); }
+});
+
+async function toggleActive(id, newState) {
+    const r = await api('/admin/api/music/' + id, { method: 'PUT', body: JSON.stringify({ isActive: newState }) });
+    if (r._id) { toast('Status updated', 'success'); loadVideos(); }
+}
+
+async function deleteVideo(id) {
+    if (!confirm('Delete this music video?')) return;
+    const r = await api('/admin/api/music/' + id, { method: 'DELETE' });
+    if (r.message) { toast('Deleted', 'success'); loadVideos(); }
+}
+
+loadVideos();
+</script>
+</body>
+</html>

@@ -44,7 +44,10 @@
 
             <!-- Recommended -->
             <section class="cm-section" id="cmRecommendedSection">
-                <h2 class="cm-sec-title">Recommended For You</h2>
+                <div class="cm-sec-header-graphic">
+                    <h2 class="cm-sec-title">Recommended For You</h2>
+                    <img src="/images/community-rec-networking.svg" alt="" class="cm-sec-graphic">
+                </div>
                 <div class="cm-rec-grid" id="cmRecGrid">
                     <div class="cm-skeleton cm-skeleton-card"></div>
                     <div class="cm-skeleton cm-skeleton-card"></div>
@@ -92,7 +95,10 @@
 
             <!-- Community Progress -->
             <div class="cm-progress-card" id="cmProgressCard">
-                <h3>Your Community Progress</h3>
+                <div class="cm-sec-header-graphic">
+                    <h3>Your Community Progress</h3>
+                    <img src="/images/community-progress-inprogress.svg" alt="" class="cm-sec-graphic cm-sec-graphic-sm">
+                </div>
                 <div class="cm-progress-tl" id="cmProgressList">
                     <div class="cm-skeleton cm-skeleton-row"></div>
                 </div>
@@ -194,9 +200,9 @@
                         '<span>' + escapeHtml(c.statusBadge || '') + '</span>' +
                         '<span>' + (c.memberCount || 0) + ' Members</span>' +
                     '</div>' +
-                    '<div style="display:flex;gap:0.4rem;margin-top:0.5rem">' +
-                        '<button class="cm-rec-btn" onclick="joinCircle(\'' + c._id + '\', this)" style="flex:1">' + escapeHtml(c.buttonText || 'Join Circle') + '</button>' +
-                        '<button class="cm-rec-btn" style="background:white;color:#374151;border:1px solid #E5E7EB;flex:0 0 auto;padding:0.55rem 0.9rem" onclick="viewCircle(\'' + c._id + '\',\'' + escapeAttr(c.title) + '\')">View</button>' +
+                    '<div style="display:flex;gap:0.5rem;margin-top:0.75rem">' +
+                        '<button class="cm-rec-btn" onclick="joinCircle(\'' + c._id + '\', this)">' + escapeHtml(c.buttonText || 'Join Circle') + '</button>' +
+                        '<a href="community-group.html?id=' + c._id + '&type=circle&name=' + encodeURIComponent(c.title) + '" class="cm-rec-btn-view">View</a>' +
                     '</div>' +
                 '</div>';
         }).join('');
@@ -364,7 +370,7 @@
                     '<div style="font-size:0.68rem;color:#6B7280;margin-top:0.4rem">' + escapeHtml(permLabel) + (g.commentingEnabled ? ' • Comments On' : '') + '</div>' +
                     '<div style="display:flex;gap:0.4rem;margin-top:0.75rem">' +
                     '<button class="cm-rec-btn" onclick="joinOfficialGroup(\'' + g._id + '\', this)">Join Group</button>' +
-                    '<button class="cm-rec-btn" style="background:white;color:#374151;border:1px solid #E5E7EB" onclick="viewOfficialGroup(\'' + g._id + '\')">View</button>' +
+                    '<a href="community-group.html?id=' + g._id + '&type=official" class="cm-rec-btn-view" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center">View</a>' +
                     '</div></div>';
             }).join('');
         } catch(e) { document.getElementById('cmOfficialGrid').innerHTML = '<div class="cm-empty">Unable to load groups</div>'; }

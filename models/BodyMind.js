@@ -32,6 +32,7 @@ const bodyMindPageSchema = new mongoose.Schema({
         level: { type: String, enum: ['beginner', 'intermediate', 'advanced', 'all'], default: 'beginner' },
         tags: [{ type: String }],
         icon: { type: String, default: '🧘' },
+        image: { type: String, default: '' },
         gradientStart: { type: String, default: '#10B981' },
         gradientEnd: { type: String, default: '#34D399' },
         steps: [{ type: String }],

@@ -20,7 +20,9 @@
     background: radial-gradient(circle, rgba(222,116,37,0.08) 0%, transparent 70%);
     pointer-events: none;
 }
+.care-hero { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
 .care-hero-content { position: relative; z-index: 1; }
+.care-hero-graphic { width: 160px; height: 160px; object-fit: contain; flex-shrink: 0; position: relative; z-index: 1; pointer-events: none; user-select: none; }
 .care-hero-content h1 { font-size: 1.9rem; font-weight: 800; color: #1a1a2e; margin-bottom: 0.5rem; line-height: 1.2; }
 .care-hero-content .hero-subtitle { font-size: 1rem; color: #6B7280; max-width: 550px; line-height: 1.6; }
 .care-hero-meta { display: flex; align-items: center; gap: 1rem; margin-top: 0.75rem; font-size: 0.8rem; color: #9CA3AF; }
@@ -65,7 +67,14 @@
     transition: all 0.25s; position: relative; overflow: hidden;
     box-shadow: var(--shadow);
 }
+.ch-card::after {
+    content: ''; position: absolute; top: -22px; right: -22px;
+    width: 130px; height: 130px;
+    background: url('/images/pattern-leaf-branch-orange.svg') no-repeat center/contain;
+    opacity: 0.28; transform: rotate(12deg); pointer-events: none;
+}
 .ch-card:hover { border-color: var(--primary-color); box-shadow: 0 8px 24px rgba(222,116,37,0.12); transform: translateY(-3px); }
+.ch-card:hover::after { opacity: 0.45; }
 .ch-card.recommended { border-color: var(--primary-color); background: #FFF8F0; }
 .ch-card.recommended::before { content: '★ Recommended'; position: absolute; top: 0.75rem; right: 0.75rem; font-size: 0.6rem; font-weight: 700; color: var(--primary-color); background: rgba(222,116,37,0.1); padding: 0.2rem 0.5rem; border-radius: 4px; }
 .ch-card-icon { font-size: 2rem; margin-bottom: 0.75rem; display: block; }
@@ -112,7 +121,9 @@
 .ch-slider-value { text-align: center; font-size: 2.5rem; font-weight: 800; color: var(--primary-color); margin-bottom: 0.5rem; }
 
 /* ===== RECOMMENDATION PANEL ===== */
-.ch-rec-panel { background: white; border: 1px solid var(--border-color); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; box-shadow: var(--shadow); }
+.ch-rec-panel { background: white; border: 1px solid var(--border-color); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+.ch-rec-panel::after { content:''; position:absolute; top:-24px; right:-24px; width:120px; height:120px; background:url('/images/pattern-leaf-branch-orange.svg') no-repeat center/contain; opacity:0.24; transform:rotate(10deg); pointer-events:none; z-index:0; }
+.ch-rec-panel > * { position: relative; z-index: 1; }
 .ch-rec-state { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; padding: 1rem; background: #F9FAFB; border-radius: 12px; border: 1px solid #E5E7EB; }
 .ch-rec-state-emoji { font-size: 2rem; }
 .ch-rec-state-text h4 { font-size: 0.9rem; color: #1a1a2e; }
@@ -127,7 +138,9 @@
 .ch-rec-item-time { font-size: 0.7rem; color: #9CA3AF; white-space: nowrap; background: #F3F4F6; padding: 0.3rem 0.6rem; border-radius: 6px; }
 
 /* ===== TODAY'S PLAN ===== */
-.ch-plan { background: white; border: 1px solid var(--border-color); border-radius: 20px; padding: 1.75rem; box-shadow: var(--shadow); }
+.ch-plan { background: white; border: 1px solid var(--border-color); border-radius: 20px; padding: 1.75rem; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+.ch-plan::after { content:''; position:absolute; top:-22px; right:-22px; width:110px; height:110px; background:url('/images/pattern-leaf-branch-orange.svg') no-repeat center/contain; opacity:0.24; transform:rotate(10deg); pointer-events:none; z-index:0; }
+.ch-plan > * { position: relative; z-index: 1; }
 .ch-plan-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem; }
 .ch-plan-progress { display: flex; align-items: center; gap: 0.75rem; }
 .ch-plan-bar { width: 120px; height: 6px; background: #E5E7EB; border-radius: 3px; overflow: hidden; }
@@ -162,7 +175,9 @@
 .ch-exercise-journal textarea:focus { border-color: var(--primary-color); }
 
 /* ===== MOOD HISTORY ===== */
-.ch-history { background: white; border: 1px solid var(--border-color); border-radius: 20px; padding: 1.75rem; box-shadow: var(--shadow); }
+.ch-history { background: white; border: 1px solid var(--border-color); border-radius: 20px; padding: 1.75rem; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+.ch-history::after { content:''; position:absolute; top:-22px; right:-22px; width:110px; height:110px; background:url('/images/pattern-leaf-branch-orange.svg') no-repeat center/contain; opacity:0.24; transform:rotate(10deg); pointer-events:none; z-index:0; }
+.ch-history > * { position: relative; z-index: 1; }
 .ch-history-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.5rem; margin-top: 1rem; }
 .ch-history-day { text-align: center; padding: 0.75rem 0.5rem; border-radius: 10px; background: #F9FAFB; border: 1px solid #F3F4F6; }
 .ch-history-day-label { font-size: 0.6rem; color: #9CA3AF; display: block; font-weight: 600; }
@@ -237,8 +252,11 @@
 
 /* ===== PARENTING: CHALLENGES ===== */
 .ch-challenge-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
-.ch-challenge-card { background: white; border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; transition: all 0.2s; box-shadow: var(--shadow); }
+.ch-challenge-card { background: white; border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; transition: all 0.2s; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+.ch-challenge-card::after { content:''; position:absolute; top:-18px; right:-18px; width:90px; height:90px; background:url('/images/pattern-leaf-branch-orange.svg') no-repeat center/contain; opacity:0.24; transform:rotate(8deg); pointer-events:none; z-index:0; }
+.ch-challenge-card > * { position: relative; z-index: 1; }
 .ch-challenge-card:hover { border-color: var(--primary-color); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(222,116,37,0.1); }
+.ch-challenge-card:hover::after { opacity: 0.4; }
 .ch-challenge-card h4 { font-size: 1rem; font-weight: 700; color: #1a1a2e; margin-bottom: 0.4rem; }
 .ch-challenge-card p { font-size: 0.82rem; color: #6B7280; margin-bottom: 0.75rem; line-height: 1.5; }
 .ch-challenge-badge { font-size: 0.7rem; background: #ECFDF5; color: #059669; padding: 0.25rem 0.7rem; border-radius: 6px; font-weight: 600; display: inline-block; margin-bottom: 0.75rem; }
@@ -258,7 +276,9 @@
 .ch-skill-tag { padding: 0.3rem 0.75rem; background: #EFF6FF; color: #2563EB; border-radius: 6px; font-size: 0.72rem; font-weight: 600; }
 
 /* Focus Result */
-.ch-focus-result { background: white; border: 1px solid var(--border-color); border-radius: 20px; padding: 2rem; box-shadow: var(--shadow); }
+.ch-focus-result { background: white; border: 1px solid var(--border-color); border-radius: 20px; padding: 2rem; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+.ch-focus-result::after { content:''; position:absolute; top:-24px; right:-24px; width:120px; height:120px; background:url('/images/pattern-leaf-branch-orange.svg') no-repeat center/contain; opacity:0.24; transform:rotate(10deg); pointer-events:none; z-index:0; }
+.ch-focus-result > * { position: relative; z-index: 1; }
 .ch-focus-result h3 { font-size: 1.3rem; font-weight: 700; color: #1a1a2e; margin-bottom: 1.25rem; }
 .ch-focus-block { margin-bottom: 1.5rem; }
 .ch-focus-block h4 { font-size: 0.92rem; font-weight: 700; color: #1a1a2e; margin-bottom: 0.75rem; }
@@ -270,9 +290,21 @@
 .ch-toast { position: fixed; bottom: 2rem; right: 2rem; background: #1a1a2e; color: white; padding: 0.85rem 1.5rem; border-radius: 12px; font-size: 0.85rem; z-index: 9999; box-shadow: var(--shadow-lg); opacity: 0; transform: translateY(10px); transition: all 0.3s; pointer-events: none; }
 .ch-toast.show { opacity: 1; transform: translateY(0); }
 
+/* ===== Section header graphics (self-care tools, history, etc.) ===== */
+.ch-section-header { position: relative; }
+.ch-sec-graphic { width: 80px; height: 80px; object-fit: contain; flex-shrink: 0; pointer-events: none; user-select: none; opacity: 0.9; }
+.ch-sec-graphic-sm { width: 56px; height: 56px; }
+.ch-history-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 0.5rem; }
+.ch-parent-selfcare-flex { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; }
+.ch-parent-selfcare-text { flex: 1; min-width: 0; }
+
 /* ===== RESPONSIVE ===== */
 @media(max-width:768px) {
-    .care-hero { padding: 2rem 1.5rem; }
+    .care-hero { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
+    .care-hero-graphic { width: 100px; height: 100px; }
+    .ch-sec-graphic { width: 56px; height: 56px; }
+    .ch-sec-graphic-sm { width: 40px; height: 40px; }
+    .ch-parent-selfcare-flex { flex-direction: column; text-align: center; }
     .care-hero-content h1 { font-size: 1.5rem; }
     .ch-cards-grid { grid-template-columns: 1fr; }
     .ch-age-grid { grid-template-columns: 1fr 1fr; }

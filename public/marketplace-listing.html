@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace Listing - ABLE</title>
+    <link rel="stylesheet" href="dashboard-styles.css">
+    <style>
+        .ml-page { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
+        .ml-back { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: #6B7280; text-decoration: none; margin-bottom: 1.25rem; font-weight: 600; }
+        .ml-back:hover { color: #E67E22; }
+        .ml-hero-img { width: 100%; height: 280px; object-fit: cover; border-radius: 16px; margin-bottom: 1.5rem; background: #F3F4F6; }
+        .ml-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+        .ml-tag { font-size: 0.7rem; font-weight: 700; padding: 0.3rem 0.7rem; border-radius: 100px; text-transform: uppercase; }
+        .ml-tag-type { background: #FEF3E2; color: #E67E22; }
+        .ml-tag-featured { background: #FEF3C7; color: #92400E; }
+        .ml-title { font-size: 1.8rem; font-weight: 800; color: #111827; margin-bottom: 0.5rem; }
+        .ml-location { font-size: 0.88rem; color: #6B7280; margin-bottom: 1.5rem; }
+        .ml-section { margin-bottom: 1.75rem; }
+        .ml-section h3 { font-size: 0.95rem; font-weight: 700; color: #111827; margin-bottom: 0.6rem; }
+        .ml-desc { font-size: 0.92rem; color: #374151; line-height: 1.8; white-space: pre-wrap; }
+        .ml-services { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+        .ml-services span { padding: 0.35rem 0.75rem; background: #F3F4F6; border-radius: 8px; font-size: 0.78rem; color: #374151; font-weight: 500; }
+        .ml-hours-grid { display: grid; gap: 0.3rem; }
+        .ml-hour-row { display: flex; justify-content: space-between; font-size: 0.82rem; padding: 0.4rem 0.75rem; background: #F9FAFB; border-radius: 8px; }
+        .ml-hour-day { font-weight: 600; color: #374151; }
+        .ml-hour-time { color: #6B7280; }
+        .ml-contact-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; }
+        .ml-contact-btns a { padding: 0.7rem 1.25rem; border-radius: 10px; font-size: 0.85rem; font-weight: 700; text-decoration: none; color: white; }
+        .ml-meta { display: flex; gap: 1.5rem; flex-wrap: wrap; font-size: 0.82rem; color: #6B7280; padding: 1rem 0; border-top: 1px solid #F3F4F6; border-bottom: 1px solid #F3F4F6; margin-bottom: 1.5rem; }
+        .ml-meta strong { color: #111827; }
+        .ml-book-section { background: #FFF7ED; border: 1.5px solid rgba(230,126,34,0.2); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .ml-book-section h3 { font-size: 1rem; font-weight: 800; color: #111827; margin-bottom: 1rem; }
+        .ml-book-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem; }
+        .ml-book-input { width: 100%; padding: 0.7rem 1rem; border: 1.5px solid #E5E7EB; border-radius: 10px; font-size: 0.85rem; }
+        .ml-book-input:focus { border-color: #E67E22; outline: none; }
+        .ml-book-btn { width: 100%; padding: 0.9rem; background: #E67E22; color: white; border: none; border-radius: 12px; font-size: 0.92rem; font-weight: 700; cursor: pointer; }
+        .ml-book-btn:hover { background: #D35400; }
+        .ml-book-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .ml-book-msg { text-align: center; padding: 0.6rem; border-radius: 8px; font-size: 0.82rem; margin-bottom: 0.75rem; display: none; }
+        .ml-disclaimer { padding: 1rem; background: #FEF2F2; border-radius: 12px; font-size: 0.75rem; color: #6B7280; line-height: 1.5; }
+        .ml-disclaimer strong { color: #92400E; }
+        .ml-prof-card { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: #F9FAFB; border-radius: 12px; margin-top: 0.75rem; }
+        .ml-prof-card img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
+        .ml-prof-card h4 { font-size: 0.88rem; font-weight: 700; color: #111827; }
+        .ml-prof-card p { font-size: 0.75rem; color: #6B7280; }
+        .ml-report { background: none; border: none; color: #9CA3AF; font-size: 0.75rem; cursor: pointer; text-decoration: underline; margin-top: 1rem; }
+        @media(max-width:600px) { .ml-book-row { grid-template-columns: 1fr; } .ml-title { font-size: 1.4rem; } .ml-hero-img { height: 200px; } }
+    </style>
+</head>
+<body>
+    <div id="sidebar"></div>
+    <script src="sidebar-nav.js"></script>
+    <div class="main-content">
+        <header class="topbar">
+            <button class="menu-toggle" id="menuToggle"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="search-bar"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input type="text" placeholder="Search therapists, resources, articles... (⌘K)"></div>
+            <div class="topbar-actions">
+                <button class="icon-button"><svg viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="notification-badge">3</span></button>
+                <div class="user-profile"><img src="https://ui-avatars.com/api/?name=User&background=E67E22&color=fff" alt="User"><div class="user-info"><span class="user-name">User</span><span class="user-role">Wellness Seeker</span></div></div>
+            </div>
+        </header>
+        <main class="ml-page" id="mlPage">
+            <a href="marketplace.html" class="ml-back">← Back to Marketplace</a>
+            <div style="text-align:center;padding:4rem;color:#9CA3AF">Loading listing...</div>
+        </main>
+    </div>
+</body>
+</html>
+
+<script>
+const token = localStorage.getItem('token');
+const TYPES = {spa:'Spa',mental_health_center:'Mental Health Center',therapy_clinic:'Therapy Clinic',yoga_studio:'Yoga Studio',meditation_center:'Meditation Center',fitness_wellness:'Fitness & Wellness',nutrition_store:'Nutrition Store',wellness_product_store:'Wellness Product Store',professional_service:'Professional Service',other:'Other'};
+
+function esc(s) { return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+async function loadListing() {
+    const id = new URLSearchParams(window.location.search).get('id');
+    if (!id) { document.getElementById('mlPage').innerHTML = '<a href="marketplace.html" class="ml-back">← Back</a><p style="text-align:center;padding:4rem;color:#EF4444">No listing ID provided</p>'; return; }
+
+    try {
+        const res = await fetch('/api/marketplace/' + id);
+        const l = await res.json();
+        if (l.error) { document.getElementById('mlPage').innerHTML = '<a href="marketplace.html" class="ml-back">← Back</a><p style="text-align:center;padding:4rem;color:#EF4444">Listing not found</p>'; return; }
+
+        const img = l.images && l.images[0] ? `<img src="${l.images[0]}" class="ml-hero-img" alt="${esc(l.businessName)}">` : '';
+        const services = (l.services||[]).map(s => `<span>${esc(s)}</span>`).join('');
+        const hours = (l.openingHours||[]).map(h => `<div class="ml-hour-row"><span class="ml-hour-day">${esc(h.day)}</span><span class="ml-hour-time">${h.isClosed ? 'Closed' : esc(h.open)+' – '+esc(h.close)}</span></div>`).join('');
+        const contact = l.contact || {};
+        const prof = l.linkedProfessionalId ? `<div class="ml-prof-card"><img src="${l.linkedProfessionalId.profilePhoto || 'https://ui-avatars.com/api/?name='+encodeURIComponent(l.linkedProfessionalId.fullName)+'&background=E67E22&color=fff'}" alt=""><div><h4>${esc(l.linkedProfessionalId.fullName)}</h4><p>${esc(l.linkedProfessionalId.title||'')} · ${(l.linkedProfessionalId.specializations||[]).slice(0,2).join(', ')}</p></div></div>` : '';
+        const serviceOptions = (l.services||[]).map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
+        const minDate = new Date().toISOString().slice(0,10);
+
+        document.title = l.businessName + ' - ABLE Marketplace';
+
+        document.getElementById('mlPage').innerHTML = `
+            <a href="marketplace.html" class="ml-back">← Back to Marketplace</a>
+            ${img}
+            <div class="ml-tags">
+                <span class="ml-tag ml-tag-type">${TYPES[l.listingType] || l.listingType}</span>
+                ${l.isFeatured ? '<span class="ml-tag ml-tag-featured">⭐ Featured</span>' : ''}
+            </div>
+            <h1 class="ml-title">${esc(l.businessName)}</h1>
+            ${l.location?.city ? `<p class="ml-location">📍 ${esc(l.location.address||'')} ${esc(l.location.city)}, ${esc(l.location.state||'')} ${esc(l.location.country||'')}</p>` : ''}
+
+            <div class="ml-meta">
+                ${l.rating ? `<span>⭐ <strong>${l.rating}</strong> (${l.reviewCount || 0} reviews)</span>` : ''}
+                ${l.priceRange && l.priceRange !== 'unknown' ? `<span>💰 <strong style="text-transform:capitalize">${l.priceRange}</strong></span>` : ''}
+                <span>👁️ ${l.views || 0} views</span>
+            </div>
+
+            <div class="ml-section">
+                <h3>About</h3>
+                <p class="ml-desc">${esc(l.description)}</p>
+            </div>
+
+            ${services ? `<div class="ml-section"><h3>Services</h3><div class="ml-services">${services}</div></div>` : ''}
+
+            ${hours ? `<div class="ml-section"><h3>Opening Hours</h3><div class="ml-hours-grid">${hours}</div></div>` : ''}
+
+            <div class="ml-section">
+                <h3>Contact</h3>
+                <div class="ml-contact-btns">
+                    ${contact.phone ? `<a href="tel:${contact.phone}" style="background:#E67E22">📞 Call</a>` : ''}
+                    ${contact.whatsapp ? `<a href="https://wa.me/${contact.whatsapp}" target="_blank" style="background:#25D366">💬 WhatsApp</a>` : ''}
+                    ${contact.website ? `<a href="${contact.website}" target="_blank" style="background:#3B82F6">🌐 Website</a>` : ''}
+                    ${contact.email ? `<a href="mailto:${contact.email}" style="background:#6B7280">✉️ Email</a>` : ''}
+                </div>
+            </div>
+
+            ${prof ? `<div class="ml-section"><h3>Linked Professional</h3>${prof}</div>` : ''}
+
+            <div class="ml-book-section">
+                <h3>📅 Book an Appointment</h3>
+                <select id="mlBookService" class="ml-book-input" style="margin-bottom:0.75rem">
+                    <option value="">Select a service (optional)</option>
+                    ${serviceOptions}
+                </select>
+                <div class="ml-book-row">
+                    <input type="date" id="mlBookDate" class="ml-book-input" min="${minDate}">
+                    <input type="time" id="mlBookTime" class="ml-book-input">
+                </div>
+                <textarea id="mlBookNote" class="ml-book-input" placeholder="Any special requests..." rows="2" style="resize:vertical;font-family:inherit;margin-bottom:0.75rem" maxlength="500"></textarea>
+                <div id="mlBookMsg" class="ml-book-msg"></div>
+                <button id="mlBookBtn" class="ml-book-btn">Send Booking Request</button>
+            </div>
+
+            <div class="ml-disclaimer">
+                <strong>⚠️ Disclaimer:</strong> ABLE lists marketplace providers for discovery. Please verify details, pricing, and credentials before booking or visiting. ABLE does not guarantee diagnosis, treatment, or emergency care through marketplace listings.
+            </div>
+            <button class="ml-report" onclick="reportListing('${l._id}')">⚠️ Report this listing</button>
+        `;
+
+        // Booking handler
+        document.getElementById('mlBookBtn').addEventListener('click', async () => {
+            if (!token) { alert('Please log in to book'); window.location.href = 'login.html'; return; }
+            const date = document.getElementById('mlBookDate').value;
+            const time = document.getElementById('mlBookTime').value;
+            const service = document.getElementById('mlBookService').value;
+            const note = document.getElementById('mlBookNote').value;
+            const msg = document.getElementById('mlBookMsg');
+            const btn = document.getElementById('mlBookBtn');
+            if (!date) { msg.style.display = 'block'; msg.style.background = '#FEF2F2'; msg.style.color = '#EF4444'; msg.textContent = 'Please select a date'; return; }
+            btn.disabled = true; btn.textContent = 'Sending...';
+            try {
+                const r = await fetch('/api/marketplace/' + id + '/book', {
+                    method: 'POST',
+                    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ serviceRequested: service, preferredDate: date, preferredTime: time, note })
+                });
+                const data = await r.json();
+                msg.style.display = 'block';
+                if (r.ok) { msg.style.background = '#F0FDF4'; msg.style.color = '#10B981'; msg.textContent = '✓ ' + data.message; btn.textContent = 'Request Sent ✓'; }
+                else { msg.style.background = '#FEF2F2'; msg.style.color = '#EF4444'; msg.textContent = data.error || 'Failed'; btn.disabled = false; btn.textContent = 'Send Booking Request'; }
+            } catch(e) { msg.style.display = 'block'; msg.style.background = '#FEF2F2'; msg.style.color = '#EF4444'; msg.textContent = 'Network error'; btn.disabled = false; btn.textContent = 'Send Booking Request'; }
+        });
+
+    } catch(e) { console.error(e); document.getElementById('mlPage').innerHTML = '<a href="marketplace.html" class="ml-back">← Back</a><p style="text-align:center;padding:4rem;color:#EF4444">Error loading listing</p>'; }
+}
+
+function reportListing(id) {
+    if (!token) { alert('Log in to report'); return; }
+    const reason = prompt('Reason for report:');
+    if (!reason) return;
+    fetch('/api/marketplace/' + id + '/report', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' }, body: JSON.stringify({ reason: 'other', details: reason }) }).then(r => r.json()).then(d => alert(d.message || 'Reported'));
+}
+
+loadListing();
+</script>

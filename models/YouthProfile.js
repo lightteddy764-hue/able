@@ -18,6 +18,4 @@ const youthProfileSchema = new mongoose.Schema({
     assessmentCompleted: { type: Boolean, default: false }
 }, { timestamps: true });
 
-youthProfileSchema.index({ userId: 1 });
-
 module.exports = mongoose.model('YouthProfile', youthProfileSchema);

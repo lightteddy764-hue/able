@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wellness Music - ABLE</title>
+    <link rel="stylesheet" href="dashboard-styles.css">
+    <link rel="stylesheet" href="dash-premium.css">
+    <style>
+        .mu-page { max-width: 1200px; margin: 0 auto; padding: 1.5rem 2rem 4rem; }
+        .mu-hero {
+            text-align: center; margin-bottom: 2rem; padding: 2.75rem 2rem;
+            background: linear-gradient(135deg, rgba(10,10,30,0.5), rgba(10,10,30,0.32)), linear-gradient(135deg, #3B82F6, #06B6D4);
+            background-size: cover; background-position: center;
+            border-radius: 20px; color: white; position: relative; overflow: hidden;
+        }
+        .mu-hero::after { content:''; position:absolute; top:-50%; right:-15%; width:280px; height:280px; background:rgba(230,126,34,0.12); border-radius:50%; }
+        .mu-hero h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; position: relative; z-index: 1; }
+        .mu-hero p { font-size: 0.95rem; opacity: 0.85; position: relative; z-index: 1; }
+        .mu-cats { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .mu-cat { padding: 0.5rem 1rem; border: 1.5px solid #E5E7EB; border-radius: 100px; font-size: 0.78rem; font-weight: 600; cursor: pointer; background: white; transition: all 0.2s; }
+        .mu-cat:hover { border-color: #3B82F6; color: #3B82F6; }
+        .mu-cat.active { background: #3B82F6; color: white; border-color: #3B82F6; }
+        .mu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.25rem; }
+        .mu-card { background: white; border-radius: 16px; border: 1px solid #E5E7EB; overflow: hidden; transition: all 0.3s; }
+        .mu-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
+        .mu-video-wrap { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; }
+        .mu-video-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
+        .mu-thumb-overlay { position: absolute; inset: 0; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .mu-thumb-overlay::after { content:''; position:absolute; inset:0; background:rgba(0,0,0,0.25); }
+        .mu-play-btn { position: relative; z-index: 1; width: 56px; height: 56px; background: rgba(255,255,255,0.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: #E67E22; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
+        .mu-card-body { padding: 1.1rem; }
+        .mu-card-cat { font-size: 0.65rem; font-weight: 700; color: #3B82F6; background: #EFF6FF; padding: 0.2rem 0.55rem; border-radius: 100px; display: inline-block; margin-bottom: 0.5rem; text-transform: uppercase; }
+        .mu-card-body h3 { font-size: 0.95rem; font-weight: 700; color: #111827; margin-bottom: 0.3rem; }
+        .mu-card-desc { font-size: 0.8rem; color: #6B7280; line-height: 1.5; margin-bottom: 0.6rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .mu-card-meta { display: flex; gap: 0.75rem; font-size: 0.72rem; color: #9CA3AF; margin-bottom: 0.6rem; }
+        .mu-card-purpose { font-size: 0.75rem; color: #059669; background: #ECFDF5; padding: 0.4rem 0.6rem; border-radius: 8px; }
+        .mu-card-actions { margin-top: 0.75rem; }
+        .mu-play-open-btn { width: 100%; padding: 0.55rem 0.8rem; background: #E67E22; color: white; border: none; border-radius: 10px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+        .mu-play-open-btn:hover { background: #D35400; }
+        .mu-empty { text-align: center; padding: 4rem 2rem; color: #9CA3AF; font-size: 0.9rem; grid-column: 1/-1; }
+        @media(max-width:768px) { .mu-page { padding: 1rem 1rem 3rem; } .mu-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div id="sidebar"></div>
+    <script src="sidebar-nav.js"></script>
+    <div class="main-content">
+        <header class="topbar">
+            <button class="menu-toggle" id="menuToggle"><svg viewBox="0 0 24 24" fill="none"><path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <div class="search-bar"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input type="text" placeholder="Search therapists, resources, articles... (⌘K)"></div>
+            <div class="topbar-actions">
+                <button class="icon-button"><svg viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="notification-badge">3</span></button>
+                <div class="user-profile"><img src="https://ui-avatars.com/api/?name=User&background=E67E22&color=fff" alt="User"><div class="user-info"><span class="user-name" id="dashUserName">User</span><span class="user-role">Wellness Seeker</span></div></div>
+            </div>
+        </header>
+        <main class="mu-page">
+            <div class="mu-hero">
+                <h1>🎵 Wellness Music</h1>
+                <p>Curated music and sounds to help you relax, focus, sleep, and heal.</p>
+            </div>
+            <div class="mu-cats" id="muCats"></div>
+            <div class="mu-grid" id="muGrid"><div class="mu-empty">Loading music...</div></div>
+        </main>
+    </div>
+    <script>
+    const CATEGORIES = ['All', 'Meditation Music', 'Sleep Music', 'Focus Music', 'Stress Relief Music', 'Breathing Music', 'Healing Sounds'];
+    let currentCat = 'All';
+    let allVideos = [];
+
+    document.getElementById('muCats').innerHTML = CATEGORIES.map(c => `<button class="mu-cat${c==='All'?' active':''}" data-c="${c}">${c}</button>`).join('');
+    document.getElementById('muCats').addEventListener('click', e => {
+        const btn = e.target.closest('.mu-cat');
+        if (!btn) return;
+        document.querySelectorAll('.mu-cat').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        currentCat = btn.dataset.c;
+        renderVideos();
+    });
+
+    function esc(s) { return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+    async function loadMusic() {
+        try {
+            const res = await fetch('/api/music');
+            const data = await res.json();
+            allVideos = data.videos || [];
+            renderVideos();
+        } catch(e) {
+            document.getElementById('muGrid').innerHTML = '<div class="mu-empty">Error loading music</div>';
+        }
+    }
+
+    function renderVideos() {
+        const grid = document.getElementById('muGrid');
+        currentPlayingId = null; // grid is being rebuilt, any playing iframe is gone
+        const videos = currentCat === 'All' ? allVideos : allVideos.filter(v => v.category === currentCat);
+        if (!videos.length) { grid.innerHTML = '<div class="mu-empty">No music videos in this category yet.</div>'; return; }
+        grid.innerHTML = videos.map(v => `
+            <div class="mu-card">
+                <div class="mu-video-wrap" id="wrap-${v._id}">
+                    <div class="mu-thumb-overlay" style="background-image:url('${v.thumbnailUrl}')" data-id="${v._id}" data-video-id="${v.youtubeVideoId}">
+                        <div class="mu-play-btn">▶</div>
+                    </div>
+                </div>
+                <div class="mu-card-body">
+                    <span class="mu-card-cat">${esc(v.category)}</span>
+                    <h3>${esc(v.title)}</h3>
+                    <p class="mu-card-desc">${esc(v.description)}</p>
+                    <div class="mu-card-meta">${v.duration ? '<span>⏱️ '+esc(v.duration)+'</span>' : ''}</div>
+                    ${v.purpose ? `<div class="mu-card-purpose">💡 ${esc(v.purpose)}</div>` : ''}
+                    <div class="mu-card-actions">
+                        <button class="mu-play-open-btn" data-id="${v._id}" data-video-id="${v.youtubeVideoId}">▶ Play / Open</button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    let currentPlayingId = null;
+
+    function playVideo(id, videoId) {
+        // Stop whatever else is currently playing so only one video plays at a time
+        if (currentPlayingId && currentPlayingId !== id) {
+            const prevVideo = allVideos.find(v => v._id === currentPlayingId);
+            if (prevVideo) stopVideo(currentPlayingId, prevVideo.thumbnailUrl);
+        }
+        const wrap = document.getElementById('wrap-' + id);
+        wrap.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" title="YouTube video player" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+        currentPlayingId = id;
+    }
+
+    function stopVideo(id, thumbnailUrl) {
+        const wrap = document.getElementById('wrap-' + id);
+        if (!wrap) return;
+        const video = allVideos.find(v => v._id === id);
+        wrap.innerHTML = `
+            <div class="mu-thumb-overlay" style="background-image:url('${thumbnailUrl}')" data-id="${id}" data-video-id="${video ? video.youtubeVideoId : ''}">
+                <div class="mu-play-btn">▶</div>
+            </div>
+        `;
+        if (currentPlayingId === id) currentPlayingId = null;
+    }
+
+    document.getElementById('muGrid').addEventListener('click', e => {
+        const trigger = e.target.closest('.mu-thumb-overlay, .mu-play-open-btn');
+        if (!trigger) return;
+        playVideo(trigger.dataset.id, trigger.dataset.videoId);
+    });
+
+    loadMusic();
+
+    // Lazy-load hero bg (same pattern as playground.html) so the large image doesn't block first paint
+    (function() {
+        const hero = document.querySelector('.mu-hero');
+        if (!hero) return;
+        const img = new Image();
+        img.onload = () => {
+            hero.style.backgroundImage = `linear-gradient(135deg, rgba(10,10,30,0.5), rgba(10,10,30,0.32)), url('/images/music-hero-bg.png')`;
+            hero.style.backgroundSize = 'cover';
+            hero.style.backgroundPosition = 'center';
+        };
+        img.src = '/images/music-hero-bg.png';
+    })();
+    </script>
+</body>
+</html>

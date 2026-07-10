@@ -26,7 +26,9 @@
         { href: '/admin/settings.html', label: 'Settings Page', icon: '<circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09" stroke="currentColor" stroke-width="2"/>' },
 
         // Operations
-        { href: '/admin/professional-sessions.html', label: 'Pro Sessions', icon: '<rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' }
+        { href: '/admin/professional-sessions.html', label: 'Pro Sessions', icon: '<rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>' },
+        { href: '/admin/marketplace.html', label: 'Marketplace', icon: '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2"/><path d="M9 22V12h6v10" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="7" r="2" stroke="currentColor" stroke-width="1.5"/>' },
+        { href: '/admin/music.html', label: 'Music', icon: '<path d="M9 18V5l12-2v13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="2"/>' }
     ];
 
     const navHTML = navItems.map(item => 

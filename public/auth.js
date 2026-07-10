@@ -9,7 +9,7 @@ if (loginForm) {
 // Signup Form Handler - Multi-Step
 const signupForm = document.getElementById('signupForm');
 let currentStep = 1;
-const totalSteps = 3;
+const totalSteps = 4;
 
 if (signupForm) {
     signupForm.addEventListener('submit', handleSignup);
@@ -24,6 +24,11 @@ if (signupForm) {
     const prevButtons = signupForm.querySelectorAll('.btn-prev');
     prevButtons.forEach(btn => {
         btn.addEventListener('click', () => prevStep());
+    });
+
+    // Hobby/Interest chip toggle
+    document.querySelectorAll('.hobby-chip').forEach(chip => {
+        chip.addEventListener('click', () => chip.classList.toggle('selected'));
     });
 }
 
@@ -216,7 +221,10 @@ function handleLogin(e) {
             localStorage.setItem('whodasScore', data.user.assessment.whodasScore || 0);
         }
         showNotification('Login successful!', 'success');
-        setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
+        // Redirect back to the page they were trying to visit, or default to dashboard
+        const params = new URLSearchParams(window.location.search);
+        const redirectTo = params.get('redirect') || 'dashboard.html';
+        setTimeout(() => { window.location.href = redirectTo; }, 800);
     })
     .catch(err => {
         showNotification('Connection error. Please try again.', 'error');
@@ -229,8 +237,8 @@ function handleLogin(e) {
 function handleSignup(e) {
     e.preventDefault();
     
-    // Final validation for step 3
-    if (!validateStep(3)) {
+    // Final validation for step 4
+    if (!validateStep(4)) {
         return;
     }
     
@@ -311,6 +319,10 @@ function handleSignup(e) {
                 name: `${firstName} ${lastName}`,
                 email,
                 password,
+                gender: formData.get('gender') || '',
+                dateOfBirth: formData.get('dateOfBirth') || undefined,
+                hobbies: [...document.querySelectorAll('#hobbyChips .hobby-chip.selected')].map(c => c.dataset.v),
+                interests: [...document.querySelectorAll('#interestChips .hobby-chip.selected')].map(c => c.dataset.v),
                 whodasScore,
                 severityLevel,
                 whodasAnswers: {}

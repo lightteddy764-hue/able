@@ -8,6 +8,13 @@ const userSchema = new mongoose.Schema({
     phone: { type: String, default: '' },
     bio: { type: String, default: '' },
     avatar: { type: String, default: '' },
+
+    // Personal Info
+    gender: { type: String, enum: ['male', 'female', 'non-binary', 'prefer-not-to-say', ''], default: '' },
+    dateOfBirth: { type: Date },
+    age: { type: Number },
+    hobbies: [{ type: String }],
+    interests: [{ type: String }],
     
     // Wellness Data
     assessment: {

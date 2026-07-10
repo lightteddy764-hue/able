@@ -230,31 +230,7 @@ if (notificationButton) {
 }
 
 // ===== Search Bar Enhancement =====
-const searchInput = document.querySelector('.search-bar input');
-if (searchInput) {
-    let searchTimeout;
-    
-    searchInput.addEventListener('input', (e) => {
-        clearTimeout(searchTimeout);
-        
-        searchTimeout = setTimeout(() => {
-            const query = e.target.value.trim();
-            if (query.length > 0) {
-                console.log('Searching for:', query);
-                // Implement search functionality here
-            }
-        }, 500);
-    });
-    
-    searchInput.addEventListener('focus', function() {
-        this.parentElement.style.transform = 'scale(1.02)';
-        this.parentElement.style.transition = 'transform 0.2s ease';
-    });
-    
-    searchInput.addEventListener('blur', function() {
-        this.parentElement.style.transform = 'scale(1)';
-    });
-}
+// Search is handled globally by sidebar-nav.js
 
 // ===== User Profile Dropdown (Future Enhancement) =====
 const userProfile = document.querySelector('.user-profile');

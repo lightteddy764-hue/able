@@ -8,7 +8,9 @@
     justify-content: space-between;
     align-items: center;
     padding: 2rem 2.5rem;
-    background: linear-gradient(135deg, #111827, #1e293b, #E67E22);
+    background: linear-gradient(135deg, rgba(10,10,30,0.45), rgba(10,10,30,0.3)), url('/images/dashboard-hero-bg.png');
+    background-size: cover;
+    background-position: center;
     border-radius: 20px;
     color: white;
     margin-bottom: 2rem;
@@ -42,9 +44,11 @@
     display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
     padding: 1.25rem 1rem; background: white; border-radius: 16px;
     border: 1px solid #E5E7EB; text-decoration: none; color: #1F2937;
-    transition: all 0.3s; text-align: center;
+    transition: all 0.3s; text-align: center; position: relative; overflow: hidden;
 }
+.dp-action::after { content:''; position:absolute; top:-18px; right:-18px; width:80px; height:80px; background:url('/images/pattern-leaf-branch-orange.svg') no-repeat center/contain; opacity:0.26; transform:rotate(10deg); pointer-events:none; }
 .dp-action:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-color: #E67E22; }
+.dp-action:hover::after { opacity: 0.42; }
 .dp-action svg { width: 28px; height: 28px; color: #E67E22; }
 .dp-action span { font-size: 0.8rem; font-weight: 600; }
 
@@ -87,9 +91,11 @@
     display: flex; align-items: center; gap: 0.75rem;
     padding: 1.25rem; background: white; border-radius: 14px;
     border: 1px solid #E5E7EB; text-decoration: none; color: #1F2937;
-    transition: all 0.3s; position: relative;
+    transition: all 0.3s; position: relative; overflow: hidden;
 }
+.dp-service-card::after { content:''; position:absolute; top:-20px; right:-20px; width:90px; height:90px; background:url('/images/pattern-leaf-branch-orange.svg') no-repeat center/contain; opacity:0.24; transform:rotate(8deg); pointer-events:none; }
 .dp-service-card:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(0,0,0,0.08); border-color: #E67E22; }
+.dp-service-card:hover::after { opacity: 0.4; }
 .dp-svc-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .dp-svc-icon svg { width: 20px; height: 20px; }
 .dp-svc-orange { background: #FDF2E9; color: #E67E22; }
@@ -104,7 +110,9 @@
 .dp-service-card:hover .dp-svc-arrow { color: #E67E22; transform: translateX(3px); }
 
 /* Therapist Recommendation */
-.dp-therapist-rec { border-left: 3px solid #E67E22; }
+.dp-therapist-rec { border-left: 3px solid #E67E22; position: relative; overflow: hidden; }
+.dp-therapist-rec::after { content:''; position:absolute; top:-20px; right:-20px; width:110px; height:110px; background:url('/images/pattern-leaf-branch-orange.svg') no-repeat center/contain; opacity:0.24; transform:rotate(12deg); pointer-events:none; z-index:0; }
+.dp-therapist-rec .dp-card-title, .dp-therapist-rec .dp-rec-content, .dp-therapist-rec .dp-rec-btn { position: relative; z-index: 1; }
 .dp-rec-content { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
 .dp-rec-avatar { width: 56px; height: 56px; border-radius: 50%; border: 2px solid #FDF2E9; flex-shrink: 0; }
 .dp-rec-info h4 { font-size: 0.95rem; font-weight: 700; color: #111827; margin-bottom: 0.2rem; }
@@ -148,7 +156,6 @@
 .dp-cm-stat { text-align: center; padding: 1rem; background: #F9FAFB; border-radius: 10px; border: 1px solid #F3F4F6; }
 .dp-cm-num { display: block; font-size: 1.5rem; font-weight: 800; color: #E67E22; }
 .dp-cm-stat span:last-child { font-size: 0.72rem; color: #6B7280; display: block; margin-top: 0.2rem; }
-.dp-trending {}
 .dp-trending-title { font-size: 0.8rem; font-weight: 700; color: #111827; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px; }
 .dp-trending-item { display: block; font-size: 0.85rem; color: #374151; text-decoration: none; padding: 0.5rem 0.75rem; border-radius: 8px; margin-bottom: 0.25rem; transition: all 0.2s; }
 .dp-trending-item:hover { color: #E67E22; background: #FFF8F0; }
@@ -220,4 +227,491 @@
     .dp-care-progress-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
     .dp-care-stat { padding: 0.75rem; }
     .dp-care-stat .dp-care-num { font-size: 1.1rem; }
+}
+
+
+/* ===== Avatar + Pentagon Wellness Radar ===== */
+.dp-avatar-panel {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+.dp-avatar-stage {
+    position: relative;
+    background: linear-gradient(160deg, #FFF1E0 0%, #FCE3D0 45%, #F0DFFF 100%);
+    background-size: 200% 200%;
+    animation: dpStageShift 14s ease infinite;
+    border: 1px solid rgba(230,126,34,0.15);
+    border-radius: 20px;
+    padding: 3.5rem 1rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: 460px;
+    overflow: hidden;
+}
+@keyframes dpStageShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Animated backdrop layer */
+.dp-stage-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+
+/* Rotating gradient rings behind the avatar */
+.dp-ring {
+    position: absolute;
+    left: 50%; top: 52%;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+.dp-ring-1 {
+    width: 300px; height: 300px;
+    border: 2px dashed rgba(230,126,34,0.30);
+    animation: dpSpin 26s linear infinite;
+}
+.dp-ring-2 {
+    width: 220px; height: 220px;
+    border: 2px dotted rgba(139,92,246,0.30);
+    animation: dpSpin 18s linear infinite reverse;
+}
+@keyframes dpSpin {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Floating colored orbs */
+.dp-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(2px);
+    opacity: 0.55;
+    animation: dpFloat 7s ease-in-out infinite;
+}
+.dp-orb-1 { width: 70px; height: 70px; left: 12%; top: 24%; background: radial-gradient(circle at 30% 30%, #FBBF77, #E67E22); animation-delay: 0s; }
+.dp-orb-2 { width: 48px; height: 48px; right: 14%; top: 18%; background: radial-gradient(circle at 30% 30%, #C4B5FD, #8B5CF6); animation-delay: 1.2s; }
+.dp-orb-3 { width: 56px; height: 56px; right: 10%; bottom: 26%; background: radial-gradient(circle at 30% 30%, #6EE7B7, #10B981); animation-delay: 2.1s; }
+.dp-orb-4 { width: 40px; height: 40px; left: 16%; bottom: 22%; background: radial-gradient(circle at 30% 30%, #93C5FD, #3B82F6); animation-delay: 0.6s; }
+@keyframes dpFloat {
+    0%,100% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(-18px) translateX(6px); }
+}
+
+/* Twinkling sparkles */
+.dp-spark {
+    position: absolute;
+    width: 8px; height: 8px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 8px 2px rgba(255,255,255,0.8);
+    opacity: 0;
+    animation: dpTwinkle 4s ease-in-out infinite;
+}
+.dp-spark-1 { left: 30%; top: 15%; animation-delay: 0.5s; }
+.dp-spark-2 { right: 28%; top: 40%; animation-delay: 1.8s; }
+.dp-spark-3 { left: 22%; bottom: 38%; animation-delay: 3s; }
+@keyframes dpTwinkle {
+    0%,100% { opacity: 0; transform: scale(0.6); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+
+.dp-avatar-glow {
+    position: absolute;
+    bottom: 55px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(230,126,34,0.35) 0%, rgba(245,158,11,0.12) 45%, rgba(230,126,34,0) 72%);
+    border-radius: 50%;
+    filter: blur(4px);
+    z-index: 1;
+    animation: dpPulse 4.5s ease-in-out infinite;
+}
+@keyframes dpPulse {
+    0%,100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.12); opacity: 1; }
+}
+.dp-avatar-img {
+    position: relative;
+    z-index: 2;
+    width: 360px;
+    height: 360px;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: bottom center;
+    cursor: pointer;
+    transition: transform 0.35s ease;
+    filter: drop-shadow(0 14px 22px rgba(0,0,0,0.18));
+    -webkit-user-select: none;
+    user-select: none;
+    animation: dpAvatarFloat 5s ease-in-out infinite;
+}
+@keyframes dpAvatarFloat {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+.dp-avatar-img:hover { transform: scale(1.03); animation-play-state: paused; }
+.dp-avatar-bounce { animation: dpBounce 0.6s ease; }
+@keyframes dpBounce {
+    0%,100% { transform: translateY(0) scale(1); }
+    30% { transform: translateY(-16px) scale(1.04); }
+    60% { transform: translateY(0) scale(1); }
+}
+.dp-avatar-shadow {
+    position: absolute;
+    bottom: 52px;
+    width: 170px; height: 20px;
+    background: rgba(0,0,0,0.13);
+    border-radius: 50%;
+    filter: blur(6px);
+    z-index: 1;
+    animation: dpShadowPulse 5s ease-in-out infinite;
+}
+@keyframes dpShadowPulse {
+    0%,100% { transform: scaleX(1); opacity: 0.5; }
+    50% { transform: scaleX(0.85); opacity: 0.35; }
+}
+.dp-avatar-name {
+    position: relative;
+    z-index: 2;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #92400E;
+}
+.dp-speech {
+    position: absolute;
+    top: 1.1rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    background: white;
+    color: #1f2937;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 0.65rem 1rem;
+    border-radius: 14px;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+    max-width: 85%;
+    text-align: center;
+    z-index: 3;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.dp-speech.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.dp-speech-tail {
+    position: absolute;
+    bottom: -7px; left: 50%;
+    transform: translateX(-50%);
+    width: 14px; height: 14px;
+    background: white;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+}
+.dp-radar-box {
+    background: white;
+    border: 1px solid #F0E6D8;
+    border-radius: 20px;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.dp-radar-wrap { display: flex; justify-content: center; }
+.dp-radar-svg { width: 100%; max-width: 340px; height: auto; overflow: visible; }
+.dp-radar-legend {
+    display: flex;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+.dp-radar-overall {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #FFF7F0;
+    border: 1px solid rgba(230,126,34,0.2);
+    border-radius: 14px;
+    padding: 0.6rem 1.5rem;
+}
+.dp-radar-overall-num { font-size: 1.6rem; font-weight: 800; color: #E67E22; line-height: 1; }
+.dp-radar-overall-lbl { font-size: 0.72rem; color: #9CA3AF; margin-top: 0.2rem; font-weight: 600; }
+
+@media (max-width: 900px) {
+    .dp-avatar-panel { grid-template-columns: 1fr; }
+    .dp-avatar-stage { min-height: 400px; padding-top: 3rem; }
+    .dp-avatar-img { width: 300px; height: 300px; }
+}
+
+
+/* ===== Mira Chat Bubble (inline on avatar stage) ===== */
+.dp-mira-chat-btn {
+    position: relative;
+    z-index: 3;
+    margin-top: 0.6rem;
+    padding: 0.55rem 1.25rem;
+    background: #E67E22;
+    color: white;
+    border: none;
+    border-radius: 100px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(230,126,34,0.3);
+}
+.dp-mira-chat-btn:hover { background: #D35400; transform: scale(1.04); }
+
+.dp-mira-chat {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background: white;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    max-height: 260px;
+    border-top: 2px solid #E67E22;
+}
+.dp-mira-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem 1rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.dp-mira-messages::-webkit-scrollbar { display: none; }
+.mira-msg {
+    max-width: 85%;
+    padding: 0.55rem 0.9rem;
+    border-radius: 14px;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+.mira-user {
+    align-self: flex-end;
+    background: #E67E22;
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+.mira-ai {
+    align-self: flex-start;
+    background: #F3F4F6;
+    color: #374151;
+    border-bottom-left-radius: 4px;
+}
+.dp-mira-input-row {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-top: 1px solid #F3F4F6;
+}
+.dp-mira-input-row input {
+    flex: 1;
+    padding: 0.6rem 1rem;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 100px;
+    font-size: 0.85rem;
+    outline: none;
+}
+.dp-mira-input-row input:focus { border-color: #E67E22; }
+.dp-mira-input-row button {
+    width: 36px;
+    height: 36px;
+    background: #E67E22;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.dp-mira-input-row button:hover { background: #D35400; }
+
+
+/* ===== Onboarding Banner ===== */
+.dp-onboarding {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    background: linear-gradient(135deg, #FFF7ED, #FEF3E2, #FFF1F2);
+    border: 1.5px solid rgba(230, 126, 34, 0.2);
+    border-radius: 16px;
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+    animation: dpOnboardSlide 0.5s ease-out;
+}
+@keyframes dpOnboardSlide {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.dp-onboard-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+.dp-onboard-text {
+    flex: 1;
+}
+.dp-onboard-text h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 0.2rem;
+}
+.dp-onboard-text p {
+    font-size: 0.82rem;
+    color: #6B7280;
+    line-height: 1.4;
+}
+.dp-onboard-btn {
+    padding: 0.65rem 1.25rem;
+    background: #E67E22;
+    color: white;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+.dp-onboard-btn:hover { background: #D35400; transform: translateY(-1px); }
+.dp-onboard-dismiss {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: #9CA3AF;
+    cursor: pointer;
+    padding: 0.25rem;
+}
+.dp-onboard-dismiss:hover { color: #374151; }
+@media (max-width: 700px) {
+    .dp-onboarding { flex-direction: column; text-align: center; }
+    .dp-onboard-btn { width: 100%; text-align: center; }
+}
+
+
+/* Playground Button */
+.dp-playground-btn {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+    padding: 0.7rem 1.25rem;
+    background: linear-gradient(135deg, #8B5CF6, #A78BFA);
+    color: white;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+.dp-playground-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139,92,246,0.3); }
+
+
+/* ===== Dashboard Graphics ===== */
+.dashboard-graphic {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    pointer-events: none;
+    user-select: none;
+}
+
+.wellness-plan-card {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.25rem;
+    overflow: hidden;
+}
+.wellness-plan-card .plan-content { flex: 1; min-width: 0; }
+.plan-graphic {
+    width: 180px;
+    max-height: 160px;
+    object-fit: contain;
+    align-self: center;
+    flex-shrink: 0;
+}
+
+.wellness-journey-card {
+    position: relative;
+    overflow: hidden;
+}
+.wellness-journey-card .journey-timeline {
+    position: relative;
+    z-index: 2;
+}
+.journey-graphic {
+    position: absolute;
+    right: 12px;
+    bottom: 0;
+    width: 200px;
+    max-width: 40%;
+    opacity: 0.9;
+    object-fit: contain;
+    z-index: 0;
+}
+
+.community-highlights-card {
+    display: flex;
+    align-items: stretch;
+    gap: 1.5rem;
+    overflow: hidden;
+}
+.community-highlights-card .community-content { flex: 1; min-width: 0; }
+.community-graphic {
+    width: 220px;
+    max-width: 30%;
+    object-fit: contain;
+    align-self: center;
+    flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+    .wellness-plan-card { flex-direction: column; }
+    .plan-graphic { width: 140px; align-self: center; opacity: 0.9; }
+    .community-highlights-card { flex-direction: column; }
+    .community-graphic { max-width: 100%; width: 180px; margin: 0 auto; }
+    .journey-graphic { position: relative; right: auto; bottom: auto; width: 100%; max-width: 220px; margin: 1rem auto 0; display: block; }
+}
+
+/* Mood card graphic */
+.mood-card { position: relative; overflow: hidden; }
+.mood-graphic { position: absolute; right: -10px; bottom: -14px; width: 110px; opacity: 0.85; z-index: 0; pointer-events: none; }
+.mood-card .dp-card-title, .mood-card .dp-mood-grid { position: relative; z-index: 1; }
+
+/* Weekly progress card graphic */
+.weekly-progress-card { position: relative; overflow: hidden; }
+.progress-graphic { position: absolute; right: -8px; top: 8px; width: 90px; opacity: 0.8; z-index: 0; pointer-events: none; }
+.weekly-progress-card .dp-card-title, .weekly-progress-card .dp-chart { position: relative; z-index: 1; }
+
+/* Recent activity card graphic */
+.activity-card { position: relative; overflow: hidden; }
+.activity-graphic { position: absolute; right: -12px; bottom: -10px; width: 100px; opacity: 0.8; z-index: 0; pointer-events: none; }
+.activity-card .dp-card-title, .activity-card .dp-activity { position: relative; z-index: 1; }
+
+/* Care Hub graphic */
+.dp-care-hub { position: relative; overflow: hidden; }
+.carehub-graphic { position: absolute; right: -6px; top: -6px; width: 120px; opacity: 0.7; z-index: 0; pointer-events: none; }
+.dp-care-hub .dp-card-title, .dp-care-hub .dp-care-progress-grid, .dp-care-hub .dp-care-bars, .dp-care-hub .dp-care-links { position: relative; z-index: 1; }
+
+@media (max-width: 768px) {
+    .mood-graphic, .progress-graphic, .activity-graphic, .carehub-graphic { width: 70px; opacity: 0.5; }
 }

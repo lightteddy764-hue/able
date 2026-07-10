@@ -46,7 +46,10 @@
 
             <!-- Active Programs -->
             <section id="programs" class="bm-section">
-                <h2 class="bm-sec-title">Your Active Programs</h2>
+                <div class="bm-sec-header-graphic">
+                    <h2 class="bm-sec-title">Your Active Programs</h2>
+                    <img src="/images/bodymind-programs-workout.svg" alt="" class="bm-sec-graphic">
+                </div>
                 <div class="bm-programs-grid" id="bmPrograms"><div class="bm-skeleton" style="height:200px;border-radius:16px"></div></div>
             </section>
 
@@ -61,7 +64,10 @@
 
             <!-- Habit Tracker -->
             <section class="bm-section">
-                <h2 class="bm-sec-title">Daily Habit Tracker</h2>
+                <div class="bm-sec-header-graphic">
+                    <h2 class="bm-sec-title">Daily Habit Tracker</h2>
+                    <img src="/images/bodymind-habits-todolist.svg" alt="" class="bm-sec-graphic bm-sec-graphic-sm">
+                </div>
                 <div class="bm-routine-card" id="bmHabits"><p style="color:#9CA3AF">Loading habits...</p></div>
             </section>
 
@@ -178,9 +184,24 @@
         if (currentCategory !== 'all') sessions = sessions.filter(s => s.category === currentCategory);
         document.getElementById('bmSessionsTitle').textContent = currentCategory === 'all' ? 'All Sessions' : currentCategory.charAt(0).toUpperCase() + currentCategory.slice(1) + ' Sessions';
         if (!sessions.length) { document.getElementById('bmSessions').innerHTML = '<p style="color:#9CA3AF;text-align:center;padding:2rem">No sessions in this category</p>'; return; }
-        document.getElementById('bmSessions').innerHTML = sessions.map(s => `
-            <div class="bm-session"><div class="bm-sess-img" style="background:linear-gradient(135deg,${s.gradientStart},${s.gradientEnd})"><span style="font-size:1.5rem">${s.icon || '🧘'}</span></div><div class="bm-sess-body"><span class="bm-sess-tag">${s.level}</span><h4>${s.title}</h4><div class="bm-sess-meta"><span>${s.duration} min</span><span>${s.category}</span>${(s.tags||[]).map(t=>'<span>✓ '+t+'</span>').join('')}</div><button class="bm-sess-btn" onclick='openSession(${JSON.stringify(s).replace(/'/g,"&#39;")})'>Start Session</button></div></div>
-        `).join('');
+        document.getElementById('bmSessions').innerHTML = sessions.map(s => {
+            const fallback = `background:linear-gradient(135deg,${s.gradientStart},${s.gradientEnd})`;
+            const bgImg = s.image
+                ? `<img class="bm-sess-bg" src="${s.image}" alt="${s.title}" loading="lazy">`
+                : '';
+            return `
+            <div class="bm-session" style="${s.image ? '' : fallback}">
+                ${bgImg}
+                <div class="bm-sess-scrim"></div>
+                <img src="/images/pattern-leaf-branch.svg" alt="" class="bm-sess-pattern">
+                <div class="bm-sess-body">
+                    <span class="bm-sess-tag">${s.level}</span>
+                    <h4>${s.title}</h4>
+                    <div class="bm-sess-meta"><span>${s.duration} min</span><span>${s.category}</span>${(s.tags||[]).map(t=>'<span>✓ '+t+'</span>').join('')}</div>
+                    <button class="bm-sess-btn" onclick='openSession(${JSON.stringify(s).replace(/'/g,"&#39;")})'>Start Session</button>
+                </div>
+            </div>`;
+        }).join('');
     }
 
     function renderHabits() {

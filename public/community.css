@@ -22,10 +22,20 @@
 .cm-section { margin-bottom:2.5rem; }
 .cm-sec-title { font-size:1.3rem; font-weight:800; color:#111827; margin-bottom:1.25rem; }
 
+/* Section header graphics */
+.cm-sec-header-graphic { display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.cm-sec-header-graphic .cm-sec-title, .cm-sec-header-graphic h3 { margin-bottom:0; }
+.cm-progress-card .cm-sec-header-graphic { margin-bottom:1rem; }
+.cm-sec-graphic { width:90px; height:90px; object-fit:contain; flex-shrink:0; opacity:0.9; pointer-events:none; user-select:none; }
+.cm-sec-graphic-sm { width:64px; height:64px; }
+
 /* Recommended */
 .cm-rec-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; }
-.cm-rec-card { padding:1.5rem; border-radius:16px; border:1px solid #E5E7EB; background:white; transition:all 0.3s; position:relative; }
+.cm-rec-card { padding:1.5rem; border-radius:16px; border:1px solid #E5E7EB; background:white; transition:all 0.3s; position:relative; overflow:hidden; }
+.cm-rec-card::after { content:''; position:absolute; top:-20px; right:-20px; width:100px; height:100px; background:url('/images/pattern-leaf-branch-orange.svg') no-repeat center/contain; opacity:0.26; transform:rotate(10deg); pointer-events:none; z-index:0; }
+.cm-rec-card > * { position: relative; z-index: 1; }
 .cm-rec-card:hover { transform:translateY(-4px); box-shadow:0 12px 30px rgba(0,0,0,0.08); }
+.cm-rec-card:hover::after { opacity:0.44; }
 .cm-rec-green { border-top:3px solid #10B981; }
 .cm-rec-blue { border-top:3px solid #3B82F6; }
 .cm-rec-purple { border-top:3px solid #8B5CF6; }
@@ -34,8 +44,10 @@
 .cm-rec-card p { font-size:0.8rem; color:#6B7280; margin-bottom:0.75rem; }
 .cm-rec-meta { display:flex; gap:0.75rem; margin-bottom:1rem; }
 .cm-rec-meta span { font-size:0.7rem; color:#9CA3AF; background:#F3F4F6; padding:0.2rem 0.5rem; border-radius:6px; }
-.cm-rec-btn { width:100%; padding:0.7rem; background:transparent; color:#E67E22; border:2px solid #E67E22; border-radius:10px; font-weight:700; font-size:0.85rem; cursor:pointer; transition:all 0.3s; }
+.cm-rec-btn { padding:0.6rem 1.2rem; background:transparent; color:#E67E22; border:2px solid #E67E22; border-radius:10px; font-weight:700; font-size:0.82rem; cursor:pointer; transition:all 0.3s; }
 .cm-rec-btn:hover { background:#E67E22; color:white; }
+.cm-rec-btn-view { padding:0.6rem 1.2rem; background:white; color:#374151; border:1.5px solid #E5E7EB; border-radius:10px; font-weight:600; font-size:0.82rem; cursor:pointer; transition:all 0.2s; }
+.cm-rec-btn-view:hover { border-color:#E67E22; color:#E67E22; }
 
 /* Community Spaces */
 .cm-spaces-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
@@ -103,3 +115,4 @@
 @media(max-width:968px) { .cm-hero{flex-direction:column;text-align:center;gap:1.5rem;padding:2rem} .cm-hero-left p{max-width:100%} .cm-hero-stats{justify-content:center} .cm-hero-ctas{justify-content:center} .cm-activity-bar{grid-template-columns:repeat(2,1fr)} }
 @media(max-width:768px) { .cm-page{padding:1rem} .cm-hero-left h1{font-size:1.4rem} .cm-rec-grid{grid-template-columns:1fr} .cm-spaces-grid{grid-template-columns:1fr} .cm-event{flex-direction:column;align-items:flex-start} .cm-ev-btn{width:100%} .cm-activity-bar{grid-template-columns:1fr} }
 @media(max-width:480px) { .cm-hero{padding:1.5rem} .cm-hero-left h1{font-size:1.2rem} }
+@media(max-width:768px) { .cm-sec-graphic{width:56px;height:56px} .cm-sec-graphic-sm{width:44px;height:44px} }

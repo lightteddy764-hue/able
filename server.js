@@ -12,6 +12,9 @@ const User = require('./models/User');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Trust the reverse proxy (Render/Heroku/etc.) so rate-limit & req.ip work correctly
+app.set('trust proxy', 1);
+
 // ===== SECURITY MIDDLEWARE =====
 // Helmet — secure HTTP headers (relaxed CSP for inline scripts)
 app.use(helmet({
@@ -82,7 +85,7 @@ function authMiddleware(req, res, next) {
 // Signup
 app.post('/api/signup', authLimiter, async (req, res) => {
     try {
-        const { name, email, password, whodasScore, severityLevel, whodasAnswers } = req.body;
+        const { name, email, password, whodasScore, severityLevel, whodasAnswers, gender, dateOfBirth, hobbies, interests } = req.body;
 
         // Input validation
         if (!name || !email || !password) return res.status(400).json({ error: 'Name, email, and password are required' });
@@ -94,11 +97,25 @@ app.post('/api/signup', authLimiter, async (req, res) => {
         const existing = await User.findOne({ email: email.toLowerCase().trim() });
         if (existing) return res.status(400).json({ error: 'Email already registered' });
 
+        // Calculate age from DOB
+        let age;
+        if (dateOfBirth) {
+            const dob = new Date(dateOfBirth);
+            const today = new Date();
+            age = today.getFullYear() - dob.getFullYear();
+            if (today.getMonth() < dob.getMonth() || (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())) age--;
+        }
+
         // Create user
         const user = new User({
             name,
             email,
             password,
+            gender: gender || '',
+            dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : undefined,
+            age: age || undefined,
+            hobbies: hobbies || [],
+            interests: interests || [],
             assessment: {
                 completed: whodasScore !== undefined,
                 whodasScore: whodasScore || 0,
@@ -481,7 +498,7 @@ app.get('/api/dashboard', authMiddleware, async (req, res) => {
         }
         
         res.json({
-            user: { name: user.name, plan: user.plan, streak, completedTasks: user.completedTasks, sessionsBooked: user.sessionsBooked },
+            user: { name: user.name, gender: user.gender, plan: user.plan, streak, completedTasks: user.completedTasks, sessionsBooked: user.sessionsBooked },
             todayMood: todayMood?.mood || null,
             weekMoods,
             wellnessScore,
@@ -632,7 +649,7 @@ app.post('/api/chat', async (req, res) => {
             return res.json({ response: getFallbackResponse(message, userData), source: 'fallback' });
         }
 
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -651,6 +668,335 @@ app.post('/api/chat', async (req, res) => {
     } catch (error) {
         console.error('AI Error:', error.message);
         res.json({ response: getFallbackResponse(req.body.message, req.body.userData), source: 'fallback' });
+    }
+});
+
+// ============================================================
+// MUSIC — Wellness Music Videos (YouTube embed only, never downloaded/stored)
+// ============================================================
+const MusicVideo = require('./models/MusicVideo');
+
+// Extract YouTube video ID from various URL formats
+function extractYoutubeId(url) {
+    if (!url) return null;
+    const patterns = [
+        /(?:youtube\.com\/watch\?v=|youtube\.com\/embed\/|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/,
+        /^([a-zA-Z0-9_-]{11})$/ // raw ID
+    ];
+    for (const p of patterns) {
+        const m = url.match(p);
+        if (m) return m[1];
+    }
+    return null;
+}
+
+// ----- Public: List active music videos -----
+app.get('/api/music', async (req, res) => {
+    try {
+        const { category } = req.query;
+        const filter = { isActive: true };
+        if (category) filter.category = category;
+        const videos = await MusicVideo.find(filter).sort({ displayOrder: 1, createdAt: -1 }).lean();
+        res.json({ videos });
+    } catch (e) { res.status(500).json({ error: 'Server error' }); }
+});
+
+// ----- Public: Single video detail -----
+app.get('/api/music/:id', async (req, res) => {
+    try {
+        const video = await MusicVideo.findOne({ _id: req.params.id, isActive: true }).lean();
+        if (!video) return res.status(404).json({ error: 'Video not found' });
+        res.json(video);
+    } catch (e) { res.status(500).json({ error: 'Server error' }); }
+});
+
+// ----- Admin: List all music videos (active + inactive) -----
+app.get('/admin/api/music', adminAuth, async (req, res) => {
+    try {
+        const videos = await MusicVideo.find({}).sort({ displayOrder: 1, createdAt: -1 }).lean();
+        res.json({ videos });
+    } catch (e) { res.status(500).json({ error: 'Server error' }); }
+});
+
+// ----- Admin: Create music video -----
+app.post('/admin/api/music', adminAuth, async (req, res) => {
+    try {
+        const { title, description, category, duration, purpose, youtubeUrl, thumbnailUrl, isActive, displayOrder } = req.body;
+        if (!title || !category || !youtubeUrl) return res.status(400).json({ error: 'Title, category, and YouTube URL are required' });
+        const videoId = extractYoutubeId(youtubeUrl);
+        if (!videoId) return res.status(400).json({ error: 'Could not extract a valid YouTube video ID from that URL' });
+        const video = await MusicVideo.create({
+            title, description: description || '', category,
+            duration: duration || '', purpose: purpose || '',
+            youtubeUrl, youtubeVideoId: videoId,
+            thumbnailUrl: thumbnailUrl || `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+            isActive: isActive !== false,
+            displayOrder: displayOrder || 0
+        });
+        res.status(201).json(video);
+    } catch (e) { res.status(500).json({ error: e.message || 'Server error' }); }
+});
+
+// ----- Admin: Update music video -----
+app.put('/admin/api/music/:id', adminAuth, async (req, res) => {
+    try {
+        const { title, description, category, duration, purpose, youtubeUrl, thumbnailUrl, isActive, displayOrder } = req.body;
+        const updates = {};
+        if (title !== undefined) updates.title = title;
+        if (description !== undefined) updates.description = description;
+        if (category !== undefined) updates.category = category;
+        if (duration !== undefined) updates.duration = duration;
+        if (purpose !== undefined) updates.purpose = purpose;
+        if (isActive !== undefined) updates.isActive = isActive;
+        if (displayOrder !== undefined) updates.displayOrder = displayOrder;
+        if (youtubeUrl !== undefined) {
+            const videoId = extractYoutubeId(youtubeUrl);
+            if (!videoId) return res.status(400).json({ error: 'Could not extract a valid YouTube video ID from that URL' });
+            updates.youtubeUrl = youtubeUrl;
+            updates.youtubeVideoId = videoId;
+            if (!thumbnailUrl) updates.thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+        }
+        if (thumbnailUrl !== undefined) updates.thumbnailUrl = thumbnailUrl;
+
+        const video = await MusicVideo.findByIdAndUpdate(req.params.id, updates, { new: true });
+        if (!video) return res.status(404).json({ error: 'Not found' });
+        res.json(video);
+    } catch (e) { res.status(500).json({ error: 'Server error' }); }
+});
+
+// ----- Admin: Delete music video -----
+app.delete('/admin/api/music/:id', adminAuth, async (req, res) => {
+    try {
+        const video = await MusicVideo.findByIdAndDelete(req.params.id);
+        if (!video) return res.status(404).json({ error: 'Not found' });
+        res.json({ message: 'Video deleted' });
+    } catch (e) { res.status(500).json({ error: 'Server error' }); }
+});
+
+// ===== WELLNESS PLAYGROUND — AI Creative Activities =====
+app.post('/api/playground/generate', authMiddleware, async (req, res) => {
+    try {
+        const { prompt, activity } = req.body;
+        if (!prompt) return res.status(400).json({ error: 'Prompt required' });
+
+        const apiKey = process.env.GEMINI_API_KEY;
+        let responseText = '';
+
+        if (apiKey && apiKey !== 'YOUR_GEMINI_API_KEY_HERE') {
+            try {
+                const aiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: { temperature: 0.9, maxOutputTokens: 400 }
+                    })
+                });
+                const data = await aiRes.json();
+                responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            } catch(e) { console.error('Playground AI error:', e.message); }
+        }
+
+        // Fallback responses
+        if (!responseText) {
+            const fallbacks = {
+                poem: 'In stillness I find my breath,\nA gentle rhythm, soft and deep.\nThe world may rush and pull and press,\nBut here, within, I choose to keep\nA moment just for me — to rest,\nTo honor all I feel inside.\nNo judgment here, no need to prove,\nJust gratitude for being alive.',
+                dream: 'Dreams often reflect our subconscious processing daily emotions and unresolved thoughts. The images you described suggest your mind is working through themes of transition and growth. Pay attention to recurring symbols — they often point to what needs your conscious attention. Consider journaling about how the dream made you feel when you woke up.',
+                imagination: 'Your imagination reveals a creative and introspective mind. The themes you described suggest a deep desire for connection and meaning. This kind of rich inner life is a strength — it indicates emotional intelligence and the ability to envision possibilities beyond current circumstances. Channel this into creative expression or goal-setting.',
+                psych: 'Based on your reflections, you show strong self-awareness and emotional depth. You appear to value authenticity and meaningful connections. Your coping style leans toward introspection, which serves you well but may benefit from balance with outward expression. Growth suggestion: try sharing one vulnerable thought with someone you trust this week.'
+            };
+            responseText = fallbacks[activity] || fallbacks.poem;
+        }
+
+        // Award points
+        const scoreGained = activity === 'psych' ? 8 : 5;
+        await User.findByIdAndUpdate(req.user.id, {
+            $inc: { completedTasks: 1, 'careProgress.selfCareTasksCompleted': 1 },
+            $push: { recentActivity: { $each: [{ type: 'playground', title: 'Playground: ' + (activity || 'creative'), description: 'Completed a wellness activity', icon: '🎨', page: 'playground', createdAt: new Date() }], $slice: -20 } }
+        });
+
+        res.json({ response: responseText, scoreGained });
+    } catch(e) { console.error('Playground error:', e); res.status(500).json({ error: 'Server error' }); }
+});
+
+// ===== MIRA — Personalized AI Assistant (Dashboard Avatar Chat) =====
+
+// Bot's own name/persona is gender-matched to the user (same pairing as the dashboard avatar)
+function getBotName(user) {
+    return user.gender === 'male' ? 'Arjun' : 'Mira';
+}
+
+// Smart fallback when Gemini is unavailable — uses real user data
+function generateMiraFallback(firstName, user, message) {
+    const botName = getBotName(user);
+    const msg = (message || '').toLowerCase();
+    const hobbies = user.hobbies || [];
+    const interests = user.interests || [];
+    const streak = user.streak || 0;
+    const recentMoods = (user.moodHistory || []).slice(-3).map(m => m.mood);
+    const lastMood = recentMoods[recentMoods.length - 1] || '';
+
+    // Greeting patterns
+    if (/^(hi|hey|hello|hii|sup|yo|good morning|good evening)/i.test(msg)) {
+        const greets = [
+            `Hey ${firstName}! 😊 Great to see you. How's your day going?`,
+            `Hi ${firstName}! I'm ${botName}, your wellness buddy. What's on your mind today?`,
+            `Hello ${firstName}! 🌟 Ready to make today count?`
+        ];
+        return { response: greets[Math.floor(Math.random() * greets.length)], mood: 'greeting' };
+    }
+
+    // Name/about me
+    if (/my name|who am i|about me/i.test(msg)) {
+        let resp = `You're ${user.name || firstName}! `;
+        if (hobbies.length) resp += `I know you enjoy ${hobbies.slice(0, 3).join(', ')}. `;
+        if (interests.length) resp += `You're interested in ${interests.slice(0, 2).join(' and ')}. `;
+        resp += `I'm here to support your wellness journey. 💛`;
+        return { response: resp, mood: 'present' };
+    }
+
+    // Progress/streak
+    if (/progress|streak|how am i doing|score|stats/i.test(msg)) {
+        let resp = streak > 0 ? `You're on a ${streak}-day streak, ${firstName}! 🔥 ` : `Start logging your mood daily to build a streak! `;
+        if (lastMood) resp += `Your last mood was "${lastMood}". `;
+        resp += streak >= 7 ? `Incredible consistency — keep it going!` : `Every day you show up matters.`;
+        return { response: resp, mood: streak > 3 ? 'celebrate' : 'present' };
+    }
+
+    // Mood/feelings
+    if (/mood|feel|stressed|anxious|sad|happy|great|low|struggling|tired|overwhelmed/i.test(msg)) {
+        if (/stressed|anxious|overwhelmed/i.test(msg)) {
+            return { response: `I hear you, ${firstName}. Try a quick breathing exercise — 4 counts in, hold 4, out for 6. Even 2 minutes can shift things. 🧘`, mood: 'empathy' };
+        }
+        if (/sad|low|struggling|tired/i.test(msg)) {
+            return { response: `That takes courage to share, ${firstName}. Be gentle with yourself today. A short walk or calling a friend can help. You're not alone. 💛`, mood: 'empathy' };
+        }
+        if (/happy|great|good|amazing/i.test(msg)) {
+            return { response: `Love that energy, ${firstName}! 🌟 Ride this wave — maybe try something new from your hobbies today?`, mood: 'celebrate' };
+        }
+        return { response: `Thanks for checking in. Try logging your mood on the dashboard — it helps me understand you better over time.`, mood: 'talk' };
+    }
+
+    // Hobbies
+    if (/hobby|hobbies|interests|what do i like|bored|something to do/i.test(msg)) {
+        if (hobbies.length) {
+            const h = hobbies[Math.floor(Math.random() * hobbies.length)];
+            return { response: `How about some ${h} today, ${firstName}? You listed it as one of your favorites! Even 15 minutes can lift your mood. 🌱`, mood: 'present' };
+        }
+        return { response: `Try exploring the Community section — there are circles for yoga, meditation, creative arts, and more!`, mood: 'present' };
+    }
+
+    // Suggestions/what to do
+    if (/suggest|recommend|what should i|help me|what to do|tip/i.test(msg)) {
+        const suggestions = [
+            `Try a 5-minute breathing session on Body-Mind — it's a quick reset. 🫁`,
+            `Have you checked the Community page? Joining a circle can boost your mood.`,
+            `How about logging your mood? Tracking patterns helps you understand yourself better.`,
+            `The Self-Care section has quick activities tailored to how you're feeling.`,
+            hobbies.length ? `Since you love ${hobbies[0]}, maybe dedicate 20 minutes to it today?` : `Try exploring the Healing Zone — real therapists are available.`
+        ];
+        return { response: `${firstName}, here's an idea: ${suggestions[Math.floor(Math.random() * suggestions.length)]}`, mood: 'present' };
+    }
+
+    // Therapy/professional help
+    if (/therap|counselor|professional|talk to someone|need help/i.test(msg)) {
+        return { response: `If you'd like to talk to a professional, check the Healing Zone — we have verified therapists ready to help. No judgment, just support. 💚`, mood: 'empathy' };
+    }
+
+    // Default — personalized with user context
+    const defaults = [
+        `I'm here for you, ${firstName}! You can ask me about your progress, mood tips, or what to do next.`,
+        `${firstName}, try telling me how you feel today, or ask for a wellness suggestion. I'll do my best! 🌿`,
+        `Not sure what to ask? Try: "What should I do today?" or "How's my progress?" — I'll personalize it for you!`
+    ];
+    return { response: defaults[Math.floor(Math.random() * defaults.length)], mood: 'talk' };
+}
+
+app.post('/api/mira/chat', authMiddleware, async (req, res) => {
+    try {
+        const { message, history } = req.body;
+        if (!message) return res.status(400).json({ error: 'Message required' });
+
+        // Crisis check
+        if (detectCrisis(message)) {
+            return res.json({ response: 'I care about your safety. If you are in crisis, please call 988 (Suicide & Crisis Lifeline) or text HOME to 741741. You are not alone. 💛', mood: 'concern' });
+        }
+
+        // Gather user context
+        const user = await User.findById(req.user.id).select('name gender age hobbies interests wellnessGoals moodHistory streak completedTasks sessionsBooked careProgress assessment').lean();
+        const recentMoods = (user.moodHistory || []).slice(-7).map(m => m.mood);
+        const moodStr = recentMoods.length ? recentMoods.join(', ') : 'not logged yet';
+
+        const userContext = `
+User profile:
+- Name: ${user.name}
+- Gender: ${user.gender || 'not specified'}
+- Age: ${user.age || 'unknown'}
+- Hobbies: ${(user.hobbies || []).join(', ') || 'none listed'}
+- Interests: ${(user.interests || []).join(', ') || 'none listed'}
+- Wellness goals: ${(user.wellnessGoals || []).join(', ') || 'general wellness'}
+- Recent moods (last 7 days): ${moodStr}
+- Day streak: ${user.streak || 0}
+- Tasks completed: ${user.completedTasks || 0}
+- Sessions booked: ${user.sessionsBooked || 0}
+- WHODAS severity: ${user.assessment?.severityLevel || 'not assessed'}
+`;
+
+        const botName = getBotName(user);
+        const systemPrompt = `You are ${botName}, ABLE's warm and supportive wellness assistant. You live inside the user's dashboard as their personal wellness buddy.
+
+Rules:
+- Be warm, supportive, concise (2-3 sentences max per response).
+- Use the user's first name naturally.
+- Reference their hobbies, interests, moods, and progress when relevant.
+- Encourage small wins and consistency.
+- Never diagnose or prescribe medication.
+- If they seem stressed, suggest a specific ABLE feature (breathing exercise, self-care check-in, community circle, etc.).
+- Stay conversational and friendly — like a kind friend, not a robot.
+- Use occasional emojis but don't overdo it.
+
+${userContext}
+
+Conversation so far:
+${(history || []).slice(-6).map(h => `${h.role}: ${h.text}`).join('\n')}
+User: ${message}
+${botName}:`;
+
+        const apiKey = process.env.GEMINI_API_KEY;
+        if (!apiKey || apiKey === 'YOUR_GEMINI_API_KEY_HERE') {
+            const firstName = (user.name || '').split(' ')[0] || 'there';
+            return res.json(generateMiraFallback(firstName, user, message));
+        }
+
+        const aiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: systemPrompt }] }],
+                generationConfig: { temperature: 0.8, maxOutputTokens: 150 }
+            })
+        });
+        const data = await aiRes.json();
+        if (!data.candidates?.[0]?.content?.parts?.[0]?.text) {
+            console.error('Mira Gemini error:', JSON.stringify(data).slice(0, 500));
+            // Fall back to smart templates
+            const firstName = (user.name || '').split(' ')[0] || 'there';
+            return res.json(generateMiraFallback(firstName, user, message));
+        }
+        const text = data.candidates[0].content.parts[0].text;
+
+        // Determine mood of response for avatar pose
+        let mood = 'talk';
+        const lower = text.toLowerCase();
+        if (/proud|great|amazing|wonderful|streak|congrat/i.test(lower)) mood = 'celebrate';
+        else if (/try|suggest|recommend|how about|breath|exercise/i.test(lower)) mood = 'present';
+        else if (/hear you|understand|tough|hard|sorry/i.test(lower)) mood = 'empathy';
+        else if (/hi|hey|hello|welcome|morning|evening/i.test(lower)) mood = 'greeting';
+
+        res.json({ response: text, mood });
+    } catch (e) {
+        console.error('Mira chat error:', e.message);
+        res.json({ response: "I'm having a moment — try again in a sec! 🌿", mood: 'talk' });
     }
 });
 
@@ -1636,6 +1982,15 @@ app.post('/admin/api/community-page/circles/:id/posts', adminAuth, async (req, r
 
 // Existing PUT/DELETE/pin/hide for /official-posts/:postId already work for circle posts (lookup is by postId, not by group type)
 
+// Public: get single circle detail
+app.get('/api/community/circles/:id', async (req, res) => {
+    try {
+        const circle = await FeaturedCircle.findById(req.params.id).lean();
+        if (!circle) return res.status(404).json({ error: 'Circle not found' });
+        res.json({ circle });
+    } catch (e) { res.status(500).json({ error: 'Server error' }); }
+});
+
 // Public: list posts in a circle
 app.get('/api/community/circles/:id/posts', async (req, res) => {
     try {
@@ -2566,6 +2921,353 @@ app.put('/admin/api/landing', adminAuth, async (req, res) => {
 // Root route
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// ============================================================
+// MARKETPLACE — API Routes
+// ============================================================
+const MarketplaceListing = require('./models/MarketplaceListing');
+
+// Marketplace image upload (up to 5 images, max 3MB each)
+const marketplaceStorage = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, 'public/uploads/marketplace'),
+    filename: (req, file, cb) => { const ext = file.originalname.split('.').pop(); cb(null, 'mp-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7) + '.' + ext); }
+});
+const marketplaceUpload = multer({
+    storage: marketplaceStorage,
+    limits: { fileSize: 3 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => { if (['image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(file.mimetype)) cb(null, true); else cb(new Error('Only JPG, PNG, WebP, GIF allowed')); }
+});
+
+// Upload marketplace images (returns array of URLs)
+app.post('/api/marketplace/upload-images', authMiddleware, (req, res) => {
+    marketplaceUpload.array('images', 5)(req, res, (err) => {
+        if (err) return res.status(400).json({ error: err.message || 'Upload failed' });
+        if (!req.files || !req.files.length) return res.status(400).json({ error: 'No files provided' });
+        const urls = req.files.map(f => '/uploads/marketplace/' + f.filename);
+        res.json({ message: 'Uploaded', images: urls });
+    });
+});
+
+// Professional version of the same upload
+app.post('/professional/api/marketplace/upload-images', profAuthForGroups, (req, res) => {
+    marketplaceUpload.array('images', 5)(req, res, (err) => {
+        if (err) return res.status(400).json({ error: err.message || 'Upload failed' });
+        if (!req.files || !req.files.length) return res.status(400).json({ error: 'No files provided' });
+        const urls = req.files.map(f => '/uploads/marketplace/' + f.filename);
+        res.json({ message: 'Uploaded', images: urls });
+    });
+});
+
+const LISTING_TYPE_LABELS = {
+    spa: 'Spa', mental_health_center: 'Mental Health Center', therapy_clinic: 'Therapy Clinic',
+    yoga_studio: 'Yoga Studio', meditation_center: 'Meditation Center', fitness_wellness: 'Fitness & Wellness',
+    nutrition_store: 'Nutrition Store', wellness_product_store: 'Wellness Product Store',
+    professional_service: 'Professional Service', other: 'Other'
+};
+
+// ----- Public: Browse approved listings -----
+app.get('/api/marketplace', async (req, res) => {
+    try {
+        const { type, city, search, featured, priceRange, page = 1, limit = 20 } = req.query;
+        const filter = { status: 'approved' };
+        if (type) filter.listingType = type;
+        if (city) filter['location.city'] = new RegExp(city, 'i');
+        if (priceRange) filter.priceRange = priceRange;
+        if (featured === 'true') filter.isFeatured = true;
+        if (search) {
+            const regex = new RegExp(search, 'i');
+            filter.$or = [{ businessName: regex }, { description: regex }, { tags: regex }, { services: regex }];
+        }
+        const skip = (parseInt(page) - 1) * parseInt(limit);
+        const [listings, total] = await Promise.all([
+            MarketplaceListing.find(filter)
+                .select('-reports -licenseNumber -qualification -professionalAssociation')
+                .sort({ isFeatured: -1, createdAt: -1 })
+                .skip(skip).limit(parseInt(limit)).lean(),
+            MarketplaceListing.countDocuments(filter)
+        ]);
+        res.json({ listings, total, page: parseInt(page), pages: Math.ceil(total / parseInt(limit)) });
+    } catch (e) { res.status(500).json({ error: 'Server error' }); }
+});
+
+// NOTE: Specific routes MUST come before /:id to avoid matching
+app.get('/api/marketplace/my-listings', authMiddleware, async (req, res) => {
+    const listings = await MarketplaceListing.find({ submittedByUser: req.user.id }).sort({ createdAt: -1 }).lean();
+    res.json({ listings });
+});
+
+app.get('/api/marketplace/my-bookings', authMiddleware, async (req, res) => {
+    const bookings = await MarketplaceBooking.find({ userId: req.user.id })
+        .populate('listingId', 'businessName listingType images location')
+        .sort({ createdAt: -1 }).lean();
+    res.json({ bookings });
+});
+
+app.get('/api/marketplace/:id', async (req, res) => {
+    try {
+        const listing = await MarketplaceListing.findOne({ _id: req.params.id, status: 'approved' })
+            .select('-reports -licenseNumber -qualification -professionalAssociation')
+            .populate('linkedProfessionalId', 'fullName title profilePhoto rating specializations')
+            .lean();
+        if (!listing) return res.status(404).json({ error: 'Listing not found' });
+        // Increment views
+        await MarketplaceListing.updateOne({ _id: req.params.id }, { $inc: { views: 1 } });
+        res.json(listing);
+    } catch (e) { res.status(500).json({ error: 'Server error' }); }
+});
+
+// ----- User: Manage own listings (view/edit/delete) — submission only via professional portal -----
+app.put('/api/marketplace/my-listings/:id', authMiddleware, async (req, res) => {
+    try {
+        const listing = await MarketplaceListing.findOne({ _id: req.params.id, submittedByUser: req.user.id });
+        if (!listing) return res.status(404).json({ error: 'Listing not found' });
+        const editable = ['businessName', 'listingType', 'description', 'services', 'location', 'contact', 'images', 'openingHours', 'priceRange', 'tags'];
+        editable.forEach(k => { if (req.body[k] !== undefined) listing[k] = req.body[k]; });
+        await listing.save();
+        res.json(listing);
+    } catch (e) { res.status(500).json({ error: 'Server error' }); }
+});
+
+app.delete('/api/marketplace/my-listings/:id', authMiddleware, async (req, res) => {
+    const r = await MarketplaceListing.findOneAndDelete({ _id: req.params.id, submittedByUser: req.user.id });
+    if (!r) return res.status(404).json({ error: 'Not found' });
+    res.json({ message: 'Listing deleted' });
+});
+
+// Report
+app.post('/api/marketplace/:id/report', authMiddleware, async (req, res) => {
+    try {
+        const { reason, details } = req.body;
+        const listing = await MarketplaceListing.findById(req.params.id);
+        if (!listing) return res.status(404).json({ error: 'Not found' });
+        listing.reports.push({ userId: req.user.id, reason: reason || 'other', details: details || '' });
+        await listing.save();
+        res.json({ message: 'Report submitted. Our team will review it.' });
+    } catch (e) { res.status(500).json({ error: 'Server error' }); }
+});
+
+// ----- Professional: Submit listing -----
+app.post('/professional/api/marketplace/submit', profAuthForGroups, async (req, res) => {
+    try {
+        if (req.professional.status !== 'approved') return res.status(403).json({ error: 'Only approved professionals can submit marketplace listings' });
+        const { businessName, listingType, description, services, location, contact, images, openingHours, priceRange, tags, licenseNumber, qualification, professionalAssociation } = req.body;
+        if (!businessName || !listingType || !description) return res.status(400).json({ error: 'Business name, type, and description are required' });
+        const listing = await MarketplaceListing.create({
+            businessName, listingType, description,
+            services: services || [], location: location || {}, contact: contact || {},
+            images: images || [], openingHours: openingHours || [],
+            priceRange: priceRange || 'unknown', tags: tags || [],
+            submittedByType: 'professional', submittedByProfessional: req.professional._id,
+            isProfessionalLinked: true, linkedProfessionalId: req.professional._id,
+            licenseNumber: licenseNumber || '', qualification: qualification || '',
+            professionalAssociation: professionalAssociation || '',
+            status: 'pending'
+        });
+        res.status(201).json({ message: 'Listing submitted for review', listing });
+    } catch (e) { res.status(500).json({ error: e.message || 'Server error' }); }
+});
+
+app.get('/professional/api/marketplace/my-listings', profAuthForGroups, async (req, res) => {
+    const listings = await MarketplaceListing.find({ submittedByProfessional: req.professional._id }).sort({ createdAt: -1 }).lean();
+    res.json({ listings });
+});
+
+app.put('/professional/api/marketplace/my-listings/:id', profAuthForGroups, async (req, res) => {
+    try {
+        const listing = await MarketplaceListing.findOne({ _id: req.params.id, submittedByProfessional: req.professional._id });
+        if (!listing) return res.status(404).json({ error: 'Not found' });
+        const editable = ['businessName', 'listingType', 'description', 'services', 'location', 'contact', 'images', 'openingHours', 'priceRange', 'tags'];
+        editable.forEach(k => { if (req.body[k] !== undefined) listing[k] = req.body[k]; });
+        await listing.save();
+        res.json(listing);
+    } catch (e) { res.status(500).json({ error: 'Server error' }); }
+});
+
+// ----- Admin: Manage marketplace -----
+app.get('/admin/api/marketplace', adminAuth, async (req, res) => {
+    try {
+        const { status, type, page = 1, limit = 30 } = req.query;
+        const filter = {};
+        if (status) filter.status = status;
+        if (type) filter.listingType = type;
+        const skip = (parseInt(page) - 1) * parseInt(limit);
+        const [listings, total] = await Promise.all([
+            MarketplaceListing.find(filter)
+                .populate('submittedByUser', 'name email')
+                .populate('submittedByProfessional', 'fullName email')
+                .sort({ createdAt: -1 }).skip(skip).limit(parseInt(limit)).lean(),
+            MarketplaceListing.countDocuments(filter)
+        ]);
+        // Stats
+        const [pending, approved, rejected, suspended] = await Promise.all([
+            MarketplaceListing.countDocuments({ status: 'pending' }),
+            MarketplaceListing.countDocuments({ status: 'approved' }),
+            MarketplaceListing.countDocuments({ status: 'rejected' }),
+            MarketplaceListing.countDocuments({ status: 'suspended' })
+        ]);
+        res.json({ listings, total, page: parseInt(page), pages: Math.ceil(total / parseInt(limit)), stats: { pending, approved, rejected, suspended } });
+    } catch (e) { res.status(500).json({ error: 'Server error' }); }
+});
+
+app.get('/admin/api/marketplace/:id', adminAuth, async (req, res) => {
+    const listing = await MarketplaceListing.findById(req.params.id)
+        .populate('submittedByUser', 'name email')
+        .populate('submittedByProfessional', 'fullName email profilePhoto')
+        .populate('linkedProfessionalId', 'fullName title specializations')
+        .lean();
+    if (!listing) return res.status(404).json({ error: 'Not found' });
+    res.json(listing);
+});
+
+app.put('/admin/api/marketplace/:id/approve', adminAuth, async (req, res) => {
+    const listing = await MarketplaceListing.findByIdAndUpdate(req.params.id, { status: 'approved', approvedBy: req.adminUser.id, approvedAt: new Date(), rejectionReason: '' }, { new: true });
+    if (!listing) return res.status(404).json({ error: 'Not found' });
+    await logAudit(req, 'marketplace.approve', 'MarketplaceListing', listing._id, listing.businessName);
+    res.json(listing);
+});
+
+app.put('/admin/api/marketplace/:id/reject', adminAuth, async (req, res) => {
+    const { reason } = req.body;
+    const listing = await MarketplaceListing.findByIdAndUpdate(req.params.id, { status: 'rejected', rejectionReason: reason || 'Does not meet guidelines' }, { new: true });
+    if (!listing) return res.status(404).json({ error: 'Not found' });
+    await logAudit(req, 'marketplace.reject', 'MarketplaceListing', listing._id, reason || 'rejected');
+    res.json(listing);
+});
+
+app.put('/admin/api/marketplace/:id/suspend', adminAuth, async (req, res) => {
+    const listing = await MarketplaceListing.findByIdAndUpdate(req.params.id, { status: 'suspended' }, { new: true });
+    if (!listing) return res.status(404).json({ error: 'Not found' });
+    res.json(listing);
+});
+
+app.put('/admin/api/marketplace/:id/hide', adminAuth, async (req, res) => {
+    const listing = await MarketplaceListing.findByIdAndUpdate(req.params.id, { status: 'hidden' }, { new: true });
+    if (!listing) return res.status(404).json({ error: 'Not found' });
+    res.json(listing);
+});
+
+app.put('/admin/api/marketplace/:id/feature', adminAuth, async (req, res) => {
+    const listing = await MarketplaceListing.findById(req.params.id);
+    if (!listing) return res.status(404).json({ error: 'Not found' });
+    listing.isFeatured = !listing.isFeatured;
+    await listing.save();
+    res.json({ isFeatured: listing.isFeatured });
+});
+
+app.put('/admin/api/marketplace/:id', adminAuth, async (req, res) => {
+    const editable = ['businessName', 'listingType', 'description', 'services', 'location', 'contact', 'images', 'openingHours', 'priceRange', 'tags', 'status', 'isFeatured'];
+    const updates = {};
+    editable.forEach(k => { if (req.body[k] !== undefined) updates[k] = req.body[k]; });
+    const listing = await MarketplaceListing.findByIdAndUpdate(req.params.id, updates, { new: true });
+    if (!listing) return res.status(404).json({ error: 'Not found' });
+    res.json(listing);
+});
+
+app.delete('/admin/api/marketplace/:id', adminAuth, async (req, res) => {
+    await MarketplaceListing.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Listing deleted' });
+});
+
+// ============================================================
+// MARKETPLACE BOOKINGS
+// ============================================================
+const MarketplaceBooking = require('./models/MarketplaceBooking');
+
+// User: Book a marketplace listing
+app.post('/api/marketplace/:id/book', authMiddleware, async (req, res) => {
+    try {
+        const listing = await MarketplaceListing.findOne({ _id: req.params.id, status: 'approved' });
+        if (!listing) return res.status(404).json({ error: 'Listing not found' });
+        const { serviceRequested, preferredDate, preferredTime, note } = req.body;
+        if (!preferredDate) return res.status(400).json({ error: 'Preferred date is required' });
+        const booking = await MarketplaceBooking.create({
+            listingId: listing._id,
+            userId: req.user.id,
+            professionalId: listing.submittedByProfessional || listing.linkedProfessionalId || null,
+            serviceRequested: serviceRequested || '',
+            preferredDate: new Date(preferredDate),
+            preferredTime: preferredTime || '',
+            note: note || '',
+            status: 'pending'
+        });
+        res.status(201).json({ message: 'Booking request sent! You will be notified when the provider responds.', booking });
+    } catch (e) { res.status(500).json({ error: e.message || 'Server error' }); }
+});
+
+// User: Cancel booking
+app.put('/api/marketplace/bookings/:id/cancel', authMiddleware, async (req, res) => {
+    const booking = await MarketplaceBooking.findOne({ _id: req.params.id, userId: req.user.id });
+    if (!booking) return res.status(404).json({ error: 'Booking not found' });
+    if (['completed', 'cancelled'].includes(booking.status)) return res.status(400).json({ error: 'Cannot cancel this booking' });
+    booking.status = 'cancelled';
+    await booking.save();
+    res.json({ message: 'Booking cancelled', booking });
+});
+
+// User: Confirm rescheduled time
+app.put('/api/marketplace/bookings/:id/confirm', authMiddleware, async (req, res) => {
+    const booking = await MarketplaceBooking.findOne({ _id: req.params.id, userId: req.user.id, status: 'rescheduled' });
+    if (!booking) return res.status(404).json({ error: 'Booking not found or not rescheduled' });
+    booking.status = 'accepted';
+    booking.userConfirmed = true;
+    booking.preferredDate = booking.offeredDate;
+    booking.preferredTime = booking.offeredTime;
+    await booking.save();
+    res.json({ message: 'Confirmed! Your appointment is set.', booking });
+});
+
+// Professional: View bookings for my listings
+app.get('/professional/api/marketplace/bookings', profAuthForGroups, async (req, res) => {
+    try {
+        // Get all listings by this professional
+        const myListings = await MarketplaceListing.find({ submittedByProfessional: req.professional._id }).select('_id').lean();
+        const listingIds = myListings.map(l => l._id);
+        // Also include directly assigned bookings
+        const bookings = await MarketplaceBooking.find({
+            $or: [{ listingId: { $in: listingIds } }, { professionalId: req.professional._id }]
+        })
+            .populate('listingId', 'businessName listingType')
+            .populate('userId', 'name email')
+            .sort({ createdAt: -1 }).lean();
+        res.json({ bookings });
+    } catch (e) { res.status(500).json({ error: 'Server error' }); }
+});
+
+// Professional: Accept booking
+app.put('/professional/api/marketplace/bookings/:id/accept', profAuthForGroups, async (req, res) => {
+    const booking = await MarketplaceBooking.findById(req.params.id);
+    if (!booking) return res.status(404).json({ error: 'Not found' });
+    const { responseNote } = req.body;
+    booking.status = 'accepted';
+    booking.responseNote = responseNote || 'Confirmed. See you then!';
+    await booking.save();
+    res.json({ message: 'Booking accepted', booking });
+});
+
+// Professional: Reject booking
+app.put('/professional/api/marketplace/bookings/:id/reject', profAuthForGroups, async (req, res) => {
+    const booking = await MarketplaceBooking.findById(req.params.id);
+    if (!booking) return res.status(404).json({ error: 'Not found' });
+    const { responseNote } = req.body;
+    booking.status = 'rejected';
+    booking.responseNote = responseNote || 'Unable to accommodate this request.';
+    await booking.save();
+    res.json({ message: 'Booking rejected', booking });
+});
+
+// Professional: Offer alternative time
+app.put('/professional/api/marketplace/bookings/:id/reschedule', profAuthForGroups, async (req, res) => {
+    const booking = await MarketplaceBooking.findById(req.params.id);
+    if (!booking) return res.status(404).json({ error: 'Not found' });
+    const { offeredDate, offeredTime, responseNote } = req.body;
+    if (!offeredDate) return res.status(400).json({ error: 'Offered date required' });
+    booking.status = 'rescheduled';
+    booking.offeredDate = new Date(offeredDate);
+    booking.offeredTime = offeredTime || '';
+    booking.responseNote = responseNote || 'I have another time available — please confirm.';
+    await booking.save();
+    res.json({ message: 'Alternative time offered', booking });
 });
 
 // Start server

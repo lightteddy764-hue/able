@@ -31,6 +31,7 @@
                         <button class="ch-btn-secondary" onclick="scrollToSection('challengeSection')">🏆 Start 7-Day Challenge</button>
                     </div>
                 </div>
+                <img src="/images/parenting-hero-family.svg" alt="" class="care-hero-graphic">
             </div>
 
             <!-- Focus Areas -->
@@ -51,8 +52,10 @@
 
             <!-- Challenges -->
             <div class="ch-section" id="challengeSection">
-                <h3 class="ch-section-title">🏆 Parenting Challenges</h3>
-                <p class="ch-section-desc">Guided daily tasks to build better habits — one small step at a time</p>
+                <div class="ch-history-header">
+                    <div><h3 class="ch-section-title">🏆 Parenting Challenges</h3><p class="ch-section-desc">Guided daily tasks to build better habits — one small step at a time</p></div>
+                    <img src="/images/parenting-challenge-goal.svg" alt="" class="ch-sec-graphic">
+                </div>
                 <div class="ch-challenge-cards" id="challengeCards">
                     <div class="ch-skeleton ch-skeleton-card"></div>
                 </div>
@@ -67,9 +70,12 @@
 
             <!-- Parent Self-Care -->
             <div class="ch-section">
-                <div class="ch-parent-selfcare" id="selfCareSection">
-                    <h3>🧡 Parent Self-Care</h3>
-                    <p>Loading...</p>
+                <div class="ch-parent-selfcare ch-parent-selfcare-flex" id="selfCareSection">
+                    <div class="ch-parent-selfcare-text">
+                        <h3>🧡 Parent Self-Care</h3>
+                        <p>Loading...</p>
+                    </div>
+                    <img src="/images/parenting-selfcare-relax.svg" alt="" class="ch-sec-graphic">
                 </div>
             </div>
         </main>
@@ -178,7 +184,7 @@
 
     function renderSelfCare() {
         const psc = pageData.parentSelfCare || {};
-        document.getElementById('selfCareSection').innerHTML = `
+        document.querySelector('#selfCareSection .ch-parent-selfcare-text').innerHTML = `
             <h3>🧡 ${psc.title || 'Parent Self-Care'}</h3>
             <p>${psc.description || ''}</p>
             ${(psc.tips||[]).map(t => '<div class="ch-psc-tip"><span>💡</span> '+t+'</div>').join('')}

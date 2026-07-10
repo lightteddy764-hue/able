@@ -7,6 +7,7 @@
         { href: '/professional/requests.html',    label: 'Requests',      icon: '📋', badge: 'navPendingCount' },
         { href: '/professional/sessions.html',    label: 'Sessions',      icon: '📅' },
         { href: '/professional/posts.html',       label: 'Posts & Tips',  icon: '✍️' },
+        { href: '/professional/marketplace-submit.html', label: 'Marketplace', icon: '🏪' },
         { href: '/professional/profile.html',     label: 'My Profile',    icon: '👤' },
         { href: '/professional/availability.html',label: 'Availability',  icon: '🕐' },
         { href: '/professional/settings.html',    label: 'Settings',      icon: '⚙️' }

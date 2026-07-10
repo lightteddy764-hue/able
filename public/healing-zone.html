@@ -51,6 +51,7 @@
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
                     <h2 class="hz-sec-title" style="margin:0">📅 My Sessions</h2>
                     <button onclick="document.getElementById('mySessionsPanel').style.display=document.getElementById('mySessionsPanel').style.display==='none'?'block':'none'" style="background:none;border:1px solid #E5E7EB;padding:0.4rem 0.8rem;border-radius:6px;font-size:0.75rem;cursor:pointer;color:#6B7280">Toggle ▾</button>
+                    <img src="/images/my-sessions-schedule.svg" alt="" class="hz-sec-graphic hz-sec-graphic-sm" style="margin-left:1rem">
                 </div>
                 <div id="mySessionsPanel">
                     <div id="mySessionsList" style="display:flex;flex-direction:column;gap:0.5rem"></div>
@@ -76,8 +77,13 @@
 
             <!-- Recommended -->
             <section id="recommended" class="hz-section">
-                <h2 class="hz-sec-title">⭐ Recommended For You</h2>
-                <p class="hz-sec-sub">Based on your assessment and preferences</p>
+                <div class="hz-sec-header-graphic">
+                    <div>
+                        <h2 class="hz-sec-title">⭐ Recommended For You</h2>
+                        <p class="hz-sec-sub">Based on your assessment and preferences</p>
+                    </div>
+                    <img src="/images/healing-hero-support.svg" alt="" class="hz-sec-graphic">
+                </div>
                 <div class="hz-rec-grid" id="hzRecGrid">
                     <div style="text-align:center;padding:2rem;color:#9ca3af;grid-column:1/-1">Loading therapists...</div>
                 </div>
@@ -85,8 +91,15 @@
 
             <!-- All Therapists -->
             <section class="hz-section">
+                <div class="hz-all-banner">
+                    <div class="hz-all-banner-text">
+                        <h2 class="hz-sec-title">All Therapists</h2>
+                        <p class="hz-sec-sub">Browse our full network of licensed professionals</p>
+                    </div>
+                    <img src="/images/all-therapists-search.svg" alt="" class="hz-all-banner-graphic">
+                </div>
                 <div class="hz-sec-header">
-                    <h2 class="hz-sec-title">All Therapists</h2>
+                    <span></span>
                     <select class="hz-sort" id="hzSort"><option value="match">Sort: Best Match</option><option value="rating">Highest Rated</option><option value="available">Available Today</option><option value="experience">Most Experience</option></select>
                 </div>
                 <div class="hz-all-grid" id="hzAllGrid">
@@ -96,7 +109,10 @@
 
             <!-- Success Stories -->
             <section class="hz-section">
-                <h2 class="hz-sec-title">Success Stories</h2>
+                <div class="hz-sec-header-graphic hz-sec-header-center">
+                    <img src="/images/success-stories-graphic.svg" alt="" class="hz-sec-graphic hz-sec-graphic-sm">
+                    <h2 class="hz-sec-title">Success Stories</h2>
+                </div>
                 <div class="hz-stories-grid">
                     <div class="hz-story"><div class="hz-story-stars">★★★★★</div><p>"My therapist helped me overcome anxiety in 3 months. I can finally sleep through the night."</p><span class="hz-story-author">— Sarah, 27</span></div>
                     <div class="hz-story"><div class="hz-story-stars">★★★★★</div><p>"After my divorce, I felt lost. Dr. Wilson gave me tools to rebuild my confidence and find joy again."</p><span class="hz-story-author">— Marcus, 34</span></div>
@@ -106,7 +122,10 @@
 
             <!-- How It Works -->
             <section class="hz-section hz-how">
-                <h2 class="hz-sec-title">How It Works</h2>
+                <div class="hz-sec-header-graphic">
+                    <h2 class="hz-sec-title">How It Works</h2>
+                    <img src="/images/how-it-works-journey.svg" alt="" class="hz-sec-graphic">
+                </div>
                 <div class="hz-how-steps">
                     <div class="hz-how-step"><div class="hz-step-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2"/></svg></div><h4>Take Assessment</h4><p>Complete your wellness profile</p></div>
                     <div class="hz-how-line"></div>
@@ -203,7 +222,7 @@
             const avatar = t.profilePhoto || `https://ui-avatars.com/api/?name=${encodeURIComponent(t.fullName)}&background=${color}&color=fff&size=72&bold=true`;
             return `<div class="hz-rec-card">
                 <div class="hz-match">${match}% Match</div>
-                <img src="${avatar}" alt="${t.fullName}" class="hz-rec-img">
+                <img src="${avatar}" alt="${t.fullName}" class="hz-rec-img" onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(t.fullName)}&background=E67E22&color=fff&size=72'">
                 <h4 style="cursor:pointer" onclick="openTherapistDetail('${t._id}')">${t.fullName}</h4>
                 <span class="hz-rec-role">${t.title} • ${(t.specializations || []).slice(0,2).join(', ')}</span>
                 <div class="hz-rec-stars">${stars} <span>${t.rating} (${t.reviewCount || 0})</span></div>

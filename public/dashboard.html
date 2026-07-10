@@ -31,6 +31,18 @@
             <div class="bg-blob blob-1"></div>
             <div class="bg-blob blob-2"></div>
             <div class="bg-blob blob-3"></div>
+
+            <!-- Onboarding Banner (shown if profile incomplete) -->
+            <div class="dp-onboarding" id="dpOnboarding" style="display:none">
+                <div class="dp-onboard-icon">👋</div>
+                <div class="dp-onboard-text">
+                    <h3>Welcome! Let's set up your wellness profile</h3>
+                    <p>Tell us about yourself so we can personalize your experience — it only takes 2 minutes.</p>
+                </div>
+                <a href="settings.html" class="dp-onboard-btn">Complete Profile →</a>
+                <button class="dp-onboard-dismiss" id="dpOnboardDismiss" title="Dismiss">✕</button>
+            </div>
+
             <!-- Greeting + Hero -->
             <div class="dp-hero">
                 <div class="dp-hero-left">
@@ -57,6 +69,48 @@
                 </div>
             </div>
 
+            <!-- Avatar + Pentagon Wellness Radar -->
+            <div class="dp-avatar-panel">
+                <div class="dp-avatar-stage">
+                    <div class="dp-stage-bg">
+                        <span class="dp-ring dp-ring-1"></span>
+                        <span class="dp-ring dp-ring-2"></span>
+                        <span class="dp-orb dp-orb-1"></span>
+                        <span class="dp-orb dp-orb-2"></span>
+                        <span class="dp-orb dp-orb-3"></span>
+                        <span class="dp-orb dp-orb-4"></span>
+                        <span class="dp-spark dp-spark-1"></span>
+                        <span class="dp-spark dp-spark-2"></span>
+                        <span class="dp-spark dp-spark-3"></span>
+                    </div>
+                    <div class="dp-speech" id="dpSpeech">
+                        <span id="dpSpeechText">Hey! Ready to make today count?</span>
+                        <i class="dp-speech-tail"></i>
+                    </div>
+                    <div class="dp-avatar-glow"></div>
+                    <img id="dpAvatar" class="dp-avatar-img" src="/images/avatar-front-idle.png" alt="Your wellness buddy" title="Click me!">
+                    <div class="dp-avatar-shadow"></div>
+                    <div class="dp-avatar-name" id="dpAvatarName">Mira · Your Wellness Buddy</div>
+                    <button class="dp-mira-chat-btn" id="dpMiraChatBtn" onclick="toggleMiraChat()">💬 Chat with <span id="dpBuddyName">Mira</span></button>
+                    <!-- Inline Mira Chat Bubble -->
+                    <div class="dp-mira-chat" id="dpMiraChat" style="display:none">
+                        <div class="dp-mira-messages" id="dpMiraMessages"></div>
+                        <div class="dp-mira-input-row">
+                            <input type="text" id="dpMiraInput" placeholder="Ask your buddy anything..." maxlength="300" autocomplete="off">
+                            <button id="dpMiraSend" onclick="sendMiraMessage()">→</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="dp-radar-box">
+                    <h3 class="dp-card-title">Your Wellness Balance</h3>
+                    <div class="dp-radar-wrap">
+                        <svg viewBox="0 0 320 300" class="dp-radar-svg" id="dpRadarSvg" aria-label="Wellness pentagon chart"></svg>
+                    </div>
+                    <div class="dp-radar-legend" id="dpRadarLegend"></div>
+                    <a href="playground.html" class="dp-playground-btn">🎨 Wellness Playground</a>
+                </div>
+            </div>
+
             <!-- Quick Actions -->
             <div class="dp-section">
                 <h3 class="dp-section-title">Quick Actions</h3>
@@ -70,6 +124,7 @@
 
             <!-- Care Hub Progress -->
             <div class="dp-card dp-care-hub" id="careHubCard">
+                <img src="/images/care-hub-wellness.svg" alt="" class="dashboard-graphic carehub-graphic">
                 <h3 class="dp-card-title">🧡 Care Hub Progress</h3>
                 <div class="dp-care-progress-grid" id="careHubStats">
                     <div class="dp-care-stat"><span class="dp-care-num">0</span><span class="dp-care-label">Check-Ins</span></div>
@@ -92,7 +147,7 @@
 
             <!-- Two Column: Mood + Daily Plan -->
             <div class="dp-two-col">
-                <div class="dp-card">
+                <div class="dp-card mood-card">
                     <h3 class="dp-card-title">How are you feeling today?</h3>
                     <div class="dp-mood-grid" id="moodGrid">
                         <button class="dp-mood" data-mood="great">😄<span>Great</span></button>
@@ -101,12 +156,16 @@
                         <button class="dp-mood" data-mood="low">😔<span>Low</span></button>
                         <button class="dp-mood" data-mood="struggling">😢<span>Struggling</span></button>
                     </div>
+                    <img src="/images/mood-mindfulness.svg" alt="" class="dashboard-graphic mood-graphic">
                 </div>
-                <div class="dp-card">
-                    <h3 class="dp-card-title">Today's Wellness Plan</h3>
-                    <div class="dp-checklist" id="dpChecklist">
-                        <div style="text-align:center;padding:1rem;color:#9ca3af;font-size:0.85rem">Loading tasks...</div>
+                <div class="dp-card wellness-plan-card">
+                    <div class="plan-content">
+                        <h3 class="dp-card-title">Today's Wellness Plan</h3>
+                        <div class="dp-checklist" id="dpChecklist">
+                            <div style="text-align:center;padding:1rem;color:#9ca3af;font-size:0.85rem">Loading tasks...</div>
+                        </div>
                     </div>
+                    <img src="/images/wellness-plan-illustration.svg" alt="" class="dashboard-graphic plan-graphic">
                 </div>
             </div>
 
@@ -134,7 +193,7 @@
                     </div>
                     <button class="dp-rec-btn" id="therapistRecBtn" style="cursor:pointer;border:none;width:100%;text-align:center">Book Session →</button>
                 </div>
-                <div class="dp-card">
+                <div class="dp-card weekly-progress-card">
                     <h3 class="dp-card-title">Weekly Wellness Progress</h3>
                     <div class="dp-chart">
                         <svg viewBox="0 0 280 100" class="dp-chart-svg" id="weekChartSvg">
@@ -146,44 +205,50 @@
                         <div class="dp-chart-labels" id="weekChartLabels"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
                         <div class="dp-chart-values" id="weekChartValues"><span>—</span><span>—</span><span>—</span><span>—</span><span>—</span><span>—</span><span>—</span></div>
                     </div>
+                    <img src="/images/weekly-progress-growth.svg" alt="" class="dashboard-graphic progress-graphic">
                 </div>
             </div>
 
             <!-- Two Column: Journey + Activity -->
             <div class="dp-two-col">
-                <div class="dp-card">
+                <div class="dp-card wellness-journey-card">
                     <h3 class="dp-card-title">Wellness Journey</h3>
-                    <div class="dp-timeline">
+                    <div class="dp-timeline journey-timeline">
                         <div class="dp-tl-item done"><div class="dp-tl-dot"></div><span>Assessment Complete</span></div>
                         <div class="dp-tl-item done"><div class="dp-tl-dot"></div><span>Wellness Profile Created</span></div>
                         <div class="dp-tl-item"><div class="dp-tl-dot"></div><span>First Therapy Session</span></div>
                         <div class="dp-tl-item"><div class="dp-tl-dot"></div><span>Community Joined</span></div>
                         <div class="dp-tl-item"><div class="dp-tl-dot"></div><span>30-Day Milestone</span></div>
                     </div>
+                    <img src="/images/wellness-journey-path.svg" alt="" class="dashboard-graphic journey-graphic">
                 </div>
-                <div class="dp-card">
+                <div class="dp-card activity-card">
                     <h3 class="dp-card-title">Recent Activity</h3>
                     <div class="dp-activity" id="recentActivityList">
                         <div class="dp-act-item"><span class="dp-act-dot green"></span>Loading...<small></small></div>
                     </div>
+                    <img src="/images/recent-activity-clock.svg" alt="" class="dashboard-graphic activity-graphic">
                 </div>
             </div>
 
             <!-- Community Highlights -->
-            <div class="dp-card dp-community-card">
-                <h3 class="dp-card-title">Community Highlights</h3>
-                <div class="dp-community-stats">
-                    <div class="dp-cm-stat"><span class="dp-cm-num">125</span><span>Discussions</span></div>
-                    <div class="dp-cm-stat"><span class="dp-cm-num">23</span><span>Stories</span></div>
-                    <div class="dp-cm-stat"><span class="dp-cm-num">18</span><span>Events</span></div>
+            <div class="dp-card dp-community-card community-highlights-card">
+                <img src="/images/community-together.svg" alt="" class="dashboard-graphic community-graphic">
+                <div class="community-content">
+                    <h3 class="dp-card-title">Community Highlights</h3>
+                    <div class="dp-community-stats">
+                        <div class="dp-cm-stat"><span class="dp-cm-num">125</span><span>Discussions</span></div>
+                        <div class="dp-cm-stat"><span class="dp-cm-num">23</span><span>Stories</span></div>
+                        <div class="dp-cm-stat"><span class="dp-cm-num">18</span><span>Events</span></div>
+                    </div>
+                    <div class="dp-trending">
+                        <h4 class="dp-trending-title">Trending Today</h4>
+                        <a href="my-voice.html" class="dp-trending-item">How I Reduced Anxiety Naturally</a>
+                        <a href="community.html" class="dp-trending-item">Daily Gratitude Challenge</a>
+                        <a href="body-mind.html" class="dp-trending-item">Weekend Group Meditation Session</a>
+                    </div>
+                    <a href="community.html" class="dp-cm-btn">Explore Community →</a>
                 </div>
-                <div class="dp-trending">
-                    <h4 class="dp-trending-title">Trending Today</h4>
-                    <a href="my-voice.html" class="dp-trending-item">How I Reduced Anxiety Naturally</a>
-                    <a href="community.html" class="dp-trending-item">Daily Gratitude Challenge</a>
-                    <a href="body-mind.html" class="dp-trending-item">Weekend Group Meditation Session</a>
-                </div>
-                <a href="community.html" class="dp-cm-btn">Explore Community →</a>
             </div>
         </main>
     </div>
@@ -242,12 +307,41 @@
             
             // Weekly mood chart
             renderWeekChart(data.weekMoods, data.wellnessScore);
-            
+
+            // Avatar panel + pentagon radar
+            renderWellnessRadar(data);
+
+            // Show onboarding if profile incomplete (no gender or hobbies)
+            if (!data.user?.gender || data.user.gender === '') {
+                const dismissed = localStorage.getItem('onboardDismissed');
+                if (!dismissed) {
+                    document.getElementById('dpOnboarding').style.display = 'flex';
+                }
+            }
+
+            // Set gender for avatar
+            if (data.user?.gender === 'female') {
+                userGender = 'female';
+                currentPoses = AVATAR_POSES.female;
+                document.getElementById('dpAvatarName').textContent = 'Mira · Your Wellness Buddy';
+                document.getElementById('dpBuddyName').textContent = 'Mira';
+            } else {
+                userGender = 'male';
+                currentPoses = AVATAR_POSES.male;
+                document.getElementById('dpAvatarName').textContent = 'Arjun · Your Wellness Buddy';
+                document.getElementById('dpBuddyName').textContent = 'Arjun';
+            }
+            document.getElementById('dpAvatar').src = pick(currentPoses.idle);
+            // Gender is now known — safe to fire the avatar's spoken greeting with the correct name
+            setTimeout(() => window.showAvatarGreeting && window.showAvatarGreeting(), 500);
+
         } catch (e) {
             console.error('Dashboard load error:', e);
             // Fallback to localStorage name
             const name = localStorage.getItem('userName') || 'User';
             document.getElementById('dpGreeting').textContent = `${greet}, ${name.split(' ')[0]} 👋`;
+            // Still greet with the default buddy name even if profile fetch failed
+            setTimeout(() => window.showAvatarGreeting && window.showAvatarGreeting(), 500);
         }
     }
 
@@ -392,11 +486,242 @@
         }
     }
 
+    // ===== AVATAR + PENTAGON WELLNESS RADAR =====
+    const DP_AXES = [
+        { key: 'mood',        label: 'Mood',        color: '#E67E22' },
+        { key: 'consistency', label: 'Consistency', color: '#10B981' },
+        { key: 'tasks',       label: 'Daily Tasks', color: '#3B82F6' },
+        { key: 'engagement',  label: 'Engagement',  color: '#8B5CF6' },
+        { key: 'activity',    label: 'Activity',    color: '#EC4899' }
+    ];
+
+    // Gender-based avatar pose sets
+    const AVATAR_POSES = {
+        male: {
+            idle: ['/images/male-front-idle.png', '/images/male-front-neutral.png'],
+            look: ['/images/male-left-angle-idle.png', '/images/male-right-angle-idle.png'],
+            talk: ['/images/male-talk-both-hands-open.png', '/images/male-talk-single-hand-explain.png'],
+            present: ['/images/male-talk-presenting-gesture.png'],
+            empathy: ['/images/male-talk-hand-on-chest.png'],
+            greeting: ['/images/male-front-neutral.png'],
+            celebrate: ['/images/male-talk-both-hands-open.png']
+        },
+        female: {
+            idle: ['/images/female-front-idle.png', '/images/female-hands-clasped-calm.png'],
+            look: ['/images/female-left-angle-idle.png'],
+            talk: ['/images/female-talking-explain-both-hands.png', '/images/female-talking-open-palms.png'],
+            present: ['/images/female-talking-present-right-hand.png'],
+            empathy: ['/images/female-talking-hand-on-chest.png'],
+            greeting: ['/images/female-wave-greeting.png', '/images/female-welcoming-open-arms.png'],
+            celebrate: ['/images/female-welcoming-open-arms.png']
+        }
+    };
+
+    let userGender = 'male'; // default, updated from API
+    let currentPoses = AVATAR_POSES.male;
+    let miraChatOpen = false;
+    let miraChatHistory = [];
+
+    function computeWellnessScores(data) {
+        const clamp = v => Math.max(0, Math.min(100, Math.round(v)));
+        const streak = data.user?.streak || 0;
+        const sessions = data.user?.sessionsBooked || 0;
+        const daysLogged = (data.weekMoods || []).length;
+        const taskPct = data.totalTasks ? (data.tasksCompleted / data.totalTasks) * 100 : 0;
+        return {
+            mood: clamp(data.wellnessScore || 0),
+            consistency: clamp((streak / 14) * 100),   // 14-day streak = full
+            tasks: clamp(taskPct),
+            engagement: clamp(sessions * 25),            // 4 sessions = full
+            activity: clamp((daysLogged / 7) * 100)      // logged all 7 days = full
+        };
+    }
+
+    function renderWellnessRadar(data) {
+        const scores = computeWellnessScores(data);
+        const svg = document.getElementById('dpRadarSvg');
+        const legend = document.getElementById('dpRadarLegend');
+        if (!svg) return;
+
+        const cx = 160, cy = 140, R = 100;
+        const n = DP_AXES.length;
+        const angleFor = i => (-Math.PI / 2) + (i * 2 * Math.PI / n); // start at top
+        const pt = (i, r) => [cx + r * Math.cos(angleFor(i)), cy + r * Math.sin(angleFor(i))];
+
+        // Grid rings
+        let grid = '';
+        [0.25, 0.5, 0.75, 1].forEach(ring => {
+            const pts = DP_AXES.map((_, i) => pt(i, R * ring).join(',')).join(' ');
+            grid += `<polygon points="${pts}" fill="none" stroke="#E5E7EB" stroke-width="1"/>`;
+        });
+        // Spokes + labels
+        let spokes = '', labels = '';
+        DP_AXES.forEach((ax, i) => {
+            const [ex, ey] = pt(i, R);
+            spokes += `<line x1="${cx}" y1="${cy}" x2="${ex}" y2="${ey}" stroke="#E5E7EB" stroke-width="1"/>`;
+            const [lx, ly] = pt(i, R + 26);
+            const anchor = Math.abs(lx - cx) < 5 ? 'middle' : (lx > cx ? 'start' : 'end');
+            labels += `<text x="${lx}" y="${ly}" text-anchor="${anchor}" font-size="11" font-weight="600" fill="#6B7280">${ax.label}</text>`;
+            labels += `<text x="${lx}" y="${ly + 13}" text-anchor="${anchor}" font-size="10" font-weight="700" fill="${ax.color}">${scores[ax.key]}%</text>`;
+        });
+        // Data polygon
+        const dataPts = DP_AXES.map((ax, i) => pt(i, R * (scores[ax.key] / 100)).join(',')).join(' ');
+        const dots = DP_AXES.map((ax, i) => {
+            const [dx, dy] = pt(i, R * (scores[ax.key] / 100));
+            return `<circle cx="${dx}" cy="${dy}" r="3.5" fill="${ax.color}" stroke="white" stroke-width="1.5"/>`;
+        }).join('');
+
+        svg.innerHTML = `
+            ${grid}${spokes}
+            <polygon points="${dataPts}" fill="rgba(230,126,34,0.18)" stroke="#E67E22" stroke-width="2" stroke-linejoin="round"/>
+            ${dots}${labels}`;
+
+        // Legend with overall average
+        const avg = Math.round(Object.values(scores).reduce((a, b) => a + b, 0) / n);
+        legend.innerHTML = `<div class="dp-radar-overall"><span class="dp-radar-overall-num">${avg}%</span><span class="dp-radar-overall-lbl">Overall Balance</span></div>`;
+
+        // Feed the strongest/weakest into avatar speech
+        const entries = DP_AXES.map(a => ({ label: a.label, val: scores[a.key] }));
+        const weakest = entries.reduce((m, e) => e.val < m.val ? e : m, entries[0]);
+        const strongest = entries.reduce((m, e) => e.val > m.val ? e : m, entries[0]);
+        dpAvatarTips = [
+            `Your ${strongest.label.toLowerCase()} is looking strong 💪`,
+            `Let's give your ${weakest.label.toLowerCase()} a little love today.`,
+            avg >= 70 ? `${avg}% balance — you're thriving! 🌟` : `You're at ${avg}% balance. Small steps add up.`,
+            data.user?.streak ? `${data.user.streak}-day streak! Keep it alive 🔥` : `Log your mood to start a streak!`
+        ];
+    }
+
+    // ===== ANIMATED AVATAR + MIRA CHAT =====
+    let dpAvatarTips = ['Welcome back! How are you feeling today?'];
+    function getBuddyName() { return userGender === 'female' ? 'Mira' : 'Arjun'; }
+
+    (function initAvatar() {
+        const avatar = document.getElementById('dpAvatar');
+        const speech = document.getElementById('dpSpeech');
+        const speechText = document.getElementById('dpSpeechText');
+        if (!avatar) return;
+
+        function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+        function setPose(category) { avatar.src = pick(currentPoses[category] || currentPoses.idle); }
+        function showTip(text) {
+            speechText.textContent = text;
+            speech.classList.remove('show');
+            void speech.offsetWidth;
+            speech.classList.add('show');
+        }
+
+        // Gentle idle loop
+        const idleSeq = ['idle', 'idle', 'look', 'idle', 'idle'];
+        let seqIdx = 0;
+        setInterval(() => {
+            if (miraChatOpen) return; // Don't cycle during chat
+            seqIdx = (seqIdx + 1) % idleSeq.length;
+            setPose(idleSeq[seqIdx]);
+        }, 3000);
+
+        // Rotate speech bubbles (when not chatting)
+        let tipIdx = 0;
+        setInterval(() => {
+            if (miraChatOpen || !dpAvatarTips.length) return;
+            tipIdx = (tipIdx + 1) % dpAvatarTips.length;
+            showTip(dpAvatarTips[tipIdx]);
+        }, 7000);
+
+        // Click avatar → open Mira chat
+        avatar.addEventListener('click', () => toggleMiraChat());
+
+        // Initial greeting — exposed globally so loadDashboard() can trigger it
+        // only after the user's gender (and therefore buddy name) is known.
+        window.showAvatarGreeting = function() {
+            const hr = new Date().getHours();
+            const name = getBuddyName();
+            setPose('greeting');
+            showTip(hr < 12 ? `Good morning! I'm ${name} 🌅` : hr < 18 ? `Hey there! I'm ${name} ☀️` : `Good evening! I'm ${name} 🌙`);
+            setTimeout(() => setPose('idle'), 2500);
+        };
+    })();
+
+    // ===== MIRA INLINE CHAT =====
+    function toggleMiraChat() {
+        const container = document.getElementById('dpMiraChat');
+        if (!container) return;
+        miraChatOpen = !miraChatOpen;
+        container.style.display = miraChatOpen ? 'flex' : 'none';
+        if (miraChatOpen) document.getElementById('dpMiraInput')?.focus();
+    }
+
+    async function sendMiraMessage() {
+        const input = document.getElementById('dpMiraInput');
+        const messagesEl = document.getElementById('dpMiraMessages');
+        const avatar = document.getElementById('dpAvatar');
+        const speechText = document.getElementById('dpSpeechText');
+        const speech = document.getElementById('dpSpeech');
+        if (!input || !input.value.trim()) return;
+
+        const msg = input.value.trim();
+        input.value = '';
+
+        // Show user message
+        messagesEl.innerHTML += `<div class="mira-msg mira-user">${escHtml(msg)}</div>`;
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+
+        // Show typing state
+        avatar.src = pick(currentPoses.talk);
+        speechText.textContent = 'Thinking...';
+        speech.classList.add('show');
+
+        // Add to history
+        miraChatHistory.push({ role: 'user', text: msg });
+
+        try {
+            const res = await fetch('/api/mira/chat', {
+                method: 'POST',
+                headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: msg, history: miraChatHistory.slice(-8) })
+            });
+            const data = await res.json();
+            const reply = data.response || "I'm here for you!";
+            const mood = data.mood || 'talk';
+
+            // Update avatar pose based on mood
+            avatar.src = pick(currentPoses[mood] || currentPoses.talk);
+            setTimeout(() => { if (miraChatOpen) avatar.src = pick(currentPoses.idle); }, 4000);
+
+            // Show in speech bubble
+            speechText.textContent = reply.slice(0, 80) + (reply.length > 80 ? '...' : '');
+            speech.classList.add('show');
+
+            // Show in chat
+            messagesEl.innerHTML += `<div class="mira-msg mira-ai">${escHtml(reply)}</div>`;
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+
+            miraChatHistory.push({ role: 'mira', text: reply });
+        } catch (e) {
+            messagesEl.innerHTML += `<div class="mira-msg mira-ai">Oops, try again! 🌿</div>`;
+            avatar.src = pick(currentPoses.idle);
+        }
+    }
+
+    function escHtml(s) { return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+    // Enter key sends message
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && e.target.id === 'dpMiraInput') { e.preventDefault(); sendMiraMessage(); }
+    });
+
     // Init
     loadDashboard();
     loadTasks();
     loadRecentActivity();
     loadRecommendedTherapist();
+
+    // Onboarding dismiss
+    document.getElementById('dpOnboardDismiss')?.addEventListener('click', () => {
+        document.getElementById('dpOnboarding').style.display = 'none';
+        localStorage.setItem('onboardDismissed', '1');
+    });
 
     // Load a real professional for the dashboard card
     async function loadRecommendedTherapist() {
